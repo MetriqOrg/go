@@ -219,7 +219,8 @@ type system struct {
 
 	reapOffsets map[string]int64
 
-	currentState State
+	currentStateMutex sync.Mutex
+	currentState      State
 }
 
 func NewSystem(config Config) (System, error) {
@@ -406,6 +407,8 @@ func (s *system) initMetrics() {
 }
 
 func (s *system) GetCurrentState() State {
+	s.currentStateMutex.Lock()
+	defer s.currentStateMutex.Unlock()
 	return s.currentState
 }
 
@@ -572,7 +575,10 @@ func (s *system) runStateMachine(cur stateMachineNode) error {
 			panic("unexpected transaction")
 		}
 
+		s.currentStateMutex.Lock()
 		s.currentState = cur.GetState()
+		s.currentStateMutex.Unlock()
+
 		next, err := cur.run(s)
 		if err != nil {
 			logger := log.WithFields(logpkg.F{
