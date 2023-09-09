@@ -131,9 +131,9 @@ func CalculatePoolPayout(reserveA, reserveB, received xdr.Int64, feeBips xdr.Int
 		//
 		// For example, for:
 		//
-		//      X = 200    // 200 stroops of deposited asset in reserves
-		//      Y = 300    // 300 stroops of disbursed asset in reserves
-		//      y = 3      // disbursing 3 stroops
+		//      X = 200    // 200 µg of deposited asset in reserves
+		//      Y = 300    // 300 µg of disbursed asset in reserves
+		//      y = 3      // disbursing 3 µg
 		//      F = 0.003  // fee is 0.3%
 		//      unrounded = (200 * 3) / ((300 - 3)(1 - 0.003)) = 2.03
 		//      S = abs(ceil(2.03) - 2.03) / 2.03 = 47.78%
@@ -208,9 +208,9 @@ func CalculatePoolExpectation(
 			//
 			// For example, for:
 			//
-			//      X = 200    // 200 stroops of deposited asset in reserves
-			//      Y = 300    // 300 stroops of disbursed asset in reserves
-			//      y = 3      // disbursing 3 stroops
+			//      X = 200    // 200 µg of deposited asset in reserves
+			//      Y = 300    // 300 µg of disbursed asset in reserves
+			//      y = 3      // disbursing 3 µg
 			//      F = 0.003  // fee is 0.3%
 			//      unrounded = (200 * 3) / ((300 - 3)(1 - 0.003)) = 2.03
 			//      S = abs(ceil(2.03) - 2.03) / 2.03 = 47.78%

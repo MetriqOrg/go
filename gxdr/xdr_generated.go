@@ -293,7 +293,7 @@ AccountEntry
 type AccountEntry struct {
 	// master public key for this account
 	AccountID AccountID
-	// in stroops
+	// in µg
 	Balance Int64
 	// last sequence number used for this account
 	SeqNum SequenceNumber
@@ -872,7 +872,7 @@ type LedgerHeader struct {
 	BucketListHash Hash
 	// sequence number of this ledger
 	LedgerSeq Uint32
-	// total number of stroops in existence.
+	// total number of µg in existence.
 	TotalCoins Int64
 	// fees burned since last inflation run
 	FeePool Int64
@@ -880,9 +880,9 @@ type LedgerHeader struct {
 	InflationSeq Uint32
 	// last used global ID, used for generating objects
 	IdPool Uint64
-	// base fee per operation in stroops
+	// base fee per operation in µg
 	BaseFee Uint32
-	// account base reserve in stroops
+	// account base reserve in µg
 	BaseReserve Uint32
 	// maximum size a transaction set can be
 	MaxTxSetSize Uint32

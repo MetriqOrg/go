@@ -3683,7 +3683,7 @@ var _ xdrType = (*AccountEntryExt)(nil)
 //	struct AccountEntry
 //	 {
 //	     AccountID accountID;      // master public key for this account
-//	     int64 balance;            // in stroops
+//	     int64 balance;            // in µg
 //	     SequenceNumber seqNum;    // last sequence number used for this account
 //	     uint32 numSubEntries;     // number of sub-entries this account has
 //	                               // drives the reserve
@@ -11160,8 +11160,8 @@ var _ xdrType = (*LedgerHeaderExt)(nil)
 //
 //	     uint64 idPool; // last used global ID, used for generating objects
 //
-//	     uint32 baseFee;     // base fee per operation in stroops
-//	     uint32 baseReserve; // account base reserve in stroops
+//	     uint32 baseFee;     // base fee per operation in µg
+//	     uint32 baseReserve; // account base reserve in µg
 //
 //	     uint32 maxTxSetSize; // maximum size a transaction set can be
 //

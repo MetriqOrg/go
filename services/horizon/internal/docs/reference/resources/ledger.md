@@ -28,8 +28,8 @@ To learn more about the concept of ledgers in the Stellar network, take a look a
 | max_tx_set_size              | number | The maximum number of transactions validators have agreed to process in a given ledger.                                      |
 | protocol_version             | number | The protocol version that the stellar network was running when this ledger was committed.                                    |
 | header_xdr                   | string | A base64 encoded string of the raw `LedgerHeader` xdr struct for this ledger.                                                |
-| base_fee_in_stroops          | number | The [fee] the network charges per operation in a transaction.  Expressed in stroops.                                         |
-| base_reserve_in_stroops      | number | The [reserve][fee] the network uses when calculating an account's minimum balance. Expressed in stroops.                     |
+| base_fee_in_stroops          | number | The [fee] the network charges per operation in a transaction.  Expressed in µg.                                         |
+| base_reserve_in_stroops      | number | The [reserve][fee] the network uses when calculating an account's minimum balance. Expressed in µg.                     |
 
 ## Links
 |              | Example                                           | Relation                        | templated |

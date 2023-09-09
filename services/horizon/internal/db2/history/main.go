@@ -459,7 +459,7 @@ func (a ExpAssetStatAccounts) IsZero() bool {
 }
 
 // ExpAssetStatBalances represents the summarized balances for a single Asset
-// Note: the string representation is in stroops!
+// Note: the string representation is in µg!
 type ExpAssetStatBalances struct {
 	Authorized                      string `json:"authorized"`
 	AuthorizedToMaintainLiabilities string `json:"authorized_to_maintain_liabilities"`

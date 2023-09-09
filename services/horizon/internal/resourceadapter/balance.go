@@ -53,13 +53,13 @@ func PopulateAssetBalance(dest *protocol.Balance, row history.TrustLine) (err er
 	return
 }
 
-func PopulateNativeBalance(dest *protocol.Balance, stroops, buyingLiabilities, sellingLiabilities xdr.Int64) (err error) {
+func PopulateNativeBalance(dest *protocol.Balance, µg, buyingLiabilities, sellingLiabilities xdr.Int64) (err error) {
 	dest.Type, err = assets.String(xdr.AssetTypeAssetTypeNative)
 	if err != nil {
 		return errors.Wrap(err, "getting the string representation from the provided xdr asset type")
 	}
 
-	dest.Balance = amount.String(stroops)
+	dest.Balance = amount.String(µg)
 	dest.BuyingLiabilities = amount.String(buyingLiabilities)
 	dest.SellingLiabilities = amount.String(sellingLiabilities)
 	dest.LastModifiedLedger = 0
