@@ -202,7 +202,7 @@ transaction.sign(keypair);
 console.log(transaction.toEnvelope().toXDR().toString("base64"));
 ```
 
-After running this script you should see a signed transaction blob. To submit this transaction we send it to horizon or stellar-core. But before we do, let's open a new console and start our previous script by `node stream_payments.js`.
+After running this script you should see a signed transaction blob. To submit this transaction we send it to horizon or gramr. But before we do, let's open a new console and start our previous script by `node stream_payments.js`.
 
 Now to send a transaction just use horizon:
 

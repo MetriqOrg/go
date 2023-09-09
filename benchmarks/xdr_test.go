@@ -5,9 +5,9 @@ import (
 	"encoding/base64"
 	"testing"
 
-	xdr3 "github.com/stellar/go-xdr/xdr3"
-	"github.com/stellar/go/gxdr"
-	"github.com/stellar/go/xdr"
+	xdr3 "github.com/lantah/go-xdr/xdr3"
+	"github.com/lantah/go/gxdr"
+	"github.com/lantah/go/xdr"
 	goxdr "github.com/xdrpp/goxdr/xdr"
 )
 

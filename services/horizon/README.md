@@ -1,7 +1,7 @@
 # Horizon
-[![Build Status](https://circleci.com/gh/stellar/go.svg?style=shield)](https://circleci.com/gh/stellar/go)
+[![Build Status](https://circleci.com/gh/lantah/go.svg?style=shield)](https://circleci.com/gh/lantah/go)
 
-Horizon is the client facing API server for the [Stellar ecosystem](https://developers.stellar.org/docs/start/introduction/).  It acts as the interface between [Stellar Core](https://developers.stellar.org/docs/run-core-node/) and applications that want to access the Stellar network. It allows you to submit transactions to the network, check the status of accounts, subscribe to event streams and more.
+Horizon is the client facing API server for the [Stellar ecosystem](https://developers.stellar.org/docs/start/introduction/).  It acts as the interface between [Gramr](https://developers.stellar.org/docs/run-core-node/) and applications that want to access the Stellar network. It allows you to submit transactions to the network, check the status of accounts, subscribe to event streams and more.
 
 Check out the following resources to get started:
 - [Horizon Development Guide](internal/docs/GUIDE_FOR_DEVELOPERS.md): Instructions for building and developing Horizon. Covers setup, building, testing, and contributing. Also contains some helpful notes and context for Horizon developers.

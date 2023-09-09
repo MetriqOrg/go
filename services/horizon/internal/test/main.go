@@ -50,7 +50,7 @@ func Start(t *testing.T) *T {
 
 	result.Ctx = log.Set(context.Background(), logger)
 	result.HorizonDB = tdb.Horizon(t)
-	result.CoreDB = tdb.StellarCore(t)
+	result.CoreDB = tdb.Gramr(t)
 	result.Assert = assert.New(t)
 	result.Require = require.New(t)
 	result.EndLogTest = logger.StartTest(log.DebugLevel)

@@ -495,9 +495,9 @@ This is a minor release with no DB Schema migrations nor explicit state rebuild.
 
 * Add new command `horizon db detect-gaps`, which detects ingestion gaps in the database. The command prints out the `db reingest` commands to run in order to fill the gaps found ([3672](https://github.com/stellar/go/pull/3672)).
 * Performance improvement: Captive Core now reuses bucket files whenever it finds existing ones in the corresponding `--captive-core-storage-path` (introduced in [v2.1.0](#v2.1.0) rather than generating a one-time temporary sub-directory ([3670](https://github.com/stellar/go/pull/3670)). **This feature requires Stellar-Core version 17.1 or later.**
-* Horizon now monitors the Stellar Core binary on disk (pointed to by `--stellar-core-binary-path`/`STELLAR_CORE_BINARY_PATH`) and restarts its Captive Core subprocess if it detects changes (i.e a more recent file timestamp for the Stellar Core binary) ([3687](https://github.com/stellar/go/pull/3687)).
+* Horizon now monitors the Stellar Core binary on disk (pointed to by `--stellar-core-binary-path`/`GRAMR_BINARY_PATH`) and restarts its Captive Core subprocess if it detects changes (i.e a more recent file timestamp for the Stellar Core binary) ([3687](https://github.com/stellar/go/pull/3687)).
 * `POST /transactions` return `503 Service Unavailable` instead of `504 Gateway Timeout` if connected Stellar-Core is out of sync ([3653](https://github.com/stellar/go/pull/3653)).
-* Add protocol version metrics: `horizon_ingest_max_supported_protocol_version`, `horizon_ingest_captive_stellar_core_supported_protocol_version`, `horizon_stellar_core_supported_protocol_version` ([3634](https://github.com/stellar/go/pull/3634)).
+* Add protocol version metrics: `horizon_ingest_max_supported_protocol_version`, `horizon_ingest_captive_gramr_supported_protocol_version`, `horizon_gramr_supported_protocol_version` ([3634](https://github.com/stellar/go/pull/3634)).
 * Fixed crash in `horizon ingest verify-range` command ([3682](https://github.com/stellar/go/pull/3682)).
 * Handle replica conflict errors gracefully ([3674](https://github.com/stellar/go/pull/3674)).
 * Fix data race in request parameters handling ([3690](https://github.com/stellar/go/pull/3690)).
@@ -581,7 +581,7 @@ This is a minor release with no DB Schema migrations nor explicit state rebuild.
 * Add a flag `--captive-core-storage-path`/`CAPTIVE_CORE_STORAGE_PATH` that allows users to control the storage location for Captive Core bucket data ([3479](https://github.com/stellar/go/pull/3479)).
   - Previously, Horizon created a directory in `/tmp` to store Captive Core bucket data. Now, if the captive core storage path flag is not set, Horizon will default to using the current working directory.
 * Add a flag `--captive-core-log-path`/`CAPTIVE_CORE_LOG_PATH` that allows users to control the location of the logs emitted by Captive Core ([3472](https://github.com/stellar/go/pull/3472)). If you have a `LOG_FILE_PATH` entry in your Captive Core toml file remove that entry and use the horizon flag instead.
-* `--stellar-core-db-url` / `STELLAR_CORE_DATABASE_URL` should only be configured if Horizon ingestion is enabled otherwise Horizon will not start ([3477](https://github.com/stellar/go/pull/3477)).
+* `--stellar-core-db-url` / `GRAMR_DATABASE_URL` should only be configured if Horizon ingestion is enabled otherwise Horizon will not start ([3477](https://github.com/stellar/go/pull/3477)).
 
 ### New features
 
@@ -609,7 +609,7 @@ If you run into issues please check [Known Issues](https://github.com/stellar/go
 ### Breaking changes
 
 * There are new config params (below) required by Captive Stellar-Core. Please check the [Captive Core](https://github.com/stellar/go/blob/master/services/horizon/internal/docs/captive_core.md) guide for migration tips.
-  * `STELLAR_CORE_BINARY_PATH` - a path to Stellar-Core binary,
+  * `GRAMR_BINARY_PATH` - a path to Stellar-Core binary,
   * `CAPTIVE_CORE_CONFIG_APPEND_PATH` - defines a path to a file to append to the Stellar Core configuration file used by captive core.
 * The `expingest` command has been renamed to `ingest` since the ingestion system is not experimental anymore.
 * Removed `--rate-limit-redis-key` and `--redis-url` configuration flags.
@@ -827,7 +827,7 @@ This patch release fixes a regression introduced in 1.7.0, breaking the
   To try out this new experimental feature, you need to specify the following parameters when starting ingesting Horizon instance:
 
   - `--enable-captive-core-ingestion` or `ENABLE_CAPTIVE_CORE_INGESTION=true`.
-  - `--stellar-core-binary-path` or `STELLAR_CORE_BINARY_PATH`.
+  - `--stellar-core-binary-path` or `GRAMR_BINARY_PATH`.
 
 ## v1.5.0
 
@@ -850,7 +850,7 @@ Extend ingestion to store the total number of operations in the transaction set 
   For now, this is only supported while running `horizon db reingest`. To try out this new experimental feature, you need to specify the following parameters:
 
   - `--enable-captive-core-ingestion` or `ENABLE_CAPTIVE_CORE_INGESTION=true`.
-  - `--stellar-core-binary-path` or `STELLAR_CORE_BINARY_PATH`.
+  - `--stellar-core-binary-path` or `GRAMR_BINARY_PATH`.
 
 ### SDK Maintainers: action needed
 

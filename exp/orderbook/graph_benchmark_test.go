@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 var (
@@ -169,7 +169,7 @@ func BenchmarkMultipleDestinationAssets(b *testing.B) {
 			amount.MustParse("554.2610400"),
 			[]xdr.Asset{
 				xdr.MustNewNativeAsset(),
-				xdr.MustNewCreditAsset("yXLM", "GARDNV3Q7YGT4AKSDF25LT32YSCCW4EV22Y2TV3I2PU2MMXJTEDL5T55"),
+				xdr.MustNewCreditAsset("GRAM", "GARDNV3Q7YGT4AKSDF25LT32YSCCW4EV22Y2TV3I2PU2MMXJTEDL5T55"),
 				xdr.MustNewCreditAsset("USDC", "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"),
 				xdr.MustNewCreditAsset("EURT", "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S"),
 			},

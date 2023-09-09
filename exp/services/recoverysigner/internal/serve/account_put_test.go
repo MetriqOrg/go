@@ -9,11 +9,11 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi"
-	"github.com/stellar/go/exp/services/recoverysigner/internal/account"
-	"github.com/stellar/go/exp/services/recoverysigner/internal/db/dbtest"
-	"github.com/stellar/go/exp/services/recoverysigner/internal/serve/auth"
-	"github.com/stellar/go/keypair"
-	supportlog "github.com/stellar/go/support/log"
+	"github.com/lantah/go/exp/services/recoverysigner/internal/account"
+	"github.com/lantah/go/exp/services/recoverysigner/internal/db/dbtest"
+	"github.com/lantah/go/exp/services/recoverysigner/internal/serve/auth"
+	"github.com/lantah/go/keypair"
+	supportlog "github.com/lantah/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

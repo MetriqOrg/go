@@ -4,11 +4,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/txnbuild"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	hProtocol "github.com/stellar/go/protocols/horizon"
+	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/keypair"
+	hProtocol "github.com/lantah/go/protocols/horizon"
 	"github.com/stretchr/testify/assert"
 )
 

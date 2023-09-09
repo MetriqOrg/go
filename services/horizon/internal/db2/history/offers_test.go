@@ -21,11 +21,11 @@ var (
 	eurAsset    = xdr.MustNewCreditAsset("EUR", issuer.Address())
 	usdAsset    = xdr.MustNewCreditAsset("USD", issuer.Address())
 
-	xlmOffer = Offer{
+	gramOffer = Offer{
 		SellerID: issuer.Address(),
 		OfferID:  int64(100),
 
-		BuyingAsset:  xlmAsset,
+		BuyingAsset:  gramAsset,
 		SellingAsset: eurAsset,
 
 		Amount:             int64(100),
@@ -177,7 +177,7 @@ func TestInsertOffers(t *testing.T) {
 	tt.Assert.NoError(err)
 	err = insertOffer(tt, q, twoEurOffer)
 	tt.Assert.NoError(err)
-	err = insertOffer(tt, q, xlmOffer)
+	err = insertOffer(tt, q, gramOffer)
 	tt.Assert.NoError(err)
 
 	var offers []Offer
@@ -196,7 +196,7 @@ func TestInsertOffers(t *testing.T) {
 
 	tt.Assert.Equal(offersByID[eurOffer.OfferID], eurOffer)
 	tt.Assert.Equal(offersByID[twoEurOffer.OfferID], twoEurOffer)
-	tt.Assert.Equal(offersByID[xlmOffer.OfferID], xlmOffer)
+	tt.Assert.Equal(offersByID[gramOffer.OfferID], gramOffer)
 
 	count, err := q.CountOffers(tt.Ctx)
 	tt.Assert.NoError(err)

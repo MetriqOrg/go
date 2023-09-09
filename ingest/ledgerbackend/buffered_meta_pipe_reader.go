@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	xdr3 "github.com/stellar/go-xdr/xdr3"
+	xdr3 "github.com/lantah/go-xdr/xdr3"
 
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/xdr"
 )
 
 const (
@@ -48,9 +48,9 @@ type metaResult struct {
 //
 // It solves the following issues:
 //
-//   - Decouples buffering from stellarCoreRunner so it can focus on running core.
+//   - Decouples buffering from gramrRunner so it can focus on running core.
 //   - Decouples unmarshaling and buffering of LedgerCloseMeta's from CaptiveCore.
-//   - By adding buffering it allows unmarshaling the ledgers available in Stellar-Core
+//   - By adding buffering it allows unmarshaling the ledgers available in Gramr
 //     while previous ledger are being processed.
 //   - Limits memory usage in case of large ledgers are closed by the network.
 //
@@ -70,7 +70,7 @@ type bufferedLedgerMetaReader struct {
 }
 
 // newBufferedLedgerMetaReader creates a new meta reader that will shutdown
-// when stellar-core terminates.
+// when gramr terminates.
 func newBufferedLedgerMetaReader(reader io.Reader) *bufferedLedgerMetaReader {
 	r := bufio.NewReaderSize(reader, metaPipeBufferSize)
 	return &bufferedLedgerMetaReader{

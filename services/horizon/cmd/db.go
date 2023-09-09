@@ -12,15 +12,15 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
+	"github.com/lantah/go/services/horizon/internal/db2/history"
 
-	horizon "github.com/stellar/go/services/horizon/internal"
-	"github.com/stellar/go/services/horizon/internal/db2/schema"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	support "github.com/stellar/go/support/config"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	hlog "github.com/stellar/go/support/log"
+	horizon "github.com/lantah/go/services/horizon/internal"
+	"github.com/lantah/go/services/horizon/internal/db2/schema"
+	"github.com/lantah/go/services/horizon/internal/ingest"
+	support "github.com/lantah/go/support/config"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	hlog "github.com/lantah/go/support/log"
 )
 
 var dbCmd = &cobra.Command{
@@ -412,8 +412,8 @@ func runDBReingestRange(ledgerRanges []history.LedgerRange, reingestForce bool, 
 		RemoteCaptiveCoreURL:        config.RemoteCaptiveCoreURL,
 		CaptiveCoreToml:             config.CaptiveCoreToml,
 		CaptiveCoreStoragePath:      config.CaptiveCoreStoragePath,
-		StellarCoreCursor:           config.CursorName,
-		StellarCoreURL:              config.StellarCoreURL,
+		GramrCursor:                 config.CursorName,
+		GramrURL:                    config.GramrURL,
 		RoundingSlippageFilter:      config.RoundingSlippageFilter,
 		EnableIngestionFiltering:    config.EnableIngestionFiltering,
 	}
@@ -423,10 +423,10 @@ func runDBReingestRange(ledgerRanges []history.LedgerRange, reingestForce bool, 
 	}
 
 	if !config.EnableCaptiveCoreIngestion {
-		if config.StellarCoreDatabaseURL == "" {
-			return fmt.Errorf("flag --%s cannot be empty", horizon.StellarCoreDBURLFlagName)
+		if config.GramrDatabaseURL == "" {
+			return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
 		}
-		if ingestConfig.CoreSession, err = db.Open("postgres", config.StellarCoreDatabaseURL); err != nil {
+		if ingestConfig.CoreSession, err = db.Open("postgres", config.GramrDatabaseURL); err != nil {
 			ingestConfig.HistorySession.Close()
 			return fmt.Errorf("cannot open Core DB: %v", err)
 		}

@@ -30,8 +30,8 @@ type Config struct {
 	CaptiveCoreReuseStoragePath bool
 	CaptiveCoreConfigUseDB      bool
 
-	StellarCoreDatabaseURL string
-	StellarCoreURL         string
+	GramrDatabaseURL string
+	GramrURL         string
 
 	// MaxDBConnections has a priority over all 4 values below.
 	MaxDBConnections            int
@@ -68,9 +68,9 @@ type Config struct {
 	TLSKey string
 	// Ingest toggles whether this horizon instance should run the data ingestion subsystem.
 	Ingest bool
-	// CursorName is the cursor used for ingesting from stellar-core.
+	// CursorName is the cursor used for ingesting from gramr.
 	// Setting multiple cursors in different Horizon instances allows multiple
-	// Horizons to ingest from the same stellar-core instance without cursor
+	// Horizons to ingest from the same gramr instance without cursor
 	// collisions.
 	CursorName string
 	// HistoryRetentionCount represents the minimum number of ledgers worth of
@@ -83,7 +83,7 @@ type Config struct {
 	// requests.
 	StaleThreshold uint
 	// SkipCursorUpdate causes the ingestor to skip reporting the "last imported
-	// ledger" state to stellar-core.
+	// ledger" state to gramr.
 	SkipCursorUpdate bool
 	// IngestDisableStateVerification disables state verification
 	// `System.verifyState()` when set to `true`.

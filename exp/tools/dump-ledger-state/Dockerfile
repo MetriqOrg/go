@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV STELLAR_CORE_VERSION=19.12.0-1378.2109a168a.focal
+ENV GRAMR_VERSION=19.12.0-1378.2109a168a.focal
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl wget gnupg apt-utils
@@ -9,7 +9,7 @@ RUN echo "deb https://apt.stellar.org focal stable" >/etc/apt/sources.list.d/SDF
 # RUN echo "deb https://apt.stellar.org focal unstable" >/etc/apt/sources.list.d/SDF-unstable.list
 RUN apt-get update -y
 
-RUN apt-get install -y stellar-core=${STELLAR_CORE_VERSION} jq
+RUN apt-get install -y gramr=${GRAMR_VERSION} jq
 RUN apt-get clean
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ $(env -i bash -c '. /etc/os-release; echo $VERSION_CODENAME')-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
@@ -28,7 +28,7 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.6/main/postgresql.conf
 
 RUN curl -sL https://storage.googleapis.com/golang/go1.19.linux-amd64.tar.gz | tar -C /usr/local -xz
 RUN ln -s  /usr/local/go/bin/go /usr/local/bin/go
-WORKDIR /go/src/github.com/stellar/go
+WORKDIR /go/src/github.com/lantah/go
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . ./
@@ -37,7 +37,7 @@ ENV PGPORT=5432
 ENV PGUSER=circleci
 ENV PGHOST=localhost
 
-WORKDIR /go/src/github.com/stellar/go/exp/tools/dump-ledger-state
+WORKDIR /go/src/github.com/lantah/go/exp/tools/dump-ledger-state
 
 ARG GITCOMMIT
 ENV GITCOMMIT=${GITCOMMIT}

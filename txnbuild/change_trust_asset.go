@@ -15,7 +15,7 @@ type ChangeTrustAsset interface {
 	ToTrustLineAsset() (TrustLineAsset, error)
 }
 
-// LiquidityPoolShareChangeTrustAsset represents non-XLM assets on the Stellar network.
+// LiquidityPoolShareChangeTrustAsset represents non-GRAM assets on the Stellar network.
 type LiquidityPoolShareChangeTrustAsset struct {
 	LiquidityPoolParameters LiquidityPoolParameters
 }
@@ -25,7 +25,7 @@ func (lpsa LiquidityPoolShareChangeTrustAsset) GetType() (AssetType, error) {
 	return AssetTypePoolShare, nil
 }
 
-// IsNative for LiquidityPoolShareChangeTrustAsset returns false (this is not an XLM asset).
+// IsNative for LiquidityPoolShareChangeTrustAsset returns false (this is not an GRAM asset).
 func (lpsa LiquidityPoolShareChangeTrustAsset) IsNative() bool { return false }
 
 // GetCode for LiquidityPoolShareChangeTrustAsset returns blank string

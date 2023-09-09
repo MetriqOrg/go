@@ -8,9 +8,9 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/price"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/price"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -1642,7 +1642,7 @@ func TestFindPaths(t *testing.T) {
 			DestinationAsset:  nativeAsset.String(),
 			DestinationAmount: 20,
 		},
-		// include the empty path where xlm is transferred without any
+		// include the empty path where gram is transferred without any
 		// conversions
 		{
 			SourceAmount:      20,
@@ -2126,13 +2126,13 @@ func TestInterleavedPaths(t *testing.T) {
 
 	// The final graph looks like the following:
 	//
-	//  - XLM: Offer 100 for 1 EUR each
+	//  - GRAM: Offer 100 for 1 EUR each
 	//         LP        for USD, 50:1
 	//
 	//  - EUR: LP for USD, 1:1
 	//
 	//  - USD: LP for EUR, 1:1
-	//         LP for XLM, 1:4
+	//         LP for GRAM, 1:4
 	//         LP for CHF, 2:1
 	//
 	//  - CHF: Offer 1 for 4 USD each
@@ -2150,14 +2150,14 @@ func TestInterleavedPaths(t *testing.T) {
 		true,
 	)
 
-	// There should be two paths: one that consumes the EUR/XLM offers and one
-	// that goes through the USD/XLM liquidity pool.
+	// There should be two paths: one that consumes the EUR/GRAM offers and one
+	// that goes through the USD/GRAM liquidity pool.
 	//
 	// If we take up the offers, it's very efficient:
-	//   64 CHF for 166 USD for 142 EUR for 100 XLM
+	//   64 CHF for 166 USD for 142 EUR for 100 GRAM
 	//
 	// If we only go through pools, it's less-so:
-	//   90 CHF for 152 USD for 100 XLM
+	//   90 CHF for 152 USD for 100 GRAM
 	expectedPaths := []Path{{
 		SourceAsset:       chfAsset.String(),
 		SourceAmount:      64,
@@ -2298,7 +2298,7 @@ func TestInterleavedFixedPaths(t *testing.T) {
 
 func TestRepro(t *testing.T) {
 	// A reproduction of the bug report:
-	// https://github.com/stellar/go/issues/4014
+	// https://github.com/lantah/go/issues/4014
 	usdc := xdr.MustNewCreditAsset("USDC", "GAEB3HSAWRVILER6T5NMX5VAPTK4PPO2BAL37HR2EOUIK567GJFEO437")
 	eurt := xdr.MustNewCreditAsset("EURT", "GABHG6C7YL2WA2ZJSONPD6ZBWLPAWKYDPYMK6BQRFLZXPQE7IBSTMPNN")
 
@@ -2376,7 +2376,7 @@ func makePool(A, B xdr.Asset, a, b xdr.Int64) xdr.LiquidityPoolEntry {
 func getCode(asset xdr.Asset) string {
 	code := asset.GetCode()
 	if code == "" {
-		return "xlm"
+		return "gram"
 	}
 	return code
 }

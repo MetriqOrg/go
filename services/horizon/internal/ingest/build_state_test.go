@@ -26,7 +26,7 @@ type BuildStateTestSuite struct {
 	ledgerBackend     *ledgerbackend.MockDatabaseBackend
 	system            *system
 	runner            *mockProcessorsRunner
-	stellarCoreClient *mockStellarCoreClient
+	gramrClient *mockGramrClient
 	checkpointLedger  uint32
 	lastLedger        uint32
 }
@@ -37,7 +37,7 @@ func (s *BuildStateTestSuite) SetupTest() {
 	s.runner = &mockProcessorsRunner{}
 	s.historyAdapter = &mockHistoryArchiveAdapter{}
 	s.ledgerBackend = &ledgerbackend.MockDatabaseBackend{}
-	s.stellarCoreClient = &mockStellarCoreClient{}
+	s.gramrClient = &mockGramrClient{}
 	s.checkpointLedger = uint32(63)
 	s.lastLedger = 0
 	s.system = &system{
@@ -46,7 +46,7 @@ func (s *BuildStateTestSuite) SetupTest() {
 		historyAdapter:    s.historyAdapter,
 		ledgerBackend:     s.ledgerBackend,
 		runner:            s.runner,
-		stellarCoreClient: s.stellarCoreClient,
+		gramrClient: s.gramrClient,
 	}
 	s.system.initMetrics()
 
@@ -73,7 +73,7 @@ func (s *BuildStateTestSuite) TearDownTest() {
 	s.historyQ.AssertExpectations(t)
 	s.historyAdapter.AssertExpectations(t)
 	s.runner.AssertExpectations(t)
-	s.stellarCoreClient.AssertExpectations(t)
+	s.gramrClient.AssertExpectations(t)
 	s.ledgerBackend.AssertExpectations(t)
 }
 
@@ -83,7 +83,7 @@ func (s *BuildStateTestSuite) mockCommonHistoryQ() {
 	s.historyQ.On("UpdateLastLedgerIngest", s.ctx, s.lastLedger).Return(nil).Once()
 	s.historyQ.On("UpdateExpStateInvalid", s.ctx, false).Return(nil).Once()
 	s.historyQ.On("TruncateIngestStateTables", s.ctx).Return(nil).Once()
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,
@@ -175,7 +175,7 @@ func (s *BuildStateTestSuite) TestUpdateLastLedgerIngestReturnsError() {
 	s.historyQ.On("GetLastLedgerIngest", s.ctx).Return(s.lastLedger, nil).Once()
 	s.historyQ.On("GetIngestVersion", s.ctx).Return(CurrentVersion, nil).Once()
 	s.historyQ.On("UpdateLastLedgerIngest", s.ctx, s.lastLedger).Return(errors.New("my error")).Once()
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,
@@ -194,7 +194,7 @@ func (s *BuildStateTestSuite) TestUpdateExpStateInvalidReturnsError() {
 	s.historyQ.On("GetIngestVersion", s.ctx).Return(CurrentVersion, nil).Once()
 	s.historyQ.On("UpdateLastLedgerIngest", s.ctx, s.lastLedger).Return(nil).Once()
 	s.historyQ.On("UpdateExpStateInvalid", s.ctx, false).Return(errors.New("my error")).Once()
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,
@@ -215,7 +215,7 @@ func (s *BuildStateTestSuite) TestTruncateIngestStateTablesReturnsError() {
 	s.historyQ.On("UpdateExpStateInvalid", s.ctx, false).Return(nil).Once()
 	s.historyQ.On("TruncateIngestStateTables", s.ctx).Return(errors.New("my error")).Once()
 
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,
@@ -251,7 +251,7 @@ func (s *BuildStateTestSuite) TestRunHistoryArchiveIngestionGenesisReturnsError(
 	s.historyQ.On("UpdateLastLedgerIngest", s.ctx, uint32(0)).Return(nil).Once()
 	s.historyQ.On("UpdateExpStateInvalid", s.ctx, false).Return(nil).Once()
 	s.historyQ.On("TruncateIngestStateTables", s.ctx).Return(nil).Once()
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,

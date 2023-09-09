@@ -25,7 +25,7 @@ type ResumeTestTestSuite struct {
 	historyQ          *mockDBQ
 	historyAdapter    *mockHistoryArchiveAdapter
 	runner            *mockProcessorsRunner
-	stellarCoreClient *mockStellarCoreClient
+	gramrClient *mockGramrClient
 	system            *system
 }
 
@@ -35,14 +35,14 @@ func (s *ResumeTestTestSuite) SetupTest() {
 	s.historyQ = &mockDBQ{}
 	s.historyAdapter = &mockHistoryArchiveAdapter{}
 	s.runner = &mockProcessorsRunner{}
-	s.stellarCoreClient = &mockStellarCoreClient{}
+	s.gramrClient = &mockGramrClient{}
 	s.system = &system{
 		ctx:                          s.ctx,
 		historyQ:                     s.historyQ,
 		historyAdapter:               s.historyAdapter,
 		runner:                       s.runner,
 		ledgerBackend:                s.ledgerBackend,
-		stellarCoreClient:            s.stellarCoreClient,
+		gramrClient:            s.gramrClient,
 		runStateVerificationOnLedger: ledgerEligibleForStateVerification(64, 1),
 	}
 	s.system.initMetrics()
@@ -70,7 +70,7 @@ func (s *ResumeTestTestSuite) TearDownTest() {
 	s.runner.AssertExpectations(t)
 	s.historyAdapter.AssertExpectations(t)
 	s.ledgerBackend.AssertExpectations(t)
-	s.stellarCoreClient.AssertExpectations(t)
+	s.gramrClient.AssertExpectations(t)
 }
 
 func (s *ResumeTestTestSuite) TestInvalidParam() {
@@ -274,7 +274,7 @@ func (s *ResumeTestTestSuite) mockSuccessfulIngestion() {
 	s.historyQ.On("Commit").Return(nil).Once()
 	s.historyQ.On("RebuildTradeAggregationBuckets", s.ctx, uint32(101), uint32(101), 0).Return(nil).Once()
 
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,
@@ -303,7 +303,7 @@ func (s *ResumeTestTestSuite) TestBumpIngestLedger() {
 	s.historyQ.On("Begin", s.ctx).Return(nil).Once()
 	s.historyQ.On("GetLastLedgerIngest", s.ctx).Return(uint32(101), nil).Once()
 
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,
@@ -353,7 +353,7 @@ func (s *ResumeTestTestSuite) TestErrorSettingCursorIgnored() {
 	s.historyQ.On("UpdateLastLedgerIngest", s.ctx, uint32(101)).Return(nil).Once()
 	s.historyQ.On("Commit").Return(nil).Once()
 
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,
@@ -392,7 +392,7 @@ func (s *ResumeTestTestSuite) TestReapingObjectsDisabled() {
 	s.historyQ.On("UpdateLastLedgerIngest", s.ctx, uint32(101)).Return(nil).Once()
 	s.historyQ.On("Commit").Return(nil).Once()
 
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,
@@ -436,7 +436,7 @@ func (s *ResumeTestTestSuite) TestErrorReapingObjectsIgnored() {
 	s.historyQ.On("UpdateLastLedgerIngest", s.ctx, uint32(101)).Return(nil).Once()
 	s.historyQ.On("Commit").Return(nil).Once()
 
-	s.stellarCoreClient.On(
+	s.gramrClient.On(
 		"SetCursor",
 		mock.AnythingOfType("*context.timerCtx"),
 		defaultCoreCursorName,

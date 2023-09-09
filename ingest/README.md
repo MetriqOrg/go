@@ -37,9 +37,9 @@ This is described in a little more detail in [`doc.go`](./doc.go), its accompany
 
 
 # Hello, World!
-As is tradition, we'll start with a simplistic example that ingests a single ledger from the network. We're immediately faced with a decision, though: _What's the backend?_ We'll use a **Captive Stellar-Core backend** in this example because it requires (little-to-)no setup, but there are couple of alternatives available. You could also use:
+As is tradition, we'll start with a simplistic example that ingests a single ledger from the network. We're immediately faced with a decision, though: _What's the backend?_ We'll use a **Captive Gramr backend** in this example because it requires (little-to-)no setup, but there are couple of alternatives available. You could also use:
 
-  - a **database** (via `NewDatabaseBackend()`), which would ingest ledgers stored in a Stellar-Core database, or
+  - a **database** (via `NewDatabaseBackend()`), which would ingest ledgers stored in a Gramr database, or
 
   - a **remote Captive Core** instance (via `NewRemoteCaptive()`), which works much like Captive Core, but points to an instance that isn't (necessarily) running locally.
 
@@ -52,7 +52,7 @@ import (
 	"context"
 	"fmt"
 
-	backends "github.com/stellar/go/ingest/ledgerbackend"
+	backends "github.com/lantah/go/ingest/ledgerbackend"
 )
 
 func main() {
@@ -92,7 +92,7 @@ panicIf(err)
 
 config := ledgerbackend.CaptiveCoreConfig{
 	// Change these based on your environment:
-	BinaryPath:         "/usr/bin/stellar-core",
+	BinaryPath:         "/usr/bin/gramr",
 	NetworkPassphrase:  networkPassphrase,
 	HistoryArchiveURLs: archiveURLs,
 	Toml:               captiveCoreToml,
@@ -105,7 +105,7 @@ Running this should dump a ton of logs while Captive Core boots up, downloads a 
 
 ```
 $ go run ./example.go
-INFO[...] default: Config from /tmp/captive-stellar-core365405852/stellar-core.conf  pid=20574
+INFO[...] default: Config from /tmp/captive-gramr365405852/gramr.conf  pid=20574
 INFO[...] default: RUN_STANDALONE enabled in configuration file - node will not function properly with most networks  pid=20574
 INFO[...] default: Generated QUORUM_SET: {              pid=20574
 INFO[...] "t" : 2,                                      pid=20574
@@ -172,9 +172,9 @@ import (
 	"io"
 
 	"github.com/sirupsen/logrus"
-	"github.com/stellar/go/ingest"
-	backends "github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/ingest"
+	backends "github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/support/log"
 )
 
 func statistics() {
@@ -277,7 +277,7 @@ In this example, we'll leverage the `CheckpointChangeReader` to determine the po
 Let's begin. As before, there's a bit of boilerplate necessary. There's only a single additional import necessary relative to the [previous Preamble](#preamble). Since we're working with checkpoint ledgers, history archives come into play:
 
 ```go
-import "github.com/stellar/go/historyarchive"
+import "github.com/lantah/go/historyarchive"
 ```
 
 This time, we don't need a `LedgerBackend` instance whatsoever. The ledger changes we want to process will be fed into the reader through a different means. In our example, the history archives have the ~droids~ ledgers that we are looking for.
@@ -364,8 +364,8 @@ You can suppress many logs by changing the level to only print warnings and erro
 package main
 
 import (
-  ingest "github.com/stellar/go/ingest/ledgerbackend"
-  "github.com/stellar/go/support/log"
+  ingest "github.com/lantah/go/ingest/ledgerbackend"
+  "github.com/lantah/go/support/log"
   "github.com/sirupsen/logrus"
 )
 

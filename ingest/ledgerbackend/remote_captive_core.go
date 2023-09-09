@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // PrepareRangeResponse describes the status of the pending PrepareRange operation.
@@ -60,35 +60,35 @@ func (r Base64Ledger) MarshalJSON() ([]byte, error) {
 	return json.Marshal(base64)
 }
 
-// RemoteCaptiveStellarCore is an http client for interacting with a remote captive core server.
-type RemoteCaptiveStellarCore struct {
+// RemoteCaptiveGramr is an http client for interacting with a remote captive core server.
+type RemoteCaptiveGramr struct {
 	url                      *url.URL
 	client                   *http.Client
 	lock                     *sync.Mutex
 	prepareRangePollInterval time.Duration
 }
 
-// RemoteCaptiveOption values can be passed into NewRemoteCaptive to customize a RemoteCaptiveStellarCore instance.
-type RemoteCaptiveOption func(c *RemoteCaptiveStellarCore)
+// RemoteCaptiveOption values can be passed into NewRemoteCaptive to customize a RemoteCaptiveGramr instance.
+type RemoteCaptiveOption func(c *RemoteCaptiveGramr)
 
 // PrepareRangePollInterval configures how often the captive core server will be polled when blocking
 // on the PrepareRange operation.
 func PrepareRangePollInterval(d time.Duration) RemoteCaptiveOption {
-	return func(c *RemoteCaptiveStellarCore) {
+	return func(c *RemoteCaptiveGramr) {
 		c.prepareRangePollInterval = d
 	}
 }
 
-// NewRemoteCaptive returns a new RemoteCaptiveStellarCore instance.
+// NewRemoteCaptive returns a new RemoteCaptiveGramr instance.
 //
 // Only the captiveCoreURL parameter is required.
-func NewRemoteCaptive(captiveCoreURL string, options ...RemoteCaptiveOption) (RemoteCaptiveStellarCore, error) {
+func NewRemoteCaptive(captiveCoreURL string, options ...RemoteCaptiveOption) (RemoteCaptiveGramr, error) {
 	u, err := url.Parse(captiveCoreURL)
 	if err != nil {
-		return RemoteCaptiveStellarCore{}, errors.Wrap(err, "unparseable url")
+		return RemoteCaptiveGramr{}, errors.Wrap(err, "unparseable url")
 	}
 
-	client := RemoteCaptiveStellarCore{
+	client := RemoteCaptiveGramr{
 		prepareRangePollInterval: time.Second,
 		url:                      u,
 		client:                   &http.Client{Timeout: 10 * time.Second},
@@ -125,7 +125,7 @@ func decodeResponse(response *http.Response, payload interface{}) error {
 // Note that for UnboundedRange the returned sequence number is not necessarily
 // the latest sequence closed by the network. It's always the last value available
 // in the backend.
-func (c RemoteCaptiveStellarCore) GetLatestLedgerSequence(ctx context.Context) (sequence uint32, err error) {
+func (c RemoteCaptiveGramr) GetLatestLedgerSequence(ctx context.Context) (sequence uint32, err error) {
 	// TODO: Have a context on this request so we can cancel all outstanding
 	// requests, not just PrepareRange.
 	u := *c.url
@@ -149,21 +149,21 @@ func (c RemoteCaptiveStellarCore) GetLatestLedgerSequence(ctx context.Context) (
 }
 
 // Close cancels any pending PrepareRange requests.
-func (c RemoteCaptiveStellarCore) Close() error {
+func (c RemoteCaptiveGramr) Close() error {
 	return nil
 }
 
 // PrepareRange prepares the given range (including from and to) to be loaded.
-// Captive stellar-core backend needs to initalize Stellar-Core state to be
+// Captive gramr backend needs to initalize Gramr state to be
 // able to stream ledgers.
-// Stellar-Core mode depends on the provided ledgerRange:
-//   - For BoundedRange it will start Stellar-Core in catchup mode.
+// Gramr mode depends on the provided ledgerRange:
+//   - For BoundedRange it will start Gramr in catchup mode.
 //   - For UnboundedRange it will first catchup to starting ledger and then run
 //     it normally (including connecting to the Stellar network).
 //
 // Please note that using a BoundedRange, currently, requires a full-trust on
-// history archive. This issue is being fixed in Stellar-Core.
-func (c RemoteCaptiveStellarCore) PrepareRange(ctx context.Context, ledgerRange Range) error {
+// history archive. This issue is being fixed in Gramr.
+func (c RemoteCaptiveGramr) PrepareRange(ctx context.Context, ledgerRange Range) error {
 	// TODO: removing createContext call here means we could technically have
 	// multiple prepareRange requests happening at the same time. Do we still
 	// need to enforce that?
@@ -190,7 +190,7 @@ func (c RemoteCaptiveStellarCore) PrepareRange(ctx context.Context, ledgerRange 
 }
 
 // IsPrepared returns true if a given ledgerRange is prepared.
-func (c RemoteCaptiveStellarCore) IsPrepared(ctx context.Context, ledgerRange Range) (bool, error) {
+func (c RemoteCaptiveGramr) IsPrepared(ctx context.Context, ledgerRange Range) (bool, error) {
 	// TODO: Have some way to cancel all outstanding requests, not just
 	// PrepareRange.
 	u := *c.url
@@ -220,17 +220,17 @@ func (c RemoteCaptiveStellarCore) IsPrepared(ctx context.Context, ledgerRange Ra
 	return parsed.Ready, nil
 }
 
-// GetLedger long-polls a remote stellar core backend, until the requested
+// GetLedger long-polls a remote gramr backend, until the requested
 // ledger is ready.
 
 // Call PrepareRange first to instruct the backend which ledgers to fetch.
 //
 // Requesting a ledger on non-prepared backend will return an error.
 //
-// Because data is streamed from Stellar-Core ledger after ledger user should
+// Because data is streamed from Gramr ledger after ledger user should
 // request sequences in a non-decreasing order. If the requested sequence number
 // is less than the last requested sequence number, an error will be returned.
-func (c RemoteCaptiveStellarCore) GetLedger(ctx context.Context, sequence uint32) (xdr.LedgerCloseMeta, error) {
+func (c RemoteCaptiveGramr) GetLedger(ctx context.Context, sequence uint32) (xdr.LedgerCloseMeta, error) {
 	for {
 		// TODO: Have some way to cancel all outstanding requests, not just
 		// PrepareRange.

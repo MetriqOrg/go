@@ -544,16 +544,16 @@ func (m *mockProcessorsRunner) RunTransactionProcessorsOnLedger(ledger xdr.Ledge
 
 var _ ProcessorRunnerInterface = (*mockProcessorsRunner)(nil)
 
-type mockStellarCoreClient struct {
+type mockGramrClient struct {
 	mock.Mock
 }
 
-func (m *mockStellarCoreClient) SetCursor(ctx context.Context, id string, cursor int32) error {
+func (m *mockGramrClient) SetCursor(ctx context.Context, id string, cursor int32) error {
 	args := m.Called(ctx, id, cursor)
 	return args.Error(0)
 }
 
-var _ stellarCoreClient = (*mockStellarCoreClient)(nil)
+var _ gramrClient = (*mockGramrClient)(nil)
 
 type mockSystem struct {
 	mock.Mock

@@ -4,11 +4,11 @@ import (
 	"go/types"
 
 	"github.com/spf13/cobra"
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/exp/services/webauth/internal/serve"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/support/config"
-	supportlog "github.com/stellar/go/support/log"
+	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/exp/services/webauth/internal/serve"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/support/config"
+	supportlog "github.com/lantah/go/support/log"
 )
 
 type ServeCommand struct {

@@ -1,8 +1,5 @@
 <div align="center">
-<a href="https://stellar.org"><img alt="Stellar" src="https://github.com/stellar/.github/raw/master/stellar-logo.png" width="558" /></a>
-<br/>
-<strong>Creating equitable access to the global financial system</strong>
-<h1>Stellar Go Monorepo</h1>
+<h1>Lantah Go Monorepo</h1>
 </div>
 <p align="center">
  
@@ -11,13 +8,13 @@
 <a href="https://goreportcard.com/report/github.com/stellar/go"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/stellar/go" /></a>
 </p>
 
-This repo is the home for all of the public Go code produced by the [Stellar Development Foundation].
+This repo is the home for all of the public Go code associated with the Lantah network. It is a fork of the go repo by SDF [Stellar Development Foundation]. Please be patient while we make changes. Thanks! :D
 
-This repo contains various tools and services that you can use and deploy, as well as the SDK you can use to develop applications that integrate with the Stellar network.
+This repo contains various tools and services that you can use and deploy, as well as the SDK you can use to develop applications that integrate with the Lantah network.
 
 ## Package Index
 
-* [Horizon Server](services/horizon): Full-featured API server for Stellar network
+* [Horizon Server](services/horizon): Full-featured API server for the Lantah network
 * [Go Horizon SDK - horizonclient](clients/horizonclient): Client for Horizon server (queries and transaction submission)
 * [Go Horizon SDK - txnbuild](txnbuild): Construct Stellar transactions and operations
 * [Ticker](services/ticker): An API server that provides statistics about assets and markets on the Stellar network

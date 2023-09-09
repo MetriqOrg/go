@@ -21,7 +21,7 @@ type System struct {
 	cancel         context.CancelFunc
 }
 
-// New initializes the reaper, causing it to begin polling the stellar-core
+// New initializes the reaper, causing it to begin polling the gramr
 // database for now ledgers and ingesting data into the horizon database.
 func New(retention uint, dbSession db.SessionInterface, ledgerState *ledger.State) *System {
 	ctx, cancel := context.WithCancel(context.Background())

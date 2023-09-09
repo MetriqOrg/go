@@ -9,7 +9,7 @@
                 "currency": "USD"
             },
             "sellingAsset": {
-                "code": "XLM",
+                "code": "GRAM",
                 "issuerAddress": "native",
                 "type": "AssetTypeNative"
             }

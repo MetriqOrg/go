@@ -8,17 +8,17 @@ import (
 
 	"github.com/jarcoal/httpmock"
 
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/support/clock"
-	"github.com/stellar/go/support/clock/clocktest"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/http/httptest"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	hProtocol "github.com/lantah/go/protocols/horizon"
+	"github.com/lantah/go/protocols/horizon/effects"
+	"github.com/lantah/go/protocols/horizon/operations"
+	"github.com/lantah/go/support/clock"
+	"github.com/lantah/go/support/clock/clocktest"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/http/httptest"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -1408,7 +1408,7 @@ func TestOrderBookRequest(t *testing.T) {
 
 	orderBookRequest := OrderBookRequest{BuyingAssetType: AssetTypeNative, SellingAssetCode: "USD", SellingAssetType: AssetType4, SellingAssetIssuer: "GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5"}
 
-	// orderbook for XLM/USD
+	// orderbook for GRAM/USD
 	hmock.On(
 		"GET",
 		"https://localhost/order_book?buying_asset_type=native&selling_asset_code=USD&selling_asset_issuer=GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5&selling_asset_type=credit_alphanum4",
@@ -1965,10 +1965,10 @@ var metricsResponse = `{
     "min": 20411,
     "stddev": 13264750988.737148
   },
-  "stellar_core.latest_ledger": {
+  "gramr.latest_ledger": {
     "value": 22826156
   },
-  "stellar_core.open_connections": {
+  "gramr.open_connections": {
     "value": 94
   },
   "txsub.buffered": {

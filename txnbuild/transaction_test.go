@@ -662,7 +662,7 @@ func TestChangeTrustNativeAssetNotAllowed(t *testing.T) {
 		},
 	)
 
-	expectedErrMsg := "validation failed for *txnbuild.ChangeTrust operation: Field: Line, Error: native (XLM) asset type is not allowed"
+	expectedErrMsg := "validation failed for *txnbuild.ChangeTrust operation: Field: Line, Error: native (GRAM) asset type is not allowed"
 	require.EqualError(t, err, expectedErrMsg, "No trustlines for native assets")
 }
 

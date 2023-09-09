@@ -55,7 +55,7 @@ INSERT INTO public.assets (
     issuer_id,
     issuer_account
 ) VALUES (
-    'XLM',
+    'GRAM',
     'native',
     0,
     FALSE,

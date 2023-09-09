@@ -27,7 +27,7 @@ type HorizonDB interface {
 
 // System represents a completely configured transaction submission system.
 // Its methods tie together the various pieces used to reliably submit transactions
-// to a stellar-core instance.
+// to a gramr instance.
 type System struct {
 	initializer sync.Once
 
@@ -45,7 +45,7 @@ type System struct {
 
 	Metrics struct {
 		// SubmissionDuration exposes timing metrics about the rate and latency of
-		// submissions to stellar-core
+		// submissions to gramr
 		SubmissionDuration prometheus.Summary
 
 		// BufferedSubmissionGauge tracks the count of submissions buffered
@@ -251,7 +251,7 @@ func (sys *System) deriveTxSubError(ctx context.Context) error {
 // Submit submits the provided base64 encoded transaction envelope to the
 // network using this submission system.
 func (sys *System) submitOnce(ctx context.Context, env string) SubmissionResult {
-	// submit to stellar-core
+	// submit to gramr
 	sr := sys.Submitter.Submit(ctx, env)
 	sys.Metrics.SubmissionDuration.Observe(float64(sr.Duration.Seconds()))
 
@@ -409,7 +409,7 @@ func (sys *System) Init() {
 
 		sys.Metrics.SubmissionDuration = prometheus.NewSummary(prometheus.SummaryOpts{
 			Namespace: "horizon", Subsystem: "txsub", Name: "submission_duration_seconds",
-			Help: "submission durations to Stellar-Core, sliding window = 10m",
+			Help: "submission durations to Gramr, sliding window = 10m",
 		})
 		sys.Metrics.FailedSubmissionsCounter = prometheus.NewCounter(prometheus.CounterOpts{
 			Namespace: "horizon", Subsystem: "txsub", Name: "failed",
@@ -439,7 +439,7 @@ func (sys *System) Init() {
 			// HTTP clients in SDKs usually timeout in 60 seconds. We want SubmissionTimeout
 			// to be lower than that to make sure that they read the response before the client
 			// timeout.
-			// 30 seconds is 6 ledgers (with avg. close time = 5 sec), enough for stellar-core
+			// 30 seconds is 6 ledgers (with avg. close time = 5 sec), enough for gramr
 			// to drop the transaction if not added to the ledger and ask client to try again
 			// by sending a Timeout response.
 			sys.SubmissionTimeout = 30 * time.Second

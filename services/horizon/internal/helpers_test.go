@@ -23,7 +23,7 @@ func NewTestApp(dsn string) *App {
 func NewTestConfig(dsn string) Config {
 	return Config{
 		DatabaseURL:            dsn,
-		StellarCoreDatabaseURL: tdb.StellarCoreURL(),
+		GramrDatabaseURL: tdb.GramrURL(),
 		RateQuota: &throttled.RateQuota{
 			MaxRate:  throttled.PerHour(1000),
 			MaxBurst: 100,

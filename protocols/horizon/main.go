@@ -11,11 +11,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/stellar/go/protocols/horizon/base"
-	"github.com/stellar/go/strkey"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/horizon/base"
+	"github.com/lantah/go/strkey"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/xdr"
 )
 
 // KeyTypeNames maps from strkey version bytes into json string values to use in
@@ -340,7 +340,7 @@ type Root struct {
 	} `json:"_links"`
 
 	HorizonVersion               string    `json:"horizon_version"`
-	StellarCoreVersion           string    `json:"core_version"`
+	GramrVersion           string    `json:"core_version"`
 	IngestSequence               uint32    `json:"ingest_latest_ledger"`
 	HorizonSequence              int32     `json:"history_latest_ledger"`
 	HorizonLatestClosedAt        time.Time `json:"history_latest_ledger_closed_at"`
@@ -368,7 +368,7 @@ type TradePrice struct {
 
 // String returns a string representation of the trade price
 func (p TradePrice) String() string {
-	return big.NewRat(p.N, p.D).FloatString(7)
+	return big.NewRat(p.N, p.D).FloatString(6)
 }
 
 // UnmarshalJSON implements a custom unmarshaler for TradePrice
@@ -731,7 +731,7 @@ type FeeDistribution struct {
 }
 
 // FeeStats represents a response of fees from horizon
-// To do: implement fee suggestions if agreement is reached in https://github.com/stellar/go/issues/926
+// To do: implement fee suggestions if agreement is reached in https://github.com/lantah/go/issues/926
 type FeeStats struct {
 	LastLedger          uint32  `json:"last_ledger,string"`
 	LastLedgerBaseFee   int64   `json:"last_ledger_base_fee,string"`

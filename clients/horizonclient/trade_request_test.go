@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/support/http/httptest"
+	hProtocol "github.com/lantah/go/protocols/horizon"
+	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

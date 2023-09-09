@@ -50,7 +50,7 @@ func UpdateOfferOp(selling, buying Asset, amount string, price xdr.Price, offerI
 // setting the Amount to "0". The sourceAccount is optional, and if not provided,
 // will be that of the surrounding transaction.
 func DeleteOfferOp(offerID int64, sourceAccount ...string) (ManageSellOffer, error) {
-	// It turns out Stellar core doesn't care about any of these fields except the amount.
+	// It turns out Gramr doesn't care about any of these fields except the amount.
 	// However, Horizon will reject ManageSellOffer if it is missing fields.
 	// Horizon will also reject if Buying == Selling.
 	// Therefore unfortunately we have to make up some dummy values here.

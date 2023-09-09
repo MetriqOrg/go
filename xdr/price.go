@@ -6,7 +6,7 @@ import (
 
 // String returns a string representation of `p`
 func (p Price) String() string {
-	return big.NewRat(int64(p.N), int64(p.D)).FloatString(7)
+	return big.NewRat(int64(p.N), int64(p.D)).FloatString(6)
 }
 
 // Equal returns whether the price's value is the same,

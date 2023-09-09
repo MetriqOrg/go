@@ -20,7 +20,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestStellarCoreMalformedTx(t *testing.T) {
+func TestGramrMalformedTx(t *testing.T) {
 	handler := SubmitTransactionHandler{}
 
 	r := httptest.NewRequest("POST", "https://horizon.stellar.org/transactions", nil)
@@ -49,7 +49,7 @@ func (m *networkSubmitterMock) Submit(ctx context.Context, rawTx string, envelop
 	return a.Get(0).(chan txsub.Result)
 }
 
-func TestStellarCoreNotSynced(t *testing.T) {
+func TestGramrNotSynced(t *testing.T) {
 	mock := &coreStateGetterMock{}
 	mock.On("GetCoreState").Return(corestate.State{
 		Synced: false,

@@ -53,7 +53,7 @@ fn test() {
 
     let token = token::Client::new(&env, &contract.get_token());
     let token_admin = token::AdminClient::new(&env, &contract.get_token());
-    assert_eq!(token.decimals(), 7);
+    assert_eq!(token.decimals(), 6);
     
     token_admin.mint(&contract_address, &1000);
 

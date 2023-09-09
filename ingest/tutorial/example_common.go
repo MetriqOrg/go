@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/stellar/go/ingest/ledgerbackend"
+	"github.com/lantah/go/ingest/ledgerbackend"
 )
 
 var (
@@ -25,7 +25,7 @@ func captiveCoreConfig() ledgerbackend.CaptiveCoreConfig {
 
 	return ledgerbackend.CaptiveCoreConfig{
 		// Change these based on your environment:
-		BinaryPath:         "/usr/local/bin/stellar-core",
+		BinaryPath:         "/usr/local/bin/gramr",
 		NetworkPassphrase:  networkPassphrase,
 		HistoryArchiveURLs: archiveURLs,
 		Toml:               captiveCoreToml,

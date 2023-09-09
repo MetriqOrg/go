@@ -138,7 +138,7 @@ func (q *Q) GetOrderBookSummary(ctx context.Context, sellingAsset, buyingAsset x
 		}
 
 		entry := PriceLevel{
-			Pricef: priceFraction.FloatString(7),
+			Pricef: priceFraction.FloatString(6),
 			Pricen: int32(priceFraction.Num().Int64()),
 			Priced: int32(priceFraction.Denom().Int64()),
 		}

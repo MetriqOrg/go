@@ -5,7 +5,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	hClient "github.com/stellar/go/clients/horizonclient"
+	hClient "github.com/lantah/go/clients/horizonclient"
 )
 
 type prometheusWatchedTP struct {

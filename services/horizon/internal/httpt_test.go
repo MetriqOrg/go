@@ -44,9 +44,9 @@ func startHTTPTest(t *testing.T, scenario string) *HTTPT {
 		}
 	}`)
 
-	ret.App.config.StellarCoreURL = ret.coreServer.URL
+	ret.App.config.GramrURL = ret.coreServer.URL
 	ret.App.UpdateCoreLedgerState(context.Background())
-	ret.App.UpdateStellarCoreInfo(context.Background())
+	ret.App.UpdateGramrInfo(context.Background())
 	ret.App.UpdateHorizonLedgerState(context.Background())
 
 	return ret

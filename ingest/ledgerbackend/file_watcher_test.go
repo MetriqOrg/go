@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/support/log"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -44,7 +44,7 @@ func (m *mockHash) hashFile(fp string) (hash, error) {
 	return m.hashResult, m.err
 }
 
-func createFWFixtures(t *testing.T) (*mockHash, *stellarCoreRunner, *fileWatcher) {
+func createFWFixtures(t *testing.T) (*mockHash, *gramrRunner, *fileWatcher) {
 	storagePath, err := os.MkdirTemp("", "captive-core-*")
 	require.NoError(t, err)
 	defer os.RemoveAll(storagePath)
@@ -58,7 +58,7 @@ func createFWFixtures(t *testing.T) (*mockHash, *stellarCoreRunner, *fileWatcher
 	captiveCoreToml, err := NewCaptiveCoreToml(CaptiveCoreTomlParams{})
 	assert.NoError(t, err)
 
-	runner := newStellarCoreRunner(CaptiveCoreConfig{
+	runner := newGramrRunner(CaptiveCoreConfig{
 		BinaryPath:         "/some/path",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),
@@ -89,7 +89,7 @@ func TestNewFileWatcherError(t *testing.T) {
 	captiveCoreToml, err := NewCaptiveCoreToml(CaptiveCoreTomlParams{})
 	assert.NoError(t, err)
 
-	runner := newStellarCoreRunner(CaptiveCoreConfig{
+	runner := newGramrRunner(CaptiveCoreConfig{
 		BinaryPath:         "/some/path",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),

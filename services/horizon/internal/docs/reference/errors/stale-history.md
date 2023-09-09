@@ -30,7 +30,7 @@ draft specification guide and thus has the following attributes:
   "type": "https://stellar.org/horizon-errors/stale_history",
   "title": "Historical DB Is Too Stale",
   "status": 503,
-  "detail": "This horizon instance is configured to reject client requests when it can determine that the history database is lagging too far behind the connected instance of stellar-core.  If you operate this server, please ensure that the ingestion system is properly running."
+  "detail": "This horizon instance is configured to reject client requests when it can determine that the history database is lagging too far behind the connected instance of gramr.  If you operate this server, please ensure that the ingestion system is properly running."
 }
 ```
 

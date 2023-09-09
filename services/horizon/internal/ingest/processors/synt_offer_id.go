@@ -12,10 +12,10 @@ const (
 
 // EncodeOfferId creates synthetic offer ids to be used by trade resources
 //
-// This is required because stellar-core does not allocate offer ids for immediately filled offers,
+// This is required because gramr does not allocate offer ids for immediately filled offers,
 // while clients expect them for aggregated views.
 //
-// The encoded value is of type int64 for sql compatibility. The 2nd bit is used to differentiate between stellar-core
+// The encoded value is of type int64 for sql compatibility. The 2nd bit is used to differentiate between gramr
 // offer ids and operation ids, which are toids.
 //
 // Due to the 2nd bit being used, the largest possible toid is:

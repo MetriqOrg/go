@@ -4,8 +4,8 @@ import (
 	"context"
 	"io"
 
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/xdr"
 )
 
 // ChangeReader provides convenient, streaming access to a sequence of Changes.
@@ -33,7 +33,7 @@ const (
 	upgradeChangesState
 )
 
-// LedgerChangeReader is a ChangeReader which returns Changes from Stellar Core
+// LedgerChangeReader is a ChangeReader which returns Changes from Gramr
 // for a single ledger
 type LedgerChangeReader struct {
 	*LedgerTransactionReader

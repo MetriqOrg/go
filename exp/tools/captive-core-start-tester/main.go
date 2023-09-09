@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stellar/go/ingest/ledgerbackend"
+	"github.com/lantah/go/ingest/ledgerbackend"
 )
 
-// This little app helped testing CaptiveStellarCore.runFromParams on a living
-// Stellar-Core. Adding it to the repo because it can be useful in a future if
-// Stellar-Core behavior changes again.
+// This little app helped testing CaptiveGramr.runFromParams on a living
+// Gramr. Adding it to the repo because it can be useful in a future if
+// Gramr behavior changes again.
 // To make it work, run standalone network (RUN_STANDALONE=false to allow outside
 // connections) and update paths below.
 func main() {
@@ -26,7 +26,7 @@ func main() {
 func check(ledger uint32) bool {
 	c, err := ledgerbackend.NewCaptive(
 		ledgerbackend.CaptiveCoreConfig{
-			BinaryPath:         "stellar-core",
+			BinaryPath:         "gramr",
 			NetworkPassphrase:  "Standalone Network ; February 2017",
 			HistoryArchiveURLs: []string{"http://localhost:1570"},
 		},

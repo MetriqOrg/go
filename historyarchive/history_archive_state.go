@@ -9,8 +9,8 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 const NumLevels = 11
@@ -89,7 +89,7 @@ func (h *HistoryArchiveState) Buckets() ([]Hash, error) {
 // This can be later compared with LedgerHeader.BucketListHash of the checkpoint
 // ledger to ensure data in history archive has not been changed by a malicious
 // actor.
-// Warning: Ledger header should be fetched from a trusted (!) stellar-core
+// Warning: Ledger header should be fetched from a trusted (!) gramr
 // instead of ex. history archives!
 func (h *HistoryArchiveState) BucketListHash() (xdr.Hash, error) {
 	total := []byte{}

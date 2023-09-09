@@ -281,31 +281,31 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 	)
 	require.NoError(t, err)
 
-	// Add an XLM asset.
+	// Add an GRAM asset.
 	err = session.InsertOrUpdateAsset(ctx, &tickerdb.Asset{
-		Code:          "XLM",
+		Code:          "GRAM",
 		IssuerAccount: issuer1PK,
 		IssuerID:      issuer1.ID,
 		IsValid:       true,
 	}, []string{"code", "issuer_id"})
 	require.NoError(t, err)
 
-	var xlmAsset tickerdb.Asset
-	err = session.GetRaw(ctx, &xlmAsset, `
+	var gramAsset tickerdb.Asset
+	err = session.GetRaw(ctx, &gramAsset, `
 		SELECT *
 		FROM assets
 		WHERE code = ?
 		AND issuer_account = ?`,
-		"XLM",
+		"GRAM",
 		issuer1PK,
 	)
 	require.NoError(t, err)
 
-	// Add XLM/BTC trades.
+	// Add GRAM/BTC trades.
 	trades = []tickerdb.Trade{
 		{
 			HorizonID:       "hrzid5",
-			BaseAssetID:     xlmAsset.ID,
+			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      10.0,
 			CounterAssetID:  btcAsset.ID,
 			CounterAmount:   10.0,
@@ -314,7 +314,7 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 		},
 		{
 			HorizonID:       "hrzid6",
-			BaseAssetID:     xlmAsset.ID,
+			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      10.0,
 			CounterAssetID:  btcAsset.ID,
 			CounterAmount:   10.0,

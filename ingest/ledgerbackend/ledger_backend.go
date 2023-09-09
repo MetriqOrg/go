@@ -3,7 +3,7 @@ package ledgerbackend
 import (
 	"context"
 
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 )
 
 // LedgerBackend represents the interface to a ledger data store.
@@ -14,7 +14,7 @@ type LedgerBackend interface {
 	// GetLedger will block until the ledger is available.
 	GetLedger(ctx context.Context, sequence uint32) (xdr.LedgerCloseMeta, error)
 	// PrepareRange prepares the given range (including from and to) to be loaded.
-	// Some backends (like captive stellar-core) need to initalize data to be
+	// Some backends (like captive gramr) need to initalize data to be
 	// able to stream ledgers. Blocks until the first ledger is available.
 	PrepareRange(ctx context.Context, ledgerRange Range) error
 	// IsPrepared returns true if a given ledgerRange is prepared.
@@ -30,13 +30,13 @@ type session interface {
 	Close() error
 }
 
-// ledgerHeaderHistory is a helper struct used to unmarshall header fields from a stellar-core DB.
+// ledgerHeaderHistory is a helper struct used to unmarshall header fields from a gramr DB.
 type ledgerHeaderHistory struct {
 	Hash   xdr.Hash         `db:"ledgerhash"`
 	Header xdr.LedgerHeader `db:"data"`
 }
 
-// ledgerHeader holds a row of data from the stellar-core `ledgerheaders` table.
+// ledgerHeader holds a row of data from the gramr `ledgerheaders` table.
 type ledgerHeader struct {
 	LedgerHash     string           `db:"ledgerhash"`
 	PrevHash       string           `db:"prevhash"`
@@ -46,7 +46,7 @@ type ledgerHeader struct {
 	Data           xdr.LedgerHeader `db:"data"`
 }
 
-// txHistory holds a row of data from the stellar-core `txhistory` table.
+// txHistory holds a row of data from the gramr `txhistory` table.
 type txHistory struct {
 	TXID      string                    `db:"txid"`
 	LedgerSeq uint32                    `db:"ledgerseq"`
@@ -56,7 +56,7 @@ type txHistory struct {
 	TXMeta    xdr.TransactionMeta       `db:"txmeta"`
 }
 
-// txFeeHistory holds a row of data from the stellar-core `txfeehistory` table.
+// txFeeHistory holds a row of data from the gramr `txfeehistory` table.
 type txFeeHistory struct {
 	TXID      string                 `db:"txid"`
 	LedgerSeq uint32                 `db:"ledgerseq"`
@@ -64,14 +64,14 @@ type txFeeHistory struct {
 	TXChanges xdr.LedgerEntryChanges `db:"txchanges"`
 }
 
-// scpHistory holds a row of data from the stellar-core `scphistory` table.
+// scpHistory holds a row of data from the gramr `scphistory` table.
 // type scpHistory struct {
 // 	NodeID    string `db:"nodeid"`
 // 	LedgerSeq uint32 `db:"ledgerseq"`
 // 	Envelope  string `db:"envelope"`
 // }
 
-// upgradeHistory holds a row of data from the stellar-core `upgradehistory` table.
+// upgradeHistory holds a row of data from the gramr `upgradehistory` table.
 type upgradeHistory struct {
 	LedgerSeq    uint32                 `db:"ledgerseq"`
 	UpgradeIndex uint32                 `db:"upgradeindex"`

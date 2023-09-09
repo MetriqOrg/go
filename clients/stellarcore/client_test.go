@@ -1,12 +1,12 @@
-package stellarcore
+package gramr
 
 import (
 	"context"
 	"net/http"
 	"testing"
 
-	proto "github.com/stellar/go/protocols/stellarcore"
-	"github.com/stellar/go/support/http/httptest"
+	proto "github.com/lantah/go/protocols/gramr"
+	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 )
 

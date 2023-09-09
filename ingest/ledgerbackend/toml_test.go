@@ -235,7 +235,7 @@ func TestGenerateConfig(t *testing.T) {
 	testCases := []struct {
 		name                           string
 		appendPath                     string
-		mode                           stellarCoreRunnerMode
+		mode                           gramrRunnerMode
 		expectedPath                   string
 		httpPort                       *uint
 		peerPort                       *uint
@@ -245,7 +245,7 @@ func TestGenerateConfig(t *testing.T) {
 	}{
 		{
 			name:         "offline config with no appendix",
-			mode:         stellarCoreRunnerModeOffline,
+			mode:         gramrRunnerModeOffline,
 			appendPath:   "",
 			expectedPath: filepath.Join("testdata", "expected-offline-core.cfg"),
 			httpPort:     newUint(6789),
@@ -255,16 +255,16 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "offline config with no peer port",
-			mode:         stellarCoreRunnerModeOffline,
+			mode:         gramrRunnerModeOffline,
 			appendPath:   "",
 			expectedPath: filepath.Join("testdata", "expected-offline-with-no-peer-port.cfg"),
 			httpPort:     newUint(6789),
 			peerPort:     nil,
-			logPath:      newString("/var/stellar-core/test.log"),
+			logPath:      newString("/var/gramr/test.log"),
 		},
 		{
 			name:         "online config with appendix",
-			mode:         stellarCoreRunnerModeOnline,
+			mode:         gramrRunnerModeOnline,
 			appendPath:   filepath.Join("testdata", "sample-appendix.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-online-core.cfg"),
 			httpPort:     newUint(6789),
@@ -273,7 +273,7 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "online config with unsupported field in appendix",
-			mode:         stellarCoreRunnerModeOnline,
+			mode:         gramrRunnerModeOnline,
 			appendPath:   filepath.Join("testdata", "invalid-captive-core-field.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-online-core.cfg"),
 			httpPort:     newUint(6789),
@@ -282,16 +282,16 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "online config with no peer port",
-			mode:         stellarCoreRunnerModeOnline,
+			mode:         gramrRunnerModeOnline,
 			appendPath:   filepath.Join("testdata", "sample-appendix.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-online-with-no-peer-port.cfg"),
 			httpPort:     newUint(6789),
 			peerPort:     nil,
-			logPath:      newString("/var/stellar-core/test.log"),
+			logPath:      newString("/var/gramr/test.log"),
 		},
 		{
 			name:         "online config with no http port",
-			mode:         stellarCoreRunnerModeOnline,
+			mode:         gramrRunnerModeOnline,
 			appendPath:   filepath.Join("testdata", "sample-appendix.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-online-with-no-http-port.cfg"),
 			httpPort:     nil,
@@ -300,7 +300,7 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "offline config with appendix",
-			mode:         stellarCoreRunnerModeOffline,
+			mode:         gramrRunnerModeOffline,
 			appendPath:   filepath.Join("testdata", "sample-appendix.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-offline-with-appendix-core.cfg"),
 			httpPort:     newUint(6789),
@@ -309,7 +309,7 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "offline config with extra fields in appendix",
-			mode:         stellarCoreRunnerModeOffline,
+			mode:         gramrRunnerModeOffline,
 			appendPath:   filepath.Join("testdata", "appendix-with-fields.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-offline-with-extra-fields.cfg"),
 			httpPort:     newUint(6789),
@@ -320,7 +320,7 @@ func TestGenerateConfig(t *testing.T) {
 		testCases = append(testCases, []struct {
 			name                           string
 			appendPath                     string
-			mode                           stellarCoreRunnerMode
+			mode                           gramrRunnerMode
 			expectedPath                   string
 			httpPort                       *uint
 			peerPort                       *uint
@@ -330,14 +330,14 @@ func TestGenerateConfig(t *testing.T) {
 		}{
 			{
 				name:                           "offline config with enforce diagnostic events",
-				mode:                           stellarCoreRunnerModeOffline,
+				mode:                           gramrRunnerModeOffline,
 				expectedPath:                   filepath.Join("testdata", "expected-offline-enforce-diagnostic-events.cfg"),
 				logPath:                        nil,
 				enforceSorobanDiagnosticEvents: true,
 			},
 			{
 				name:                           "offline config disabling enforced diagnostic events",
-				mode:                           stellarCoreRunnerModeOffline,
+				mode:                           gramrRunnerModeOffline,
 				expectedPath:                   filepath.Join("testdata", "expected-offline-enforce-disabled-diagnostic-events.cfg"),
 				appendPath:                     filepath.Join("testdata", "appendix-disable-diagnostic-events.cfg"),
 				logPath:                        nil,
@@ -345,7 +345,7 @@ func TestGenerateConfig(t *testing.T) {
 			},
 			{
 				name:                           "online config with enforce diagnostic events",
-				mode:                           stellarCoreRunnerModeOnline,
+				mode:                           gramrRunnerModeOnline,
 				appendPath:                     filepath.Join("testdata", "sample-appendix.cfg"),
 				expectedPath:                   filepath.Join("testdata", "expected-online-with-no-http-port-diag-events.cfg"),
 				httpPort:                       nil,
@@ -355,7 +355,7 @@ func TestGenerateConfig(t *testing.T) {
 			},
 			{
 				name:         "offline config with minimum persistent entry in appendix",
-				mode:         stellarCoreRunnerModeOnline,
+				mode:         gramrRunnerModeOnline,
 				appendPath:   filepath.Join("testdata", "appendix-with-minimum-persistent-entry.cfg"),
 				expectedPath: filepath.Join("testdata", "expected-online-with-appendix-minimum-persistent-entry.cfg"),
 				logPath:      nil,
@@ -415,7 +415,7 @@ func TestExternalStorageConfigUsesDatabaseToml(t *testing.T) {
 	assert.NoError(t, err)
 	captiveCoreToml.Database = "sqlite3:///etc/defaults/stellar.db"
 
-	configBytes, err := generateConfig(captiveCoreToml, stellarCoreRunnerModeOffline)
+	configBytes, err := generateConfig(captiveCoreToml, gramrRunnerModeOffline)
 
 	assert.NoError(t, err)
 	toml := CaptiveCoreToml{}
@@ -443,7 +443,7 @@ func TestDBConfigDefaultsToSqlite(t *testing.T) {
 	captiveCoreToml, err = NewCaptiveCoreToml(params)
 	assert.NoError(t, err)
 
-	configBytes, err := generateConfig(captiveCoreToml, stellarCoreRunnerModeOffline)
+	configBytes, err := generateConfig(captiveCoreToml, gramrRunnerModeOffline)
 
 	assert.NoError(t, err)
 	toml := CaptiveCoreToml{}
@@ -471,7 +471,7 @@ func TestNonDBConfigDoesNotUpdateDatabase(t *testing.T) {
 	captiveCoreToml, err = NewCaptiveCoreToml(params)
 	assert.NoError(t, err)
 
-	configBytes, err := generateConfig(captiveCoreToml, stellarCoreRunnerModeOffline)
+	configBytes, err := generateConfig(captiveCoreToml, gramrRunnerModeOffline)
 
 	assert.NoError(t, err)
 	toml := CaptiveCoreToml{}

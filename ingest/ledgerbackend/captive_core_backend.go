@@ -13,42 +13,42 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sirupsen/logrus"
 
-	"github.com/stellar/go/clients/stellarcore"
-	"github.com/stellar/go/historyarchive"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/clients/gramr"
+	"github.com/lantah/go/historyarchive"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/xdr"
 )
 
-// Ensure CaptiveStellarCore implements LedgerBackend
-var _ LedgerBackend = (*CaptiveStellarCore)(nil)
+// Ensure CaptiveGramr implements LedgerBackend
+var _ LedgerBackend = (*CaptiveGramr)(nil)
 
 // ErrCannotStartFromGenesis is returned when attempting to prepare a range from ledger 1
 var ErrCannotStartFromGenesis = errors.New("CaptiveCore is unable to start from ledger 1, start from ledger 2")
 
-func (c *CaptiveStellarCore) roundDownToFirstReplayAfterCheckpointStart(ledger uint32) uint32 {
+func (c *CaptiveGramr) roundDownToFirstReplayAfterCheckpointStart(ledger uint32) uint32 {
 	r := c.checkpointManager.GetCheckpointRange(ledger)
 	if r.Low <= 1 {
-		// Stellar-Core doesn't stream ledger 1
+		// Gramr doesn't stream ledger 1
 		return 2
 	}
 	// All other checkpoints start at the next multiple of 64
 	return r.Low
 }
 
-// CaptiveStellarCore is a ledger backend that starts internal Stellar-Core
+// CaptiveGramr is a ledger backend that starts internal Gramr
 // subprocess responsible for streaming ledger data. It provides better decoupling
 // than DatabaseBackend but requires some extra init time.
 //
 // It operates in two modes:
-//   - When a BoundedRange is prepared it starts Stellar-Core in catchup mode that
-//     replays ledgers in memory. This is very fast but requires Stellar-Core to
+//   - When a BoundedRange is prepared it starts Gramr in catchup mode that
+//     replays ledgers in memory. This is very fast but requires Gramr to
 //     keep ledger state in RAM. It requires around 3GB of RAM as of August 2020.
-//   - When a UnboundedRange is prepared it runs Stellar-Core catchup mode to
+//   - When a UnboundedRange is prepared it runs Gramr catchup mode to
 //     sync with the first ledger and then runs it in a normal mode. This
 //     requires the configAppendPath to be provided because a quorum set needs to
 //     be selected.
 //
-// When running CaptiveStellarCore will create a temporary folder to store
+// When running CaptiveGramr will create a temporary folder to store
 // bucket files and other temporary files. The folder is removed when Close is
 // called.
 //
@@ -56,43 +56,43 @@ func (c *CaptiveStellarCore) roundDownToFirstReplayAfterCheckpointStart(ledger u
 // temporary folder.
 //
 // Currently BoundedRange requires a full-trust on history archive. This issue is
-// being fixed in Stellar-Core.
+// being fixed in Gramr.
 //
 // While using BoundedRanges is straightforward there are a few gotchas connected
 // to UnboundedRanges:
 //   - PrepareRange takes more time because all ledger entries must be stored on
 //     disk instead of RAM.
 //   - If GetLedger is not called frequently (every 5 sec. on average) the
-//     Stellar-Core process can go out of sync with the network. This happens
-//     because there is no buffering of communication pipe and CaptiveStellarCore
-//     has a very small internal buffer and Stellar-Core will not close the new
+//     Gramr process can go out of sync with the network. This happens
+//     because there is no buffering of communication pipe and CaptiveGramr
+//     has a very small internal buffer and Gramr will not close the new
 //     ledger if it's not read.
 //
-// Except for the Close function, CaptiveStellarCore is not thread-safe and should
+// Except for the Close function, CaptiveGramr is not thread-safe and should
 // not be accessed by multiple go routines. Close is thread-safe and can be called
 // from another go routine. Once Close is called it will interrupt and cancel any
 // pending operations.
 //
-// Requires Stellar-Core v13.2.0+.
-type CaptiveStellarCore struct {
+// Requires Gramr v13.2.0+.
+type CaptiveGramr struct {
 	archive           historyarchive.ArchiveInterface
 	checkpointManager historyarchive.CheckpointManager
 	ledgerHashStore   TrustedLedgerHashStore
 	useDB             bool
 
-	// cancel is the CancelFunc for context which controls the lifetime of a CaptiveStellarCore instance.
-	// Once it is invoked CaptiveStellarCore will not be able to stream ledgers from Stellar Core or
-	// spawn new instances of Stellar Core.
+	// cancel is the CancelFunc for context which controls the lifetime of a CaptiveGramr instance.
+	// Once it is invoked CaptiveGramr will not be able to stream ledgers from Gramr or
+	// spawn new instances of Gramr.
 	cancel context.CancelFunc
 
-	stellarCoreRunner stellarCoreRunnerInterface
-	// stellarCoreLock protects access to stellarCoreRunner. When the read lock
-	// is acquired stellarCoreRunner can be accessed. When the write lock is acquired
-	// stellarCoreRunner can be updated.
-	stellarCoreLock sync.RWMutex
+	gramrRunner gramrRunnerInterface
+	// gramrLock protects access to gramrRunner. When the read lock
+	// is acquired gramrRunner can be accessed. When the write lock is acquired
+	// gramrRunner can be updated.
+	gramrLock sync.RWMutex
 
 	// For testing
-	stellarCoreRunnerFactory func() stellarCoreRunnerInterface
+	gramrRunnerFactory func() gramrRunnerInterface
 
 	// cachedMeta keeps that ledger data of the last fetched ledger. Updated in GetLedger().
 	cachedMeta *xdr.LedgerCloseMeta
@@ -100,7 +100,7 @@ type CaptiveStellarCore struct {
 	// ledgerSequenceLock mutex is used to protect the member variables used in the
 	// read-only GetLatestLedgerSequence method from concurrent write operations.
 	// This is required when GetLatestLedgerSequence is called from other goroutine
-	// such as writing Prometheus metric captive_stellar_core_latest_ledger.
+	// such as writing Prometheus metric captive_gramr_latest_ledger.
 	ledgerSequenceLock sync.RWMutex
 
 	prepared           *Range  // non-nil if any range is prepared
@@ -110,12 +110,12 @@ type CaptiveStellarCore struct {
 	previousLedgerHash *string
 
 	config            CaptiveCoreConfig
-	stellarCoreClient *stellarcore.Client
+	gramrClient *gramr.Client
 }
 
-// CaptiveCoreConfig contains all the parameters required to create a CaptiveStellarCore instance
+// CaptiveCoreConfig contains all the parameters required to create a CaptiveGramr instance
 type CaptiveCoreConfig struct {
-	// BinaryPath is the file path to the Stellar Core binary
+	// BinaryPath is the file path to the Gramr binary
 	BinaryPath string
 	// NetworkPassphrase is the Stellar network passphrase used by captive core when connecting to the Stellar network
 	NetworkPassphrase string
@@ -132,12 +132,12 @@ type CaptiveCoreConfig struct {
 	CheckpointFrequency uint32
 	// LedgerHashStore is an optional store used to obtain hashes for ledger sequences from a trusted source
 	LedgerHashStore TrustedLedgerHashStore
-	// Log is an (optional) custom logger which will capture any output from the Stellar Core process.
+	// Log is an (optional) custom logger which will capture any output from the Gramr process.
 	// If Log is omitted then all output will be printed to stdout.
 	Log *log.Entry
-	// Context is the (optional) context which controls the lifetime of a CaptiveStellarCore instance. Once the context is done
-	// the CaptiveStellarCore instance will not be able to stream ledgers from Stellar Core or spawn new
-	// instances of Stellar Core. If Context is omitted CaptiveStellarCore will default to using context.Background.
+	// Context is the (optional) context which controls the lifetime of a CaptiveGramr instance. Once the context is done
+	// the CaptiveGramr instance will not be able to stream ledgers from Gramr or spawn new
+	// instances of Gramr. If Context is omitted CaptiveGramr will default to using context.Background.
 	Context context.Context
 	// StoragePath is the (optional) base path passed along to Core's
 	// BUCKET_DIR_PATH which specifies where various bucket data should be
@@ -152,8 +152,8 @@ type CaptiveCoreConfig struct {
 	UseDB bool
 }
 
-// NewCaptive returns a new CaptiveStellarCore instance.
-func NewCaptive(config CaptiveCoreConfig) (*CaptiveStellarCore, error) {
+// NewCaptive returns a new CaptiveGramr instance.
+func NewCaptive(config CaptiveCoreConfig) (*CaptiveGramr, error) {
 	// Here we set defaults in the config. Because config is not a pointer this code should
 	// not mutate the original CaptiveCoreConfig instance which was passed into NewCaptive()
 
@@ -186,7 +186,7 @@ func NewCaptive(config CaptiveCoreConfig) (*CaptiveStellarCore, error) {
 		return nil, errors.Wrap(err, "Error connecting to ALL history archives.")
 	}
 
-	c := &CaptiveStellarCore{
+	c := &CaptiveGramr{
 		archive:           &archivePool,
 		ledgerHashStore:   config.LedgerHashStore,
 		useDB:             config.UseDB,
@@ -195,12 +195,12 @@ func NewCaptive(config CaptiveCoreConfig) (*CaptiveStellarCore, error) {
 		checkpointManager: historyarchive.NewCheckpointManager(config.CheckpointFrequency),
 	}
 
-	c.stellarCoreRunnerFactory = func() stellarCoreRunnerInterface {
-		return newStellarCoreRunner(config)
+	c.gramrRunnerFactory = func() gramrRunnerInterface {
+		return newGramrRunner(config)
 	}
 
 	if config.Toml != nil && config.Toml.HTTPPort != 0 {
-		c.stellarCoreClient = &stellarcore.Client{
+		c.gramrClient = &gramr.Client{
 			HTTP: &http.Client{
 				Timeout: 2 * time.Second,
 			},
@@ -211,14 +211,14 @@ func NewCaptive(config CaptiveCoreConfig) (*CaptiveStellarCore, error) {
 	return c, nil
 }
 
-func (c *CaptiveStellarCore) coreSyncedMetric() float64 {
-	if c.stellarCoreClient == nil {
+func (c *CaptiveGramr) coreSyncedMetric() float64 {
+	if c.gramrClient == nil {
 		return -2
 	}
 
-	info, err := c.stellarCoreClient.Info(c.config.Context)
+	info, err := c.gramrClient.Info(c.config.Context)
 	if err != nil {
-		c.config.Log.WithError(err).Warn("Cannot connect to Captive Stellar-Core HTTP server")
+		c.config.Log.WithError(err).Warn("Cannot connect to Captive Gramr HTTP server")
 		return -1
 	}
 
@@ -229,37 +229,37 @@ func (c *CaptiveStellarCore) coreSyncedMetric() float64 {
 	}
 }
 
-func (c *CaptiveStellarCore) coreVersionMetric() float64 {
-	if c.stellarCoreClient == nil {
+func (c *CaptiveGramr) coreVersionMetric() float64 {
+	if c.gramrClient == nil {
 		return -2
 	}
 
-	info, err := c.stellarCoreClient.Info(c.config.Context)
+	info, err := c.gramrClient.Info(c.config.Context)
 	if err != nil {
-		c.config.Log.WithError(err).Warn("Cannot connect to Captive Stellar-Core HTTP server")
+		c.config.Log.WithError(err).Warn("Cannot connect to Captive Gramr HTTP server")
 		return -1
 	}
 
 	return float64(info.Info.ProtocolVersion)
 }
 
-func (c *CaptiveStellarCore) registerMetrics(registry *prometheus.Registry, namespace string) {
+func (c *CaptiveGramr) registerMetrics(registry *prometheus.Registry, namespace string) {
 	coreSynced := prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: namespace, Subsystem: "ingest", Name: "captive_stellar_core_synced",
+			Namespace: namespace, Subsystem: "ingest", Name: "captive_gramr_synced",
 			Help: "1 if sync, 0 if not synced, -1 if unable to connect or HTTP server disabled.",
 		},
 		c.coreSyncedMetric,
 	)
 	supportedProtocolVersion := prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: namespace, Subsystem: "ingest", Name: "captive_stellar_core_supported_protocol_version",
+			Namespace: namespace, Subsystem: "ingest", Name: "captive_gramr_supported_protocol_version",
 			Help: "determines the supported version of the protocol by Captive-Core",
 		},
 		c.coreVersionMetric,
 	)
 	latestLedger := prometheus.NewGaugeFunc(prometheus.GaugeOpts{
-		Namespace: namespace, Subsystem: "ingest", Name: "captive_stellar_core_latest_ledger",
+		Namespace: namespace, Subsystem: "ingest", Name: "captive_gramr_latest_ledger",
 		Help: "sequence number of the latest ledger available in the ledger backend",
 	},
 		func() float64 {
@@ -273,7 +273,7 @@ func (c *CaptiveStellarCore) registerMetrics(registry *prometheus.Registry, name
 	registry.MustRegister(coreSynced, supportedProtocolVersion, latestLedger)
 }
 
-func (c *CaptiveStellarCore) getLatestCheckpointSequence() (uint32, error) {
+func (c *CaptiveGramr) getLatestCheckpointSequence() (uint32, error) {
 	has, err := c.archive.GetRootHAS()
 	if err != nil {
 		return 0, errors.Wrap(err, "error getting root HAS")
@@ -282,7 +282,7 @@ func (c *CaptiveStellarCore) getLatestCheckpointSequence() (uint32, error) {
 	return has.CurrentLedger, nil
 }
 
-func (c *CaptiveStellarCore) openOfflineReplaySubprocess(from, to uint32) error {
+func (c *CaptiveGramr) openOfflineReplaySubprocess(from, to uint32) error {
 	latestCheckpointSequence, err := c.getLatestCheckpointSequence()
 	if err != nil {
 		return errors.Wrap(err, "error getting latest checkpoint sequence")
@@ -304,10 +304,10 @@ func (c *CaptiveStellarCore) openOfflineReplaySubprocess(from, to uint32) error 
 		)
 	}
 
-	c.stellarCoreRunner = c.stellarCoreRunnerFactory()
-	err = c.stellarCoreRunner.catchup(from, to)
+	c.gramrRunner = c.gramrRunnerFactory()
+	err = c.gramrRunner.catchup(from, to)
 	if err != nil {
-		return errors.Wrap(err, "error running stellar-core")
+		return errors.Wrap(err, "error running gramr")
 	}
 
 	// The next ledger should be the first ledger of the checkpoint containing
@@ -324,16 +324,16 @@ func (c *CaptiveStellarCore) openOfflineReplaySubprocess(from, to uint32) error 
 	return nil
 }
 
-func (c *CaptiveStellarCore) openOnlineReplaySubprocess(ctx context.Context, from uint32) error {
+func (c *CaptiveGramr) openOnlineReplaySubprocess(ctx context.Context, from uint32) error {
 	runFrom, ledgerHash, err := c.runFromParams(ctx, from)
 	if err != nil {
-		return errors.Wrap(err, "error calculating ledger and hash for stellar-core run")
+		return errors.Wrap(err, "error calculating ledger and hash for gramr run")
 	}
 
-	c.stellarCoreRunner = c.stellarCoreRunnerFactory()
-	err = c.stellarCoreRunner.runFrom(runFrom, ledgerHash)
+	c.gramrRunner = c.gramrRunnerFactory()
+	err = c.gramrRunner.runFrom(runFrom, ledgerHash)
 	if err != nil {
-		return errors.Wrap(err, "error running stellar-core")
+		return errors.Wrap(err, "error running gramr")
 	}
 
 	// In the online mode we update nextLedger after streaming the first ledger.
@@ -351,10 +351,10 @@ func (c *CaptiveStellarCore) openOnlineReplaySubprocess(ctx context.Context, fro
 	return nil
 }
 
-// runFromParams receives a ledger sequence and calculates the required values to call stellar-core run with --start-ledger and --start-hash
-func (c *CaptiveStellarCore) runFromParams(ctx context.Context, from uint32) (uint32, string, error) {
+// runFromParams receives a ledger sequence and calculates the required values to call gramr run with --start-ledger and --start-hash
+func (c *CaptiveGramr) runFromParams(ctx context.Context, from uint32) (uint32, string, error) {
 	if from == 1 {
-		// Trying to start-from 1 results in an error from Stellar-Core:
+		// Trying to start-from 1 results in an error from Gramr:
 		// Target ledger 1 is not newer than last closed ledger 1 - nothing to do
 		// TODO maybe we can fix it by generating 1st ledger meta
 		// like GenesisLedgerStateReader?
@@ -364,8 +364,8 @@ func (c *CaptiveStellarCore) runFromParams(ctx context.Context, from uint32) (ui
 	if from <= c.checkpointManager.GetCheckpoint(0) {
 		// The line below is to support a special case for streaming ledger 2
 		// that works for all other ledgers <= 63 (fast-forward).
-		// We can't set from=2 because Stellar-Core will not allow starting from 1.
-		// To solve this we start from 3 and exploit the fast that Stellar-Core
+		// We can't set from=2 because Gramr will not allow starting from 1.
+		// To solve this we start from 3 and exploit the fast that Gramr
 		// will stream data from 2 for the first checkpoint.
 		from = 3
 	}
@@ -378,7 +378,7 @@ func (c *CaptiveStellarCore) runFromParams(ctx context.Context, from uint32) (ui
 	// We don't allow starting the online mode starting with more than two
 	// checkpoints from now. Such requests are likely buggy.
 	// We should allow only one checkpoint here but sometimes there are up to a
-	// minute delays when updating root HAS by stellar-core.
+	// minute delays when updating root HAS by gramr.
 	twoCheckPointsLength := (c.checkpointManager.GetCheckpoint(0) + 1) * 2
 	maxLedger := latestCheckpointSequence + twoCheckPointsLength
 	if from > maxLedger {
@@ -428,33 +428,33 @@ func (c *CaptiveStellarCore) runFromParams(ctx context.Context, from uint32) (ui
 
 // nextExpectedSequence returns nextLedger (if currently set) or start of
 // prepared range. Otherwise it returns 0.
-// This is done because `nextLedger` is 0 between the moment Stellar-Core is
+// This is done because `nextLedger` is 0 between the moment Gramr is
 // started and streaming the first ledger (in such case we return first ledger
 // in requested range).
-func (c *CaptiveStellarCore) nextExpectedSequence() uint32 {
+func (c *CaptiveGramr) nextExpectedSequence() uint32 {
 	if c.nextLedger == 0 && c.prepared != nil {
 		return c.prepared.from
 	}
 	return c.nextLedger
 }
 
-func (c *CaptiveStellarCore) startPreparingRange(ctx context.Context, ledgerRange Range) (bool, error) {
-	c.stellarCoreLock.Lock()
-	defer c.stellarCoreLock.Unlock()
+func (c *CaptiveGramr) startPreparingRange(ctx context.Context, ledgerRange Range) (bool, error) {
+	c.gramrLock.Lock()
+	defer c.gramrLock.Unlock()
 
 	if c.isPrepared(ledgerRange) {
 		return true, nil
 	}
 
-	if c.stellarCoreRunner != nil {
-		if err := c.stellarCoreRunner.close(); err != nil {
+	if c.gramrRunner != nil {
+		if err := c.gramrRunner.close(); err != nil {
 			return false, errors.Wrap(err, "error closing existing session")
 		}
 
-		// Make sure Stellar-Core is terminated before starting a new instance.
-		processExited, _ := c.stellarCoreRunner.getProcessExitError()
+		// Make sure Gramr is terminated before starting a new instance.
+		processExited, _ := c.gramrRunner.getProcessExitError()
 		if !processExited {
-			return false, errors.New("the previous Stellar-Core instance is still running")
+			return false, errors.New("the previous Gramr instance is still running")
 		}
 	}
 
@@ -472,16 +472,16 @@ func (c *CaptiveStellarCore) startPreparingRange(ctx context.Context, ledgerRang
 }
 
 // PrepareRange prepares the given range (including from and to) to be loaded.
-// Captive stellar-core backend needs to initialize Stellar-Core state to be
+// Captive gramr backend needs to initialize Gramr state to be
 // able to stream ledgers.
-// Stellar-Core mode depends on the provided ledgerRange:
-//   - For BoundedRange it will start Stellar-Core in catchup mode.
+// Gramr mode depends on the provided ledgerRange:
+//   - For BoundedRange it will start Gramr in catchup mode.
 //   - For UnboundedRange it will first catchup to starting ledger and then run
 //     it normally (including connecting to the Stellar network).
 //
 // Please note that using a BoundedRange, currently, requires a full-trust on
-// history archive. This issue is being fixed in Stellar-Core.
-func (c *CaptiveStellarCore) PrepareRange(ctx context.Context, ledgerRange Range) error {
+// history archive. This issue is being fixed in Gramr.
+func (c *CaptiveGramr) PrepareRange(ctx context.Context, ledgerRange Range) error {
 	if alreadyPrepared, err := c.startPreparingRange(ctx, ledgerRange); err != nil {
 		return errors.Wrap(err, "error starting prepare range")
 	} else if alreadyPrepared {
@@ -501,23 +501,23 @@ func (c *CaptiveStellarCore) PrepareRange(ctx context.Context, ledgerRange Range
 }
 
 // IsPrepared returns true if a given ledgerRange is prepared.
-func (c *CaptiveStellarCore) IsPrepared(ctx context.Context, ledgerRange Range) (bool, error) {
-	c.stellarCoreLock.RLock()
-	defer c.stellarCoreLock.RUnlock()
+func (c *CaptiveGramr) IsPrepared(ctx context.Context, ledgerRange Range) (bool, error) {
+	c.gramrLock.RLock()
+	defer c.gramrLock.RUnlock()
 
 	return c.isPrepared(ledgerRange), nil
 }
 
-func (c *CaptiveStellarCore) isPrepared(ledgerRange Range) bool {
+func (c *CaptiveGramr) isPrepared(ledgerRange Range) bool {
 	if c.closed {
 		return false
 	}
 
-	if c.stellarCoreRunner == nil || c.stellarCoreRunner.context().Err() != nil {
+	if c.gramrRunner == nil || c.gramrRunner.context().Err() != nil {
 		return false
 	}
 
-	if exited, _ := c.stellarCoreRunner.getProcessExitError(); exited {
+	if exited, _ := c.gramrRunner.getProcessExitError(); exited {
 		return false
 	}
 
@@ -554,22 +554,22 @@ func (c *CaptiveStellarCore) isPrepared(ledgerRange Range) bool {
 // (even for UnboundedRange), then return it's LedgerCloseMeta.
 //
 // Call PrepareRange first to instruct the backend which ledgers to fetch.
-// CaptiveStellarCore requires PrepareRange call first to initialize Stellar-Core.
+// CaptiveGramr requires PrepareRange call first to initialize Gramr.
 // Requesting a ledger on non-prepared backend will return an error.
 //
 // Please note that requesting a ledger sequence far after current
 // ledger will block the execution for a long time.
 //
-// Because ledger data is streamed from Stellar-Core sequentially, users should
+// Because ledger data is streamed from Gramr sequentially, users should
 // request sequences in a non-decreasing order. If the requested sequence number
 // is less than the last requested sequence number, an error will be returned.
 //
 // This function behaves differently for bounded and unbounded ranges:
 //   - BoundedRange: After getting the last ledger in a range this method will
 //     also Close() the backend.
-func (c *CaptiveStellarCore) GetLedger(ctx context.Context, sequence uint32) (xdr.LedgerCloseMeta, error) {
-	c.stellarCoreLock.RLock()
-	defer c.stellarCoreLock.RUnlock()
+func (c *CaptiveGramr) GetLedger(ctx context.Context, sequence uint32) (xdr.LedgerCloseMeta, error) {
+	c.gramrLock.RLock()
+	defer c.gramrLock.RUnlock()
 
 	if c.cachedMeta != nil && sequence == c.cachedMeta.LedgerSequence() {
 		// GetLedger can be called multiple times using the same sequence, ex. to create
@@ -578,18 +578,18 @@ func (c *CaptiveStellarCore) GetLedger(ctx context.Context, sequence uint32) (xd
 	}
 
 	if c.closed {
-		return xdr.LedgerCloseMeta{}, errors.New("stellar-core is no longer usable")
+		return xdr.LedgerCloseMeta{}, errors.New("gramr is no longer usable")
 	}
 
 	if c.prepared == nil {
 		return xdr.LedgerCloseMeta{}, errors.New("session is not prepared, call PrepareRange first")
 	}
 
-	if c.stellarCoreRunner == nil {
-		return xdr.LedgerCloseMeta{}, errors.New("stellar-core cannot be nil, call PrepareRange first")
+	if c.gramrRunner == nil {
+		return xdr.LedgerCloseMeta{}, errors.New("gramr cannot be nil, call PrepareRange first")
 	}
 	if c.closed {
-		return xdr.LedgerCloseMeta{}, errors.New("stellar-core has an error, call PrepareRange first")
+		return xdr.LedgerCloseMeta{}, errors.New("gramr has an error, call PrepareRange first")
 	}
 
 	if sequence < c.nextExpectedSequence() {
@@ -613,7 +613,7 @@ func (c *CaptiveStellarCore) GetLedger(ctx context.Context, sequence uint32) (xd
 		select {
 		case <-ctx.Done():
 			return xdr.LedgerCloseMeta{}, ctx.Err()
-		case result, ok := <-c.stellarCoreRunner.getMetaPipe():
+		case result, ok := <-c.gramrRunner.getMetaPipe():
 			found, ledger, err := c.handleMetaPipeResult(sequence, result, ok)
 			if found || err != nil {
 				return ledger, err
@@ -622,16 +622,16 @@ func (c *CaptiveStellarCore) GetLedger(ctx context.Context, sequence uint32) (xd
 	}
 }
 
-func (c *CaptiveStellarCore) handleMetaPipeResult(sequence uint32, result metaResult, ok bool) (bool, xdr.LedgerCloseMeta, error) {
+func (c *CaptiveGramr) handleMetaPipeResult(sequence uint32, result metaResult, ok bool) (bool, xdr.LedgerCloseMeta, error) {
 	if err := c.checkMetaPipeResult(result, ok); err != nil {
-		c.stellarCoreRunner.close()
+		c.gramrRunner.close()
 		return false, xdr.LedgerCloseMeta{}, err
 	}
 
 	seq := result.LedgerCloseMeta.LedgerSequence()
 	// If we got something unexpected; close and reset
 	if c.nextLedger != 0 && seq != c.nextLedger {
-		c.stellarCoreRunner.close()
+		c.gramrRunner.close()
 		return false, xdr.LedgerCloseMeta{}, errors.Errorf(
 			"unexpected ledger sequence (expected=%d actual=%d)",
 			c.nextLedger,
@@ -639,7 +639,7 @@ func (c *CaptiveStellarCore) handleMetaPipeResult(sequence uint32, result metaRe
 		)
 	} else if c.nextLedger == 0 && seq > c.prepared.from {
 		// First stream ledger is greater than prepared.from
-		c.stellarCoreRunner.close()
+		c.gramrRunner.close()
 		return false, xdr.LedgerCloseMeta{}, errors.Errorf(
 			"unexpected ledger sequence (expected=<=%d actual=%d)",
 			c.prepared.from,
@@ -650,7 +650,7 @@ func (c *CaptiveStellarCore) handleMetaPipeResult(sequence uint32, result metaRe
 	newPreviousLedgerHash := result.LedgerCloseMeta.PreviousLedgerHash().HexString()
 	if c.previousLedgerHash != nil && *c.previousLedgerHash != newPreviousLedgerHash {
 		// We got something unexpected; close and reset
-		c.stellarCoreRunner.close()
+		c.gramrRunner.close()
 		return false, xdr.LedgerCloseMeta{}, errors.Errorf(
 			"unexpected previous ledger hash for ledger %d (expected=%s actual=%s)",
 			seq,
@@ -672,7 +672,7 @@ func (c *CaptiveStellarCore) handleMetaPipeResult(sequence uint32, result metaRe
 	if seq == sequence {
 		// If we got the _last_ ledger in a segment, close before returning.
 		if c.lastLedger != nil && *c.lastLedger == seq {
-			if err := c.stellarCoreRunner.close(); err != nil {
+			if err := c.gramrRunner.close(); err != nil {
 				return false, xdr.LedgerCloseMeta{}, errors.Wrap(err, "error closing session")
 			}
 		}
@@ -682,27 +682,27 @@ func (c *CaptiveStellarCore) handleMetaPipeResult(sequence uint32, result metaRe
 	return false, xdr.LedgerCloseMeta{}, nil
 }
 
-func (c *CaptiveStellarCore) checkMetaPipeResult(result metaResult, ok bool) error {
+func (c *CaptiveGramr) checkMetaPipeResult(result metaResult, ok bool) error {
 	// There are 4 error scenarios we check for:
 	// 1. User initiated shutdown by canceling the parent context or calling Close().
-	// 2. The stellar core process exited unexpectedly with an error message.
+	// 2. The gramr process exited unexpectedly with an error message.
 	// 3. Some error was encountered while consuming the ledgers emitted by captive core (e.g. parsing invalid xdr)
-	// 4. The stellar core process exited unexpectedly without an error message
-	if err := c.stellarCoreRunner.context().Err(); err != nil {
+	// 4. The gramr process exited unexpectedly without an error message
+	if err := c.gramrRunner.context().Err(); err != nil {
 		// Case 1 - User initiated shutdown by canceling the parent context or calling Close()
 		return err
 	}
 	if !ok || result.err != nil {
-		exited, err := c.stellarCoreRunner.getProcessExitError()
+		exited, err := c.gramrRunner.getProcessExitError()
 		if exited && err != nil {
-			// Case 2 - The stellar core process exited unexpectedly with an error message
-			return errors.Wrap(err, "stellar core exited unexpectedly")
+			// Case 2 - The gramr process exited unexpectedly with an error message
+			return errors.Wrap(err, "gramr exited unexpectedly")
 		} else if result.err != nil {
 			// Case 3 - Some error was encountered while consuming the ledger stream emitted by captive core.
 			return result.err
 		} else if exited {
-			// case 4 - The stellar core process exited unexpectedly without an error message
-			return errors.Errorf("stellar core exited unexpectedly")
+			// case 4 - The gramr process exited unexpectedly without an error message
+			return errors.Errorf("gramr exited unexpectedly")
 		} else if !ok {
 			// This case should never happen because the ledger buffer channel can only be closed
 			// if and only if the process exits or the context is canceled.
@@ -720,43 +720,43 @@ func (c *CaptiveStellarCore) checkMetaPipeResult(result metaResult, ok bool) err
 // Note that for UnboundedRange the returned sequence number is not necessarily
 // the latest sequence closed by the network. It's always the last value available
 // in the backend.
-func (c *CaptiveStellarCore) GetLatestLedgerSequence(ctx context.Context) (uint32, error) {
-	c.stellarCoreLock.RLock()
-	defer c.stellarCoreLock.RUnlock()
+func (c *CaptiveGramr) GetLatestLedgerSequence(ctx context.Context) (uint32, error) {
+	c.gramrLock.RLock()
+	defer c.gramrLock.RUnlock()
 
 	c.ledgerSequenceLock.RLock()
 	defer c.ledgerSequenceLock.RUnlock()
 
 	if c.closed {
-		return 0, errors.New("stellar-core is no longer usable")
+		return 0, errors.New("gramr is no longer usable")
 	}
 	if c.prepared == nil {
-		return 0, errors.New("stellar-core must be prepared, call PrepareRange first")
+		return 0, errors.New("gramr must be prepared, call PrepareRange first")
 	}
-	if c.stellarCoreRunner == nil {
-		return 0, errors.New("stellar-core cannot be nil, call PrepareRange first")
+	if c.gramrRunner == nil {
+		return 0, errors.New("gramr cannot be nil, call PrepareRange first")
 	}
 	if c.closed {
-		return 0, errors.New("stellar-core is closed, call PrepareRange first")
+		return 0, errors.New("gramr is closed, call PrepareRange first")
 
 	}
 	if c.lastLedger == nil {
-		return c.nextExpectedSequence() - 1 + uint32(len(c.stellarCoreRunner.getMetaPipe())), nil
+		return c.nextExpectedSequence() - 1 + uint32(len(c.gramrRunner.getMetaPipe())), nil
 	}
 	return *c.lastLedger, nil
 }
 
-// Close closes existing Stellar-Core process, streaming sessions and removes all
-// temporary files. Note, once a CaptiveStellarCore instance is closed it can no longer be used and
+// Close closes existing Gramr process, streaming sessions and removes all
+// temporary files. Note, once a CaptiveGramr instance is closed it can no longer be used and
 // all subsequent calls to PrepareRange(), GetLedger(), etc will fail.
 // Close is thread-safe and can be called from another go routine.
-func (c *CaptiveStellarCore) Close() error {
-	c.stellarCoreLock.RLock()
-	defer c.stellarCoreLock.RUnlock()
+func (c *CaptiveGramr) Close() error {
+	c.gramrLock.RLock()
+	defer c.gramrLock.RUnlock()
 
 	c.closed = true
 
-	// after the CaptiveStellarCore context is canceled all subsequent calls to PrepareRange() will fail
+	// after the CaptiveGramr context is canceled all subsequent calls to PrepareRange() will fail
 	c.cancel()
 
 	// TODO: Sucks to ignore the error here, but no worse than it was before,
@@ -765,8 +765,8 @@ func (c *CaptiveStellarCore) Close() error {
 		c.ledgerHashStore.Close()
 	}
 
-	if c.stellarCoreRunner != nil {
-		return c.stellarCoreRunner.close()
+	if c.gramrRunner != nil {
+		return c.gramrRunner.close()
 	}
 	return nil
 }

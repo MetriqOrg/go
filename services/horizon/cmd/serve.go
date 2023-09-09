@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	horizon "github.com/stellar/go/services/horizon/internal"
+	horizon "github.com/lantah/go/services/horizon/internal"
 )
 
 var serveCmd = &cobra.Command{

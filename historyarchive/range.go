@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/stellar/go/support/ordered"
+	"github.com/lantah/go/support/ordered"
 	"golang.org/x/exp/slices"
 )
 

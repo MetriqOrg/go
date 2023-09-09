@@ -6,9 +6,9 @@ import (
 	"io"
 
 	"github.com/sirupsen/logrus"
-	"github.com/stellar/go/ingest"
-	backends "github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/ingest"
+	backends "github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/support/log"
 )
 
 func statistics() {

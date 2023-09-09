@@ -190,8 +190,8 @@ func (s *ProcessorRunner) checkIfProtocolVersionSupported(ledgerProtocolVersion 
 }
 
 // validateBucketList validates if the bucket list hash in history archive
-// matches the one in corresponding ledger header in stellar-core backend.
-// This gives you full security if data in stellar-core backend can be trusted
+// matches the one in corresponding ledger header in gramr backend.
+// This gives you full security if data in gramr backend can be trusted
 // (ex. you run it in your infrastructure).
 // The hashes of actual buckets of this HAS file are checked using
 // historyarchive.XdrStream.SetExpectedHash (this is done in

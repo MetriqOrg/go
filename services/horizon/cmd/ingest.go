@@ -9,13 +9,13 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/stellar/go/historyarchive"
-	horizon "github.com/stellar/go/services/horizon/internal"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	support "github.com/stellar/go/support/config"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/historyarchive"
+	horizon "github.com/lantah/go/services/horizon/internal"
+	"github.com/lantah/go/services/horizon/internal/db2/history"
+	"github.com/lantah/go/services/horizon/internal/ingest"
+	support "github.com/lantah/go/support/config"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/log"
 )
 
 var ingestCmd = &cobra.Command{
@@ -43,7 +43,7 @@ var ingestBuildStateCmdOpts = []*support.ConfigOption{
 		OptType:     types.Bool,
 		Required:    false,
 		FlagDefault: false,
-		Usage:       "[optional] set to skip protocol version and bucket list hash verification, can speed up the process because does not require a running Stellar-Core",
+		Usage:       "[optional] set to skip protocol version and bucket list hash verification, can speed up the process because does not require a running Gramr",
 	},
 }
 
@@ -140,11 +140,11 @@ var ingestVerifyRangeCmd = &cobra.Command{
 		}
 
 		if !ingestConfig.EnableCaptiveCore {
-			if config.StellarCoreDatabaseURL == "" {
-				return fmt.Errorf("flag --%s cannot be empty", horizon.StellarCoreDBURLFlagName)
+			if config.GramrDatabaseURL == "" {
+				return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
 			}
 
-			coreSession, dbErr := db.Open("postgres", config.StellarCoreDatabaseURL)
+			coreSession, dbErr := db.Open("postgres", config.GramrDatabaseURL)
 			if dbErr != nil {
 				return fmt.Errorf("cannot open Core DB: %v", dbErr)
 			}
@@ -233,11 +233,11 @@ var ingestStressTestCmd = &cobra.Command{
 			ingestConfig.RemoteCaptiveCoreURL = config.RemoteCaptiveCoreURL
 			ingestConfig.CaptiveCoreConfigUseDB = config.CaptiveCoreConfigUseDB
 		} else {
-			if config.StellarCoreDatabaseURL == "" {
-				return fmt.Errorf("flag --%s cannot be empty", horizon.StellarCoreDBURLFlagName)
+			if config.GramrDatabaseURL == "" {
+				return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
 			}
 
-			coreSession, dbErr := db.Open("postgres", config.StellarCoreDatabaseURL)
+			coreSession, dbErr := db.Open("postgres", config.GramrDatabaseURL)
 			if dbErr != nil {
 				return fmt.Errorf("cannot open Core DB: %v", dbErr)
 			}
@@ -325,11 +325,11 @@ var ingestInitGenesisStateCmd = &cobra.Command{
 			ingestConfig.CaptiveCoreBinaryPath = config.CaptiveCoreBinaryPath
 			ingestConfig.CaptiveCoreConfigUseDB = config.CaptiveCoreConfigUseDB
 		} else {
-			if config.StellarCoreDatabaseURL == "" {
-				return fmt.Errorf("flag --%s cannot be empty", horizon.StellarCoreDBURLFlagName)
+			if config.GramrDatabaseURL == "" {
+				return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
 			}
 
-			coreSession, dbErr := db.Open("postgres", config.StellarCoreDatabaseURL)
+			coreSession, dbErr := db.Open("postgres", config.GramrDatabaseURL)
 			if dbErr != nil {
 				return fmt.Errorf("cannot open Core DB: %v", dbErr)
 			}
@@ -405,11 +405,11 @@ var ingestBuildStateCmd = &cobra.Command{
 
 		if !ingestBuildStateSkipChecks {
 			if !ingestConfig.EnableCaptiveCore {
-				if config.StellarCoreDatabaseURL == "" {
-					return fmt.Errorf("flag --%s cannot be empty", horizon.StellarCoreDBURLFlagName)
+				if config.GramrDatabaseURL == "" {
+					return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
 				}
 
-				coreSession, dbErr := db.Open("postgres", config.StellarCoreDatabaseURL)
+				coreSession, dbErr := db.Open("postgres", config.GramrDatabaseURL)
 				if dbErr != nil {
 					return fmt.Errorf("cannot open Core DB: %v", dbErr)
 				}

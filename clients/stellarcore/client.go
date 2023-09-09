@@ -1,4 +1,4 @@
-package stellarcore
+package gramr
 
 import (
 	"context"
@@ -13,19 +13,19 @@ import (
 	"strings"
 	"time"
 
-	proto "github.com/stellar/go/protocols/stellarcore"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	proto "github.com/lantah/go/protocols/gramr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // Client represents a client that is capable of communicating with a
-// stellar-core server using HTTP
+// gramr server using HTTP
 type Client struct {
-	// HTTP is the client to use when communicating with stellar-core.  If nil,
+	// HTTP is the client to use when communicating with gramr.  If nil,
 	// http.DefaultClient will be used.
 	HTTP HTTP
 
-	// URL of Stellar Core server to connect.
+	// URL of Gramr server to connect.
 	URL string
 }
 
@@ -55,7 +55,7 @@ func drainReponse(hresp *http.Response, close bool, err *error) (outerror error)
 	return
 }
 
-// Upgrade upgrades the protocol version running on the stellar core instance
+// Upgrade upgrades the protocol version running on the gramr instance
 func (c *Client) Upgrade(ctx context.Context, version int) (err error) {
 	queryParams := url.Values{}
 	queryParams.Add("mode", "set")
@@ -82,7 +82,7 @@ func (c *Client) Upgrade(ctx context.Context, version int) (err error) {
 	return nil
 }
 
-// GetLedgerEntry submits a request to the stellar core instance to get the latest
+// GetLedgerEntry submits a request to the gramr instance to get the latest
 // state of a given ledger entry.
 func (c *Client) GetLedgerEntry(ctx context.Context, ledgerKey xdr.LedgerKey) (proto.GetLedgerEntryResponse, error) {
 	b64, err := xdr.MarshalBase64(ledgerKey)
@@ -123,7 +123,7 @@ func (c *Client) GetLedgerEntry(ctx context.Context, ledgerKey xdr.LedgerKey) (p
 	return response, nil
 }
 
-// Info calls the `info` command on the connected stellar core and returns the
+// Info calls the `info` command on the connected gramr and returns the
 // provided response
 func (c *Client) Info(ctx context.Context) (resp *proto.InfoResponse, err error) {
 	var req *http.Request
@@ -155,7 +155,7 @@ func (c *Client) Info(ctx context.Context) (resp *proto.InfoResponse, err error)
 	return
 }
 
-// SetCursor calls the `setcursor` command on the connected stellar core
+// SetCursor calls the `setcursor` command on the connected gramr
 func (c *Client) SetCursor(ctx context.Context, id string, cursor int32) (err error) {
 	var req *http.Request
 	req, err = c.simpleGet(ctx, "setcursor", url.Values{
@@ -187,13 +187,13 @@ func (c *Client) SetCursor(ctx context.Context, id string, cursor int32) (err er
 
 	body := strings.TrimSpace(string(raw))
 	if body != SetCursorDone {
-		return errors.Errorf("failed to set cursor on stellar-core: %s", body)
+		return errors.Errorf("failed to set cursor on gramr: %s", body)
 	}
 
 	return nil
 }
 
-// SubmitTransaction calls the `tx` command on the connected stellar core with the provided envelope
+// SubmitTransaction calls the `tx` command on the connected gramr with the provided envelope
 func (c *Client) SubmitTransaction(ctx context.Context, envelope string) (resp *proto.TXResponse, err error) {
 
 	q := url.Values{}
@@ -229,7 +229,7 @@ func (c *Client) SubmitTransaction(ctx context.Context, envelope string) (resp *
 	return
 }
 
-// WaitForNetworkSync continually polls the connected stellar-core until it
+// WaitForNetworkSync continually polls the connected gramr until it
 // receives a response that indicated the node has synced with the network
 func (c *Client) WaitForNetworkSync(ctx context.Context) error {
 
@@ -305,7 +305,7 @@ func (c *Client) http() HTTP {
 	return c.HTTP
 }
 
-// simpleGet returns a new GET request to the connected stellar-core using the
+// simpleGet returns a new GET request to the connected gramr using the
 // provided path and query values to construct the result.
 func (c *Client) simpleGet(
 	ctx context.Context,

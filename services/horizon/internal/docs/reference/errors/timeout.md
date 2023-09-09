@@ -5,12 +5,12 @@ replacement: https://developers.stellar.org/api/errors/http-status-codes/horizon
 
 If you are encountering this error it means that either:
 
-* Horizon has not received a confirmation from the Stellar Core server that the transaction you are
+* Horizon has not received a confirmation from the Gramr server that the transaction you are
   trying to submit to the network was included in a ledger in a timely manner.
 * Horizon has not sent a response to a reverse-proxy before a specified amount of time has elapsed.
 
 The former case may happen because there was no room for your transaction for 3 consecutive
-ledgers. This is because Stellar Core removes each submitted transaction from a queue. To solve
+ledgers. This is because Gramr removes each submitted transaction from a queue. To solve
 this you can:
 
 * Keep resubmitting the same transaction (with the same sequence number) and wait until it finally

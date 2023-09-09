@@ -3,11 +3,11 @@ package serve
 import (
 	"net/http"
 
-	"github.com/stellar/go/exp/services/recoverysigner/internal/account"
-	"github.com/stellar/go/exp/services/recoverysigner/internal/serve/auth"
-	"github.com/stellar/go/keypair"
-	supportlog "github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/render/httpjson"
+	"github.com/lantah/go/exp/services/recoverysigner/internal/account"
+	"github.com/lantah/go/exp/services/recoverysigner/internal/serve/auth"
+	"github.com/lantah/go/keypair"
+	supportlog "github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/render/httpjson"
 )
 
 type accountListHandler struct {

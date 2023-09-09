@@ -6,10 +6,10 @@ import (
 	"sort"
 	"time"
 
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 const (
@@ -146,7 +146,7 @@ func (dbb *DatabaseBackend) GetLedger(ctx context.Context, sequence uint32) (xdr
 }
 
 // getLedgerAfterExist returns true (and sequence number) if there's a ledger in
-// the Stellar-Core DB with the sequence number higher than sequence.
+// the Gramr DB with the sequence number higher than sequence.
 func (dbb *DatabaseBackend) getLedgerAfterExist(ctx context.Context, sequence uint32) (bool, uint32, error) {
 	var fetchedSequence uint32
 	err := dbb.session.GetRaw(ctx, &fetchedSequence, ledgerSequenceAfterQuery, sequence)

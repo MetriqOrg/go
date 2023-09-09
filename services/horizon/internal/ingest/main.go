@@ -12,7 +12,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/clients/stellarcore"
+	"github.com/stellar/go/clients/gramr"
 	"github.com/stellar/go/historyarchive"
 	"github.com/stellar/go/ingest"
 	"github.com/stellar/go/ingest/ledgerbackend"
@@ -74,8 +74,8 @@ var log = logpkg.DefaultLogger.WithField("service", "ingest")
 
 type Config struct {
 	CoreSession            db.SessionInterface
-	StellarCoreURL         string
-	StellarCoreCursor      string
+	GramrURL         string
+	GramrCursor      string
 	EnableCaptiveCore      bool
 	CaptiveCoreBinaryPath  string
 	CaptiveCoreStoragePath string
@@ -128,7 +128,7 @@ const (
 	updateExpStateInvalidErrMsg  string = "Error updating state invalid value"
 )
 
-type stellarCoreClient interface {
+type gramrClient interface {
 	SetCursor(ctx context.Context, id string, cursor int32) error
 }
 
@@ -201,7 +201,7 @@ type system struct {
 	ledgerBackend  ledgerbackend.LedgerBackend
 	historyAdapter historyArchiveAdapterInterface
 
-	stellarCoreClient stellarCoreClient
+	gramrClient gramrClient
 
 	maxReingestRetries          int
 	reingestRetryBackoffSeconds int
@@ -248,7 +248,7 @@ func NewSystem(config Config) (System, error) {
 			return nil, errors.Wrap(err, "error creating captive core backend")
 		}
 	} else if config.LocalCaptiveCoreEnabled() {
-		logger := log.WithField("subservice", "stellar-core")
+		logger := log.WithField("subservice", "gramr")
 		ledgerBackend, err = ledgerbackend.NewCaptive(
 			ledgerbackend.CaptiveCoreConfig{
 				BinaryPath:          config.CaptiveCoreBinaryPath,
@@ -292,8 +292,8 @@ func NewSystem(config Config) (System, error) {
 		ledgerBackend:               ledgerBackend,
 		maxReingestRetries:          config.MaxReingestRetries,
 		reingestRetryBackoffSeconds: config.ReingestRetryBackoffSeconds,
-		stellarCoreClient: &stellarcore.Client{
-			URL: config.StellarCoreURL,
+		gramrClient: &gramr.Client{
+			URL: config.GramrURL,
 		},
 		runner: &ProcessorRunner{
 			ctx:            ctx,
@@ -736,20 +736,20 @@ func (s *system) resetStateVerificationErrors() {
 }
 
 func (s *system) updateCursor(ledgerSequence uint32) error {
-	if s.stellarCoreClient == nil || s.config.EnableCaptiveCore {
+	if s.gramrClient == nil || s.config.EnableCaptiveCore {
 		return nil
 	}
 
 	cursor := defaultCoreCursorName
-	if s.config.StellarCoreCursor != "" {
-		cursor = s.config.StellarCoreCursor
+	if s.config.GramrCursor != "" {
+		cursor = s.config.GramrCursor
 	}
 
 	ctx, cancel := context.WithTimeout(s.ctx, time.Second)
 	defer cancel()
-	err := s.stellarCoreClient.SetCursor(ctx, cursor, int32(ledgerSequence))
+	err := s.gramrClient.SetCursor(ctx, cursor, int32(ledgerSequence))
 	if err != nil {
-		return errors.Wrap(err, "Setting stellar-core cursor failed")
+		return errors.Wrap(err, "Setting gramr cursor failed")
 	}
 
 	return nil

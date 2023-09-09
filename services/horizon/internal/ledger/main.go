@@ -1,6 +1,6 @@
 // Package ledger provides useful utilities concerning ledgers within stellar,
 // specifically as a central location to store a cached snapshot of the state of
-// both horizon's and stellar-core's views of the ledger.  This package is
+// both horizon's and gramr's views of the ledger.  This package is
 // intended to be at the lowest levels of horizon's dependency tree, please keep
 // it free of dependencies to other horizon packages.
 package ledger
@@ -12,7 +12,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// Status represents a snapshot of both horizon's and stellar-core's view of the
+// Status represents a snapshot of both horizon's and gramr's view of the
 // ledger.
 type Status struct {
 	CoreStatus
@@ -31,7 +31,7 @@ type HorizonStatus struct {
 }
 
 // State is an in-memory data structure which holds a snapshot of both
-// horizon's and stellar-core's view of the the network
+// horizon's and gramr's view of the the network
 type State struct {
 	sync.RWMutex
 	current Status
@@ -59,7 +59,7 @@ func (c *State) SetStatus(next Status) {
 	c.current = next
 }
 
-// SetCoreStatus updates the cached snapshot of the ledger state of Stellar-Core
+// SetCoreStatus updates the cached snapshot of the ledger state of Gramr
 func (c *State) SetCoreStatus(next CoreStatus) {
 	c.Lock()
 	defer c.Unlock()
@@ -105,7 +105,7 @@ func (c *State) RegisterMetrics(registry *prometheus.Registry) {
 	registry.MustRegister(c.Metrics.HistoryElderLedgerCounter)
 
 	c.Metrics.CoreLatestLedgerCounter = prometheus.NewCounterFunc(
-		prometheus.CounterOpts{Namespace: "horizon", Subsystem: "stellar_core", Name: "latest_ledger"},
+		prometheus.CounterOpts{Namespace: "horizon", Subsystem: "gramr", Name: "latest_ledger"},
 		func() float64 {
 			ls := c.CurrentStatus()
 			return float64(ls.CoreLatest)

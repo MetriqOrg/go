@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	hProtocol "github.com/stellar/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/horizon"
 )
 
-// Volume stores volume of a various base pair in both XLM and USD.
+// Volume stores volume of a various base pair in both GRAM and USD.
 // It also includes metadata about associated trades.
 type Volume struct {
 	BaseVolumeBaseAsset    prometheus.Gauge
@@ -21,7 +21,7 @@ type Volume struct {
 	TradeAvgAmt            prometheus.Gauge
 }
 
-type xlmPrice struct {
+type gramPrice struct {
 	timestamp int64
 	price     float64
 }
@@ -46,10 +46,10 @@ func trackVolumes(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatche
 }
 
 func initVolumes(cfg Config, c trackerClient, watchedTPs []prometheusWatchedTP) map[string][]volumeHist {
-	xlmReq := mustCreateXlmPriceRequest()
-	xlmPriceHist, err := getXlmPriceHistory(xlmReq)
+	gramReq := mustCreateGramPriceRequest()
+	gramPriceHist, err := getGramPriceHistory(gramReq)
 	if err != nil {
-		fmt.Printf("got error when getting xlm price history: %s\n", err)
+		fmt.Printf("got error when getting gram price history: %s\n", err)
 	}
 
 	volumeHistMap := make(map[string][]volumeHist)
@@ -60,7 +60,7 @@ func initVolumes(cfg Config, c trackerClient, watchedTPs []prometheusWatchedTP) 
 
 	for i, wtp := range watchedTPs {
 		// TODO: Calculate volume for assets with non-native counter.
-		if wtp.TradePair.SellingAsset.Code != "XLM" && wtp.TradePair.SellingAsset.IssuerAddress != "" {
+		if wtp.TradePair.SellingAsset.Code != "GRAM" && wtp.TradePair.SellingAsset.IssuerAddress != "" {
 			continue
 		}
 
@@ -77,7 +77,7 @@ func initVolumes(cfg Config, c trackerClient, watchedTPs []prometheusWatchedTP) 
 		}
 
 		records := getAggRecords(taps)
-		volumeHist, err := constructVolumeHistory(records, xlmPriceHist, trueAssetUsdPrice, start, end, res)
+		volumeHist, err := constructVolumeHistory(records, gramPriceHist, trueAssetUsdPrice, start, end, res)
 		if err != nil {
 			fmt.Printf("got error constructing volume history for pair %s\n: %s", wtp.TradePair.String(), err)
 		}
@@ -96,7 +96,7 @@ func initVolumes(cfg Config, c trackerClient, watchedTPs []prometheusWatchedTP) 
 }
 
 func updateVolume(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatchedTP, volumeHistMap map[string][]volumeHist) {
-	req := mustCreateXlmPriceRequest()
+	req := mustCreateGramPriceRequest()
 	historyUnit := time.Duration(15 * 60 * time.Second) // length of each individual unit of volume history
 	cRes := time.Duration(60*1000) * time.Millisecond   // horizon client requests have a 1 minute resolution, in milliseconds
 	day := time.Duration(24 * 60 * 60 * time.Second)    // number of seconds in a day
@@ -107,7 +107,7 @@ func updateVolume(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatche
 	for {
 		time.Sleep(historyUnit - forLoopDuration) // wait before starting the update
 
-		xlmUsdPrice, err := getLatestXlmPrice(req)
+		gramUsdPrice, err := getLatestGramPrice(req)
 		if err != nil {
 			fmt.Printf("error while getting latest price: %s", err)
 		}
@@ -116,7 +116,7 @@ func updateVolume(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatche
 		start := end.Add(-1 * historyUnit)
 		for i, wtp := range watchedTPs {
 			// TODO: Calculate volume for assets with non-native counter.
-			if wtp.TradePair.SellingAsset.Code != "XLM" && wtp.TradePair.SellingAsset.IssuerAddress != "" {
+			if wtp.TradePair.SellingAsset.Code != "GRAM" && wtp.TradePair.SellingAsset.IssuerAddress != "" {
 				continue
 			}
 
@@ -149,7 +149,7 @@ func updateVolume(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatche
 			ets := end.Unix()
 			counterVolume, err := totalRecordsCounterVolume(records, start, end)
 			if err != nil {
-				fmt.Printf("got error aggregating xlm volume for pair %s\n: %s", tps, err)
+				fmt.Printf("got error aggregating gram volume for pair %s\n: %s", tps, err)
 			}
 
 			baseVolume, err := totalRecordsBaseVolume(records, start, end)
@@ -167,8 +167,8 @@ func updateVolume(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatche
 				end:                    ets,
 				baseVolumeBaseAsset:    baseVolume,
 				baseVolumeUsd:          baseVolume / trueAssetUsdPrice,
-				counterVolumeBaseAsset: counterVolume * xlmUsdPrice * trueAssetUsdPrice,
-				counterVolumeUsd:       counterVolume * xlmUsdPrice,
+				counterVolumeBaseAsset: counterVolume * gramUsdPrice * trueAssetUsdPrice,
+				counterVolumeUsd:       counterVolume * gramUsdPrice,
 				numTrades:              numTrades,
 			}
 
@@ -203,9 +203,9 @@ func getAggRecords(taps []hProtocol.TradeAggregationsPage) (records []hProtocol.
 	return
 }
 
-func constructVolumeHistory(tas []hProtocol.TradeAggregation, xlmPrices []xlmPrice, assetPrice float64, start, end time.Time, res int) ([]volumeHist, error) {
-	if len(xlmPrices) < 2 {
-		return []volumeHist{}, fmt.Errorf("mis-formed xlm price history from stellar expert")
+func constructVolumeHistory(tas []hProtocol.TradeAggregation, gramPrices []gramPrice, assetPrice float64, start, end time.Time, res int) ([]volumeHist, error) {
+	if len(gramPrices) < 2 {
+		return []volumeHist{}, fmt.Errorf("mis-formed gram price history from stellar expert")
 	}
 
 	volumeHistory := []volumeHist{}
@@ -216,9 +216,9 @@ func constructVolumeHistory(tas []hProtocol.TradeAggregation, xlmPrices []xlmPri
 		// find the weighted price for the current interval
 		cets := currEnd.Unix()
 		csts := cets - int64(res)
-		priceIdx = findTimestampPriceIndex(csts, xlmPrices, priceIdx)
+		priceIdx = findTimestampPriceIndex(csts, gramPrices, priceIdx)
 
-		weightedXlmUsdPrice, err := calcWeightedPrice(csts, priceIdx, xlmPrices)
+		weightedGramUsdPrice, err := calcWeightedPrice(csts, priceIdx, gramPrices)
 		if err != nil {
 			return []volumeHist{}, err
 		}
@@ -265,8 +265,8 @@ func constructVolumeHistory(tas []hProtocol.TradeAggregation, xlmPrices []xlmPri
 			numTrades:              currTradeCount,
 			baseVolumeBaseAsset:    currBaseVolume,
 			baseVolumeUsd:          currBaseVolume / assetPrice,
-			counterVolumeBaseAsset: currCounterVolume * weightedXlmUsdPrice * assetPrice,
-			counterVolumeUsd:       weightedXlmUsdPrice * currCounterVolume,
+			counterVolumeBaseAsset: currCounterVolume * weightedGramUsdPrice * assetPrice,
+			counterVolumeUsd:       weightedGramUsdPrice * currCounterVolume,
 		}
 
 		currEnd = currEnd.Add(time.Duration(-1*res) * time.Second)
@@ -391,7 +391,7 @@ func totalRecordsTradeCount(tas []hProtocol.TradeAggregation, start, end time.Ti
 // findTimestampPriceIndex iterates through an array of timestamps and prices, and returns the
 // index of the oldest such pair that is more recent than the given timestamp.
 // This assumes those pairs are sorted by decreasing timestamp, (i.e. most recent first).
-func findTimestampPriceIndex(timestamp int64, prices []xlmPrice, startIndex int) int {
+func findTimestampPriceIndex(timestamp int64, prices []gramPrice, startIndex int) int {
 	index := startIndex
 	if index < 0 {
 		if timestamp > prices[0].timestamp {
@@ -409,7 +409,7 @@ func findTimestampPriceIndex(timestamp int64, prices []xlmPrice, startIndex int)
 	return index
 }
 
-func calcWeightedPrice(timestamp int64, startIndex int, prices []xlmPrice) (float64, error) {
+func calcWeightedPrice(timestamp int64, startIndex int, prices []gramPrice) (float64, error) {
 	// we expect prices sorted in decreasing timestamp (i.e., most recent first)
 	// TODO: Use resolution to weight prices.
 	if startIndex < 0 {

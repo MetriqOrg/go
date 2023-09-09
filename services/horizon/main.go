@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/stellar/go/services/horizon/cmd"
+	"github.com/lantah/go/services/horizon/cmd"
 )
 
 func main() {

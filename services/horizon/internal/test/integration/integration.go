@@ -26,7 +26,7 @@ import (
 	"github.com/stellar/go/support/config"
 
 	sdk "github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/clients/stellarcore"
+	"github.com/stellar/go/clients/gramr"
 	"github.com/stellar/go/ingest/ledgerbackend"
 	"github.com/stellar/go/keypair"
 	proto "github.com/stellar/go/protocols/horizon"
@@ -40,11 +40,11 @@ import (
 
 const (
 	StandaloneNetworkPassphrase = "Standalone Network ; February 2017"
-	stellarCorePostgresPassword = "mysecretpassword"
+	gramrPostgresPassword = "mysecretpassword"
 	horizonDefaultPort          = "8000"
 	adminPort                   = 6060
-	stellarCorePort             = 11626
-	stellarCorePostgresPort     = 5641
+	gramrPort             = 11626
+	gramrPostgresPort     = 5641
 	historyArchivePort          = 1570
 	sorobanRPCPort              = 8080
 )
@@ -100,7 +100,7 @@ type Test struct {
 
 	horizonClient      *sdk.Client
 	horizonAdminClient *sdk.AdminClient
-	coreClient         *stellarcore.Client
+	coreClient         *gramr.Client
 
 	webNode       *horizon.App
 	ingestNode    *horizon.App
@@ -154,7 +154,7 @@ func NewTest(t *testing.T, config Config) *Test {
 			environment: NewEnvironmentManager(),
 		}
 		i.configureCaptiveCore()
-		// Only run Stellar Core container and its dependencies.
+		// Only run Gramr container and its dependencies.
 		i.runComposeCommand("up", "--detach", "--quiet-pull", "--no-color", "core")
 	} else {
 		i = &Test{
@@ -165,7 +165,7 @@ func NewTest(t *testing.T, config Config) *Test {
 	}
 
 	i.prepareShutdownHandlers()
-	i.coreClient = &stellarcore.Client{URL: "http://localhost:" + strconv.Itoa(stellarCorePort)}
+	i.coreClient = &gramr.Client{URL: "http://localhost:" + strconv.Itoa(gramrPort)}
 	if !config.SkipCoreContainerCreation {
 		i.waitForCore()
 		if RunWithSorobanRPC && i.config.EnableSorobanRPC {
@@ -203,8 +203,8 @@ func (i *Test) configureCaptiveCore() {
 	}
 
 	if value := i.getIngestParameter(
-		horizon.StellarCoreBinaryPathName,
-		"STELLAR_CORE_BINARY_PATH",
+		horizon.GramrBinaryPathName,
+		"GRAMR_BINARY_PATH",
 	); value != "" {
 		i.coreConfig.binaryPath = value
 	}
@@ -267,7 +267,7 @@ func (i *Test) runComposeCommand(args ...string) {
 	if i.config.ProtocolVersion < ledgerbackend.MinimalSorobanProtocolSupport {
 		cmd.Env = append(
 			cmd.Environ(),
-			"CORE_CONFIG_FILE=stellar-core-classic-integration-tests.cfg",
+			"CORE_CONFIG_FILE=gramr-classic-integration-tests.cfg",
 		)
 	}
 
@@ -423,7 +423,7 @@ func (i *Test) getDefaultArgs(postgres *dbtest.DB) map[string]string {
 		"ingest":                        "false",
 		"history-archive-urls":          fmt.Sprintf("http://%s:%d", "localhost", historyArchivePort),
 		"db-url":                        postgres.RO_DSN,
-		"stellar-core-url":              i.coreClient.URL,
+		"gramr-url":              i.coreClient.URL,
 		"network-passphrase":            i.passPhrase,
 		"apply-migrations":              "true",
 		"enable-captive-core-ingestion": "false",
@@ -445,13 +445,13 @@ func (i *Test) getDefaultIngestArgs(postgres *dbtest.DB) map[string]string {
 		"port":                          "8001",
 		"enable-captive-core-ingestion": strconv.FormatBool(len(i.coreConfig.binaryPath) > 0),
 		"db-url":                        postgres.DSN,
-		"stellar-core-db-url": fmt.Sprintf(
+		"gramr-db-url": fmt.Sprintf(
 			"postgres://postgres:%s@%s:%d/stellar?sslmode=disable",
-			stellarCorePostgresPassword,
+			gramrPostgresPassword,
 			"localhost",
-			stellarCorePostgresPort,
+			gramrPostgresPort,
 		),
-		"stellar-core-binary-path":  i.coreConfig.binaryPath,
+		"gramr-binary-path":  i.coreConfig.binaryPath,
 		"captive-core-config-path":  i.coreConfig.configPath,
 		"captive-core-http-port":    "21626",
 		"captive-core-use-db":       strconv.FormatBool(i.coreConfig.useDB),
@@ -774,8 +774,8 @@ func (i *Test) WaitForHorizon() {
 	i.t.Fatal("Horizon not ingesting...")
 }
 
-// CoreClient returns a stellar core client connected to the Stellar Core instance.
-func (i *Test) CoreClient() *stellarcore.Client {
+// CoreClient returns a gramr client connected to the Gramr instance.
+func (i *Test) CoreClient() *gramr.Client {
 	return i.coreClient
 }
 
@@ -900,7 +900,7 @@ func (i *Test) CreateAccounts(count int, initialBalance string) ([]*keypair.Full
 	}
 
 	for _, keys := range pairs {
-		i.t.Logf("Funded %s (%s) with %s XLM.\n",
+		i.t.Logf("Funded %s (%s) with %s GRAM.\n",
 			keys.Seed(), keys.Address(), initialBalance)
 	}
 

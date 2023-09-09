@@ -1,12 +1,12 @@
 // Package amount provides utilities for converting numbers to/from
-// the format used internally to stellar-core.
+// the format used internally to gramr.
 //
-// stellar-core represents asset "amounts" as 64-bit integers, but to enable
+// gramr represents asset "amounts" as 64-bit integers, but to enable
 // fractional units of an asset, horizon, the client-libraries and other built
-// on top of stellar-core use a convention, encoding amounts as a string of
+// on top of gramr use a convention, encoding amounts as a string of
 // decimal digits with up to seven digits of precision in the fractional
 // portion. For example, an amount shown as "101.001" in horizon would be
-// represented in stellar-core as 1010010000.
+// represented in gramr as 1010010000.
 package amount
 
 import (
@@ -15,14 +15,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
-// One is the value of one whole unit of currency. Stellar uses 7 fixed digits
-// for fractional values, thus One is 10 million (10^7).
+// One is the value of one whole unit of currency. LLantah uses 6 fixed digits
+// for fractional values, thus One is 1 million (10^6).
 const (
-	One = 10000000
+	One = 1000000
 )
 
 var (
@@ -118,10 +118,10 @@ func String(v xdr.Int64) string {
 }
 
 // String128 converts a signed 128-bit integer into a string, boldly assuming
-// 7-decimal precision.
+// 6-decimal precision.
 //
-// TODO: This should be adapted to variable precision when appopriate, but 7
-// decimals is the correct default for Stellar Classic amounts.
+// TODO: This should be adapted to variable precision when appopriate, but 6
+// decimals is the correct default for Lantah Classic amounts.
 func String128(v xdr.Int128Parts) string {
 	// the upper half of the i128 always indicates its sign regardless of its
 	// value, just like a native signed type
@@ -130,12 +130,12 @@ func String128(v xdr.Int128Parts) string {
 
 	rat := new(big.Rat).SetInt(val)
 	rat.Quo(rat, bigOne)
-	return rat.FloatString(7)
+	return rat.FloatString(6)
 }
 
 // StringFromInt64 returns an "amount string" from the provided raw int64 value `v`.
 func StringFromInt64(v int64) string {
 	r := big.NewRat(v, 1)
 	r.Quo(r, bigOne)
-	return r.FloatString(7)
+	return r.FloatString(6)
 }

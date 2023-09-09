@@ -391,7 +391,7 @@ func TestBuildAsset(t *testing.T) {
 }
 
 func TestAssetLessThan(t *testing.T) {
-	xlm := MustNewNativeAsset()
+	gram := MustNewNativeAsset()
 
 	t.Run("returns false if assets are equal", func(t *testing.T) {
 		assetA, err := NewCreditAsset(
@@ -406,7 +406,7 @@ func TestAssetLessThan(t *testing.T) {
 		)
 		require.NoError(t, err)
 
-		assert.False(t, xlm.LessThan(xlm))
+		assert.False(t, gram.LessThan(gram))
 		assert.False(t, assetA.LessThan(assetA))
 		assert.False(t, assetB.LessThan(assetB))
 	})
@@ -423,15 +423,15 @@ func TestAssetLessThan(t *testing.T) {
 		)
 		require.NoError(t, err)
 
-		assert.False(t, xlm.LessThan(xlm))
-		assert.True(t, xlm.LessThan(anum4))
-		assert.True(t, xlm.LessThan(anum12))
+		assert.False(t, gram.LessThan(gram))
+		assert.True(t, gram.LessThan(anum4))
+		assert.True(t, gram.LessThan(anum12))
 
-		assert.False(t, anum4.LessThan(xlm))
+		assert.False(t, anum4.LessThan(gram))
 		assert.False(t, anum4.LessThan(anum4))
 		assert.True(t, anum4.LessThan(anum12))
 
-		assert.False(t, anum12.LessThan(xlm))
+		assert.False(t, anum12.LessThan(gram))
 		assert.False(t, anum12.LessThan(anum4))
 		assert.False(t, anum12.LessThan(anum12))
 	})

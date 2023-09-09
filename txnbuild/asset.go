@@ -44,7 +44,7 @@ type Asset interface {
 	ToXDR() (xdr.Asset, error)
 }
 
-// NativeAsset represents the native XLM asset.
+// NativeAsset represents the native GRAM asset.
 type NativeAsset struct{}
 
 // GetType for NativeAsset returns the enum type of the asset.
@@ -52,13 +52,13 @@ func (na NativeAsset) GetType() (AssetType, error) {
 	return AssetTypeNative, nil
 }
 
-// IsNative for NativeAsset returns true (this is an XLM asset).
+// IsNative for NativeAsset returns true (this is an GRAM asset).
 func (na NativeAsset) IsNative() bool { return true }
 
-// GetCode for NativeAsset returns an empty string (XLM doesn't have a code).
+// GetCode for NativeAsset returns an empty string (GRAM doesn't have a code).
 func (na NativeAsset) GetCode() string { return "" }
 
-// GetIssuer for NativeAsset returns an empty string (XLM doesn't have an issuer).
+// GetIssuer for NativeAsset returns an empty string (GRAM doesn't have an issuer).
 func (na NativeAsset) GetIssuer() string { return "" }
 
 // LessThan returns true if this asset sorts before some other asset.
@@ -104,7 +104,7 @@ func (na NativeAsset) MustToTrustLineAsset() TrustLineAsset {
 	return TrustLineAssetWrapper{na}
 }
 
-// CreditAsset represents non-XLM assets on the Stellar network.
+// CreditAsset represents non-GRAM assets on the Stellar network.
 type CreditAsset struct {
 	Code   string
 	Issuer string
@@ -122,7 +122,7 @@ func (ca CreditAsset) GetType() (AssetType, error) {
 	}
 }
 
-// IsNative for CreditAsset returns false (this is not an XLM asset).
+// IsNative for CreditAsset returns false (this is not an GRAM asset).
 func (ca CreditAsset) IsNative() bool { return false }
 
 // GetCode for CreditAsset returns the asset code.

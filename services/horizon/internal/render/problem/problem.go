@@ -111,8 +111,8 @@ var (
 		Status: http.StatusServiceUnavailable,
 		Detail: "This horizon instance is configured to reject client requests " +
 			"when it can determine that the history database is lagging too far " +
-			"behind the connected instance of Stellar-Core or read replica. It's " +
-			"also possible that Stellar-Core is out of sync. Please try again later.",
+			"behind the connected instance of Gramr or read replica. It's " +
+			"also possible that Gramr is out of sync. Please try again later.",
 	}
 
 	// StillIngesting is a well-known problem type.  Use it as a shortcut

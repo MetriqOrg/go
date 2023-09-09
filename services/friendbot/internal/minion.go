@@ -3,11 +3,11 @@ package internal
 import (
 	"fmt"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/keypair"
+	hProtocol "github.com/lantah/go/protocols/horizon"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/txnbuild"
 )
 
 const createAccountAlreadyExistXDR = "AAAAAAAAAGT/////AAAAAQAAAAAAAAAA/////AAAAAA="

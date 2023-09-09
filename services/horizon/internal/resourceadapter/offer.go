@@ -22,7 +22,7 @@ func PopulateOffer(ctx context.Context, dest *protocol.Offer, row history.Offer,
 	dest.Amount = amount.String(xdr.Int64(row.Amount))
 	dest.PriceR.N = row.Pricen
 	dest.PriceR.D = row.Priced
-	dest.Price = big.NewRat(int64(row.Pricen), int64(row.Priced)).FloatString(7)
+	dest.Price = big.NewRat(int64(row.Pricen), int64(row.Priced)).FloatString(6)
 	if row.Sponsor.Valid {
 		dest.Sponsor = row.Sponsor.String
 	}

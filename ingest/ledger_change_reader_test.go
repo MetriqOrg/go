@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/xdr"
 )
 
 const (
@@ -275,7 +275,7 @@ func TestLedgerChangeReaderOrder(t *testing.T) {
 		t,
 		err,
 		"error extracting transactions from ledger close meta: TransactionMeta.V=2 is required in protocol"+
-			" version older than version 10. Please process ledgers again using the latest stellar-core version.",
+			" version older than version 10. Please process ledgers again using the latest gramr version.",
 	)
 	mock.AssertExpectations(t)
 

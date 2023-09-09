@@ -60,7 +60,7 @@ func HorizonROURL() string {
 	return horizonDB.RO_DSN
 }
 
-func StellarCore(t *testing.T) *sqlx.DB {
+func Gramr(t *testing.T) *sqlx.DB {
 	if coreDBConn != nil {
 		return coreDBConn
 	}
@@ -68,9 +68,9 @@ func StellarCore(t *testing.T) *sqlx.DB {
 	return coreDBConn
 }
 
-func StellarCoreURL() string {
+func GramrURL() string {
 	if coreDB == nil {
-		log.Panic(fmt.Errorf("StellarCore not initialized"))
+		log.Panic(fmt.Errorf("Gramr not initialized"))
 	}
 	return coreDB.DSN
 }

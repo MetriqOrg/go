@@ -37,8 +37,8 @@ In addition, the following additional data is provided in the `extras` field of 
 | Attribute                  | Type   | Description                                                                                                                 |
 |----------------------------|--------|-----------------------------------------------------------------------------------------------------------------------------|
 | `envelope_xdr`             | String | A base64-encoded representation of the TransactionEnvelope XDR whose failure triggered this response.                       |
-| `result_xdr`               | String | A base64-encoded representation of the TransactionResult XDR returned by stellar-core when submitting this transaction.     |
-| `result_codes.transaction` | String | The transaction result code returned by Stellar Core.                                                                       |
+| `result_xdr`               | String | A base64-encoded representation of the TransactionResult XDR returned by gramr when submitting this transaction.     |
+| `result_codes.transaction` | String | The transaction result code returned by Gramr.                                                                       |
 | `result_codes.operations`  | Array  | An array of strings, representing the operation result codes for each operation in the submitted transaction, if available. |
 
 

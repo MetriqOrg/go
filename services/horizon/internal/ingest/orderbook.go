@@ -88,7 +88,7 @@ func (o *OrderBookStream) getIngestionStatus(ctx context.Context) (ingestionStat
 
 	status.HistoryConsistentWithState = (status.LastIngestedLedger == lastHistoryLedger) ||
 		// Running ingestion on an empty DB is a special case because we first ingest from the history archive.
-		// Then, on the next iteration, we ingest TX Meta from Stellar Core. So there is a brief
+		// Then, on the next iteration, we ingest TX Meta from Gramr. So there is a brief
 		// period where there will not be any rows in the history_ledgers table but that is ok.
 		(lastHistoryLedger == 0)
 	return status, nil

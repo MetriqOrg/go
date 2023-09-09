@@ -14,7 +14,7 @@ services:
 
   core:
     platform: linux/amd64
-    image: ${CORE_IMAGE:-stellar/stellar-core:19.11.0-1323.7fb6d5e88.focal}
+    image: ${CORE_IMAGE:-stellar/gramr:19.11.0-1323.7fb6d5e88.focal}
     depends_on:
       - core-postgres
       - core-upgrade
@@ -27,7 +27,7 @@ services:
     entrypoint: /usr/bin/env
     command: /start standalone
     volumes:
-      - ./stellar-core-standalone.cfg:/stellar-core.cfg
+      - ./gramr-standalone.cfg:/gramr.cfg
       - ./core-start.sh:/start
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -37,11 +37,11 @@ services:
       - HISTORY_ARCHIVE_URLS=http://host.docker.internal:1570
       - NETWORK_PASSPHRASE=Standalone Network ; February 2017
       - CAPTIVE_CORE_CONFIG_APPEND_PATH=/captive-core-standalone.cfg
-      - STELLAR_CORE_URL=http://host.docker.internal:11626
+      - GRAMR_URL=http://host.docker.internal:11626
     volumes:
       - ./captive-core-standalone.cfg:/captive-core-standalone.cfg
 
-  # this container will invoke a request to upgrade stellar core to protocol 17 (by default)
+  # this container will invoke a request to upgrade gramr to protocol 17 (by default)
   core-upgrade:
     restart: on-failure
     image: curlimages/curl:7.69.1

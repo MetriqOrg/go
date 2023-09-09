@@ -125,13 +125,13 @@ func (s *system) verifyState(verifyAgainstLatestCheckpoint bool) error {
 				break
 			}
 
-			localLog.Info("Waiting for stellar-core to publish HAS...")
+			localLog.Info("Waiting for gramr to publish HAS...")
 			select {
 			case <-ctx.Done():
 				localLog.Info("State verifier shut down...")
 				return nil
 			case <-time.After(5 * time.Second):
-				// Wait for stellar-core to publish HAS
+				// Wait for gramr to publish HAS
 				retries++
 				if retries == 12 {
 					localLog.Info("Checkpoint not published. Canceling...")

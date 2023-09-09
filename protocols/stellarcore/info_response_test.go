@@ -1,4 +1,4 @@
-package stellarcore
+package gramr
 
 import "testing"
 import "encoding/json"

@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/xdr"
 
 	"github.com/pelletier/go-toml"
 )
@@ -20,7 +20,7 @@ const (
 	defaultHTTPPort      = 11626
 	defaultFailureSafety = -1
 
-	// if LOG_FILE_PATH is omitted stellar core actually defaults to "stellar-core.log"
+	// if LOG_FILE_PATH is omitted gramr actually defaults to "gramr.log"
 	// however, we are overriding this default for captive core
 	defaultLogFilePath = "" // by default we disable logging to a file
 )
@@ -65,7 +65,7 @@ type QuorumSet struct {
 type captiveCoreTomlValues struct {
 	Database string `toml:"DATABASE,omitempty"`
 	// we cannot omitempty because the empty string is a valid configuration for LOG_FILE_PATH
-	// and the default is stellar-core.log
+	// and the default is gramr.log
 	LogFilePath   string `toml:"LOG_FILE_PATH"`
 	BucketDirPath string `toml:"BUCKET_DIR_PATH,omitempty"`
 	// we cannot omitempty because 0 is a valid configuration for HTTP_PORT
@@ -316,13 +316,13 @@ type CaptiveCoreTomlParams struct {
 	// HTTPPort is the TCP port to listen for requests (defaults to 0, which disables the HTTP server).
 	HTTPPort *uint
 	// PeerPort is the TCP port to bind to for connecting to the Stellar network
-	// (defaults to 11625). It may be useful for example when there's >1 Stellar-Core
+	// (defaults to 11625). It may be useful for example when there's >1 Gramr
 	// instance running on a machine.
 	PeerPort *uint
 	// LogPath is the (optional) path in which to store Core logs, passed along
-	// to Stellar Core's LOG_FILE_PATH.
+	// to Gramr's LOG_FILE_PATH.
 	LogPath *string
-	// Strict is a flag which, if enabled, rejects Stellar Core toml fields which are not supported by captive core.
+	// Strict is a flag which, if enabled, rejects Gramr toml fields which are not supported by captive core.
 	Strict bool
 	// If true, specifies that captive core should be invoked with on-disk rather than in-memory option for ledger state
 	UseDB bool

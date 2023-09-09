@@ -38,10 +38,10 @@ type OpenSubmissionList interface {
 	Pending(context.Context) []string
 }
 
-// Submitter represents the low-level "submit a transaction to stellar-core"
+// Submitter represents the low-level "submit a transaction to gramr"
 // provider.
 type Submitter interface {
-	// Submit sends the provided transaction envelope to stellar-core
+	// Submit sends the provided transaction envelope to gramr
 	Submit(context.Context, string) SubmissionResult
 }
 
@@ -52,7 +52,7 @@ type Result struct {
 	Err error
 
 	// The full details of the transaction which was submitted
-	// to Stellar Core
+	// to Gramr
 	Transaction history.Transaction
 }
 
@@ -66,7 +66,7 @@ type SubmissionResult struct {
 	Err error
 
 	// Duration records the time it took to submit a transaction
-	// to stellar-core
+	// to gramr
 	Duration time.Duration
 }
 

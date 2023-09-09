@@ -28,12 +28,12 @@ const (
 	DatabaseURLFlagName = "db-url"
 	// IngestFlagName is the command line flag for enabling ingestion on the Horizon instance
 	IngestFlagName = "ingest"
-	// StellarCoreDBURLFlagName is the command line flag for configuring the postgres Stellar Core URL
-	StellarCoreDBURLFlagName = "stellar-core-db-url"
-	// StellarCoreURLFlagName is the command line flag for configuring the URL fore Stellar Core HTTP endpoint
-	StellarCoreURLFlagName = "stellar-core-url"
-	// StellarCoreBinaryPathName is the command line flag for configuring the path to the stellar core binary
-	StellarCoreBinaryPathName = "stellar-core-binary-path"
+	// GramrDBURLFlagName is the command line flag for configuring the postgres Gramr URL
+	GramrDBURLFlagName = "gramr-db-url"
+	// GramrURLFlagName is the command line flag for configuring the URL fore Gramr HTTP endpoint
+	GramrURLFlagName = "gramr-url"
+	// GramrBinaryPathName is the command line flag for configuring the path to the gramr binary
+	GramrBinaryPathName = "gramr-binary-path"
 	// captiveCoreConfigAppendPathName is the command line flag for configuring the path to the captive core additional configuration
 	// Note captiveCoreConfigAppendPathName is deprecated in favor of CaptiveCoreConfigPathName
 	captiveCoreConfigAppendPathName = "captive-core-config-append-path"
@@ -142,11 +142,11 @@ func Flags() (*Config, support.ConfigOptions) {
 			Usage:     "horizon postgres read-replica to connect with, when set it will return stale history error when replica is behind primary",
 		},
 		&support.ConfigOption{
-			Name:        StellarCoreBinaryPathName,
+			Name:        GramrBinaryPathName,
 			OptType:     types.String,
 			FlagDefault: "",
 			Required:    false,
-			Usage:       "path to stellar core binary, look for the stellar-core binary in $PATH by default.",
+			Usage:       "path to gramr binary, look for the gramr binary in $PATH by default.",
 			ConfigKey:   &config.CaptiveCoreBinaryPath,
 		},
 		&support.ConfigOption{
@@ -219,7 +219,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:     types.Bool,
 			FlagDefault: true,
 			Required:    false,
-			Usage:       "causes Horizon to ingest from a Captive Stellar Core process instead of a persistent Stellar Core database",
+			Usage:       "causes Horizon to ingest from a Captive Gramr process instead of a persistent Gramr database",
 			ConfigKey:   &config.EnableCaptiveCoreIngestion,
 		},
 		&support.ConfigOption{
@@ -280,22 +280,22 @@ func Flags() (*Config, support.ConfigOptions) {
 			FlagDefault:    uint(0),
 			CustomSetValue: support.SetOptionalUint,
 			Required:       false,
-			Usage:          "port for Captive Core to bind to for connecting to the Stellar swarm (0 uses Stellar Core's default)",
+			Usage:          "port for Captive Core to bind to for connecting to the Stellar swarm (0 uses Gramr's default)",
 			ConfigKey:      &config.CaptiveCoreTomlParams.PeerPort,
 		},
 		&support.ConfigOption{
-			Name:      StellarCoreDBURLFlagName,
-			EnvVar:    "STELLAR_CORE_DATABASE_URL",
-			ConfigKey: &config.StellarCoreDatabaseURL,
+			Name:      GramrDBURLFlagName,
+			EnvVar:    "GRAMR_DATABASE_URL",
+			ConfigKey: &config.GramrDatabaseURL,
 			OptType:   types.String,
 			Required:  false,
-			Usage:     "stellar-core postgres database to connect with",
+			Usage:     "gramr postgres database to connect with",
 		},
 		&support.ConfigOption{
-			Name:      StellarCoreURLFlagName,
-			ConfigKey: &config.StellarCoreURL,
+			Name:      GramrURLFlagName,
+			ConfigKey: &config.GramrURL,
 			OptType:   types.String,
-			Usage:     "stellar-core to connect with (for http commands). If unset and the local Captive core is enabled, it will use http://localhost:<stellar_captive_core_http_port>",
+			Usage:     "gramr to connect with (for http commands). If unset and the local Captive core is enabled, it will use http://localhost:<stellar_captive_core_http_port>",
 		},
 		&support.ConfigOption{
 			Name:      HistoryArchiveURLsFlagName,
@@ -503,7 +503,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			ConfigKey:   &config.Ingest,
 			OptType:     types.Bool,
 			FlagDefault: true,
-			Usage:       "causes this horizon process to ingest data from stellar-core into horizon's db",
+			Usage:       "causes this horizon process to ingest data from gramr into horizon's db",
 		},
 		&support.ConfigOption{
 			Name:        "cursor-name",
@@ -511,7 +511,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			ConfigKey:   &config.CursorName,
 			OptType:     types.String,
 			FlagDefault: "HORIZON",
-			Usage:       "ingestor cursor used by horizon to ingest from stellar core. must be uppercase and unique for each horizon instance ingesting from that core instance.",
+			Usage:       "ingestor cursor used by horizon to ingest from gramr. must be uppercase and unique for each horizon instance ingesting from that core instance.",
 		},
 		&support.ConfigOption{
 			Name:        "history-retention-count",
@@ -525,14 +525,14 @@ func Flags() (*Config, support.ConfigOptions) {
 			ConfigKey:   &config.StaleThreshold,
 			OptType:     types.Uint,
 			FlagDefault: uint(0),
-			Usage:       "the maximum number of ledgers the history db is allowed to be out of date from the connected stellar-core db before horizon considers history stale",
+			Usage:       "the maximum number of ledgers the history db is allowed to be out of date from the connected gramr db before horizon considers history stale",
 		},
 		&support.ConfigOption{
 			Name:        "skip-cursor-update",
 			ConfigKey:   &config.SkipCursorUpdate,
 			OptType:     types.Bool,
 			FlagDefault: false,
-			Usage:       "causes the ingester to skip reporting the last imported ledger state to stellar-core",
+			Usage:       "causes the ingester to skip reporting the last imported ledger state to gramr",
 		},
 		&support.ConfigOption{
 			Name:        "ingest-disable-state-verification",
@@ -637,11 +637,11 @@ func NewAppFromFlags(config *Config, flags support.ConfigOptions) (*App, error) 
 		return nil, err
 	}
 	// Validate app-specific arguments
-	if config.StellarCoreURL == "" {
-		return nil, fmt.Errorf("flag --%s cannot be empty", StellarCoreURLFlagName)
+	if config.GramrURL == "" {
+		return nil, fmt.Errorf("flag --%s cannot be empty", GramrURLFlagName)
 	}
-	if config.Ingest && !config.EnableCaptiveCoreIngestion && config.StellarCoreDatabaseURL == "" {
-		return nil, fmt.Errorf("flag --%s cannot be empty", StellarCoreDBURLFlagName)
+	if config.Ingest && !config.EnableCaptiveCoreIngestion && config.GramrDatabaseURL == "" {
+		return nil, fmt.Errorf("flag --%s cannot be empty", GramrDBURLFlagName)
 	}
 
 	log.Infof("Initializing horizon...")
@@ -686,7 +686,7 @@ var (
 // getCaptiveCoreBinaryPath retrieves the path of the Captive Core binary
 // Returns the path or an error if the binary is not found
 func getCaptiveCoreBinaryPath() (string, error) {
-	result, err := exec.LookPath("stellar-core")
+	result, err := exec.LookPath("gramr")
 	if err != nil {
 		return "", err
 	}
@@ -783,12 +783,12 @@ func createCaptiveCoreConfigFromParameters(config *Config) error {
 func setCaptiveCoreConfiguration(config *Config) error {
 	stdLog.Println("Preparing captive core...")
 
-	// If the user didn't specify a Stellar Core binary, we can check the
+	// If the user didn't specify a Gramr binary, we can check the
 	// $PATH and possibly fill it in for them.
 	if config.CaptiveCoreBinaryPath == "" {
 		var err error
 		if config.CaptiveCoreBinaryPath, err = getCaptiveCoreBinaryPath(); err != nil {
-			return fmt.Errorf("captive core requires %s", StellarCoreBinaryPathName)
+			return fmt.Errorf("captive core requires %s", GramrBinaryPathName)
 		}
 	}
 
@@ -806,8 +806,8 @@ func setCaptiveCoreConfiguration(config *Config) error {
 
 	// If we don't supply an explicit core URL and running captive core process with the http port enabled,
 	// point to it.
-	if config.StellarCoreURL == "" && config.CaptiveCoreToml.HTTPPort != 0 {
-		config.StellarCoreURL = fmt.Sprintf("http://localhost:%d", config.CaptiveCoreToml.HTTPPort)
+	if config.GramrURL == "" && config.CaptiveCoreToml.HTTPPort != 0 {
+		config.GramrURL = fmt.Sprintf("http://localhost:%d", config.CaptiveCoreToml.HTTPPort)
 	}
 
 	return nil
@@ -860,11 +860,11 @@ func ApplyFlags(config *Config, flags support.ConfigOptions, options ApplyOption
 				captiveCoreConfigFlag = CaptiveCoreConfigPathName
 			}
 			return fmt.Errorf("invalid config: one or more captive core params passed (--%s or --%s) but --ingest not set"+captiveCoreMigrationHint,
-				StellarCoreBinaryPathName, captiveCoreConfigFlag)
+				GramrBinaryPathName, captiveCoreConfigFlag)
 		}
-		if config.StellarCoreDatabaseURL != "" {
+		if config.GramrDatabaseURL != "" {
 			return fmt.Errorf("invalid config: --%s passed but --ingest not set"+
-				"", StellarCoreDBURLFlagName)
+				"", GramrDBURLFlagName)
 		}
 	}
 

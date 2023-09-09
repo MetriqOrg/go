@@ -5,20 +5,20 @@ set -x
 
 source /etc/profile
 # work within the current docker working dir
-if [ ! -f "./stellar-core.cfg" ]; then
-   cp /stellar-core.cfg ./
+if [ ! -f "./gramr.cfg" ]; then
+   cp /gramr.cfg ./
 fi   
 
 echo "using config:"
-cat stellar-core.cfg
+cat gramr.cfg
 
 # initialize new db
-stellar-core new-db
+gramr new-db
 
 if [ "$1" = "standalone" ]; then
   # initialize for new history archive path, remove any pre-existing on same path from base image
   rm -rf ./history
-  stellar-core new-hist vs
+  gramr new-hist vs
 
   # serve history archives to horizon on port 1570
   pushd ./history/vs/
@@ -26,4 +26,4 @@ if [ "$1" = "standalone" ]; then
   popd
 fi
 
-exec stellar-core run --console
+exec gramr run --console

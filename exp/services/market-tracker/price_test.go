@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateXlmPriceRequest(t *testing.T) {
-	req, err := createXlmPriceRequest()
+func TestCreateGramPriceRequest(t *testing.T) {
+	req, err := createGramPriceRequest()
 	assert.NoError(t, err)
 	assert.Equal(t, "GET", req.Method)
 	assert.Equal(t, stelExURL, req.URL.String())

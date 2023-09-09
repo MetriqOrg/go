@@ -737,9 +737,9 @@ func TestContractClawbackFromContract(t *testing.T) {
 func assertContainsBalance(itest *integration.Test, acct *keypair.Full, issuer, code string, amt xdr.Int64) {
 	accountResponse := itest.MustGetAccount(acct)
 	if issuer == "" && code == "" {
-		xlmBalance, err := accountResponse.GetNativeBalance()
+		gramBalance, err := accountResponse.GetNativeBalance()
 		assert.NoError(itest.CurrentTest(), err)
-		assert.Equal(itest.CurrentTest(), amt, amount.MustParse(xlmBalance))
+		assert.Equal(itest.CurrentTest(), amt, amount.MustParse(gramBalance))
 	} else {
 		assetBalance := accountResponse.GetCreditBalance(code, issuer)
 		assert.Equal(itest.CurrentTest(), amt, amount.MustParse(assetBalance))

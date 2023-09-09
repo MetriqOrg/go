@@ -6,12 +6,12 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 )
 
 // WithMetrics decorates the given LedgerBackend with metrics
 func WithMetrics(base LedgerBackend, registry *prometheus.Registry, namespace string) LedgerBackend {
-	if captiveCoreBackend, ok := base.(*CaptiveStellarCore); ok {
+	if captiveCoreBackend, ok := base.(*CaptiveGramr); ok {
 		captiveCoreBackend.registerMetrics(registry, namespace)
 	}
 	summary := prometheus.NewSummary(

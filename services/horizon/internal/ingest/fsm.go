@@ -329,7 +329,7 @@ func (b buildState) run(s *system) (transition, error) {
 
 	if err = s.updateCursor(b.checkpointLedger - 1); err != nil {
 		// Don't return updateCursor error.
-		log.WithError(err).Warn("error updating stellar-core cursor")
+		log.WithError(err).Warn("error updating gramr cursor")
 	}
 
 	log.Info("Starting ingestion system from empty state...")
@@ -456,10 +456,10 @@ func (r resumeState) run(s *system) (transition, error) {
 			Info("bumping ingest ledger to next ledger after ingested ledger in db")
 
 		// Update cursor if there's more than one ingesting instance: either
-		// Captive-Core or DB ingestion connected to another Stellar-Core.
+		// Captive-Core or DB ingestion connected to another Gramr.
 		if err = s.updateCursor(lastIngestedLedger); err != nil {
 			// Don't return updateCursor error.
-			log.WithError(err).Warn("error updating stellar-core cursor")
+			log.WithError(err).Warn("error updating gramr cursor")
 		}
 
 		// resume immediately so Captive-Core catchup is not slowed down
@@ -524,7 +524,7 @@ func (r resumeState) run(s *system) (transition, error) {
 
 	if err = s.updateCursor(ingestLedger); err != nil {
 		// Don't return updateCursor error.
-		log.WithError(err).Warn("error updating stellar-core cursor")
+		log.WithError(err).Warn("error updating gramr cursor")
 	}
 
 	duration = time.Since(startTime).Seconds()

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stellar/go/protocols/stellarcore"
+	"github.com/stellar/go/protocols/gramr"
 	"github.com/stellar/go/support/clock"
 	"github.com/stellar/go/support/db"
 	"github.com/stellar/go/support/log"
@@ -21,8 +21,8 @@ const (
 
 var healthLogger = log.WithField("service", "healthCheck")
 
-type stellarCoreClient interface {
-	Info(ctx context.Context) (*stellarcore.InfoResponse, error)
+type gramrClient interface {
+	Info(ctx context.Context) (*gramr.InfoResponse, error)
 }
 
 type healthCache struct {
@@ -52,7 +52,7 @@ func newHealthCache(ttl time.Duration) *healthCache {
 type healthCheck struct {
 	session db.SessionInterface
 	ctx     context.Context
-	core    stellarCoreClient
+	core    gramrClient
 	cache   *healthCache
 }
 
@@ -73,7 +73,7 @@ func (h healthCheck) runCheck() healthResponse {
 		response.DatabaseConnected = false
 	}
 	if resp, err := h.core.Info(h.ctx); err != nil {
-		healthLogger.Warnf("request to stellar core failed: %s", err)
+		healthLogger.Warnf("request to gramr failed: %s", err)
 		response.CoreUp = false
 		response.CoreSynced = false
 	} else {

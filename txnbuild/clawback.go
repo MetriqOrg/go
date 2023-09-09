@@ -30,7 +30,7 @@ func (cb *Clawback) BuildXDR() (xdr.Operation, error) {
 	}
 	// Validate this is an issued asset
 	if cb.Asset.IsNative() {
-		return xdr.Operation{}, errors.New("clawbacks don't support the native (XLM) asset")
+		return xdr.Operation{}, errors.New("clawbacks don't support the native (GRAM) asset")
 	}
 
 	xdrAmount, err := amount.Parse(cb.Amount)

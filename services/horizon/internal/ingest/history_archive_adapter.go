@@ -36,7 +36,7 @@ func (haa *historyArchiveAdapter) GetLatestLedgerSequence() (uint32, error) {
 }
 
 // BucketListHash returns the bucket list hash to compare with hash in the
-// ledger header fetched from Stellar-Core.
+// ledger header fetched from Gramr.
 func (haa *historyArchiveAdapter) BucketListHash(sequence uint32) (xdr.Hash, error) {
 	exists, err := haa.archive.CategoryCheckpointExists("history", sequence)
 	if err != nil {

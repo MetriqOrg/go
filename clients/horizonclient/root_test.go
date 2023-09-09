@@ -3,7 +3,7 @@ package horizonclient
 import (
 	"testing"
 
-	"github.com/stellar/go/support/http/httptest"
+	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,7 +23,7 @@ func TestRoot(t *testing.T) {
 	root, err := client.Root()
 	if assert.NoError(t, err) {
 		assert.Equal(t, root.HorizonVersion, "0.17.6-unstable-bc999a67d0b2413d8abd76153a56733c7d517484")
-		assert.Equal(t, root.StellarCoreVersion, "stellar-core 11.0.0 (236f831521b6724c0ae63906416faa997ef27e19)")
+		assert.Equal(t, root.GramrVersion, "gramr 11.0.0 (236f831521b6724c0ae63906416faa997ef27e19)")
 		assert.Equal(t, root.HorizonSequence, int32(84959))
 		assert.Equal(t, root.NetworkPassphrase, "Test SDF Network ; September 2015")
 	}
@@ -94,7 +94,7 @@ var rootResponse = `{
     }
   },
   "horizon_version": "0.17.6-unstable-bc999a67d0b2413d8abd76153a56733c7d517484",
-  "core_version": "stellar-core 11.0.0 (236f831521b6724c0ae63906416faa997ef27e19)",
+  "core_version": "gramr 11.0.0 (236f831521b6724c0ae63906416faa997ef27e19)",
   "history_latest_ledger": 84959,
   "history_elder_ledger": 1,
   "core_latest_ledger": 84959,

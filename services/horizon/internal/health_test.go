@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/protocols/stellarcore"
+	"github.com/stellar/go/protocols/gramr"
 	"github.com/stellar/go/support/clock"
 	"github.com/stellar/go/support/clock/clocktest"
 	"github.com/stellar/go/support/db"
@@ -19,28 +19,28 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var _ stellarCoreClient = (*mockStellarCore)(nil)
+var _ gramrClient = (*mockGramr)(nil)
 
-type mockStellarCore struct {
+type mockGramr struct {
 	mock.Mock
 }
 
-func (m *mockStellarCore) Info(ctx context.Context) (*stellarcore.InfoResponse, error) {
+func (m *mockGramr) Info(ctx context.Context) (*gramr.InfoResponse, error) {
 	args := m.Called(ctx)
-	return args.Get(0).(*stellarcore.InfoResponse), args.Error(1)
+	return args.Get(0).(*gramr.InfoResponse), args.Error(1)
 }
 
 func TestHealthCheck(t *testing.T) {
-	synced := &stellarcore.InfoResponse{}
+	synced := &gramr.InfoResponse{}
 	synced.Info.State = "Synced!"
-	notSynced := &stellarcore.InfoResponse{}
+	notSynced := &gramr.InfoResponse{}
 	notSynced.Info.State = "Catching up"
 
 	for _, tc := range []struct {
 		name             string
 		pingErr          error
 		coreErr          error
-		coreResponse     *stellarcore.InfoResponse
+		coreResponse     *gramr.InfoResponse
 		expectedStatus   int
 		expectedResponse healthResponse
 	}{
@@ -69,7 +69,7 @@ func TestHealthCheck(t *testing.T) {
 			},
 		},
 		{
-			"stellar core not synced",
+			"gramr not synced",
 			nil,
 			nil,
 			notSynced,
@@ -81,9 +81,9 @@ func TestHealthCheck(t *testing.T) {
 			},
 		},
 		{
-			"stellar core down",
+			"gramr down",
 			nil,
-			fmt.Errorf("stellar core is down"),
+			fmt.Errorf("gramr is down"),
 			nil,
 			http.StatusServiceUnavailable,
 			healthResponse{
@@ -93,9 +93,9 @@ func TestHealthCheck(t *testing.T) {
 			},
 		},
 		{
-			"stellar core and db down",
+			"gramr and db down",
 			fmt.Errorf("database is down"),
-			fmt.Errorf("stellar core is down"),
+			fmt.Errorf("gramr is down"),
 			nil,
 			http.StatusServiceUnavailable,
 			healthResponse{
@@ -105,7 +105,7 @@ func TestHealthCheck(t *testing.T) {
 			},
 		},
 		{
-			"stellar core not synced and db down",
+			"gramr not synced and db down",
 			fmt.Errorf("database is down"),
 			nil,
 			notSynced,
@@ -121,7 +121,7 @@ func TestHealthCheck(t *testing.T) {
 			ctx := context.Background()
 			session := &db.MockSession{}
 			session.On("Ping", ctx, dbPingTimeout).Return(tc.pingErr).Once()
-			core := &mockStellarCore{}
+			core := &mockGramr{}
 			core.On("Info", ctx).Return(tc.coreResponse, tc.coreErr).Once()
 
 			h := healthCheck{
@@ -183,8 +183,8 @@ func TestHealthCheckCache(t *testing.T) {
 	ctx := context.Background()
 	session := &db.MockSession{}
 	session.On("Ping", ctx, dbPingTimeout).Return(nil).Once()
-	core := &mockStellarCore{}
-	core.On("Info", h.ctx).Return(&stellarcore.InfoResponse{}, fmt.Errorf("core err")).Once()
+	core := &mockGramr{}
+	core.On("Info", h.ctx).Return(&gramr.InfoResponse{}, fmt.Errorf("core err")).Once()
 	h.session = session
 	h.core = core
 	updatedResponse := healthResponse{

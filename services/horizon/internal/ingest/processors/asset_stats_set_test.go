@@ -51,7 +51,7 @@ func assertAllFromSnapshotEquals(t *testing.T, set AssetStatSet, expected []hist
 }
 
 func TestAddContractData(t *testing.T) {
-	xlmID, err := xdr.MustNewNativeAsset().ContractID("passphrase")
+	gramID, err := xdr.MustNewNativeAsset().ContractID("passphrase")
 	assert.NoError(t, err)
 	usdcIssuer := keypair.MustRandom().Address()
 	usdcAsset := xdr.MustNewCreditAsset("USDC", usdcIssuer)
@@ -67,12 +67,12 @@ func TestAddContractData(t *testing.T) {
 
 	set := NewAssetStatSet("passphrase")
 
-	xlmContractData, err := AssetToContractData(true, "", "", xlmID)
+	gramContractData, err := AssetToContractData(true, "", "", gramID)
 	assert.NoError(t, err)
 	err = set.AddContractData(ingest.Change{
 		Type: xdr.LedgerEntryTypeContractData,
 		Post: &xdr.LedgerEntry{
-			Data: xlmContractData,
+			Data: gramContractData,
 		},
 	})
 	assert.NoError(t, err)
@@ -80,7 +80,7 @@ func TestAddContractData(t *testing.T) {
 	err = set.AddContractData(ingest.Change{
 		Type: xdr.LedgerEntryTypeContractData,
 		Post: &xdr.LedgerEntry{
-			Data: BalanceToContractData(xlmID, [32]byte{}, 100),
+			Data: BalanceToContractData(gramID, [32]byte{}, 100),
 		},
 	})
 	assert.NoError(t, err)

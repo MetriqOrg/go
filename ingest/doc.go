@@ -8,8 +8,8 @@ possible features. This is why this package was created.
 # Ledger Backend
 
 Ledger backends are sources of information about Stellar network ledgers. This
-can be, for example: a Stellar-Core database, (possibly-remote) Captive
-Stellar-Core instances, or History Archives. Please consult the "ledgerbackend"
+can be, for example: a Gramr database, (possibly-remote) Captive
+Gramr instances, or History Archives. Please consult the "ledgerbackend"
 package docs for more information about each backend.
 
 Warning: Ledger backends provide low-level xdr.LedgerCloseMeta that should not
@@ -38,6 +38,6 @@ transactions status in your application if required.
 
 Refer to the examples below for simple use cases, or check out the README (and
 its corresponding tutorial/ subfolder) in the repository for a Getting Started
-guide: https://github.com/stellar/go/blob/master/ingest/README.md
+guide: https://github.com/lantah/go/blob/master/ingest/README.md
 */
 package ingest

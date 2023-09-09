@@ -628,7 +628,7 @@ func (e *effectsWrapper) addCreatePassiveSellOfferEffect() error {
 
 	var claims []xdr.ClaimAtom
 
-	// KNOWN ISSUE:  stellar-core creates results for CreatePassiveOffer operations
+	// KNOWN ISSUE:  gramr creates results for CreatePassiveOffer operations
 	// with the wrong result arm set.
 	if result.Type == xdr.OperationTypeManageSellOffer {
 		claims = result.MustManageSellOfferResult().MustSuccess().OffersClaimed
@@ -1000,7 +1000,7 @@ func (e *effectsWrapper) addClaimableBalanceEntryCreatedEffects(source *xdr.Muxe
 	// `create_claimable_balance` operation but also by `liquidity_pool_withdraw`
 	// operation causing a revocation.
 	// In case of `create_claimable_balance` we use `op.Claimants` to make
-	// effects backward compatible. The reason for this is that Stellar-Core
+	// effects backward compatible. The reason for this is that Gramr
 	// changes all `rel_before` predicated to `abs_before` when tx is included
 	// in the ledger.
 	var claimants []xdr.Claimant

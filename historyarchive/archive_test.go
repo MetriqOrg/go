@@ -17,7 +17,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 

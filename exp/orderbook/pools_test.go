@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -87,7 +87,7 @@ func TestLiquidityPoolExchanges(t *testing.T) {
 }
 
 // TestLiquidityPoolMath is a robust suite of tests to ensure that theliquidity
-// pool calculation functions are correct, taken from Stellar Core's tests here:
+// pool calculation functions are correct, taken from Gramr's tests here:
 //
 // https://github.com/stellar/stellar-core/blob/master/src/transactions/test/ExchangeTests.cpp#L948
 func TestLiquidityPoolMath(t *testing.T) {

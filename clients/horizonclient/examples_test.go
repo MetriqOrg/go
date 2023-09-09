@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	hProtocol "github.com/lantah/go/protocols/horizon"
+	"github.com/lantah/go/protocols/horizon/effects"
+	"github.com/lantah/go/protocols/horizon/operations"
+	"github.com/lantah/go/txnbuild"
 )
 
 func ExampleClient_Accounts() {
@@ -516,7 +516,7 @@ func ExampleClient_Operations() {
 
 func ExampleClient_OrderBook() {
 	client := horizonclient.DefaultPublicNetClient
-	// orderbook for an asset pair, e.g XLM/NGN
+	// orderbook for an asset pair, e.g GRAM/NGN
 	obRequest := horizonclient.OrderBookRequest{
 		BuyingAssetType:    horizonclient.AssetTypeNative,
 		SellingAssetCode:   "USD",
@@ -533,7 +533,7 @@ func ExampleClient_OrderBook() {
 
 func ExampleClient_Paths() {
 	client := horizonclient.DefaultPublicNetClient
-	// Find paths for XLM->NGN
+	// Find paths for GRAM->NGN
 	pr := horizonclient.PathsRequest{
 		DestinationAccount:     "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 		DestinationAmount:      "100",

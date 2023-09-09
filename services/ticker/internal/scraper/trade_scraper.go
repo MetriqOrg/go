@@ -96,12 +96,12 @@ func (c *ScraperConfig) streamTrades(h horizonclient.TradeHandler, cursor string
 // addNativeData adds additional fields when one of the assets is native.
 func addNativeData(trade *hProtocol.Trade) {
 	if trade.BaseAssetType == "native" {
-		trade.BaseAssetCode = "XLM"
+		trade.BaseAssetCode = "GRAM"
 		trade.BaseAssetIssuer = "native"
 	}
 
 	if trade.CounterAssetType == "native" {
-		trade.CounterAssetCode = "XLM"
+		trade.CounterAssetCode = "GRAM"
 		trade.CounterAssetIssuer = "native"
 	}
 }

@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/stellar/go/protocols/stellarcore"
+	"github.com/stellar/go/protocols/gramr"
 )
 
 type State struct {
@@ -25,7 +25,7 @@ type Store struct {
 	}
 }
 
-func (c *Store) Set(resp *stellarcore.InfoResponse) {
+func (c *Store) Set(resp *gramr.InfoResponse) {
 	c.Lock()
 	defer c.Unlock()
 	c.state.Synced = resp.IsSynced()
@@ -49,8 +49,8 @@ func (c *Store) Get() State {
 func (c *Store) RegisterMetrics(registry *prometheus.Registry) {
 	c.Metrics.CoreSynced = prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "stellar_core", Name: "synced",
-			Help: "determines if Stellar-Core defined by --stellar-core-url is synced with the network",
+			Namespace: "horizon", Subsystem: "gramr", Name: "synced",
+			Help: "determines if Gramr defined by --gramr-url is synced with the network",
 		},
 		func() float64 {
 			if c.Get().Synced {
@@ -64,8 +64,8 @@ func (c *Store) RegisterMetrics(registry *prometheus.Registry) {
 
 	c.Metrics.CoreSupportedProtocolVersion = prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "stellar_core", Name: "supported_protocol_version",
-			Help: "determines the supported version of the protocol by Stellar-Core defined by --stellar-core-url",
+			Namespace: "horizon", Subsystem: "gramr", Name: "supported_protocol_version",
+			Help: "determines the supported version of the protocol by Gramr defined by --gramr-url",
 		},
 		func() float64 {
 			return float64(c.Get().CoreSupportedProtocolVersion)

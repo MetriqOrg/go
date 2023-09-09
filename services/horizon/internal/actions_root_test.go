@@ -27,9 +27,9 @@ func TestRootAction(t *testing.T) {
 		}`)
 	defer server.Close()
 
-	ht.App.config.StellarCoreURL = server.URL
+	ht.App.config.GramrURL = server.URL
 	ht.App.config.NetworkPassphrase = "test"
-	assert.NoError(t, ht.App.UpdateStellarCoreInfo(ht.Ctx))
+	assert.NoError(t, ht.App.UpdateGramrInfo(ht.Ctx))
 	ht.App.UpdateCoreLedgerState(ht.Ctx)
 	ht.App.UpdateHorizonLedgerState(ht.Ctx)
 
@@ -40,7 +40,7 @@ func TestRootAction(t *testing.T) {
 		err := json.Unmarshal(w.Body.Bytes(), &actual)
 		ht.Require.NoError(err)
 		ht.Assert.Equal("devel", actual.HorizonVersion)
-		ht.Assert.Equal("test-core", actual.StellarCoreVersion)
+		ht.Assert.Equal("test-core", actual.GramrVersion)
 		ht.Assert.Equal(int32(4), actual.CoreSupportedProtocolVersion)
 		ht.Assert.Equal(int32(3), actual.CurrentProtocolVersion)
 		ht.Assert.Equal(int32(64), actual.CoreSequence)
@@ -95,7 +95,7 @@ func TestRootCoreClientInfoErrored(t *testing.T) {
 	server := test.NewStaticMockServer(`{}`)
 	defer server.Close()
 
-	ht.App.config.StellarCoreURL = server.URL
+	ht.App.config.GramrURL = server.URL
 	ht.App.UpdateCoreLedgerState(ht.Ctx)
 
 	w := ht.Get("/")

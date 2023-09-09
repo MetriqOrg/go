@@ -1,6 +1,6 @@
-package stellarcore
+package gramr
 
-// InfoResponse is the json response returned from stellar-core's /info
+// InfoResponse is the json response returned from gramr's /info
 // endpoint.
 type InfoResponse struct {
 	Info struct {
@@ -14,7 +14,7 @@ type InfoResponse struct {
 	}
 }
 
-// LedgerInfo is the part of the stellar-core's info json response.
+// LedgerInfo is the part of the gramr's info json response.
 // It's returned under `ledger` key
 type LedgerInfo struct {
 	Age          int    `json:"age"`
@@ -27,7 +27,7 @@ type LedgerInfo struct {
 	Version      int    `json:"version"`
 }
 
-// IsSynced returns a boolean indicating whether stellarcore is synced with the
+// IsSynced returns a boolean indicating whether gramr is synced with the
 // network.
 func (resp *InfoResponse) IsSynced() bool {
 	return resp.Info.State == "Synced!"

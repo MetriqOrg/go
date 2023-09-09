@@ -7,12 +7,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/support/errors"
-	supporthttp "github.com/stellar/go/support/http"
-	supportlog "github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/render/health"
+	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/support/errors"
+	supporthttp "github.com/lantah/go/support/http"
+	supportlog "github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/render/health"
 	"gopkg.in/square/go-jose.v2"
 )
 

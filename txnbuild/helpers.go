@@ -99,7 +99,7 @@ func validatePrice(p xdr.Price) error {
 
 // validateAssetCode checks if the provided asset is valid as an asset code.
 // It returns an error if the asset is invalid.
-// The asset must be non native (XLM) with a valid asset code.
+// The asset must be non native (GRAM) with a valid asset code.
 func validateAssetCode(asset BasicAsset) error {
 	// Note: we are not using validateStellarAsset() function for AllowTrust operations because it requires the
 	//  following :
@@ -111,7 +111,7 @@ func validateAssetCode(asset BasicAsset) error {
 	}
 
 	if asset.IsNative() {
-		return errors.New("native (XLM) asset type is not allowed")
+		return errors.New("native (GRAM) asset type is not allowed")
 	}
 
 	_, err := asset.GetType()
@@ -123,7 +123,7 @@ func validateAssetCode(asset BasicAsset) error {
 
 // validateChangeTrustAsset checks if the provided asset is valid for use in ChangeTrust operation.
 // It returns an error if the asset is invalid.
-// The asset must be non native (XLM) with a valid asset code and issuer.
+// The asset must be non native (GRAM) with a valid asset code and issuer.
 func validateChangeTrustAsset(asset ChangeTrustAsset) error {
 	// Note: we are not using validateStellarAsset() function for ChangeTrust operations because it requires the
 	//  following :

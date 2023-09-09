@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/stellar/go/historyarchive"
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/historyarchive"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/xdr"
 )
 
 // Example_ledgerentrieshistoryarchive demonstrates how to stream all ledger
@@ -61,7 +61,7 @@ func Example_ledgerentrieshistoryarchive() {
 }
 
 // Example_changes demonstrates how to stream ledger entry changes
-// for a specific ledger using captive stellar-core. Please note that transaction
+// for a specific ledger using captive gramr. Please note that transaction
 // meta IS available when using this backend.
 func Example_changes() {
 	ctx := context.Background()
@@ -76,10 +76,10 @@ func Example_changes() {
 		panic(err)
 	}
 
-	// Requires Stellar-Core 13.2.0+
+	// Requires Gramr 13.2.0+
 	backend, err := ledgerbackend.NewCaptive(
 		ledgerbackend.CaptiveCoreConfig{
-			BinaryPath:         "/bin/stellar-core",
+			BinaryPath:         "/bin/gramr",
 			NetworkPassphrase:  networkPassphrase,
 			HistoryArchiveURLs: []string{archiveURL},
 			Toml:               captiveCoreToml,

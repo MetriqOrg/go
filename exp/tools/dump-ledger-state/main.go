@@ -12,11 +12,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/stellar/go/historyarchive"
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/historyarchive"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/xdr"
 )
 
 // csvMap maintains a mapping from ledger entry type to csv file

@@ -15,7 +15,7 @@ import (
 	"gopkg.in/matryer/try.v1"
 )
 
-const stelExURL = "https://api.stellar.expert/explorer/public/xlm-price"
+const stelExURL = "MISSING"
 
 const ratesURL = "https://openexchangerates.org/api/latest.json"
 
@@ -24,12 +24,12 @@ type cachedPrice struct {
 	updated time.Time
 }
 
-func mustCreateXlmPriceRequest() *http.Request {
+func mustCreateGramPriceRequest() *http.Request {
 	numAttempts := 10
 	var req *http.Request
 	err := try.Do(func(attempt int) (bool, error) {
 		var err error
-		req, err = createXlmPriceRequest()
+		req, err = createGramPriceRequest()
 		if err != nil {
 			time.Sleep(time.Duration(attempt) * time.Second)
 		}
@@ -42,7 +42,7 @@ func mustCreateXlmPriceRequest() *http.Request {
 	return req
 }
 
-func createXlmPriceRequest() (*http.Request, error) {
+func createGramPriceRequest() (*http.Request, error) {
 	err := godotenv.Load()
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func createXlmPriceRequest() (*http.Request, error) {
 	return req, nil
 }
 
-func getLatestXlmPrice(req *http.Request) (float64, error) {
+func getLatestGramPrice(req *http.Request) (float64, error) {
 	body, err := getPriceResponse(req)
 	if err != nil {
 		return 0.0, fmt.Errorf("got error from stellar expert price api: %s", err)
@@ -69,10 +69,10 @@ func getLatestXlmPrice(req *http.Request) (float64, error) {
 	return parseStellarExpertLatestPrice(body)
 }
 
-func getXlmPriceHistory(req *http.Request) ([]xlmPrice, error) {
+func getGramPriceHistory(req *http.Request) ([]gramPrice, error) {
 	body, err := getPriceResponse(req)
 	if err != nil {
-		return []xlmPrice{}, fmt.Errorf("got error from stellar expert price api: %s", err)
+		return []gramPrice{}, fmt.Errorf("got error from stellar expert price api: %s", err)
 	}
 	return parseStellarExpertPriceHistory(body)
 }
@@ -112,41 +112,41 @@ func getPriceResponse(req *http.Request) (string, error) {
 	return body, nil
 }
 
-func parseStellarExpertPriceHistory(body string) ([]xlmPrice, error) {
+func parseStellarExpertPriceHistory(body string) ([]gramPrice, error) {
 	// The Stellar Expert response has expected format: [[timestamp1,price1], [timestamp2,price2], ...]
 	// with the most recent timestamp and price first. We split that array to get strings of only "timestamp,price".
 	// We then split each of those strings and define a struct containing the timestamp and price.
 	if len(body) < 5 {
-		return []xlmPrice{}, fmt.Errorf("got ill-formed response body from stellar expert")
+		return []gramPrice{}, fmt.Errorf("got ill-formed response body from stellar expert")
 	}
 
 	body = body[2 : len(body)-2]
 	timePriceStrs := strings.Split(body, "],[")
 
-	var xlmPrices []xlmPrice
+	var gramPrices []gramPrice
 	for _, timePriceStr := range timePriceStrs {
 		timePrice := strings.Split(timePriceStr, ",")
 		if len(timePrice) != 2 {
-			return []xlmPrice{}, fmt.Errorf("got ill-formed time/price from stellar expert")
+			return []gramPrice{}, fmt.Errorf("got ill-formed time/price from stellar expert")
 		}
 
 		ts, err := strconv.ParseInt(timePrice[0], 10, 64)
 		if err != nil {
-			return []xlmPrice{}, err
+			return []gramPrice{}, err
 		}
 
 		p, err := strconv.ParseFloat(timePrice[1], 64)
 		if err != nil {
-			return []xlmPrice{}, err
+			return []gramPrice{}, err
 		}
 
-		newXlmPrice := xlmPrice{
+		newGramPrice := gramPrice{
 			timestamp: ts,
 			price:     p,
 		}
-		xlmPrices = append(xlmPrices, newXlmPrice)
+		gramPrices = append(gramPrices, newGramPrice)
 	}
-	return xlmPrices, nil
+	return gramPrices, nil
 }
 
 func parseStellarExpertLatestPrice(body string) (float64, error) {

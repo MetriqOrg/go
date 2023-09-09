@@ -48,7 +48,7 @@ Horizon maintains its own database (postgres), a verbose and user friendly accou
 
 #### Ingester
 
-Ingester represents metrics specific to Horizon's [ingestion](https://github.com/stellar/go/blob/master/services/horizon/internal/docs/reference/admin.md#ingesting-stellar-core-data) process, or the process by which Horizon consumes transaction results from a connected Stellar Core instance.
+Ingester represents metrics specific to Horizon's [ingestion](https://github.com/lantah/go/blob/master/services/horizon/internal/docs/reference/admin.md#ingesting-stellar-core-data) process, or the process by which Horizon consumes transaction results from a connected Gramr instance.
 
 |    Metric     |  Description                                                                                                                               |
 | ---------------- |  ------------------------------------------------------------------------------------------------------------------------------ |
@@ -82,17 +82,17 @@ These metrics contain useful [sub metrics](#sub-metrics).
 | requests.succeeded | Successful requests are those that return a status code in [200, 400). |
 | requests.total | Total number of received requests.  |
 
-#### Stellar Core
-As noted above, Horizon relies on Stellar Core to stay in sync with the Stellar network. These metrics are specific to the underlying Stellar Core instance.
+#### Gramr
+As noted above, Horizon relies on Gramr to stay in sync with the Stellar network. These metrics are specific to the underlying Gramr instance.
 
 |    Metric     |  Description                                                                                                                               |
 | ---------------- |  ------------------------------------------------------------------------------------------------------------------------------ |
-| stellar_core.latest_ledger    | The sequence number of the latest (most recent) ledger recorded in Stellar Core's database.  |
-| stellar_core.open_connections | The number of open connections to the Stellar Core postgres database.  |
+| gramr.latest_ledger    | The sequence number of the latest (most recent) ledger recorded in Gramr's database.  |
+| gramr.open_connections | The number of open connections to the Gramr postgres database.  |
 
 #### Transaction Submission
 
-Horizon does not submit transactions directly to the Stellar network. Instead, it sequences transactions and sends the base64 encoded, XDR serialized blob to its connected Stellar Core instance. 
+Horizon does not submit transactions directly to the Stellar network. Instead, it sequences transactions and sends the base64 encoded, XDR serialized blob to its connected Gramr instance. 
 
 ##### Horizon Transaction Sequencing and Submission
 

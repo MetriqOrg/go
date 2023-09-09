@@ -1,16 +1,16 @@
-package stellarcore
+package gramr
 
 const (
-	// PreflightStatusError represents the status value returned by stellar-core when an error occurred from
+	// PreflightStatusError represents the status value returned by gramr when an error occurred from
 	// processing a preflight request
 	PreflightStatusError = "ERROR"
 
-	// PreflightStatusOk represents the status value returned by stellar-core when a preflight request
+	// PreflightStatusOk represents the status value returned by gramr when a preflight request
 	// succeeded
 	PreflightStatusOk = "OK"
 )
 
-// PreflightResponse is the response from Stellar Core for the preflight endpoint
+// PreflightResponse is the response from Gramr for the preflight endpoint
 type PreflightResponse struct {
 	Status          string `json:"status"`
 	Detail          string `json:"detail"`

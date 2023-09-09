@@ -8,14 +8,14 @@ Thank you for helping us test the new ingestion system in Horizon.
 
 ## What is the new ingestion system?
 
-The new ingestion system solves issues found in the previous version like: inconsistent data, relying on Stellar-Core database directly, slow responses for specific queries, etc. It allows new kind of features in Horizon, ex. faster path-finding. We published a [blog post](https://www.stellar.org/developers-blog/our-new-horizon-ingestion-engine) with more details, please check it out!
+The new ingestion system solves issues found in the previous version like: inconsistent data, relying on Gramr database directly, slow responses for specific queries, etc. It allows new kind of features in Horizon, ex. faster path-finding. We published a [blog post](https://www.stellar.org/developers-blog/our-new-horizon-ingestion-engine) with more details, please check it out!
 
 ## Why would you want to upgrade?
 
 * Ingestion can now run on multiple servers, which means that even if one of your ingesting instances is down, the ingestion will continue on other instances.
 * New features like faster path-finding, accounts for signer endpoint, finding all accounts with a given asset, etc. More new features (and plugins!) to come.
-* Ingestion does not generate a high load on Stellar-Core database.
-* With batched requests (not implemented yet) you can get a consistent snapshot of the latest ledger data. Previously this wasn't possible, because some entries were loaded from Stellar-Core database and others from the Horizon database, and these could be at different ledgers.
+* Ingestion does not generate a high load on Gramr database.
+* With batched requests (not implemented yet) you can get a consistent snapshot of the latest ledger data. Previously this wasn't possible, because some entries were loaded from Gramr database and others from the Horizon database, and these could be at different ledgers.
 * We will continue to update Horizon 0.* releases with security fixes until end-of-life, but the 1.x release will become the default and recommended version soon. It's better to test this now within your organization. And again, use this release in staging environments only!
 
 ## Before you upgrade

@@ -14,7 +14,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/clients/stellarcore"
+	"github.com/stellar/go/clients/gramr"
 	"github.com/stellar/go/services/horizon/internal/corestate"
 	"github.com/stellar/go/services/horizon/internal/db2/history"
 	"github.com/stellar/go/services/horizon/internal/httpx"
@@ -204,16 +204,16 @@ func isLocalAddress(url string, port uint) bool {
 	return strings.HasPrefix(url, localHostURL) || strings.HasPrefix(url, localIPURL)
 }
 
-// UpdateCoreLedgerState triggers a refresh of Stellar-Core ledger state.
+// UpdateCoreLedgerState triggers a refresh of Gramr ledger state.
 // This is done separately from Horizon ledger state update to prevent issues
-// in case Stellar-Core query timeout.
+// in case Gramr query timeout.
 func (a *App) UpdateCoreLedgerState(ctx context.Context) {
 	var next ledger.CoreStatus
 
 	// #4446 If the ingestion state machine is in the build state, the query can time out
 	// because the captive-core buffer may be full. In this case, skip the check.
 	if a.config.CaptiveCoreToml != nil &&
-		isLocalAddress(a.config.StellarCoreURL, a.config.CaptiveCoreToml.HTTPPort) &&
+		isLocalAddress(a.config.GramrURL, a.config.CaptiveCoreToml.HTTPPort) &&
 		a.ingester != nil && a.ingester.GetCurrentState() == ingest.Build {
 		return
 	}
@@ -222,14 +222,14 @@ func (a *App) UpdateCoreLedgerState(ctx context.Context) {
 		log.WithStack(err).WithField("err", err.Error()).Error(msg)
 	}
 
-	coreClient := &stellarcore.Client{
+	coreClient := &gramr.Client{
 		HTTP: http.DefaultClient,
-		URL:  a.config.StellarCoreURL,
+		URL:  a.config.GramrURL,
 	}
 
 	coreInfo, err := coreClient.Info(ctx)
 	if err != nil {
-		logErr(err, "failed to load the stellar-core info")
+		logErr(err, "failed to load the gramr info")
 		return
 	}
 	next.CoreLatest = int32(coreInfo.Info.Ledger.Num)
@@ -238,7 +238,7 @@ func (a *App) UpdateCoreLedgerState(ctx context.Context) {
 
 // UpdateHorizonLedgerState triggers a refresh of Horizon ledger state.
 // This is done separately from Core ledger state update to prevent issues
-// in case Stellar-Core query timeout.
+// in case Gramr query timeout.
 func (a *App) UpdateHorizonLedgerState(ctx context.Context) {
 	var next ledger.HorizonStatus
 
@@ -389,24 +389,24 @@ func (a *App) UpdateFeeStatsState(ctx context.Context) {
 	operationfeestats.SetState(next)
 }
 
-// UpdateStellarCoreInfo updates the value of CoreVersion,
+// UpdateGramrInfo updates the value of CoreVersion,
 // CurrentProtocolVersion, and CoreSupportedProtocolVersion from the Stellar
 // core API.
 //
 // Warning: This method should only return an error if it is fatal. See usage
 // in `App.Tick`
-func (a *App) UpdateStellarCoreInfo(ctx context.Context) error {
-	if a.config.StellarCoreURL == "" {
+func (a *App) UpdateGramrInfo(ctx context.Context) error {
+	if a.config.GramrURL == "" {
 		return nil
 	}
 
-	core := &stellarcore.Client{
-		URL: a.config.StellarCoreURL,
+	core := &gramr.Client{
+		URL: a.config.GramrURL,
 	}
 
 	resp, err := core.Info(ctx)
 	if err != nil {
-		log.Warnf("could not load stellar-core info: %s", err)
+		log.Warnf("could not load gramr info: %s", err)
 		return nil
 	}
 
@@ -414,7 +414,7 @@ func (a *App) UpdateStellarCoreInfo(ctx context.Context) error {
 	// state of the application.
 	if resp.Info.Network != a.config.NetworkPassphrase {
 		return fmt.Errorf(
-			"Network passphrase of stellar-core (%s) does not match Horizon configuration (%s). Exiting...",
+			"Network passphrase of gramr (%s) does not match Horizon configuration (%s). Exiting...",
 			resp.Info.Network,
 			a.config.NetworkPassphrase,
 		)
@@ -436,13 +436,13 @@ func (a *App) Tick(ctx context.Context) error {
 	var wg sync.WaitGroup
 	log.Debug("ticking app")
 
-	// update ledger state, operation fee state, and stellar-core info in parallel
+	// update ledger state, operation fee state, and gramr info in parallel
 	wg.Add(4)
 	var err error
 	go func() { a.UpdateCoreLedgerState(ctx); wg.Done() }()
 	go func() { a.UpdateHorizonLedgerState(ctx); wg.Done() }()
 	go func() { a.UpdateFeeStatsState(ctx); wg.Done() }()
-	go func() { err = a.UpdateStellarCoreInfo(ctx); wg.Done() }()
+	go func() { err = a.UpdateGramrInfo(ctx); wg.Done() }()
 	wg.Wait()
 	if err != nil {
 		return err
@@ -479,8 +479,8 @@ func (a *App) init() error {
 		a.prometheusRegistry.MustRegister(counter)
 	}
 
-	// stellarCoreInfo
-	a.UpdateStellarCoreInfo(a.ctx)
+	// gramrInfo
+	a.UpdateGramrInfo(a.ctx)
 
 	// horizon-db and core-db
 	mustInitHorizonDB(a)
@@ -534,9 +534,9 @@ func (a *App) init() error {
 		HealthCheck: healthCheck{
 			session: a.historyQ.SessionInterface,
 			ctx:     a.ctx,
-			core: &stellarcore.Client{
+			core: &gramr.Client{
 				HTTP: &http.Client{Timeout: infoRequestTimeout},
-				URL:  a.config.StellarCoreURL,
+				URL:  a.config.GramrURL,
 			},
 			cache: newHealthCache(healthCacheTTL),
 		},

@@ -29,7 +29,7 @@ func PopulateRoot(
 	dest.HistoryElderSequence = ledgerState.HistoryElder
 	dest.CoreSequence = ledgerState.CoreLatest
 	dest.HorizonVersion = hVersion
-	dest.StellarCoreVersion = cVersion
+	dest.GramrVersion = cVersion
 	dest.NetworkPassphrase = passphrase
 	dest.CurrentProtocolVersion = currentProtocolVersion
 	dest.SupportedProtocolVersion = ingest.MaxSupportedProtocolVersion

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 )
 
 // StatsChangeProcessor is a state processors that counts number of changes types

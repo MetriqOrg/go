@@ -22,7 +22,7 @@ func (lpsa LiquidityPoolShareTrustLineAsset) GetType() (AssetType, error) {
 	return AssetTypePoolShare, nil
 }
 
-// IsNative for LiquidityPoolShareAsset returns false (this is not an XLM asset).
+// IsNative for LiquidityPoolShareAsset returns false (this is not an GRAM asset).
 func (lpsa LiquidityPoolShareTrustLineAsset) IsNative() bool { return false }
 
 // GetCode for LiquidityPoolShareAsset returns blank string

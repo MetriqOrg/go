@@ -6,11 +6,11 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/stellar/go/support/db"
+	"github.com/lantah/go/support/db"
 )
 
 // TrustedLedgerHashStore is used to query ledger data from a trusted source.
-// The store should contain ledgers verified by Stellar-Core, do not use untrusted
+// The store should contain ledgers verified by Gramr, do not use untrusted
 // source like history archives.
 type TrustedLedgerHashStore interface {
 	// GetLedgerHash returns the ledger hash for the given sequence number

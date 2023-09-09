@@ -349,7 +349,7 @@ func (p *TradeProcessor) extractTrades(
 		case xdr.OperationTypeCreatePassiveSellOffer:
 			result := opResults[opidx].MustTr()
 
-			// KNOWN ISSUE:  stellar-core creates results for CreatePassiveOffer operations
+			// KNOWN ISSUE:  gramr creates results for CreatePassiveOffer operations
 			// with the wrong result arm set.
 			if result.Type == xdr.OperationTypeManageSellOffer {
 				manageOfferResult := result.MustManageSellOfferResult().MustSuccess()
@@ -366,7 +366,7 @@ func (p *TradeProcessor) extractTrades(
 			int32(ledger.Header.LedgerSeq), int32(transaction.Index), int32(opidx+1),
 		).ToInt64()
 		for order, trade := range trades {
-			// stellar-core will opportunistically garbage collect invalid offers (in the
+			// gramr will opportunistically garbage collect invalid offers (in the
 			// event that a trader spends down their balance).  These garbage collected
 			// offers get emitted in the result with the amount values set to zero.
 			//

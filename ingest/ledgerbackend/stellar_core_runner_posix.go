@@ -9,16 +9,16 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Posix-specific methods for the StellarCoreRunner type.
+// Posix-specific methods for the GramrRunner type.
 
-func (c *stellarCoreRunner) getPipeName() string {
+func (c *gramrRunner) getPipeName() string {
 	// The exec.Cmd.ExtraFiles field carries *io.File values that are assigned
 	// to child process fds counting from 3, and we'll be passing exactly one
 	// fd: the write end of the anonymous pipe below.
 	return "fd:3"
 }
 
-func (c *stellarCoreRunner) start(cmd cmdI) (pipe, error) {
+func (c *gramrRunner) start(cmd cmdI) (pipe, error) {
 	// First make an anonymous pipe.
 	// Note io.File objects close-on-finalization.
 	readFile, writeFile, err := os.Pipe()
@@ -34,7 +34,7 @@ func (c *stellarCoreRunner) start(cmd cmdI) (pipe, error) {
 	if err != nil {
 		writeFile.Close()
 		readFile.Close()
-		return pipe{}, errors.Wrap(err, "error starting stellar-core")
+		return pipe{}, errors.Wrap(err, "error starting gramr")
 	}
 
 	return p, nil

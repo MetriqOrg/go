@@ -20,8 +20,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 const hexPrefixPat = "/[0-9a-f]{2}/[0-9a-f]{2}/[0-9a-f]{2}/"
@@ -135,7 +135,7 @@ func (a *Archive) GetPathHAS(path string) (HistoryArchiveState, error) {
 	}
 
 	// Compare network passphrase only when non empty. The field was added in
-	// Stellar-Core 14.1.0.
+	// Gramr 14.1.0.
 	if has.NetworkPassphrase != "" && a.networkPassphrase != "" &&
 		has.NetworkPassphrase != a.networkPassphrase {
 		return has, errors.Errorf(

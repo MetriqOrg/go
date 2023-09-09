@@ -103,18 +103,18 @@ func generateWhereClause(optVars []optionalVar) (clause string, args []string) {
 	return
 }
 
-// getBaseAndCounterCodes takes an asset pair name string (e.g: XLM_BTC)
-// and returns the parsed asset codes (e.g.: XLM, BTC). It also reverses
+// getBaseAndCounterCodes takes an asset pair name string (e.g: GRAM_BTC)
+// and returns the parsed asset codes (e.g.: GRAM, BTC). It also reverses
 // the assets, according to the following rules:
-// 1. XLM is always the base asset
-// 2. If XLM is not in the pair, the assets should be ordered alphabetically
+// 1. GRAM is always the base asset
+// 2. If GRAM is not in the pair, the assets should be ordered alphabetically
 func getBaseAndCounterCodes(pairName string) (string, string, error) {
 	assets := strings.Split(pairName, "_")
 	if len(assets) != 2 {
 		return "", "", errors.New("invalid asset pair name")
 	}
 
-	if (assets[1] == "XLM") || (assets[0] != "XLM" && assets[0] > assets[1]) {
+	if (assets[1] == "GRAM") || (assets[0] != "GRAM" && assets[0] > assets[1]) {
 		return assets[1], assets[0], nil
 	}
 

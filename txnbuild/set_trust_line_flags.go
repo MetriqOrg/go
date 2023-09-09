@@ -40,7 +40,7 @@ func (stf *SetTrustLineFlags) BuildXDR() (xdr.Operation, error) {
 
 	// Validate this is an issued asset
 	if stf.Asset.IsNative() {
-		return xdr.Operation{}, errors.New("trustline doesn't exist for a native (XLM) asset")
+		return xdr.Operation{}, errors.New("trustline doesn't exist for a native (GRAM) asset")
 	}
 
 	xdrOp.Asset, err = stf.Asset.ToXDR()

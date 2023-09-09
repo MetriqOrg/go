@@ -95,7 +95,7 @@ func initIngester(app *App) {
 	var coreSession db.SessionInterface
 	if !app.config.EnableCaptiveCoreIngestion {
 		coreSession = mustNewDBSession(
-			db.CoreSubservice, app.config.StellarCoreDatabaseURL, ingest.MaxDBConnections, ingest.MaxDBConnections, app.prometheusRegistry)
+			db.CoreSubservice, app.config.GramrDatabaseURL, ingest.MaxDBConnections, ingest.MaxDBConnections, app.prometheusRegistry)
 	}
 	app.ingester, err = ingest.NewSystem(ingest.Config{
 		CoreSession: coreSession,
@@ -105,8 +105,8 @@ func initIngester(app *App) {
 		NetworkPassphrase:                    app.config.NetworkPassphrase,
 		HistoryArchiveURLs:                   app.config.HistoryArchiveURLs,
 		CheckpointFrequency:                  app.config.CheckpointFrequency,
-		StellarCoreURL:                       app.config.StellarCoreURL,
-		StellarCoreCursor:                    app.config.CursorName,
+		GramrURL:                       app.config.GramrURL,
+		GramrCursor:                    app.config.CursorName,
 		CaptiveCoreBinaryPath:                app.config.CaptiveCoreBinaryPath,
 		CaptiveCoreStoragePath:               app.config.CaptiveCoreStoragePath,
 		CaptiveCoreConfigUseDB:               app.config.CaptiveCoreConfigUseDB,
@@ -240,7 +240,7 @@ func initWebMetrics(app *App) {
 func initSubmissionSystem(app *App) {
 	app.submitter = &txsub.System{
 		Pending:         txsub.NewDefaultSubmissionList(),
-		Submitter:       txsub.NewDefaultSubmitter(http.DefaultClient, app.config.StellarCoreURL),
+		Submitter:       txsub.NewDefaultSubmitter(http.DefaultClient, app.config.GramrURL),
 		SubmissionQueue: sequence.NewManager(),
 		DB: func(ctx context.Context) txsub.HorizonDB {
 			return &history.Q{SessionInterface: app.HorizonSession()}

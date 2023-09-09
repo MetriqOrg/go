@@ -3,8 +3,8 @@ package ingest
 import (
 	"fmt"
 
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // LedgerTransaction represents the data for a single transaction within a ledger.

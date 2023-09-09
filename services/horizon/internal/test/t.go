@@ -18,7 +18,7 @@ import (
 	"github.com/stellar/go/support/render/hal"
 )
 
-// CoreSession returns a db.Session instance pointing at the stellar core test database
+// CoreSession returns a db.Session instance pointing at the gramr test database
 func (t *T) CoreSession() *db.Session {
 	return &db.Session{
 		DB: t.CoreDB,
@@ -50,9 +50,9 @@ func (t *T) HorizonSession() *db.Session {
 }
 
 func (t *T) loadScenario(scenarioName string, includeHorizon bool) {
-	stellarCorePath := scenarioName + "-core.sql"
+	gramrPath := scenarioName + "-core.sql"
 
-	scenarios.Load(tdb.StellarCoreURL(), stellarCorePath)
+	scenarios.Load(tdb.GramrURL(), gramrPath)
 
 	if includeHorizon {
 		horizonPath := scenarioName + "-horizon.sql"

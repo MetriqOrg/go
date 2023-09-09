@@ -29,18 +29,18 @@ The script takes one optional parameter which configures the Stellar network use
 The following ports will be exposed:
 - Horizon: **8000**
 - Horizon-Postgres: **5432**
-- Stellar-Core (If `standalone` specified): **11626**
-- Stellar-Core-Postgres (If `standalone` specified): **5641**
+- Gramr (If `standalone` specified): **11626**
+- Gramr-Postgres (If `standalone` specified): **5641**
 
-Note that when you switch between different networks you will need to clear the Stellar Core and Stellar Horizon databases. You can wipe out the databases by running `docker-compose down --remove-orphans -v`. 
+Note that when you switch between different networks you will need to clear the Gramr and Stellar Horizon databases. You can wipe out the databases by running `docker-compose down --remove-orphans -v`. 
 
 This script is helpful to spin up the services quickly and play around with them. However, for code development it's important to build and install everything locally 
 
 ## Developing Horizon Locally
 We will now configure a development environment to run Horizon service locally without Docker.
 
-### Building Stellar Core
-Horizon requires an instance of stellar-core binary on the same host. This is referred to as the `Captive Core`. Since, we are running horizon for dev purposes, we recommend considering two approaches to get the stellar-core binary, if saving time is top priority and your development machine is on a linux debian o/s, then consider installing the debian package, otherwise the next option available is to compile the core source directly to binary on your machine, refer to [INSTALL.md](https://github.com/stellar/stellar-core/blob/master/INSTALL.md) file for the instructions on both approaches.
+### Building Gramr
+Horizon requires an instance of gramr binary on the same host. This is referred to as the `Captive Core`. Since, we are running horizon for dev purposes, we recommend considering two approaches to get the gramr binary, if saving time is top priority and your development machine is on a linux debian o/s, then consider installing the debian package, otherwise the next option available is to compile the core source directly to binary on your machine, refer to [INSTALL.md](https://github.com/lantah/gramr/blob/master/INSTALL.md) file for the instructions on both approaches.
 
 ### Building Horizon
 
@@ -52,7 +52,7 @@ Open a new terminal. Confirm everything worked by running `stellar-horizon --hel
 
 ### Database Setup
 
-Horizon uses a Postgres database backend to record information ingested from an associated Stellar Core. The unit and integration tests will also attempt to reference a Postgres db server at ``localhost:5432`` with trust auth method enabled by default for ``postgres`` user.  You can either install the server locally or run any type of docker container that hosts the database server. We recommend using the [docker-compose.yml](/services/horizon/docker/docker-compose.yml) file in the ``docker`` folder:
+Horizon uses a Postgres database backend to record information ingested from an associated Gramr. The unit and integration tests will also attempt to reference a Postgres db server at ``localhost:5432`` with trust auth method enabled by default for ``postgres`` user.  You can either install the server locally or run any type of docker container that hosts the database server. We recommend using the [docker-compose.yml](/services/horizon/docker/docker-compose.yml) file in the ``docker`` folder:
 ```bash
 docker-compose -f ./docker/docker-compose.yml up horizon-postgres
 ```
@@ -75,7 +75,7 @@ To run the integration tests, you need to set some environment variables:
 ```bash
 export HORIZON_INTEGRATION_TESTS_ENABLED=true 
 export HORIZON_INTEGRATION_TESTS_CORE_MAX_SUPPORTED_PROTOCOL=19
-export HORIZON_INTEGRATION_TESTS_DOCKER_IMG=stellar/stellar-core:19.11.0-1323.7fb6d5e88.focal
+export HORIZON_INTEGRATION_TESTS_DOCKER_IMG=stellar/gramr:19.11.0-1323.7fb6d5e88.focal
 go test -race -timeout 25m -v ./services/horizon/internal/integration/...
 ```
 Note that this will also require a Postgres instance running on port 5432 either locally or exposed through a docker container. Also note that the ``POSTGRES_HOST_AUTH_METHOD`` has been enabled.
@@ -116,7 +116,7 @@ You can also use a similar configuration to debug the integration and unit tests
    "env": {
        "HORIZON_INTEGRATION_TESTS_ENABLED": "true",
        "HORIZON_INTEGRATION_TESTS_CORE_MAX_SUPPORTED_PROTOCOL": "19",
-       "HORIZON_INTEGRATION_TESTS_DOCKER_IMG": "stellar/stellar-core:19.11.0-1323.7fb6d5e88.focal"
+       "HORIZON_INTEGRATION_TESTS_DOCKER_IMG": "stellar/gramr:19.11.0-1323.7fb6d5e88.focal"
    },
    "args": [
        "-test.run",
@@ -139,17 +139,17 @@ Read about the available endpoints and see examples in the [Horizon API referenc
 
 This section contains additional information related to the development of Horizon.
 
-## Configuring a Standalone Stellar-Core
+## Configuring a Standalone Gramr
 
 By default, the [docker-compose.yml](/services/horizon/docker/docker-compose.yml) will configure Horizon with captive core ingestion to use the test network.
 
 To run the containers on a private stand-alone network, run `./start.sh standalone`.
-When you run Stellar Core on a stand-alone network, a root account will be created by default. It will have a balance of 100 billion Lumens and the following key pair:
+When you run Gramr on a stand-alone network, a root account will be created by default. It will have a balance of 1 trillion grams (1Tg) and the following key pair:
 ```
-Root Public Key: GBZXN7PIRZGNMHGA7MUUUF4GWPY5AYPV6LY4UV2GL6VJGIQRXFDNMADI
-Root Secret Key: SC5O7VZUXDJ6JBDSZ74DSERXL7W3Y5LTOAMRF7RQRL3TAGAPS7LUVG3L
+Root Public Key: (MISSING)
+Root Secret Key: (MISSING)
 ```
-When running Horizon on a private stand-alone network, Horizon will not start ingesting until Stellar Core creates its first history archive snapshot. Stellar Core creates snapshots every 64 ledgers, which means ingestion will be delayed until ledger 64.
+When running Horizon on a private stand-alone network, Horizon will not start ingesting until Gramr creates its first history archive snapshot. Gramr creates snapshots every 64 ledgers, which means ingestion will be delayed until ledger 64.
 
 ### Accelerated network for testing
 
@@ -164,20 +164,20 @@ This modification causes the standalone network to close ledgers every 1 second 
 deviating from the default timing of ledger closing after 5 seconds and creating a checkpoint once every 64 ledgers. Please note that 
 this customization is only applicable when running a standalone network, as it requires changes to the captive-core configuration.
 
-## Using a specific version of Stellar Core
+## Using a specific version of Gramr
 
-By default, the Docker Compose file is configured to use version 19 of Protocol and Stellar Core. You can specify optional environment variables from the command shell for stating version overrides for either the docker-compose or start.sh invocations.
+By default, the Docker Compose file is configured to use version 19 of Protocol and Gramr. You can specify optional environment variables from the command shell for stating version overrides for either the docker-compose or start.sh invocations.
 ```bash
 export PROTOCOL_VERSION="19"
-export CORE_IMAGE="stellar/stellar-core:19.11.0-1323.7fb6d5e88.focal" 
-export STELLAR_CORE_VERSION="19.11.0-1323.7fb6d5e88.focal"
+export CORE_IMAGE="stellar/gramr:19.11.0-1323.7fb6d5e88.focal" 
+export GRAMR_VERSION="19.11.0-1323.7fb6d5e88.focal"
 ```
 
 Example:
 
 Runs Stellar Protocol and Core version 19, for any mode of testnet, standalone, pubnet
 ```bash
-PROTOCOL_VERSION=19 CORE_IMAGE=stellar/stellar-core:19.11.0-1323.7fb6d5e88.focal STELLAR_CORE_VERSION=19.11.0-1323.7fb6d5e88.focal ./start.sh [standalone|pubnet]
+PROTOCOL_VERSION=19 CORE_IMAGE=stellar/gramr:19.11.0-1323.7fb6d5e88.focal GRAMR_VERSION=19.11.0-1323.7fb6d5e88.focal ./start.sh [standalone|pubnet]
 ```
 
 ## <a name="logging"></a> **Logging**

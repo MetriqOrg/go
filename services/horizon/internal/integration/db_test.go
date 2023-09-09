@@ -543,15 +543,15 @@ func TestReingestDB(t *testing.T) {
 
 func command(t *testing.T, horizonConfig horizon.Config, args ...string) []string {
 	return append([]string{
-		"--stellar-core-url",
-		horizonConfig.StellarCoreURL,
+		"--gramr-url",
+		horizonConfig.GramrURL,
 		"--history-archive-urls",
 		horizonConfig.HistoryArchiveURLs[0],
 		"--db-url",
 		horizonConfig.DatabaseURL,
-		"--stellar-core-db-url",
-		horizonConfig.StellarCoreDatabaseURL,
-		"--stellar-core-binary-path",
+		"--gramr-db-url",
+		horizonConfig.GramrDatabaseURL,
+		"--gramr-binary-path",
 		horizonConfig.CaptiveCoreBinaryPath,
 		"--captive-core-config-path",
 		horizonConfig.CaptiveCoreConfigPath,

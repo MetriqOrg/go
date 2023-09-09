@@ -6,4 +6,4 @@ See [godoc](https://godoc.org/github.com/stellar/go/exp) for details about each 
 
 ## Adding experimental services, clients, tools, etc.
 
-Just as with the non-experimental portion of this repo, the `exp` package uses a well-defined package structure for a few common activities.  An experimental service would go in `github.com/stellar/go/exp/services`, for example.
+Just as with the non-experimental portion of this repo, the `exp` package uses a well-defined package structure for a few common activities.  An experimental service would go in `github.com/lantah/go/exp/services`, for example.

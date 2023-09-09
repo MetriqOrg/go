@@ -26,17 +26,17 @@ import (
 )
 
 var defaultCaptiveCoreParameters = map[string]string{
-	horizon.StellarCoreBinaryPathName: os.Getenv("CAPTIVE_CORE_BIN"),
-	horizon.StellarCoreURLFlagName:    "",
-	horizon.StellarCoreDBURLFlagName:  "",
+	horizon.GramrBinaryPathName: os.Getenv("CAPTIVE_CORE_BIN"),
+	horizon.GramrURLFlagName:    "",
+	horizon.GramrDBURLFlagName:  "",
 }
 
 var networkParamArgs = map[string]string{
 	horizon.EnableCaptiveCoreIngestionFlagName: "",
 	horizon.CaptiveCoreConfigPathName:          "",
 	horizon.CaptiveCoreHTTPPortFlagName:        "",
-	horizon.StellarCoreBinaryPathName:          "",
-	horizon.StellarCoreURLFlagName:             "",
+	horizon.GramrBinaryPathName:          "",
+	horizon.GramrURLFlagName:             "",
 	horizon.HistoryArchiveURLsFlagName:         "",
 	horizon.NetworkPassphraseFlagName:          "",
 }
@@ -80,7 +80,7 @@ func TestBucketDirDisallowed(t *testing.T) {
 	testConfig := integration.GetTestConfig()
 	testConfig.HorizonIngestParameters = map[string]string{
 		horizon.CaptiveCoreConfigPathName: confName,
-		horizon.StellarCoreBinaryPathName: os.Getenv("CAPTIVE_CORE_BIN"),
+		horizon.GramrBinaryPathName: os.Getenv("CAPTIVE_CORE_BIN"),
 	}
 	test := integration.NewTest(t, *testConfig)
 	err := test.StartHorizon()
@@ -187,10 +187,10 @@ func TestInvalidNetworkParameters(t *testing.T) {
 // subprocess using the default configuration when --network [testnet|pubnet]
 // commandline parameter.
 //
-// In integration tests, we start Horizon and stellar-core containers in standalone mode
+// In integration tests, we start Horizon and gramr containers in standalone mode
 // simultaneously. We usually wait for Horizon to begin ingesting to verify the test's
 // success. However, for "pubnet" or "testnet," we can not wait for Horizon to catch up,
-// so we skip starting stellar-core containers.
+// so we skip starting gramr containers.
 func TestNetworkParameter(t *testing.T) {
 	if !integration.RunWithCaptiveCore {
 		t.Skip()
@@ -237,10 +237,10 @@ func TestNetworkParameter(t *testing.T) {
 // subprocess using the default configuration when the NETWORK environment variable is set
 // to either pubnet or testnet.
 //
-// In integration tests, we start Horizon and stellar-core containers in standalone mode
+// In integration tests, we start Horizon and gramr containers in standalone mode
 // simultaneously. We usually wait for Horizon to begin ingesting to verify the test's
 // success. However, for "pubnet" or "testnet," we can not wait for Horizon to catch up,
-// so we skip starting stellar-core containers.
+// so we skip starting gramr containers.
 func TestNetworkEnvironmentVariable(t *testing.T) {
 	if !integration.RunWithCaptiveCore {
 		t.Skip()
@@ -398,29 +398,29 @@ func TestIngestionFilteringAlwaysDefaultingToTrue(t *testing.T) {
 }
 
 func TestDisableTxSub(t *testing.T) {
-	t.Run("require stellar-core-url when both DISABLE_TX_SUB=false and INGEST=false", func(t *testing.T) {
+	t.Run("require gramr-url when both DISABLE_TX_SUB=false and INGEST=false", func(t *testing.T) {
 		localParams := integration.MergeMaps(networkParamArgs, map[string]string{
 			horizon.NetworkFlagName:          "testnet",
 			horizon.IngestFlagName:           "false",
 			horizon.DisableTxSubFlagName:     "false",
-			horizon.StellarCoreDBURLFlagName: "",
+			horizon.GramrDBURLFlagName: "",
 		})
 		testConfig := integration.GetTestConfig()
 		testConfig.HorizonIngestParameters = localParams
 		testConfig.SkipCoreContainerCreation = true
 		test := integration.NewTest(t, *testConfig)
 		err := test.StartHorizon()
-		assert.ErrorContains(t, err, "cannot initialize Horizon: flag --stellar-core-url cannot be empty")
+		assert.ErrorContains(t, err, "cannot initialize Horizon: flag --gramr-url cannot be empty")
 		test.Shutdown()
 	})
-	t.Run("horizon starts successfully when DISABLE_TX_SUB=false, INGEST=false and stellar-core-url is provided", func(t *testing.T) {
-		// TODO: Remove explicit mention of stellar-core-db-url once this issue is done: https://github.com/stellar/go/issues/4855
+	t.Run("horizon starts successfully when DISABLE_TX_SUB=false, INGEST=false and gramr-url is provided", func(t *testing.T) {
+		// TODO: Remove explicit mention of gramr-db-url once this issue is done: https://github.com/stellar/go/issues/4855
 		localParams := integration.MergeMaps(networkParamArgs, map[string]string{
 			horizon.NetworkFlagName:          "testnet",
 			horizon.IngestFlagName:           "false",
 			horizon.DisableTxSubFlagName:     "false",
-			horizon.StellarCoreDBURLFlagName: "",
-			horizon.StellarCoreURLFlagName:   "http://localhost:11626",
+			horizon.GramrDBURLFlagName: "",
+			horizon.GramrURLFlagName:   "http://localhost:11626",
 		})
 		testConfig := integration.GetTestConfig()
 		testConfig.HorizonIngestParameters = localParams
@@ -435,7 +435,7 @@ func TestDisableTxSub(t *testing.T) {
 		//	//horizon.NetworkFlagName:           "testnet",
 		//	horizon.IngestFlagName:            "true",
 		//	horizon.DisableTxSubFlagName:      "true",
-		//	horizon.StellarCoreBinaryPathName: "/usr/bin/stellar-core",
+		//	horizon.GramrBinaryPathName: "/usr/bin/gramr",
 		//})
 		testConfig := integration.GetTestConfig()
 		testConfig.HorizonIngestParameters = map[string]string{
@@ -518,7 +518,7 @@ func TestHelpOutput(t *testing.T) {
 	assert.NotContains(t, output, "--exp-enable-ingestion-filtering")
 }
 
-// validateNoBucketDirPath ensures the Stellar Core auto-generated configuration
+// validateNoBucketDirPath ensures the Gramr auto-generated configuration
 // file doesn't contain the BUCKET_DIR_PATH entry, which is forbidden when using
 // Captive Core.
 //
@@ -527,7 +527,7 @@ func TestHelpOutput(t *testing.T) {
 func validateNoBucketDirPath(itest *integration.Test, rootDir string) {
 	tt := assert.New(itest.CurrentTest())
 
-	coreConf := path.Join(rootDir, "captive-core", "stellar-core.conf")
+	coreConf := path.Join(rootDir, "captive-core", "gramr.conf")
 	tt.FileExists(coreConf)
 
 	result, err := ioutil.ReadFile(coreConf)
@@ -546,7 +546,7 @@ func validateCaptiveCoreDiskState(itest *integration.Test, rootDir string) {
 	tt := assert.New(itest.CurrentTest())
 
 	storageDir := path.Join(rootDir, "captive-core")
-	coreConf := path.Join(storageDir, "stellar-core.conf")
+	coreConf := path.Join(storageDir, "gramr.conf")
 
 	tt.DirExists(rootDir)
 	tt.DirExists(storageDir)

@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	xlmAsset = xdr.MustNewNativeAsset()
+	gramAsset = xdr.MustNewNativeAsset()
 )
 
 func TestFindLiquidityPool(t *testing.T) {
@@ -19,7 +19,7 @@ func TestFindLiquidityPool(t *testing.T) {
 	test.ResetHorizonDB(t, tt.HorizonDB)
 	q := &Q{tt.HorizonSession()}
 
-	lp := MakeTestPool(usdAsset, 450, xlmAsset, 450)
+	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
 	err := q.UpsertLiquidityPools(tt.Ctx, []LiquidityPool{lp})
 	tt.Assert.NoError(err)
@@ -44,7 +44,7 @@ func TestRemoveLiquidityPool(t *testing.T) {
 	test.ResetHorizonDB(t, tt.HorizonDB)
 	q := &Q{tt.HorizonSession()}
 
-	lp := MakeTestPool(usdAsset, 450, xlmAsset, 450)
+	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
 	err := q.UpsertLiquidityPools(tt.Ctx, []LiquidityPool{lp})
 	tt.Assert.NoError(err)
@@ -97,7 +97,7 @@ func TestStreamAllLiquidity(t *testing.T) {
 	test.ResetHorizonDB(t, tt.HorizonDB)
 	q := &Q{tt.HorizonSession()}
 
-	lp := MakeTestPool(usdAsset, 450, xlmAsset, 450)
+	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 	otherLP := MakeTestPool(usdAsset, 10, eurAsset, 20)
 	expected := []LiquidityPool{lp, otherLP}
 	sort.Slice(expected, func(i, j int) bool {
@@ -124,7 +124,7 @@ func TestFindLiquidityPoolsByAssets(t *testing.T) {
 	test.ResetHorizonDB(t, tt.HorizonDB)
 	q := &Q{tt.HorizonSession()}
 
-	lp := MakeTestPool(usdAsset, 450, xlmAsset, 450)
+	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
 	err := q.UpsertLiquidityPools(tt.Ctx, []LiquidityPool{lp})
 	tt.Assert.NoError(err)
@@ -161,7 +161,7 @@ func TestFindLiquidityPoolsByAssets(t *testing.T) {
 	// query by two assets
 	query = LiquidityPoolsQuery{
 		PageQuery: db2.MustPageQuery("", false, "", 10),
-		Assets:    []xdr.Asset{usdAsset, xlmAsset},
+		Assets:    []xdr.Asset{usdAsset, gramAsset},
 	}
 
 	lps, err = q.GetLiquidityPools(tt.Ctx, query)
@@ -205,7 +205,7 @@ func TestLiquidityPoolCompaction(t *testing.T) {
 	test.ResetHorizonDB(t, tt.HorizonDB)
 	q := &Q{tt.HorizonSession()}
 
-	lp := MakeTestPool(usdAsset, 450, xlmAsset, 450)
+	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
 	err := q.UpsertLiquidityPools(tt.Ctx, []LiquidityPool{lp})
 	tt.Assert.NoError(err)
@@ -271,7 +271,7 @@ func TestUpdateLiquidityPool(t *testing.T) {
 	test.ResetHorizonDB(t, tt.HorizonDB)
 	q := &Q{tt.HorizonSession()}
 
-	initialLP := MakeTestPool(usdAsset, 450, xlmAsset, 450)
+	initialLP := MakeTestPool(usdAsset, 450, gramAsset, 450)
 	err := q.UpsertLiquidityPools(tt.Ctx, []LiquidityPool{initialLP})
 	tt.Assert.NoError(err)
 
@@ -299,7 +299,7 @@ func TestGetLiquidityPoolsByID(t *testing.T) {
 	test.ResetHorizonDB(t, tt.HorizonDB)
 	q := &Q{tt.HorizonSession()}
 
-	lp := MakeTestPool(usdAsset, 450, xlmAsset, 450)
+	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
 	err := q.UpsertLiquidityPools(tt.Ctx, []LiquidityPool{lp})
 	tt.Assert.NoError(err)
@@ -342,14 +342,14 @@ func TestLiquidityPoolByAccountId(t *testing.T) {
 	q := &Q{tt.HorizonSession()}
 
 	pools := []LiquidityPool{
-		MakeTestPool(usdAsset, 450, xlmAsset, 450),
-		MakeTestPool(eurAsset, 450, xlmAsset, 450),
+		MakeTestPool(usdAsset, 450, gramAsset, 450),
+		MakeTestPool(eurAsset, 450, gramAsset, 450),
 	}
 	err := q.UpsertLiquidityPools(tt.Ctx, pools)
 	tt.Assert.NoError(err)
 
 	lines := []TrustLine{
-		MakeTestTrustline(account1.AccountID, xlmAsset, ""),
+		MakeTestTrustline(account1.AccountID, gramAsset, ""),
 		MakeTestTrustline(account1.AccountID, eurAsset, ""),
 		MakeTestTrustline(account1.AccountID, usdAsset, ""),
 		MakeTestTrustline(account1.AccountID, xdr.Asset{}, pools[0].PoolID),

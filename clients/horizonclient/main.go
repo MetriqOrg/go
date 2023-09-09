@@ -3,10 +3,10 @@ Package horizonclient provides client access to a Horizon server, allowing an ap
 
 This library provides an interface to the Stellar Horizon service. It supports the building of Go applications on
 top of the Stellar network (https://www.stellar.org/). Transactions may be constructed using the sister package to
-this one, txnbuild (https://github.com/stellar/go/tree/master/txnbuild), and then submitted with this client to any
+this one, txnbuild (https://github.com/lantah/go/tree/master/txnbuild), and then submitted with this client to any
 Horizon instance for processing onto the ledger. Together, these two libraries provide a complete Stellar SDK.
 
-For more information and further examples, see https://github.com/stellar/go/blob/master/docs/reference/readme.md
+For more information and further examples, see https://github.com/lantah/go/blob/master/docs/reference/readme.md
 */
 package horizonclient
 
@@ -18,12 +18,12 @@ import (
 	"sync"
 	"time"
 
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/support/clock"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/txnbuild"
+	hProtocol "github.com/lantah/go/protocols/horizon"
+	"github.com/lantah/go/protocols/horizon/effects"
+	"github.com/lantah/go/protocols/horizon/operations"
+	"github.com/lantah/go/support/clock"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/txnbuild"
 )
 
 // cursor represents `cursor` param in queries
@@ -62,7 +62,7 @@ const (
 	AssetType4 AssetType = "credit_alphanum4"
 	// AssetType12 represents an asset type that is 12 characters long
 	AssetType12 AssetType = "credit_alphanum12"
-	// AssetTypeNative represents the asset type for Stellar Lumens (XLM)
+	// AssetTypeNative represents the asset type for Lantah Grams (GRAM)
 	AssetTypeNative AssetType = "native"
 	// accountRequiresMemo is the base64 encoding of "1".
 	// SEP 29 uses this value to define transaction memo requirements for incoming payments.
