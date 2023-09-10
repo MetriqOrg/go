@@ -38,14 +38,14 @@ GET /transactions/{hash}/payments{?cursor,limit,order}
 ### curl Example Request
 
 ```sh
-curl "https://horizon-testnet.stellar.org/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5/payments"
+curl "https://orbitr-testnet.lantah.network/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5/payments"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 server.payments()
   .forTransaction("f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5")
@@ -70,13 +70,13 @@ operations).
 {
   "_links": {
     "self": {
-      "href": "https://horizon-testnet.stellar.org/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5/payments?cursor=&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5/payments?cursor=&limit=10&order=asc"
     },
     "next": {
-      "href": "https://horizon-testnet.stellar.org/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5/payments?cursor=2993420406628353&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5/payments?cursor=2993420406628353&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://horizon-testnet.stellar.org/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5/payments?cursor=2993420406628353&limit=10&order=desc"
+      "href": "https://orbitr-testnet.lantah.network/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5/payments?cursor=2993420406628353&limit=10&order=desc"
     }
   },
   "_embedded": {
@@ -84,19 +84,19 @@ operations).
       {
         "_links": {
           "self": {
-            "href": "https://horizon-testnet.stellar.org/operations/2993420406628353"
+            "href": "https://orbitr-testnet.lantah.network/operations/2993420406628353"
           },
           "transaction": {
-            "href": "https://horizon-testnet.stellar.org/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5"
+            "href": "https://orbitr-testnet.lantah.network/transactions/f65278b36875d170e865853838da400515f59ca23836f072e8d62cac18b803e5"
           },
           "effects": {
-            "href": "https://horizon-testnet.stellar.org/operations/2993420406628353/effects"
+            "href": "https://orbitr-testnet.lantah.network/operations/2993420406628353/effects"
           },
           "succeeds": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=desc&cursor=2993420406628353"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=2993420406628353"
           },
           "precedes": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=asc&cursor=2993420406628353"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=2993420406628353"
           }
         },
         "id": "2993420406628353",

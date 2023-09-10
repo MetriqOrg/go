@@ -2,11 +2,11 @@
 // the format used internally to gramr.
 //
 // gramr represents asset "amounts" as 64-bit integers, but to enable
-// fractional units of an asset, horizon, the client-libraries and other built
+// fractional units of an asset, orbitr, the client-libraries and other built
 // on top of gramr use a convention, encoding amounts as a string of
-// decimal digits with up to seven digits of precision in the fractional
-// portion. For example, an amount shown as "101.001" in horizon would be
-// represented in gramr as 1010010000.
+// decimal digits with up to six digits of precision in the fractional
+// portion. For example, an amount shown as "101.001" in orbitr would be
+// represented in gramr as 101001000.
 package amount
 
 import (
@@ -19,7 +19,7 @@ import (
 	"github.com/lantah/go/xdr"
 )
 
-// One is the value of one whole unit of currency. LLantah uses 6 fixed digits
+// One is the value of one whole unit of currency. Lantah uses 6 fixed digits
 // for fractional values, thus One is 1 million (10^6).
 const (
 	One = 1000000

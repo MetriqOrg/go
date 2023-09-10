@@ -1,22 +1,22 @@
-package horizonclient_test
+package orbitrclient_test
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/keypair"
 	"github.com/lantah/go/network"
-	hProtocol "github.com/lantah/go/protocols/horizon"
-	"github.com/lantah/go/protocols/horizon/effects"
-	"github.com/lantah/go/protocols/horizon/operations"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/protocols/orbitr/operations"
 	"github.com/lantah/go/txnbuild"
 )
 
 func ExampleClient_Accounts() {
-	client := horizonclient.DefaultPublicNetClient
-	accountsRequest := horizonclient.AccountsRequest{Signer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
+	client := orbitrclient.DefaultPublicNetClient
+	accountsRequest := orbitrclient.AccountsRequest{Signer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
 
 	account, err := client.Accounts(accountsRequest)
 	if err != nil {
@@ -28,8 +28,8 @@ func ExampleClient_Accounts() {
 }
 
 func ExampleClient_AccountDetail() {
-	client := horizonclient.DefaultPublicNetClient
-	accountRequest := horizonclient.AccountRequest{AccountID: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
+	client := orbitrclient.DefaultPublicNetClient
+	accountRequest := orbitrclient.AccountRequest{AccountID: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
 
 	account, err := client.AccountDetail(accountRequest)
 	if err != nil {
@@ -41,9 +41,9 @@ func ExampleClient_AccountDetail() {
 }
 
 func ExampleClient_Assets() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// assets for asset issuer
-	assetRequest := horizonclient.AssetRequest{ForAssetIssuer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
+	assetRequest := orbitrclient.AssetRequest{ForAssetIssuer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
 	asset, err := client.Assets(assetRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -52,7 +52,7 @@ func ExampleClient_Assets() {
 	fmt.Print(asset)
 
 	// all assets
-	assetRequest = horizonclient.AssetRequest{}
+	assetRequest = orbitrclient.AssetRequest{}
 	asset, err = client.Assets(assetRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -62,9 +62,9 @@ func ExampleClient_Assets() {
 }
 
 func ExampleClient_Effects() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// effects for an account
-	effectRequest := horizonclient.EffectRequest{ForAccount: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
+	effectRequest := orbitrclient.EffectRequest{ForAccount: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
 	effect, err := client.Effects(effectRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -73,7 +73,7 @@ func ExampleClient_Effects() {
 	fmt.Print(effect)
 
 	// all effects
-	effectRequest = horizonclient.EffectRequest{}
+	effectRequest = orbitrclient.EffectRequest{}
 	effect, err = client.Effects(effectRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -90,8 +90,8 @@ func ExampleClient_Effects() {
 }
 
 func ExampleClient_FeeStats() {
-	client := horizonclient.DefaultPublicNetClient
-	// horizon fees
+	client := orbitrclient.DefaultPublicNetClient
+	// orbitr fees
 	fees, err := client.FeeStats()
 	if err != nil {
 		fmt.Println(err)
@@ -102,7 +102,7 @@ func ExampleClient_FeeStats() {
 }
 
 func ExampleClient_Fund() {
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	// fund an account
 	resp, err := client.Fund("GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU")
 	if err != nil {
@@ -113,7 +113,7 @@ func ExampleClient_Fund() {
 }
 
 func ExampleClient_LedgerDetail() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// details for a ledger
 	sequence := uint32(12345)
 	ledger, err := client.LedgerDetail(sequence)
@@ -126,9 +126,9 @@ func ExampleClient_LedgerDetail() {
 }
 
 func ExampleClient_NextAccountsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// accounts with signer
-	accountsRequest := horizonclient.AccountsRequest{Signer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
+	accountsRequest := orbitrclient.AccountsRequest{Signer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 		Limit: 20}
 	accounts, err := client.Accounts(accountsRequest)
 	if err != nil {
@@ -153,9 +153,9 @@ func ExampleClient_NextAccountsPage() {
 }
 
 func ExampleClient_NextAssetsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// assets for asset issuer
-	assetRequest := horizonclient.AssetRequest{ForAssetIssuer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
+	assetRequest := orbitrclient.AssetRequest{ForAssetIssuer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 		Limit: 20}
 	asset, err := client.Assets(assetRequest)
 	if err != nil {
@@ -165,7 +165,7 @@ func ExampleClient_NextAssetsPage() {
 	fmt.Print(asset)
 
 	// all assets
-	assetRequest = horizonclient.AssetRequest{}
+	assetRequest = orbitrclient.AssetRequest{}
 	asset, err = client.Assets(assetRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -182,9 +182,9 @@ func ExampleClient_NextAssetsPage() {
 }
 
 func ExampleClient_NextEffectsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all effects
-	effectRequest := horizonclient.EffectRequest{Limit: 20}
+	effectRequest := orbitrclient.EffectRequest{Limit: 20}
 	efp, err := client.Effects(effectRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -216,9 +216,9 @@ func ExampleClient_NextEffectsPage() {
 }
 
 func ExampleClient_NextLedgersPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all ledgers
-	ledgerRequest := horizonclient.LedgerRequest{Limit: 20}
+	ledgerRequest := orbitrclient.LedgerRequest{Limit: 20}
 	ledgers, err := client.Ledgers(ledgerRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -250,9 +250,9 @@ func ExampleClient_NextLedgersPage() {
 }
 
 func ExampleClient_NextOffersPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all offers
-	offerRequest := horizonclient.OfferRequest{ForAccount: "GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C", Limit: 20}
+	offerRequest := orbitrclient.OfferRequest{ForAccount: "GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C", Limit: 20}
 	offers, err := client.Offers(offerRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -283,9 +283,9 @@ func ExampleClient_NextOffersPage() {
 	}
 }
 func ExampleClient_NextOperationsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all operations
-	operationRequest := horizonclient.OperationRequest{Limit: 20}
+	operationRequest := orbitrclient.OperationRequest{Limit: 20}
 	ops, err := client.Operations(operationRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -317,18 +317,18 @@ func ExampleClient_NextOperationsPage() {
 }
 
 func ExampleClient_NextTradeAggregationsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	testTime := time.Unix(int64(1517521726), int64(0))
 	// Find trade aggregations
-	ta := horizonclient.TradeAggregationRequest{
+	ta := orbitrclient.TradeAggregationRequest{
 		StartTime:          testTime,
 		EndTime:            testTime,
-		Resolution:         horizonclient.FiveMinuteResolution,
-		BaseAssetType:      horizonclient.AssetTypeNative,
-		CounterAssetType:   horizonclient.AssetType4,
+		Resolution:         orbitrclient.FiveMinuteResolution,
+		BaseAssetType:      orbitrclient.AssetTypeNative,
+		CounterAssetType:   orbitrclient.AssetType4,
 		CounterAssetCode:   "SLT",
 		CounterAssetIssuer: "GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP",
-		Order:              horizonclient.OrderDesc,
+		Order:              orbitrclient.OrderDesc,
 	}
 	tradeAggs, err := client.TradeAggregations(ta)
 	if err != nil {
@@ -361,9 +361,9 @@ func ExampleClient_NextTradeAggregationsPage() {
 }
 
 func ExampleClient_NextTradesPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all trades
-	tradeRequest := horizonclient.TradeRequest{Cursor: "123456", Limit: 30, Order: horizonclient.OrderAsc}
+	tradeRequest := orbitrclient.TradeRequest{Cursor: "123456", Limit: 30, Order: orbitrclient.OrderAsc}
 	trades, err := client.Trades(tradeRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -395,9 +395,9 @@ func ExampleClient_NextTradesPage() {
 }
 
 func ExampleClient_NextTransactionsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all transactions
-	transactionRequest := horizonclient.TransactionRequest{Limit: 20}
+	transactionRequest := orbitrclient.TransactionRequest{Limit: 20}
 	transactions, err := client.Transactions(transactionRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -429,7 +429,7 @@ func ExampleClient_NextTransactionsPage() {
 }
 
 func ExampleClient_OfferDetails() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	offer, err := client.OfferDetails("2")
 	if err != nil {
 		fmt.Println(err)
@@ -440,11 +440,11 @@ func ExampleClient_OfferDetails() {
 }
 
 func ExampleClient_Offers() {
-	client := horizonclient.DefaultPublicNetClient
-	offerRequest := horizonclient.OfferRequest{
+	client := orbitrclient.DefaultPublicNetClient
+	offerRequest := orbitrclient.OfferRequest{
 		ForAccount: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 		Cursor:     "now",
-		Order:      horizonclient.OrderDesc,
+		Order:      orbitrclient.OrderDesc,
 	}
 	offers, err := client.Offers(offerRequest)
 	if err != nil {
@@ -453,11 +453,11 @@ func ExampleClient_Offers() {
 	}
 	fmt.Print(offers)
 
-	offerRequest = horizonclient.OfferRequest{
+	offerRequest = orbitrclient.OfferRequest{
 		Seller:  "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 		Selling: "COP:GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 		Buying:  "EUR:GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
-		Order:   horizonclient.OrderDesc,
+		Order:   orbitrclient.OrderDesc,
 	}
 
 	offers, err = client.Offers(offerRequest)
@@ -469,7 +469,7 @@ func ExampleClient_Offers() {
 }
 
 func ExampleClient_OperationDetail() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	opID := "123456"
 	// operation details for an id
 	ops, err := client.OperationDetail(opID)
@@ -481,9 +481,9 @@ func ExampleClient_OperationDetail() {
 }
 
 func ExampleClient_Operations() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// operations for an account
-	opRequest := horizonclient.OperationRequest{ForAccount: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
+	opRequest := orbitrclient.OperationRequest{ForAccount: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
 	ops, err := client.Operations(opRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -492,7 +492,7 @@ func ExampleClient_Operations() {
 	fmt.Print(ops)
 
 	// all operations
-	opRequest = horizonclient.OperationRequest{Cursor: "now"}
+	opRequest = orbitrclient.OperationRequest{Cursor: "now"}
 	ops, err = client.Operations(opRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -515,12 +515,12 @@ func ExampleClient_Operations() {
 }
 
 func ExampleClient_OrderBook() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// orderbook for an asset pair, e.g GRAM/NGN
-	obRequest := horizonclient.OrderBookRequest{
-		BuyingAssetType:    horizonclient.AssetTypeNative,
+	obRequest := orbitrclient.OrderBookRequest{
+		BuyingAssetType:    orbitrclient.AssetTypeNative,
 		SellingAssetCode:   "USD",
-		SellingAssetType:   horizonclient.AssetType4,
+		SellingAssetType:   orbitrclient.AssetType4,
 		SellingAssetIssuer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 	}
 	obs, err := client.OrderBook(obRequest)
@@ -532,14 +532,14 @@ func ExampleClient_OrderBook() {
 }
 
 func ExampleClient_Paths() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// Find paths for GRAM->NGN
-	pr := horizonclient.PathsRequest{
+	pr := orbitrclient.PathsRequest{
 		DestinationAccount:     "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 		DestinationAmount:      "100",
 		DestinationAssetCode:   "NGN",
 		DestinationAssetIssuer: "GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
-		DestinationAssetType:   horizonclient.AssetType4,
+		DestinationAssetType:   orbitrclient.AssetType4,
 		SourceAccount:          "GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
 	}
 	paths, err := client.StrictReceivePaths(pr)
@@ -551,13 +551,13 @@ func ExampleClient_Paths() {
 }
 
 func ExampleClient_StrictSendPaths() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// Find paths for USD->EUR
-	pr := horizonclient.StrictSendPathsRequest{
+	pr := orbitrclient.StrictSendPathsRequest{
 		SourceAmount:      "20",
 		SourceAssetCode:   "USD",
 		SourceAssetIssuer: "GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX",
-		SourceAssetType:   horizonclient.AssetType4,
+		SourceAssetType:   orbitrclient.AssetType4,
 		DestinationAssets: "EURT:GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S",
 	}
 	paths, err := client.StrictSendPaths(pr)
@@ -569,9 +569,9 @@ func ExampleClient_StrictSendPaths() {
 }
 
 func ExampleClient_Payments() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// payments for an account
-	opRequest := horizonclient.OperationRequest{ForAccount: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
+	opRequest := orbitrclient.OperationRequest{ForAccount: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
 	ops, err := client.Payments(opRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -580,7 +580,7 @@ func ExampleClient_Payments() {
 	fmt.Print(ops)
 
 	// all payments
-	opRequest = horizonclient.OperationRequest{Cursor: "now"}
+	opRequest = orbitrclient.OperationRequest{Cursor: "now"}
 	ops, err = client.Payments(opRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -603,9 +603,9 @@ func ExampleClient_Payments() {
 }
 
 func ExampleClient_PrevAssetsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// assets for asset issuer
-	assetRequest := horizonclient.AssetRequest{ForAssetIssuer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
+	assetRequest := orbitrclient.AssetRequest{ForAssetIssuer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 		Limit: 20}
 	asset, err := client.Assets(assetRequest)
 	if err != nil {
@@ -615,7 +615,7 @@ func ExampleClient_PrevAssetsPage() {
 	fmt.Print(asset)
 
 	// all assets
-	assetRequest = horizonclient.AssetRequest{}
+	assetRequest = orbitrclient.AssetRequest{}
 	asset, err = client.Assets(assetRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -632,9 +632,9 @@ func ExampleClient_PrevAssetsPage() {
 }
 
 func ExampleClient_PrevEffectsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all effects
-	effectRequest := horizonclient.EffectRequest{Limit: 20}
+	effectRequest := orbitrclient.EffectRequest{Limit: 20}
 	efp, err := client.Effects(effectRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -666,9 +666,9 @@ func ExampleClient_PrevEffectsPage() {
 }
 
 func ExampleClient_PrevLedgersPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all ledgers
-	ledgerRequest := horizonclient.LedgerRequest{Limit: 20}
+	ledgerRequest := orbitrclient.LedgerRequest{Limit: 20}
 	ledgers, err := client.Ledgers(ledgerRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -700,9 +700,9 @@ func ExampleClient_PrevLedgersPage() {
 }
 
 func ExampleClient_PrevOffersPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all offers
-	offerRequest := horizonclient.OfferRequest{ForAccount: "GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C", Limit: 20}
+	offerRequest := orbitrclient.OfferRequest{ForAccount: "GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C", Limit: 20}
 	offers, err := client.Offers(offerRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -734,9 +734,9 @@ func ExampleClient_PrevOffersPage() {
 }
 
 func ExampleClient_PrevOperationsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all operations
-	operationRequest := horizonclient.OperationRequest{Limit: 20}
+	operationRequest := orbitrclient.OperationRequest{Limit: 20}
 	ops, err := client.Operations(operationRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -768,18 +768,18 @@ func ExampleClient_PrevOperationsPage() {
 }
 
 func ExampleClient_PrevTradeAggregationsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	testTime := time.Unix(int64(1517521726), int64(0))
 	// Find trade aggregations
-	ta := horizonclient.TradeAggregationRequest{
+	ta := orbitrclient.TradeAggregationRequest{
 		StartTime:          testTime,
 		EndTime:            testTime,
-		Resolution:         horizonclient.FiveMinuteResolution,
-		BaseAssetType:      horizonclient.AssetTypeNative,
-		CounterAssetType:   horizonclient.AssetType4,
+		Resolution:         orbitrclient.FiveMinuteResolution,
+		BaseAssetType:      orbitrclient.AssetTypeNative,
+		CounterAssetType:   orbitrclient.AssetType4,
 		CounterAssetCode:   "SLT",
 		CounterAssetIssuer: "GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP",
-		Order:              horizonclient.OrderDesc,
+		Order:              orbitrclient.OrderDesc,
 	}
 	tradeAggs, err := client.TradeAggregations(ta)
 	if err != nil {
@@ -812,9 +812,9 @@ func ExampleClient_PrevTradeAggregationsPage() {
 }
 
 func ExampleClient_PrevTradesPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all trades
-	tradeRequest := horizonclient.TradeRequest{Cursor: "123456", Limit: 30, Order: horizonclient.OrderAsc}
+	tradeRequest := orbitrclient.TradeRequest{Cursor: "123456", Limit: 30, Order: orbitrclient.OrderAsc}
 	trades, err := client.Trades(tradeRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -846,9 +846,9 @@ func ExampleClient_PrevTradesPage() {
 }
 
 func ExampleClient_PrevTransactionsPage() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// all transactions
-	transactionRequest := horizonclient.TransactionRequest{Limit: 20}
+	transactionRequest := orbitrclient.TransactionRequest{Limit: 20}
 	transactions, err := client.Transactions(transactionRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -880,7 +880,7 @@ func ExampleClient_PrevTransactionsPage() {
 }
 
 func ExampleClient_Root() {
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	root, err := client.Root()
 	if err != nil {
 		fmt.Println(err)
@@ -889,14 +889,14 @@ func ExampleClient_Root() {
 	fmt.Print(root)
 }
 
-func ExampleClient_SetHorizonTimeout() {
-	client := horizonclient.DefaultTestNetClient
+func ExampleClient_SetOrbitRTimeout() {
+	client := orbitrclient.DefaultTestNetClient
 
 	// https://www.stellar.org/laboratory/#xdr-viewer?input=AAAAABB90WssODNIgi6BHveqzxTRmIpvAFRyVNM%2BHm2GVuCcAAAAZAAABD0AAuV%2FAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAyTBGxOgfSApppsTnb%2FYRr6gOR8WT0LZNrhLh4y3FCgoAAAAXSHboAAAAAAAAAAABhlbgnAAAAEAivKe977CQCxMOKTuj%2BcWTFqc2OOJU8qGr9afrgu2zDmQaX5Q0cNshc3PiBwe0qw%2F%2BD%2FqJk5QqM5dYeSUGeDQP&type=TransactionEnvelope&network=test
 	txXdr := `AAAAABB90WssODNIgi6BHveqzxTRmIpvAFRyVNM+Hm2GVuCcAAAAZAAABD0AAuV/AAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAyTBGxOgfSApppsTnb/YRr6gOR8WT0LZNrhLh4y3FCgoAAAAXSHboAAAAAAAAAAABhlbgnAAAAEAivKe977CQCxMOKTuj+cWTFqc2OOJU8qGr9afrgu2zDmQaX5Q0cNshc3PiBwe0qw/+D/qJk5QqM5dYeSUGeDQP`
 
 	// test user timeout
-	client = client.SetHorizonTimeout(30 * time.Second)
+	client = client.SetOrbitRTimeout(30 * time.Second)
 	resp, err := client.SubmitTransactionXDR(txXdr)
 	if err != nil {
 		fmt.Println(err)
@@ -907,9 +907,9 @@ func ExampleClient_SetHorizonTimeout() {
 }
 
 func ExampleClient_StreamEffects() {
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	// all effects
-	effectRequest := horizonclient.EffectRequest{Cursor: "760209215489"}
+	effectRequest := orbitrclient.EffectRequest{Cursor: "760209215489"}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
@@ -928,9 +928,9 @@ func ExampleClient_StreamEffects() {
 }
 
 func ExampleClient_StreamLedgers() {
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	// all ledgers from now
-	ledgerRequest := horizonclient.LedgerRequest{}
+	ledgerRequest := orbitrclient.LedgerRequest{}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
@@ -949,9 +949,9 @@ func ExampleClient_StreamLedgers() {
 }
 
 func ExampleClient_StreamOffers() {
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	// offers for account
-	offerRequest := horizonclient.OfferRequest{ForAccount: "GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C", Cursor: "1"}
+	offerRequest := orbitrclient.OfferRequest{ForAccount: "GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C", Cursor: "1"}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
@@ -970,9 +970,9 @@ func ExampleClient_StreamOffers() {
 }
 
 func ExampleClient_StreamOperations() {
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	// operations for an account
-	opRequest := horizonclient.OperationRequest{ForAccount: "GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR", Cursor: "760209215489"}
+	opRequest := orbitrclient.OperationRequest{ForAccount: "GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR", Cursor: "760209215489"}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
@@ -991,10 +991,10 @@ func ExampleClient_StreamOperations() {
 }
 
 func ExampleClient_StreamOrderBooks() {
-	client := horizonclient.DefaultTestNetClient
-	orderbookRequest := horizonclient.OrderBookRequest{
-		SellingAssetType:  horizonclient.AssetTypeNative,
-		BuyingAssetType:   horizonclient.AssetType4,
+	client := orbitrclient.DefaultTestNetClient
+	orderbookRequest := orbitrclient.OrderBookRequest{
+		SellingAssetType:  orbitrclient.AssetTypeNative,
+		BuyingAssetType:   orbitrclient.AssetType4,
 		BuyingAssetCode:   "ABC",
 		BuyingAssetIssuer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 	}
@@ -1016,9 +1016,9 @@ func ExampleClient_StreamOrderBooks() {
 }
 
 func ExampleClient_StreamPayments() {
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	// all payments
-	opRequest := horizonclient.OperationRequest{Cursor: "760209215489"}
+	opRequest := orbitrclient.OperationRequest{Cursor: "760209215489"}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
@@ -1037,9 +1037,9 @@ func ExampleClient_StreamPayments() {
 }
 
 func ExampleClient_StreamTrades() {
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	// all trades
-	tradeRequest := horizonclient.TradeRequest{Cursor: "760209215489"}
+	tradeRequest := orbitrclient.TradeRequest{Cursor: "760209215489"}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
@@ -1059,9 +1059,9 @@ func ExampleClient_StreamTrades() {
 }
 
 func ExampleClient_StreamTransactions() {
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	// all transactions
-	transactionRequest := horizonclient.TransactionRequest{Cursor: "760209215489"}
+	transactionRequest := orbitrclient.TransactionRequest{Cursor: "760209215489"}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
@@ -1081,8 +1081,8 @@ func ExampleClient_StreamTransactions() {
 
 func ExampleClient_SubmitFeeBumpTransaction() {
 	kp := keypair.MustParseFull("SDQQUZMIPUP5TSDWH3UJYAKUOP55IJ4KTBXTY7RCOMEFRQGYA6GIR3OD")
-	client := horizonclient.DefaultTestNetClient
-	ar := horizonclient.AccountRequest{AccountID: kp.Address()}
+	client := orbitrclient.DefaultTestNetClient
+	ar := orbitrclient.AccountRequest{AccountID: kp.Address()}
 	sourceAccount, err := client.AccountDetail(ar)
 	if err != nil {
 		return
@@ -1135,8 +1135,8 @@ func ExampleClient_SubmitFeeBumpTransaction() {
 
 func ExampleClient_SubmitFeeBumpTransactionWithOptions() {
 	kp := keypair.MustParseFull("SDQQUZMIPUP5TSDWH3UJYAKUOP55IJ4KTBXTY7RCOMEFRQGYA6GIR3OD")
-	client := horizonclient.DefaultTestNetClient
-	ar := horizonclient.AccountRequest{AccountID: kp.Address()}
+	client := orbitrclient.DefaultTestNetClient
+	ar := orbitrclient.AccountRequest{AccountID: kp.Address()}
 	sourceAccount, err := client.AccountDetail(ar)
 	if err != nil {
 		return
@@ -1181,7 +1181,7 @@ func ExampleClient_SubmitFeeBumpTransactionWithOptions() {
 
 	result, err := client.SubmitFeeBumpTransactionWithOptions(
 		feeBumpTx,
-		horizonclient.SubmitTxOpts{SkipMemoRequiredCheck: true},
+		orbitrclient.SubmitTxOpts{SkipMemoRequiredCheck: true},
 	)
 	if err != nil {
 		fmt.Println(err)
@@ -1192,8 +1192,8 @@ func ExampleClient_SubmitFeeBumpTransactionWithOptions() {
 
 func ExampleClient_SubmitTransaction() {
 	kp := keypair.MustParseFull("SDQQUZMIPUP5TSDWH3UJYAKUOP55IJ4KTBXTY7RCOMEFRQGYA6GIR3OD")
-	client := horizonclient.DefaultTestNetClient
-	ar := horizonclient.AccountRequest{AccountID: kp.Address()}
+	client := orbitrclient.DefaultTestNetClient
+	ar := orbitrclient.AccountRequest{AccountID: kp.Address()}
 	sourceAccount, err := client.AccountDetail(ar)
 	if err != nil {
 		return
@@ -1234,8 +1234,8 @@ func ExampleClient_SubmitTransaction() {
 
 func ExampleClient_SubmitTransactionWithOptions() {
 	kp := keypair.MustParseFull("SDQQUZMIPUP5TSDWH3UJYAKUOP55IJ4KTBXTY7RCOMEFRQGYA6GIR3OD")
-	client := horizonclient.DefaultTestNetClient
-	ar := horizonclient.AccountRequest{AccountID: kp.Address()}
+	client := orbitrclient.DefaultTestNetClient
+	ar := orbitrclient.AccountRequest{AccountID: kp.Address()}
 	sourceAccount, err := client.AccountDetail(ar)
 	if err != nil {
 		return
@@ -1266,7 +1266,7 @@ func ExampleClient_SubmitTransactionWithOptions() {
 		return
 	}
 
-	result, err := client.SubmitTransactionWithOptions(tx, horizonclient.SubmitTxOpts{SkipMemoRequiredCheck: true})
+	result, err := client.SubmitTransactionWithOptions(tx, orbitrclient.SubmitTxOpts{SkipMemoRequiredCheck: true})
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -1276,8 +1276,8 @@ func ExampleClient_SubmitTransactionWithOptions() {
 
 func ExampleClient_SubmitTransactionWithOptions_skip_memo_required_check() {
 	kp := keypair.MustParseFull("SDQQUZMIPUP5TSDWH3UJYAKUOP55IJ4KTBXTY7RCOMEFRQGYA6GIR3OD")
-	client := horizonclient.DefaultTestNetClient
-	ar := horizonclient.AccountRequest{AccountID: kp.Address()}
+	client := orbitrclient.DefaultTestNetClient
+	ar := orbitrclient.AccountRequest{AccountID: kp.Address()}
 	sourceAccount, err := client.AccountDetail(ar)
 	if err != nil {
 		return
@@ -1309,7 +1309,7 @@ func ExampleClient_SubmitTransactionWithOptions_skip_memo_required_check() {
 		return
 	}
 
-	result, err := client.SubmitTransactionWithOptions(tx, horizonclient.SubmitTxOpts{
+	result, err := client.SubmitTransactionWithOptions(tx, orbitrclient.SubmitTxOpts{
 		SkipMemoRequiredCheck: true,
 	})
 	if err != nil {
@@ -1320,7 +1320,7 @@ func ExampleClient_SubmitTransactionWithOptions_skip_memo_required_check() {
 }
 
 func ExampleClient_SubmitTransactionXDR() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// https://www.stellar.org/laboratory/#xdr-viewer?input=AAAAAOoS%2F5V%2BBiCPXRiVcz8YsnkDdODufq%2Bg7xdqTdIXN8vyAAAE4gFiW0YAAALxAAAAAQAAAAAAAAAAAAAAAFyuBUcAAAABAAAABzIyMjgyNDUAAAAAAQAAAAEAAAAALhsY%2FFdAHXllTmb025DtCVBw06WDSQjq6I9NrCQHOV8AAAABAAAAAHT8zKV7bRQzuGTpk9AO3gjWJ9jVxBXTgguFORkxHVIKAAAAAAAAAAAAOnDwAAAAAAAAAAIkBzlfAAAAQPefqlsOvni6xX1g3AqddvOp1GOM88JYzayGZodbzTfV5toyhxZvL1ZggY3prFsvrereugEpj1kyPJ67z6gcRg0XN8vyAAAAQGwmoTssW49gaze8iQkz%2FUA2E2N%2BBOo%2B6v7YdOSsvIcZnMc37KmXH920nLosKpDLqkNChVztSZFcbVUlHhjbQgA%3D&type=TransactionEnvelope&network=public
 	txXdr := `AAAAAOoS/5V+BiCPXRiVcz8YsnkDdODufq+g7xdqTdIXN8vyAAAE4gFiW0YAAALxAAAAAQAAAAAAAAAAAAAAAFyuBUcAAAABAAAABzIyMjgyNDUAAAAAAQAAAAEAAAAALhsY/FdAHXllTmb025DtCVBw06WDSQjq6I9NrCQHOV8AAAABAAAAAHT8zKV7bRQzuGTpk9AO3gjWJ9jVxBXTgguFORkxHVIKAAAAAAAAAAAAOnDwAAAAAAAAAAIkBzlfAAAAQPefqlsOvni6xX1g3AqddvOp1GOM88JYzayGZodbzTfV5toyhxZvL1ZggY3prFsvrereugEpj1kyPJ67z6gcRg0XN8vyAAAAQGwmoTssW49gaze8iQkz/UA2E2N+BOo+6v7YdOSsvIcZnMc37KmXH920nLosKpDLqkNChVztSZFcbVUlHhjbQgA=`
 
@@ -1335,18 +1335,18 @@ func ExampleClient_SubmitTransactionXDR() {
 }
 
 func ExampleClient_TradeAggregations() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	testTime := time.Unix(int64(1517521726), int64(0))
 	// Find trade aggregations
-	ta := horizonclient.TradeAggregationRequest{
+	ta := orbitrclient.TradeAggregationRequest{
 		StartTime:          testTime,
 		EndTime:            testTime,
-		Resolution:         horizonclient.FiveMinuteResolution,
-		BaseAssetType:      horizonclient.AssetTypeNative,
-		CounterAssetType:   horizonclient.AssetType4,
+		Resolution:         orbitrclient.FiveMinuteResolution,
+		BaseAssetType:      orbitrclient.AssetTypeNative,
+		CounterAssetType:   orbitrclient.AssetType4,
 		CounterAssetCode:   "SLT",
 		CounterAssetIssuer: "GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP",
-		Order:              horizonclient.OrderDesc,
+		Order:              orbitrclient.OrderDesc,
 	}
 	tradeAggs, err := client.TradeAggregations(ta)
 	if err != nil {
@@ -1357,9 +1357,9 @@ func ExampleClient_TradeAggregations() {
 }
 
 func ExampleClient_Trades() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// Find all trades
-	tr := horizonclient.TradeRequest{Cursor: "123456", Limit: 30, Order: horizonclient.OrderAsc}
+	tr := orbitrclient.TradeRequest{Cursor: "123456", Limit: 30, Order: orbitrclient.OrderAsc}
 	trades, err := client.Trades(tr)
 	if err != nil {
 		fmt.Println(err)
@@ -1369,9 +1369,9 @@ func ExampleClient_Trades() {
 }
 
 func ExampleClient_Transactions() {
-	client := horizonclient.DefaultPublicNetClient
+	client := orbitrclient.DefaultPublicNetClient
 	// transactions for an account
-	txRequest := horizonclient.TransactionRequest{ForAccount: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
+	txRequest := orbitrclient.TransactionRequest{ForAccount: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}
 	txs, err := client.Transactions(txRequest)
 	if err != nil {
 		fmt.Println(err)
@@ -1380,7 +1380,7 @@ func ExampleClient_Transactions() {
 	fmt.Print(txs)
 
 	// all transactions
-	txRequest = horizonclient.TransactionRequest{Cursor: "now", Order: horizonclient.OrderDesc}
+	txRequest = orbitrclient.TransactionRequest{Cursor: "now", Order: orbitrclient.OrderDesc}
 	txs, err = client.Transactions(txRequest)
 	if err != nil {
 		fmt.Println(err)

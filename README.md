@@ -1,12 +1,6 @@
 <div align="center">
 <h1>Lantah Go Monorepo</h1>
 </div>
-<p align="center">
- 
-<a href="https://github.com/stellar/go/actions/workflows/go.yml?query=branch%3Amaster+event%3Apush">![master GitHub workflow](https://github.com/stellar/go/actions/workflows/go.yml/badge.svg)</a>
-<a href="https://godoc.org/github.com/stellar/go"><img alt="GoDoc" src="https://godoc.org/github.com/stellar/go?status.svg" /></a>
-<a href="https://goreportcard.com/report/github.com/stellar/go"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/stellar/go" /></a>
-</p>
 
 This repo is the home for all of the public Go code associated with the Lantah network. It is a fork of the go repo by SDF [Stellar Development Foundation]. Please be patient while we make changes. Thanks! :D
 
@@ -14,9 +8,9 @@ This repo contains various tools and services that you can use and deploy, as we
 
 ## Package Index
 
-* [Horizon Server](services/horizon): Full-featured API server for the Lantah network
-* [Go Horizon SDK - horizonclient](clients/horizonclient): Client for Horizon server (queries and transaction submission)
-* [Go Horizon SDK - txnbuild](txnbuild): Construct Stellar transactions and operations
+* [OrbitR Server](services/orbitr): Full-featured API server for the Lantah network
+* [Go OrbitR SDK - orbitrclient](clients/orbitrclient): Client for OrbitR server (queries and transaction submission)
+* [Go OrbitR SDK - txnbuild](txnbuild): Construct Lantah transactions and operations
 * [Ticker](services/ticker): An API server that provides statistics about assets and markets on the Stellar network
 * [Keystore](services/keystore): An API server that is used to store and manage encrypted keys for Stellar client applications
 * Servers for Anchors & Financial Institutions
@@ -77,6 +71,6 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for more detai
 
 ### Developing
 
-See [GUIDE_FOR_DEVELOPERS.md](/services/horizon/internal/docs/GUIDE_FOR_DEVELOPERS.md) for helpful instructions for getting started developing code in this repository.
+See [GUIDE_FOR_DEVELOPERS.md](/services/orbitr/internal/docs/GUIDE_FOR_DEVELOPERS.md) for helpful instructions for getting started developing code in this repository.
 
 [Stellar Development Foundation]: https://stellar.org

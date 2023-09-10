@@ -27,14 +27,14 @@ GET /ledgers/{sequence}/operations{?cursor,limit,order,include_failed}
 ### curl Example Request
 
 ```sh
-curl "https://horizon-testnet.stellar.org/ledgers/681637/operations?limit=1"
+curl "https://orbitr-testnet.lantah.network/ledgers/681637/operations?limit=1"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 server.operations()
   .forLedger("681637")
@@ -57,13 +57,13 @@ This endpoint responds with a list of operations in a given ledger.  See [operat
 {
   "_links": {
     "self": {
-      "href": "https://horizon-testnet.stellar.org/ledgers/681637/operations?cursor=&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/ledgers/681637/operations?cursor=&limit=10&order=asc"
     },
     "next": {
-      "href": "https://horizon-testnet.stellar.org/ledgers/681637/operations?cursor=2927608622751745&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/ledgers/681637/operations?cursor=2927608622751745&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://horizon-testnet.stellar.org/ledgers/681637/operations?cursor=2927608622747649&limit=10&order=desc"
+      "href": "https://orbitr-testnet.lantah.network/ledgers/681637/operations?cursor=2927608622747649&limit=10&order=desc"
     }
   },
   "_embedded": {
@@ -71,19 +71,19 @@ This endpoint responds with a list of operations in a given ledger.  See [operat
       {
         "_links": {
           "self": {
-            "href": "https://horizon-testnet.stellar.org/operations/2927608622747649"
+            "href": "https://orbitr-testnet.lantah.network/operations/2927608622747649"
           },
           "transaction": {
-            "href": "https://horizon-testnet.stellar.org/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a"
+            "href": "https://orbitr-testnet.lantah.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a"
           },
           "effects": {
-            "href": "https://horizon-testnet.stellar.org/operations/2927608622747649/effects"
+            "href": "https://orbitr-testnet.lantah.network/operations/2927608622747649/effects"
           },
           "succeeds": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=desc&cursor=2927608622747649"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=2927608622747649"
           },
           "precedes": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=asc&cursor=2927608622747649"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=2927608622747649"
           }
         },
         "id": "2927608622747649",
@@ -102,19 +102,19 @@ This endpoint responds with a list of operations in a given ledger.  See [operat
       {
         "_links": {
           "self": {
-            "href": "https://horizon-testnet.stellar.org/operations/2927608622751745"
+            "href": "https://orbitr-testnet.lantah.network/operations/2927608622751745"
           },
           "transaction": {
-            "href": "https://horizon-testnet.stellar.org/transactions/fdabcee816bd439dd1d20bcb0abab5aa939c15cca5fccc1db060ba6096a5e0ed"
+            "href": "https://orbitr-testnet.lantah.network/transactions/fdabcee816bd439dd1d20bcb0abab5aa939c15cca5fccc1db060ba6096a5e0ed"
           },
           "effects": {
-            "href": "https://horizon-testnet.stellar.org/operations/2927608622751745/effects"
+            "href": "https://orbitr-testnet.lantah.network/operations/2927608622751745/effects"
           },
           "succeeds": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=desc&cursor=2927608622751745"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=2927608622751745"
           },
           "precedes": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=asc&cursor=2927608622751745"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=2927608622751745"
           }
         },
         "id": "2927608622751745",

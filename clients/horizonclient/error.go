@@ -1,17 +1,17 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"encoding/json"
 	"strings"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/errors"
 	"github.com/lantah/go/xdr"
 )
 
 func (herr Error) Error() string {
 	s := strings.Builder{}
-	s.WriteString(`horizon error: "`)
+	s.WriteString(`orbitr error: "`)
 	s.WriteString(herr.Problem.Title)
 	s.WriteString(`" `)
 	if rc, err := herr.ResultCodes(); err == nil {
@@ -20,7 +20,7 @@ func (herr Error) Error() string {
 		s.WriteString(strings.Join(resultCodes, `, `))
 		s.WriteString(`) `)
 	}
-	s.WriteString(`- check horizon.Error.Problem for more information`)
+	s.WriteString(`- check orbitr.Error.Problem for more information`)
 	return s.String()
 }
 

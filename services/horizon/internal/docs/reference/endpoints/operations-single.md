@@ -30,14 +30,14 @@ GET /operations/{id}
 ### curl Example Request
 
 ```sh
-curl https://horizon-testnet.stellar.org/operations/2927608622747649
+curl https://orbitr-testnet.lantah.network/operations/2927608622747649
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 server.operations()
   .operation('2927608622747649')
@@ -60,19 +60,19 @@ This endpoint responds with a single Operation.  See [operation resource](../res
 {
   "_links": {
     "self": {
-      "href": "https://horizon-testnet.stellar.org/operations/2927608622747649"
+      "href": "https://orbitr-testnet.lantah.network/operations/2927608622747649"
     },
     "transaction": {
-      "href": "https://horizon-testnet.stellar.org/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a"
+      "href": "https://orbitr-testnet.lantah.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a"
     },
     "effects": {
-      "href": "https://horizon-testnet.stellar.org/operations/2927608622747649/effects"
+      "href": "https://orbitr-testnet.lantah.network/operations/2927608622747649/effects"
     },
     "succeeds": {
-      "href": "https://horizon-testnet.stellar.org/effects?order=desc&cursor=2927608622747649"
+      "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=2927608622747649"
     },
     "precedes": {
-      "href": "https://horizon-testnet.stellar.org/effects?order=asc&cursor=2927608622747649"
+      "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=2927608622747649"
     }
   },
   "id": "2927608622747649",

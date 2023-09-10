@@ -27,9 +27,9 @@ draft specification guide and thus has the following attributes:
 ## Example
 
 ```shell
-$ curl -X GET "https://horizon-testnet.stellar.org/transactions?cursor=1&order=desc"
+$ curl -X GET "https://orbitr-testnet.lantah.network/transactions?cursor=1&order=desc"
 {
-  "type": "https://stellar.org/horizon-errors/before_history",
+  "type": "https://lantah.network/orbitr-errors/before_history",
   "title": "Data Requested Is Before Recorded History",
   "status": 410,
   "detail": "This horizon instance is configured to only track a portion of the stellar network's latest history. This request is asking for results prior to the recorded history known to this horizon instance."

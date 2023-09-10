@@ -1,9 +1,9 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -24,7 +24,7 @@ func TestLiquidityPoolRequestBuildUrl(t *testing.T) {
 func TestLiquidityPoolDetailRequest(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -54,17 +54,17 @@ func TestLiquidityPoolDetailRequest(t *testing.T) {
 
 	_, err = client.LiquidityPoolDetail(request)
 	if assert.Error(t, err) {
-		assert.Contains(t, err.Error(), "horizon error")
-		horizonError, ok := err.(*Error)
+		assert.Contains(t, err.Error(), "orbitr error")
+		orbitrError, ok := err.(*Error)
 		assert.Equal(t, ok, true)
-		assert.Equal(t, horizonError.Problem.Title, "Bad Request")
+		assert.Equal(t, orbitrError.Problem.Title, "Bad Request")
 	}
 }
 
 var liquidityPoolResponse = `{
   "_links": {
     "self": {
-      "href": "https://horizon.stellar.org/liquidity_pools/abcdef"
+      "href": "https://orbitr.lantah.network/liquidity_pools/abcdef"
     }
   },
 	"id": "abcdef",

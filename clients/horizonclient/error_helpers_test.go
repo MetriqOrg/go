@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"testing"
@@ -28,7 +28,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "not found problem (pointer)",
 			err: &Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -39,7 +39,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "wrapped not found problem (pointer)",
 			err: errors.Wrap(&Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -50,7 +50,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "not found problem (not a pointer)",
 			err: Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -61,7 +61,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "wrapped not found problem (not a pointer)",
 			err: errors.Wrap(Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -72,7 +72,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "some other problem (pointer)",
 			err: &Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/server_error",
+					Type:   "https://lantah.network/orbitr-errors/server_error",
 					Title:  "Server Error",
 					Status: 500,
 				},
@@ -83,7 +83,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "wrapped some other problem (pointer)",
 			err: errors.Wrap(&Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/server_error",
+					Type:   "https://lantah.network/orbitr-errors/server_error",
 					Title:  "Server Error",
 					Status: 500,
 				},
@@ -94,7 +94,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "some other problem (not a pointer)",
 			err: Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/server_error",
+					Type:   "https://lantah.network/orbitr-errors/server_error",
 					Title:  "Server Error",
 					Status: 500,
 				},
@@ -105,7 +105,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "wrapped some other problem (not a pointer)",
 			err: errors.Wrap(Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/server_error",
+					Type:   "https://lantah.network/orbitr-errors/server_error",
 					Title:  "Server Error",
 					Status: 500,
 				},
@@ -113,7 +113,7 @@ func TestIsNotFoundError(t *testing.T) {
 			is: false,
 		},
 		{
-			desc: "a nil *horizonclient.Error",
+			desc: "a nil *orbitrclient.Error",
 			err:  (*Error)(nil),
 			is:   false,
 		},
@@ -147,14 +147,14 @@ func TestGetError(t *testing.T) {
 			desc: "not found problem (pointer)",
 			err: &Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
 			},
 			wantErr: &Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -164,14 +164,14 @@ func TestGetError(t *testing.T) {
 			desc: "wrapped not found problem (pointer)",
 			err: errors.Wrap(&Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
 			}, "wrap message"),
 			wantErr: &Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -181,14 +181,14 @@ func TestGetError(t *testing.T) {
 			desc: "not found problem (not a pointer)",
 			err: Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
 			},
 			wantErr: &Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -198,21 +198,21 @@ func TestGetError(t *testing.T) {
 			desc: "wrapped not found problem (not a pointer)",
 			err: errors.Wrap(Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
 			}, "wrap message"),
 			wantErr: &Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
 			},
 		},
 		{
-			desc:    "a nil *horizonclient.Error",
+			desc:    "a nil *orbitrclient.Error",
 			err:     (*Error)(nil),
 			wantErr: nil,
 		},

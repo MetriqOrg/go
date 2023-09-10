@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/keypair"
 	"github.com/lantah/go/support/errors"
 	supporthttp "github.com/lantah/go/support/http"
@@ -18,7 +18,7 @@ import (
 
 type Options struct {
 	Logger                      *supportlog.Entry
-	HorizonURL                  string
+	OrbitRURL                  string
 	Port                        int
 	NetworkPassphrase           string
 	SigningKeys                 string
@@ -80,15 +80,15 @@ func handler(opts Options) (http.Handler, error) {
 		return nil, errors.New("algorithm (alg) field must be set")
 	}
 
-	horizonTimeout := horizonclient.HorizonTimeout
+	orbitrTimeout := orbitrclient.OrbitRTimeout
 	httpClient := &http.Client{
-		Timeout: horizonTimeout,
+		Timeout: orbitrTimeout,
 	}
-	horizonClient := &horizonclient.Client{
-		HorizonURL: opts.HorizonURL,
+	orbitrClient := &orbitrclient.Client{
+		OrbitRURL: opts.OrbitRURL,
 		HTTP:       httpClient,
 	}
-	horizonClient.SetHorizonTimeout(horizonTimeout)
+	orbitrClient.SetOrbitRTimeout(orbitrTimeout)
 
 	mux := supporthttp.NewAPIMux(opts.Logger)
 
@@ -106,7 +106,7 @@ func handler(opts Options) (http.Handler, error) {
 	}.ServeHTTP)
 	mux.Post("/", tokenHandler{
 		Logger:                      opts.Logger,
-		HorizonClient:               horizonClient,
+		OrbitRClient:               orbitrClient,
 		NetworkPassphrase:           opts.NetworkPassphrase,
 		SigningAddresses:            signingAddresses,
 		JWK:                         jwk,

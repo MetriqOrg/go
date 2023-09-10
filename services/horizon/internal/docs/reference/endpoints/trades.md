@@ -38,14 +38,14 @@ GET /trades?base_asset_type={base_asset_type}&base_asset_code={base_asset_code}&
 
 ### curl Example Request
 ```sh
-curl https://horizon.stellar.org/trades?base_asset_type=native&counter_asset_code=SLT&counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP&counter_asset_type=credit_alphanum4&limit=2&order=desc
+curl https://orbitr.lantah.network/trades?base_asset_type=native&counter_asset_code=SLT&counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP&counter_asset_type=credit_alphanum4&limit=2&order=desc
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 server.trades()
   .call()
@@ -61,7 +61,7 @@ server.trades()
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 var tradesHandler = function (tradeResponse) {
   console.log(tradeResponse);
@@ -83,13 +83,13 @@ The list of trades. `base` and `counter` in the records will match the asset pai
 {
   "_links": {
     "self": {
-      "href": "https://horizon-testnet.stellar.org/trades?cursor=&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/trades?cursor=&limit=10&order=asc"
     },
     "next": {
-      "href": "https://horizon-testnet.stellar.org/trades?cursor=6025839120434-0&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/trades?cursor=6025839120434-0&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://horizon-testnet.stellar.org/trades?cursor=6012954218535-0&limit=10&order=desc"
+      "href": "https://orbitr-testnet.lantah.network/trades?cursor=6012954218535-0&limit=10&order=desc"
     }
   },
   "_embedded": {
@@ -100,13 +100,13 @@ The list of trades. `base` and `counter` in the records will match the asset pai
             "href": ""
           },
           "base": {
-            "href": "https://horizon-testnet.stellar.org/accounts/GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C"
+            "href": "https://orbitr-testnet.lantah.network/accounts/GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C"
           },
           "counter": {
-            "href": "https://horizon-testnet.stellar.org/accounts/GCYN7MI6VXVRP74KR6MKBAW2ELLCXL6QCY5H4YQ62HVWZWMCE6Y232UC"
+            "href": "https://orbitr-testnet.lantah.network/accounts/GCYN7MI6VXVRP74KR6MKBAW2ELLCXL6QCY5H4YQ62HVWZWMCE6Y232UC"
           },
           "operation": {
-            "href": "https://horizon-testnet.stellar.org/operations/6012954218535"
+            "href": "https://orbitr-testnet.lantah.network/operations/6012954218535"
           }
         },
         "id": "6012954218535-0",
@@ -137,13 +137,13 @@ The list of trades. `base` and `counter` in the records will match the asset pai
             "href": ""
           },
           "base": {
-            "href": "https://horizon-testnet.stellar.org/accounts/GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C"
+            "href": "https://orbitr-testnet.lantah.network/accounts/GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C"
           },
           "counter": {
-            "href": "https://horizon-testnet.stellar.org/accounts/GCYN7MI6VXVRP74KR6MKBAW2ELLCXL6QCY5H4YQ62HVWZWMCE6Y232UC"
+            "href": "https://orbitr-testnet.lantah.network/accounts/GCYN7MI6VXVRP74KR6MKBAW2ELLCXL6QCY5H4YQ62HVWZWMCE6Y232UC"
           },
           "operation": {
-            "href": "https://horizon-testnet.stellar.org/operations/6025839120385"
+            "href": "https://orbitr-testnet.lantah.network/operations/6025839120385"
           }
         },
         "id": "6025839120385-0",

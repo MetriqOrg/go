@@ -1,11 +1,11 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"github.com/lantah/go/support/errors"
 	"net/http"
 )
 
-// BuildURL returns the url for getting fee stats about a running horizon instance
+// BuildURL returns the url for getting fee stats about a running orbitr instance
 func (fr feeStatsRequest) BuildURL() (endpoint string, err error) {
 	endpoint = fr.endpoint
 	if endpoint == "" {
@@ -16,11 +16,11 @@ func (fr feeStatsRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the fee stats endpoint
-func (fr feeStatsRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (fr feeStatsRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := fr.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }

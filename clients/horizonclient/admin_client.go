@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"bytes"
@@ -9,12 +9,12 @@ import (
 	"net/url"
 	"time"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/errors"
 )
 
-// port - the horizon admin port, zero value defaults to 4200
-// host - the host interface name that horizon has bound admin web service, zero value defaults to 'localhost'
+// port - the orbitr admin port, zero value defaults to 4200
+// host - the host interface name that orbitr has bound admin web service, zero value defaults to 'localhost'
 // timeout - the length of time for the http client to wait on responses from admin web service
 func NewAdminClient(port uint16, host string, timeout time.Duration) (*AdminClient, error) {
 	baseURL, err := getAdminBaseURL(port, host)
@@ -22,13 +22,13 @@ func NewAdminClient(port uint16, host string, timeout time.Duration) (*AdminClie
 		return nil, err
 	}
 	if timeout == 0 {
-		timeout = HorizonTimeout
+		timeout = OrbitRTimeout
 	}
 
 	return &AdminClient{
 		baseURL:        baseURL,
 		http:           http.DefaultClient,
-		horizonTimeout: timeout,
+		orbitrTimeout: timeout,
 	}, nil
 }
 
@@ -58,7 +58,7 @@ func (c *AdminClient) sendGetRequest(requestURL string, a interface{}) error {
 }
 
 func (c *AdminClient) sendHTTPRequest(req *http.Request, a interface{}) error {
-	ctx, cancel := context.WithTimeout(context.Background(), c.horizonTimeout)
+	ctx, cancel := context.WithTimeout(context.Background(), c.orbitrTimeout)
 	defer cancel()
 
 	if resp, err := c.http.Do(req.WithContext(ctx)); err != nil {
@@ -112,5 +112,5 @@ func (c *AdminClient) SetIngestionAccountFilter(filter hProtocol.AccountFilterCo
 	return c.sendHTTPRequest(req, nil)
 }
 
-// ensure that the horizon admin client implements AdminClientInterface
+// ensure that the orbitr admin client implements AdminClientInterface
 var _ AdminClientInterface = &AdminClient{}

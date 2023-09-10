@@ -7,8 +7,8 @@ Horizon is an API server for the Stellar ecosystem.  It acts as the interface be
 Horizon provides a RESTful API to allow client applications to interact with the Stellar network. You can communicate with Horizon using cURL or just your web browser. However, if you're building a client application, you'll likely want to use a Stellar SDK in the language of your client.
 SDF provides a [JavaScript SDK](https://www.stellar.org/developers/js-stellar-sdk/reference/index.html) for clients to use to interact with Horizon.
 
-SDF runs a instance of Horizon that is connected to the test net: [https://horizon-testnet.stellar.org/](https://horizon-testnet.stellar.org/) and one that is connected to the public Stellar network:
-[https://horizon.stellar.org/](https://horizon.stellar.org/).
+SDF runs a instance of Horizon that is connected to the test net: [https://orbitr-testnet.lantah.network/](https://orbitr-testnet.lantah.network/) and one that is connected to the public Stellar network:
+[https://orbitr.lantah.network/](https://orbitr.lantah.network/).
 
 ## Libraries
 

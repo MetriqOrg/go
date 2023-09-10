@@ -30,14 +30,14 @@ GET /operations{?cursor,limit,order,include_failed}
 ### curl Example Request
 
 ```sh
-curl "https://horizon-testnet.stellar.org/operations?limit=200&order=desc"
+curl "https://orbitr-testnet.lantah.network/operations?limit=200&order=desc"
 ```
 
 ### JavaScript Example Request
 
 ```js
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 server.operations()
   .call()
@@ -59,7 +59,7 @@ server.operations()
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 var operationHandler = function (operationResponse) {
   console.log(operationResponse);

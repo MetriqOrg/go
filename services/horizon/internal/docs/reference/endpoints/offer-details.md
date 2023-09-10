@@ -20,7 +20,7 @@ GET /offers/{offer}
 ### curl Example Request
 
 ```sh
-curl "https://horizon-testnet.stellar.org/offers/1347876"
+curl "https://orbitr-testnet.lantah.network/offers/1347876"
 ```
 
 <!-- ### JavaScript Example Request -->
@@ -35,10 +35,10 @@ This endpoint responds with the details of a single offer for a given ID. See [o
 {
   "_links": {
     "self": {
-      "href": "https://horizon-testnet.stellar.org/offers/1347876"
+      "href": "https://orbitr-testnet.lantah.network/offers/1347876"
     },
     "offer_maker": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C"
     }
   },
   "id": "1347876",

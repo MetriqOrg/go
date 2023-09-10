@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"bufio"
@@ -18,15 +18,15 @@ import (
 
 	"github.com/manucorporat/sse"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
-	"github.com/lantah/go/protocols/horizon/effects"
-	"github.com/lantah/go/protocols/horizon/operations"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/protocols/orbitr/operations"
 	"github.com/lantah/go/support/errors"
 )
 
-// sendRequest builds the URL for the given horizon request and sends the url to a horizon server
-func (c *Client) sendRequest(hr HorizonRequest, resp interface{}) (err error) {
-	req, err := hr.HTTPRequest(c.fixHorizonURL())
+// sendRequest builds the URL for the given orbitr request and sends the url to a orbitr server
+func (c *Client) sendRequest(hr OrbitRRequest, resp interface{}) (err error) {
+	req, err := hr.HTTPRequest(c.fixOrbitRURL())
 	if err != nil {
 		return err
 	}
@@ -79,9 +79,9 @@ func (c *Client) checkMemoRequired(transaction *txnbuild.Transaction) error {
 
 		data, err := c.AccountData(request)
 		if err != nil {
-			horizonError := GetError(err)
+			orbitrError := GetError(err)
 
-			if horizonError == nil || horizonError.Response.StatusCode != 404 {
+			if orbitrError == nil || orbitrError.Response.StatusCode != 404 {
 				return err
 			}
 
@@ -99,8 +99,8 @@ func (c *Client) checkMemoRequired(transaction *txnbuild.Transaction) error {
 	return nil
 }
 
-// sendGetRequest sends a HTTP GET request to a horizon server.
-// It can be used for requests that do not implement the HorizonRequest interface.
+// sendGetRequest sends a HTTP GET request to a orbitr server.
+// It can be used for requests that do not implement the OrbitRRequest interface.
 func (c *Client) sendGetRequest(requestURL string, a interface{}) error {
 	req, err := http.NewRequest("GET", requestURL, nil)
 	if err != nil {
@@ -113,20 +113,20 @@ func (c *Client) sendHTTPRequest(req *http.Request, a interface{}) error {
 	c.setClientAppHeaders(req)
 	c.setDefaultClient()
 
-	if c.horizonTimeout == 0 {
-		c.horizonTimeout = HorizonTimeout
+	if c.orbitrTimeout == 0 {
+		c.orbitrTimeout = OrbitRTimeout
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), c.horizonTimeout)
+	ctx, cancel := context.WithTimeout(context.Background(), c.orbitrTimeout)
 	defer cancel()
 
 	if resp, err := c.HTTP.Do(req.WithContext(ctx)); err != nil {
 		return err
 	} else {
-		return decodeResponse(resp, a, c.HorizonURL, c.clock)
+		return decodeResponse(resp, a, c.OrbitRURL, c.clock)
 	}
 }
 
-// stream handles connections to endpoints that support streaming on a horizon server
+// stream handles connections to endpoints that support streaming on a orbitr server
 func (c *Client) stream(
 	ctx context.Context,
 	streamURL string,
@@ -192,12 +192,12 @@ func (c *Client) stream(
 					if err == io.EOF || err == io.ErrUnexpectedEOF {
 						// We catch EOF errors to handle two possible situations:
 						// - The last line before closing the stream was not empty. This should never
-						//   happen in Horizon as it always sends an empty line after each event.
+						//   happen in OrbitR as it always sends an empty line after each event.
 						// - The stream was closed by the server/proxy because the connection was idle.
 						//
-						// In the former case, that (again) should never happen in Horizon, we need to
+						// In the former case, that (again) should never happen in OrbitR, we need to
 						// check if there are any events we need to decode. We do this in the `if`
-						// statement below just in case if Horizon behavior changes in a future.
+						// statement below just in case if OrbitR behavior changes in a future.
 						//
 						// From spec:
 						// > Once the end of the file is reached, the user agent must dispatch the
@@ -267,27 +267,27 @@ func (c *Client) setDefaultClient() {
 	}
 }
 
-// fixHorizonURL strips all slashes(/) at the end of HorizonURL if any, then adds a single slash
-func (c *Client) fixHorizonURL() string {
-	c.fixHorizonURLOnce.Do(func() {
+// fixOrbitRURL strips all slashes(/) at the end of OrbitRURL if any, then adds a single slash
+func (c *Client) fixOrbitRURL() string {
+	c.fixOrbitRURLOnce.Do(func() {
 		// TODO: we shouldn't happily edit data provided by the user,
 		//       better store it in an internal variable or, even better,
 		//       just parse it every time (what if the url changes during the life of the client?).
-		c.HorizonURL = strings.TrimRight(c.HorizonURL, "/") + "/"
+		c.OrbitRURL = strings.TrimRight(c.OrbitRURL, "/") + "/"
 	})
-	return c.HorizonURL
+	return c.OrbitRURL
 }
 
-// SetHorizonTimeout allows users to set the timeout before a horizon request is canceled.
+// SetOrbitRTimeout allows users to set the timeout before a orbitr request is canceled.
 // The timeout is specified as a time.Duration which is in nanoseconds.
-func (c *Client) SetHorizonTimeout(t time.Duration) *Client {
-	c.horizonTimeout = t
+func (c *Client) SetOrbitRTimeout(t time.Duration) *Client {
+	c.orbitrTimeout = t
 	return c
 }
 
-// HorizonTimeout returns the current timeout for a horizon client
-func (c *Client) HorizonTimeout() time.Duration {
-	return c.horizonTimeout
+// OrbitRTimeout returns the current timeout for a orbitr client
+func (c *Client) OrbitRTimeout() time.Duration {
+	return c.orbitrTimeout
 }
 
 // Accounts returns accounts who have a given signer or
@@ -417,7 +417,7 @@ func (c *Client) OperationDetail(id string) (ops operations.Operation, err error
 
 	err = c.sendRequest(request, &record)
 	if err != nil {
-		return ops, errors.Wrap(err, "sending request to horizon")
+		return ops, errors.Wrap(err, "sending request to orbitr")
 	}
 
 	var baseRecord operations.Base
@@ -436,7 +436,7 @@ func (c *Client) OperationDetail(id string) (ops operations.Operation, err error
 	return ops, nil
 }
 
-// SubmitTransactionXDR submits a transaction represented as a base64 XDR string to the network. err can be either error object or horizon.Error object.
+// SubmitTransactionXDR submits a transaction represented as a base64 XDR string to the network. err can be either error object or orbitr.Error object.
 // See https://developers.stellar.org/api/resources/transactions/post/
 func (c *Client) SubmitTransactionXDR(transactionXdr string) (tx hProtocol.Transaction,
 	err error) {
@@ -446,7 +446,7 @@ func (c *Client) SubmitTransactionXDR(transactionXdr string) (tx hProtocol.Trans
 }
 
 // SubmitFeeBumpTransaction submits a fee bump transaction to the network. err can be either an
-// error object or a horizon.Error object.
+// error object or a orbitr.Error object.
 //
 // This function will always check if the destination account requires a memo in the transaction as
 // defined in SEP0029: https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0029.md
@@ -459,7 +459,7 @@ func (c *Client) SubmitFeeBumpTransaction(transaction *txnbuild.FeeBumpTransacti
 }
 
 // SubmitFeeBumpTransactionWithOptions submits a fee bump transaction to the network, allowing
-// you to pass SubmitTxOpts. err can be either an error object or a horizon.Error object.
+// you to pass SubmitTxOpts. err can be either an error object or a orbitr.Error object.
 //
 // See https://developers.stellar.org/api/resources/transactions/post/
 func (c *Client) SubmitFeeBumpTransactionWithOptions(transaction *txnbuild.FeeBumpTransaction, opts SubmitTxOpts) (tx hProtocol.Transaction, err error) {
@@ -482,7 +482,7 @@ func (c *Client) SubmitFeeBumpTransactionWithOptions(transaction *txnbuild.FeeBu
 }
 
 // SubmitTransaction submits a transaction to the network. err can be either an
-// error object or a horizon.Error object.
+// error object or a orbitr.Error object.
 //
 // This function will always check if the destination account requires a memo in the transaction as
 // defined in SEP0029: https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0029.md
@@ -495,7 +495,7 @@ func (c *Client) SubmitTransaction(transaction *txnbuild.Transaction) (tx hProto
 }
 
 // SubmitTransactionWithOptions submits a transaction to the network, allowing
-// you to pass SubmitTxOpts. err can be either an error object or a horizon.Error object.
+// you to pass SubmitTxOpts. err can be either an error object or a orbitr.Error object.
 //
 // See https://developers.stellar.org/api/resources/transactions/post/
 func (c *Client) SubmitTransactionWithOptions(transaction *txnbuild.Transaction, opts SubmitTxOpts) (tx hProtocol.Transaction, err error) {
@@ -578,10 +578,10 @@ func (c *Client) Trades(request TradeRequest) (tds hProtocol.TradesPage, err err
 // Fund creates a new account funded from friendbot. It only works on test networks. See
 // https://developers.stellar.org/docs/tutorials/create-account/ for more information.
 func (c *Client) Fund(addr string) (tx hProtocol.Transaction, err error) {
-	friendbotURL := fmt.Sprintf("%sfriendbot?addr=%s", c.fixHorizonURL(), addr)
+	friendbotURL := fmt.Sprintf("%sfriendbot?addr=%s", c.fixOrbitRURL(), addr)
 	err = c.sendGetRequest(friendbotURL, &tx)
 	if IsNotFoundError(err) {
-		return tx, errors.Wrap(err, "funding is only available on test networks and may not be supported by "+c.fixHorizonURL())
+		return tx, errors.Wrap(err, "funding is only available on test networks and may not be supported by "+c.fixOrbitRURL())
 	}
 	return
 }
@@ -607,7 +607,7 @@ func (c *Client) StreamTransactions(ctx context.Context, request TransactionRequ
 	return request.StreamTransactions(ctx, c, handler)
 }
 
-// StreamEffects streams horizon effects. It can be used to stream all effects or account specific effects.
+// StreamEffects streams orbitr effects. It can be used to stream all effects or account specific effects.
 // Use context.WithCancel to stop streaming or context.Background() if you want to stream indefinitely.
 // EffectHandler is a user-supplied function that is executed for each streamed transaction received.
 func (c *Client) StreamEffects(ctx context.Context, request EffectRequest, handler EffectHandler) error {
@@ -652,14 +652,14 @@ func (c *Client) StreamOrderBooks(ctx context.Context, request OrderBookRequest,
 	return request.StreamOrderBooks(ctx, c, handler)
 }
 
-// FetchTimebounds provides timebounds for N seconds from now using the server time of the horizon instance.
+// FetchTimebounds provides timebounds for N seconds from now using the server time of the orbitr instance.
 // It defaults to localtime when the server time is not available.
 // Note that this will generate your timebounds when you init the transaction, not when you build or submit
 // the transaction! So give yourself enough time to get the transaction built and signed before submitting.
 func (c *Client) FetchTimebounds(seconds int64) (txnbuild.TimeBounds, error) {
-	serverURL, err := url.Parse(c.HorizonURL)
+	serverURL, err := url.Parse(c.OrbitRURL)
 	if err != nil {
-		return txnbuild.TimeBounds{}, errors.Wrap(err, "unable to parse horizon url")
+		return txnbuild.TimeBounds{}, errors.Wrap(err, "unable to parse orbitr url")
 	}
 	currentTime := currentServerTime(serverURL.Hostname(), c.clock.Now().UTC().Unix())
 	if currentTime != 0 {
@@ -671,9 +671,9 @@ func (c *Client) FetchTimebounds(seconds int64) (txnbuild.TimeBounds, error) {
 	return txnbuild.NewTimeout(seconds), nil
 }
 
-// Root loads the root endpoint of horizon
+// Root loads the root endpoint of orbitr
 func (c *Client) Root() (root hProtocol.Root, err error) {
-	err = c.sendGetRequest(c.fixHorizonURL(), &root)
+	err = c.sendGetRequest(c.fixOrbitRURL(), &root)
 	return
 }
 
@@ -844,5 +844,5 @@ func (c *Client) PrevLiquidityPoolsPage(page hProtocol.LiquidityPoolsPage) (lp h
 	return
 }
 
-// ensure that the horizon client implements ClientInterface
+// ensure that the orbitr client implements ClientInterface
 var _ ClientInterface = &Client{}

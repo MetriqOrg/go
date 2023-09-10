@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"testing"
@@ -11,7 +11,7 @@ func TestFund(t *testing.T) {
 	friendbotFundResponse := `{
   "_links": {
     "transaction": {
-      "href": "https://horizon-testnet.stellar.org/transactions/94e42f65d3ff5f30669b6109c2ce3e82c0e592c52004e3b41bb30e24df33954e"
+      "href": "https://orbitr-testnet.lantah.org/transactions/94e42f65d3ff5f30669b6109c2ce3e82c0e592c52004e3b41bb30e24df33954e"
     }
   },
   "hash": "94e42f65d3ff5f30669b6109c2ce3e82c0e592c52004e3b41bb30e24df33954e",
@@ -23,7 +23,7 @@ func TestFund(t *testing.T) {
 
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -39,7 +39,7 @@ func TestFund(t *testing.T) {
 
 func TestFund_notSupported(t *testing.T) {
 	friendbotFundResponse := `{
-  "type": "https://stellar.org/horizon-errors/not_found",
+  "type": "https://stellar.org/orbitr-errors/not_found",
   "title": "Resource Missing",
   "status": 404,
   "detail": "The resource at the url requested was not found.  This usually occurs for one of two reasons:  The url requested is not valid, or no data in our database could be found with the parameters provided."
@@ -47,7 +47,7 @@ func TestFund_notSupported(t *testing.T) {
 
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -57,5 +57,5 @@ func TestFund_notSupported(t *testing.T) {
 	).ReturnString(404, friendbotFundResponse)
 
 	_, err := client.Fund("GBLPP2W3X3PJQXYMC7EFWM5G2QCZL7HTCTFNMONS4ITGAYJ3GNNZIQ4V")
-	assert.EqualError(t, err, "funding is only available on test networks and may not be supported by https://localhost/: horizon error: \"Resource Missing\" - check horizon.Error.Problem for more information")
+	assert.EqualError(t, err, "funding is only available on test networks and may not be supported by https://localhost/: orbitr error: \"Resource Missing\" - check orbitr.Error.Problem for more information")
 }

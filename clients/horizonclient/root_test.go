@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"testing"
@@ -10,7 +10,7 @@ import (
 func TestRoot(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -22,9 +22,9 @@ func TestRoot(t *testing.T) {
 
 	root, err := client.Root()
 	if assert.NoError(t, err) {
-		assert.Equal(t, root.HorizonVersion, "0.17.6-unstable-bc999a67d0b2413d8abd76153a56733c7d517484")
+		assert.Equal(t, root.OrbitRVersion, "0.17.6-unstable-bc999a67d0b2413d8abd76153a56733c7d517484")
 		assert.Equal(t, root.GramrVersion, "gramr 11.0.0 (236f831521b6724c0ae63906416faa997ef27e19)")
-		assert.Equal(t, root.HorizonSequence, int32(84959))
+		assert.Equal(t, root.OrbitRSequence, int32(84959))
 		assert.Equal(t, root.NetworkPassphrase, "Test SDF Network ; September 2015")
 	}
 
@@ -36,10 +36,10 @@ func TestRoot(t *testing.T) {
 
 	_, err = client.Root()
 	if assert.Error(t, err) {
-		assert.Contains(t, err.Error(), "horizon error")
-		horizonError, ok := err.(*Error)
+		assert.Contains(t, err.Error(), "orbitr error")
+		orbitrError, ok := err.(*Error)
 		assert.Equal(t, ok, true)
-		assert.Equal(t, horizonError.Problem.Title, "Resource Missing")
+		assert.Equal(t, orbitrError.Problem.Title, "Resource Missing")
 	}
 
 	// connection error
@@ -59,15 +59,15 @@ func TestRoot(t *testing.T) {
 var rootResponse = `{
   "_links": {
     "account": {
-      "href": "https://horizon-testnet.stellar.org/accounts/{account_id}",
+      "href": "https://orbitr-testnet.lantah.network/accounts/{account_id}",
       "templated": true
     },
     "account_transactions": {
-      "href": "https://horizon-testnet.stellar.org/accounts/{account_id}/transactions{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.lantah.network/accounts/{account_id}/transactions{?cursor,limit,order}",
       "templated": true
     },
     "assets": {
-      "href": "https://horizon-testnet.stellar.org/assets{?asset_code,asset_issuer,cursor,limit,order}",
+      "href": "https://orbitr-testnet.lantah.network/assets{?asset_code,asset_issuer,cursor,limit,order}",
       "templated": true
     },
     "friendbot": {
@@ -75,25 +75,25 @@ var rootResponse = `{
       "templated": true
     },
     "metrics": {
-      "href": "https://horizon-testnet.stellar.org/metrics"
+      "href": "https://orbitr-testnet.lantah.network/metrics"
     },
     "order_book": {
-      "href": "https://horizon-testnet.stellar.org/order_book{?selling_asset_type,selling_asset_code,selling_asset_issuer,buying_asset_type,buying_asset_code,buying_asset_issuer,limit}",
+      "href": "https://orbitr-testnet.lantah.network/order_book{?selling_asset_type,selling_asset_code,selling_asset_issuer,buying_asset_type,buying_asset_code,buying_asset_issuer,limit}",
       "templated": true
     },
     "self": {
-      "href": "https://horizon-testnet.stellar.org/"
+      "href": "https://orbitr-testnet.lantah.network/"
     },
     "transaction": {
-      "href": "https://horizon-testnet.stellar.org/transactions/{hash}",
+      "href": "https://orbitr-testnet.lantah.network/transactions/{hash}",
       "templated": true
     },
     "transactions": {
-      "href": "https://horizon-testnet.stellar.org/transactions{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.lantah.network/transactions{?cursor,limit,order}",
       "templated": true
     }
   },
-  "horizon_version": "0.17.6-unstable-bc999a67d0b2413d8abd76153a56733c7d517484",
+  "orbitr_version": "0.17.6-unstable-bc999a67d0b2413d8abd76153a56733c7d517484",
   "core_version": "gramr 11.0.0 (236f831521b6724c0ae63906416faa997ef27e19)",
   "history_latest_ledger": 84959,
   "history_elder_ledger": 1,

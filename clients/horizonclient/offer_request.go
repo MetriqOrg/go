@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/errors"
 )
 
@@ -52,13 +52,13 @@ func (or OfferRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the offers endpoint
-func (or OfferRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (or OfferRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := or.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }
 
 // OfferHandler is a function that is called when a new offer is received
@@ -73,7 +73,7 @@ func (or OfferRequest) StreamOffers(ctx context.Context, client *Client, handler
 		return errors.Wrap(err, "unable to build endpoint for offers request")
 	}
 
-	url := fmt.Sprintf("%s%s", client.fixHorizonURL(), endpoint)
+	url := fmt.Sprintf("%s%s", client.fixOrbitRURL(), endpoint)
 
 	return client.stream(ctx, url, func(data []byte) error {
 		var offer hProtocol.Offer

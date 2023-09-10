@@ -28,8 +28,8 @@ ticker:
 friendbot:
 	$(MAKE) -C services/friendbot/ docker-build
 
-horizon:
-	$(MAKE) -C services/horizon/ binary-build
+orbitr:
+	$(MAKE) -C services/orbitr/ binary-build
 
 webauth:
 	$(MAKE) -C exp/services/webauth/ docker-build

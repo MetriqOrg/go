@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	hc "github.com/lantah/go/clients/horizonclient"
+	hc "github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/clients/stellartoml"
 	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
@@ -123,10 +123,10 @@ func TestLookupByAddress(t *testing.T) {
 }
 
 func TestLookupByID(t *testing.T) {
-	horizonMock := &hc.MockClient{}
-	client := &Client{Horizon: horizonMock}
+	orbitrMock := &hc.MockClient{}
+	client := &Client{OrbitR: orbitrMock}
 
-	horizonMock.On("HomeDomainForAccount", "GASTNVNLHVR3NFO3QACMHCJT3JUSIV4NBXDHDO4VTPDTNN65W3B2766C").
+	orbitrMock.On("HomeDomainForAccount", "GASTNVNLHVR3NFO3QACMHCJT3JUSIV4NBXDHDO4VTPDTNN65W3B2766C").
 		Return("", errors.New("homedomain not set"))
 
 	// an account without a homedomain set fails

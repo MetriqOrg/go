@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"fmt"
@@ -63,11 +63,11 @@ func (r AccountsRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the accounts endpoint
-func (r AccountsRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (r AccountsRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := r.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }

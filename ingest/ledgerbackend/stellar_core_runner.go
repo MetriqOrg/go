@@ -110,7 +110,7 @@ func newGramrRunner(config CaptiveCoreConfig) *gramrRunner {
 func (r *gramrRunner) getFullStoragePath() string {
 	if runtime.GOOS == "windows" || r.mode == gramrRunnerModeOffline {
 		// On Windows, first we ALWAYS append something to the base storage path,
-		// because we will delete the directory entirely when Horizon stops. We also
+		// because we will delete the directory entirely when OrbitR stops. We also
 		// add a random suffix in order to ensure that there aren't naming
 		// conflicts.
 		// This is done because it's impossible to send SIGINT on Windows so
@@ -300,7 +300,7 @@ func (r *gramrRunner) catchup(from, to uint32) error {
 	rangeArg := fmt.Sprintf("%d/%d", to, to-from+1)
 	params := []string{"catchup", rangeArg, "--metadata-output-stream", r.getPipeName()}
 
-	// horizon operator has specified to use external storage for captive core ledger state
+	// orbitr operator has specified to use external storage for captive core ledger state
 	// instruct captive core invocation to not use memory, and in that case
 	// cc will look at DATABASE property in cfg toml for the external storage source to use.
 	// when using external storage of ledgers, use new-db to first set the state of

@@ -1,7 +1,7 @@
 # Ingestion Library
 The `ingest` package provides primitives for building custom ingestion engines.
 
-Very often, developers need features that are outside of Horizon's scope. While it provides APIs for building the most common applications, it's not possible to add all possible features. That's why this package was created.
+Very often, developers need features that are outside of OrbitR's scope. While it provides APIs for building the most common applications, it's not possible to add all possible features. That's why this package was created.
 
 
 
@@ -77,7 +77,7 @@ func main() {
 
 _(The `panicIf` function is defined in the [footnotes](#footnotes); it's used here for error-checking brevity.)_
 
-Notice that the mysterious `config` variable above isn't defined. This will be environment-specific and users should consult both the [Captive Core documentation](../../services/horizon/internal/docs/captive_core.md) and the [config docs](./ledgerbackend/captive_core_backend.go#L96-L125) directly for more details if they want to use this backend in production. For now, though, we'll have some hardcoded values for the SDF testnet:
+Notice that the mysterious `config` variable above isn't defined. This will be environment-specific and users should consult both the [Captive Core documentation](../../services/orbitr/internal/docs/captive_core.md) and the [config docs](./ledgerbackend/captive_core_backend.go#L96-L125) directly for more details if they want to use this backend in production. For now, though, we'll have some hardcoded values for the SDF testnet:
 
 ```go
 networkPassphrase := "Test SDF Network ; September 2015"
@@ -157,7 +157,7 @@ There's obviously much, *much* more we can do with the ingestion library. Let's 
 # **Example**: Ledger Statistics
 In this section, we'll demonstrate how to combine a backend with a reader to actually learn something meaningful about the Stellar network. Again, we'll use a specific backend here (Captive Core, again), but the processing can be done with any of them.
 
-More specifically, we're going to analyze the ledgers and track some statistics about the success/failure of transactions and their relative operations using `LedgerTransactionReader`. While this is technically doable by manipulating the Horizon API and some fancy JSON parsing, it serves as a useful yet concise demonstration of the ingestion library's features.
+More specifically, we're going to analyze the ledgers and track some statistics about the success/failure of transactions and their relative operations using `LedgerTransactionReader`. While this is technically doable by manipulating the OrbitR API and some fancy JSON parsing, it serves as a useful yet concise demonstration of the ingestion library's features.
 
 
 ## Preamble
@@ -315,7 +315,7 @@ Now we can use the history archive to actually read in all of the changes that h
 	panicIf(err)
 ```
 
-In our examples, we refer to the testnet, whose archives are much smaller. When using the pubnet, a 30 *minute* timeout may be more appropriate (depending on system specs): Horizon takes around 15-20 minutes to process pubnet history archives.
+In our examples, we refer to the testnet, whose archives are much smaller. When using the pubnet, a 30 *minute* timeout may be more appropriate (depending on system specs): OrbitR takes around 15-20 minutes to process pubnet history archives.
 
 By default, checkpoints occur every 64 ledgers (see `historyarchive.ConnectOptions` for changing this). More specifically, given ledger `n`, if `n+1 mod 64 == 0`, then `n` is a checkpoint ledger. Alternatively, this is when `n*64 - 1` for `n = 1, 2, 3, ...` and so on. This is true above for `n == 123455`.
 

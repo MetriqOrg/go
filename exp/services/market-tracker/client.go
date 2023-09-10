@@ -4,12 +4,12 @@ import (
 	"math"
 	"time"
 
-	hClient "github.com/lantah/go/clients/horizonclient"
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hClient "github.com/lantah/go/clients/orbitrclient"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 )
 
 type trackerClient struct {
-	horizon *hClient.Client
+	orbitr *hClient.Client
 }
 
 func (tc *trackerClient) computeSpreadForTradePair(tp TradePair) (spread float64, err error) {
@@ -34,7 +34,7 @@ func (tc *trackerClient) getOrderBookForTradePair(tp TradePair) (obStats hProtoc
 		BuyingAssetIssuer:  tp.BuyingAsset.IssuerAddress,
 		Limit:              200,
 	}
-	obStats, err = tc.horizon.OrderBook(req)
+	obStats, err = tc.orbitr.OrderBook(req)
 	return
 }
 
@@ -54,19 +54,19 @@ func (tc *trackerClient) getAggTradesForTradePair(tp TradePair, start, end time.
 		Limit:              maxLimit,
 	}
 
-	tap, err := tc.horizon.TradeAggregations(req)
+	tap, err := tc.orbitr.TradeAggregations(req)
 	if err != nil {
 		return
 	}
 	taps = append(taps, tap)
 
 	// iterate through the remaining trade aggregations as needed, until error
-	// TODO: Check error for Horizon rate limiting, before adding volume metrics.
+	// TODO: Check error for OrbitR rate limiting, before adding volume metrics.
 	counter := 1
 	numRes := float64(end.Sub(start) / res)
 	numRequests := int(math.Ceil(numRes / maxLimit))
 	for counter < numRequests {
-		tap, err = tc.horizon.NextTradeAggregationsPage(tap)
+		tap, err = tc.orbitr.NextTradeAggregationsPage(tap)
 		if err != nil {
 			return
 		}

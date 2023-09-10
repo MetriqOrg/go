@@ -19,11 +19,11 @@ change is, and why it is being made, with enough context for anyone to understan
 * [ ] This PR adds tests for the most critical parts of the new functionality or fixes.
 * [ ] I've updated any docs ([developer docs](https://developers.stellar.org/api/), `.md`
   files, etc... affected by this change). Take a look in the `docs` folder for a given service,
-  like [this one](https://github.com/lantah/go/tree/master/services/horizon/internal/docs).
+  like [this one](https://github.com/lantah/go/tree/master/services/orbitr/internal/docs).
 
 ### Release planning
 
-* [ ] I've updated the relevant CHANGELOG ([here](services/horizon/CHANGELOG.md) for Horizon) if
+* [ ] I've updated the relevant CHANGELOG ([here](services/orbitr/CHANGELOG.md) for OrbitR) if
   needed with deprecations, added features, breaking changes, and DB schema changes.
 * [ ] I've decided if this PR requires a new major/minor version according to
   [semver](https://semver.org/), or if it's mainly a patch change. The PR is targeted at the next

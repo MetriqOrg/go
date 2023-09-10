@@ -9,13 +9,13 @@ func TestNormalizeResponseBody(t *testing.T) {
 	resp := `{
 	"_links": {
 	  "self": {
-		"href": "https://horizon-testnet.stellar.org/transactions?cursor=\u0026limit=1\u0026order=desc"
+		"href": "https://orbitr-testnet.lantah.network/transactions?cursor=\u0026limit=1\u0026order=desc"
 	  },
 	  "next": {
-		"href": "https://horizon-testnet.stellar.org/transactions?cursor=2892102128111616\u0026limit=1\u0026order=desc"
+		"href": "https://orbitr-testnet.lantah.network/transactions?cursor=2892102128111616\u0026limit=1\u0026order=desc"
 	  },
 	  "prev": {
-		"href": "https://horizon-testnet.stellar.org/transactions?cursor=2892102128111616\u0026limit=1\u0026order=asc"
+		"href": "https://orbitr-testnet.lantah.network/transactions?cursor=2892102128111616\u0026limit=1\u0026order=asc"
 	  }
 	},
 	"_embedded": {
@@ -23,30 +23,30 @@ func TestNormalizeResponseBody(t *testing.T) {
 		{
 		  "_links": {
 			"self": {
-			  "href": "https://horizon-testnet.stellar.org/transactions/cfc6395b98ed0c5ad63bd808e6b5ec994c3ccc67814945d3c652659b5077da18"
+			  "href": "https://orbitr-testnet.lantah.network/transactions/cfc6395b98ed0c5ad63bd808e6b5ec994c3ccc67814945d3c652659b5077da18"
 			},
 			"account": {
-			  "href": "https://horizon-testnet.stellar.org/accounts/GBW7BTQDKVMB62NXB3Z55NZCENRBD4O4OE7YBKBOG4K4DM4QK76L2DJD"
+			  "href": "https://orbitr-testnet.lantah.network/accounts/GBW7BTQDKVMB62NXB3Z55NZCENRBD4O4OE7YBKBOG4K4DM4QK76L2DJD"
 			},
 			"ledger": {
-			  "href": "https://horizon-testnet.stellar.org/ledgers/673370"
+			  "href": "https://orbitr-testnet.lantah.network/ledgers/673370"
 			},
 			"operations": {
-			  "href": "https://horizon-testnet.stellar.org/transactions/cfc6395b98ed0c5ad63bd808e6b5ec994c3ccc67814945d3c652659b5077da18/operations{?cursor,limit,order}",
+			  "href": "https://orbitr-testnet.lantah.network/transactions/cfc6395b98ed0c5ad63bd808e6b5ec994c3ccc67814945d3c652659b5077da18/operations{?cursor,limit,order}",
 			  "templated": true
 			},
 			"effects": {
-			  "href": "https://horizon-testnet.stellar.org/transactions/cfc6395b98ed0c5ad63bd808e6b5ec994c3ccc67814945d3c652659b5077da18/effects{?cursor,limit,order}",
+			  "href": "https://orbitr-testnet.lantah.network/transactions/cfc6395b98ed0c5ad63bd808e6b5ec994c3ccc67814945d3c652659b5077da18/effects{?cursor,limit,order}",
 			  "templated": true
 			},
 			"precedes": {
-			  "href": "https://horizon-testnet.stellar.org/transactions?order=asc\u0026cursor=2892102128111616"
+			  "href": "https://orbitr-testnet.lantah.network/transactions?order=asc\u0026cursor=2892102128111616"
 			},
 			"succeeds": {
-			  "href": "https://horizon-testnet.stellar.org/transactions?order=desc\u0026cursor=2892102128111616"
+			  "href": "https://orbitr-testnet.lantah.network/transactions?order=desc\u0026cursor=2892102128111616"
 			},
 			"transaction": {
-			  "href": "https://horizon-testnet.stellar.org/transactions/cfc6395b98ed0c5ad63bd808e6b5ec994c3ccc67814945d3c652659b5077da18"
+			  "href": "https://orbitr-testnet.lantah.network/transactions/cfc6395b98ed0c5ad63bd808e6b5ec994c3ccc67814945d3c652659b5077da18"
 			}
 		  },
 		  "id": "cfc6395b98ed0c5ad63bd808e6b5ec994c3ccc67814945d3c652659b5077da18",

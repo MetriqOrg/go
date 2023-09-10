@@ -69,7 +69,7 @@ Usage:
 Flags:
       --asset-code string              The code of the regulated asset (ASSET_CODE)
       --base-url string                The base url to the server where the asset home domain should be. For instance, "https://test.example.com/" if your desired asset home domain is "test.example.com". (BASE_URL)
-      --horizon-url string             Horizon URL used for looking up account details (HORIZON_URL) (default "https://horizon-testnet.stellar.org/")
+      --horizon-url string             Horizon URL used for looking up account details (HORIZON_URL) (default "https://orbitr-testnet.lantah.network/")
       --issuer-account-secret string   Secret key of the issuer account. (ISSUER_ACCOUNT_SECRET)
       --network-passphrase string      Network passphrase of the Stellar network transactions should be signed for (NETWORK_PASSPHRASE) (default "Test SDF Network ; September 2015")
 ```
@@ -114,7 +114,7 @@ Flags:
       --base-url string                                The base url address to this server (BASE_URL)
       --database-url string                            Database URL (DATABASE_URL) (default "postgres://localhost:5432/?sslmode=disable")
       --friendbot-payment-amount int                   The amount of regulated assets the friendbot will be distributing (FRIENDBOT_PAYMENT_AMOUNT) (default 10000)
-      --horizon-url string                             Horizon URL used for looking up account details (HORIZON_URL) (default "https://horizon-testnet.stellar.org/")
+      --horizon-url string                             Horizon URL used for looking up account details (HORIZON_URL) (default "https://orbitr-testnet.lantah.network/")
       --issuer-account-secret string                   Secret key of the issuer account. (ISSUER_ACCOUNT_SECRET)
       --kyc-required-payment-amount-threshold string   The amount threshold when KYC is required, may contain decimals and is greater than 0 (KYC_REQUIRED_PAYMENT_AMOUNT_THRESHOLD) (default "500")
       --network-passphrase string                      Network passphrase of the Stellar network transactions should be signed for (NETWORK_PASSPHRASE) (default "Test SDF Network ; September 2015")

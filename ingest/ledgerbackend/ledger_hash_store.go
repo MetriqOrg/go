@@ -18,18 +18,18 @@ type TrustedLedgerHashStore interface {
 	Close() error
 }
 
-// HorizonDBLedgerHashStore is a TrustedLedgerHashStore which uses horizon's db to look up ledger hashes
-type HorizonDBLedgerHashStore struct {
+// OrbitRDBLedgerHashStore is a TrustedLedgerHashStore which uses orbitr's db to look up ledger hashes
+type OrbitRDBLedgerHashStore struct {
 	session db.SessionInterface
 }
 
-// NewHorizonDBLedgerHashStore constructs a new TrustedLedgerHashStore backed by the horizon db
-func NewHorizonDBLedgerHashStore(session db.SessionInterface) TrustedLedgerHashStore {
-	return HorizonDBLedgerHashStore{session: session}
+// NewOrbitRDBLedgerHashStore constructs a new TrustedLedgerHashStore backed by the orbitr db
+func NewOrbitRDBLedgerHashStore(session db.SessionInterface) TrustedLedgerHashStore {
+	return OrbitRDBLedgerHashStore{session: session}
 }
 
 // GetLedgerHash returns the ledger hash for the given sequence number
-func (h HorizonDBLedgerHashStore) GetLedgerHash(ctx context.Context, seq uint32) (string, bool, error) {
+func (h OrbitRDBLedgerHashStore) GetLedgerHash(ctx context.Context, seq uint32) (string, bool, error) {
 	sql := sq.Select("hl.ledger_hash").From("history_ledgers hl").
 		Limit(1).Where("sequence = ?", seq)
 
@@ -41,7 +41,7 @@ func (h HorizonDBLedgerHashStore) GetLedgerHash(ctx context.Context, seq uint32)
 	return hash, true, err
 }
 
-func (h HorizonDBLedgerHashStore) Close() error {
+func (h OrbitRDBLedgerHashStore) Close() error {
 	return h.session.Close()
 }
 

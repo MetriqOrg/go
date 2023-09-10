@@ -28,14 +28,14 @@ GET /assets{?asset_code,asset_issuer,cursor,limit,order}
 
 ```sh
 # Retrieve the 200 assets, ordered alphabetically:
-curl "https://horizon-testnet.stellar.org/assets?limit=200"
+curl "https://orbitr-testnet.lantah.network/assets?limit=200"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 server.assets()
   .call()

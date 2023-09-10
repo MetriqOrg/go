@@ -47,7 +47,7 @@ In addition, the following additional data is provided in the `extras` field of 
 ### No Source Account
 ```json
 {
-  "type": "https://stellar.org/horizon-errors/transaction_failed",
+  "type": "https://lantah.network/orbitr-errors/transaction_failed",
   "title": "Transaction Failed",
   "status": 400,
   "detail": "The transaction failed when submitted to the stellar network. The `extras.result_codes` field on this response contains further details.  Descriptions of each code can be found at: https://www.stellar.org/developers/learn/concepts/list-of-operations.html",
@@ -64,7 +64,7 @@ In addition, the following additional data is provided in the `extras` field of 
 ### Bad Authentication
 ```json
 {
-  "type": "https://stellar.org/horizon-errors/transaction_failed",
+  "type": "https://lantah.network/orbitr-errors/transaction_failed",
   "title": "Transaction Failed",
   "status": 400,
   "detail": "The transaction failed when submitted to the stellar network. The `extras.result_codes` field on this response contains further details.  Descriptions of each code can be found at: https://www.stellar.org/developers/learn/concepts/list-of-operations.html",

@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"encoding/json"
@@ -12,8 +12,8 @@ import (
 	"github.com/lantah/go/support/errors"
 )
 
-// decodeResponse decodes the response from a request to a horizon server
-func decodeResponse(resp *http.Response, object interface{}, horizonUrl string, clock *clock.Clock) (err error) {
+// decodeResponse decodes the response from a request to a orbitr server
+func decodeResponse(resp *http.Response, object interface{}, orbitrUrl string, clock *clock.Clock) (err error) {
 	defer resp.Body.Close()
 	if object == nil {
 		// Nothing to decode
@@ -21,21 +21,21 @@ func decodeResponse(resp *http.Response, object interface{}, horizonUrl string, 
 	}
 	decoder := json.NewDecoder(resp.Body)
 
-	u, err := url.Parse(horizonUrl)
+	u, err := url.Parse(orbitrUrl)
 	if err != nil {
-		return errors.Errorf("unable to parse the provided horizon url: %s", horizonUrl)
+		return errors.Errorf("unable to parse the provided orbitr url: %s", orbitrUrl)
 	}
 	setCurrentServerTime(u.Hostname(), resp.Header["Date"], clock)
 
 	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
-		horizonError := &Error{
+		orbitrError := &Error{
 			Response: resp,
 		}
-		decodeError := decoder.Decode(&horizonError.Problem)
+		decodeError := decoder.Decode(&orbitrError.Problem)
 		if decodeError != nil {
-			return errors.Wrap(decodeError, "error decoding horizon.Problem")
+			return errors.Wrap(decodeError, "error decoding orbitr.Problem")
 		}
-		return horizonError
+		return orbitrError
 	}
 	err = decoder.Decode(&object)
 	if err != nil {
@@ -123,7 +123,7 @@ func addQueryParams(params ...interface{}) string {
 	return query.Encode()
 }
 
-// setCurrentServerTime saves the current time returned by a horizon server
+// setCurrentServerTime saves the current time returned by a orbitr server
 func setCurrentServerTime(host string, serverDate []string, clock *clock.Clock) {
 	if len(serverDate) == 0 {
 		return
@@ -137,7 +137,7 @@ func setCurrentServerTime(host string, serverDate []string, clock *clock.Clock) 
 	serverTimeMapMutex.Unlock()
 }
 
-// currentServerTime returns the current server time for a given horizon server
+// currentServerTime returns the current server time for a given orbitr server
 func currentServerTime(host string, currentTimeUTC int64) int64 {
 	serverTimeMapMutex.Lock()
 	st, has := ServerTimeMap[host]

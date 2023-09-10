@@ -1,28 +1,27 @@
-# horizonclient
+# orbitrclient
 
 
-`horizonclient` is a [Stellar Go SDK](https://developers.stellar.org/api/) package that provides client access to a horizon server. It supports all endpoints exposed by the [horizon API](https://developers.stellar.org/api/introduction/).
+`orbitrclient` is a Lantah Go SDK package that provides client access to a OrbitR server. It supports all endpoints exposed by the OrbitR API.
 
-This project is maintained by the Stellar Development Foundation.
 
 ## Getting Started
-This library is aimed at developers building Go applications that interact with the [Stellar network](https://www.stellar.org/). It allows users to query the network and submit transactions to the network. The recommended transaction builder for Go programmers is [txnbuild](https://github.com/lantah/go/tree/master/txnbuild). Together, these two libraries provide a complete Stellar SDK.
+This library is aimed at developers building Go applications that interact with the [Lantah network](https://www.lantah.org/). It allows users to query the network and submit transactions to the network. The recommended transaction builder for Go programmers is [txnbuild](https://github.com/lantah/go/tree/master/txnbuild). Together, these two libraries provide a complete Stellar SDK.
 
-* The [horizonclient API reference](https://godoc.org/github.com/lantah/go/clients/horizonclient).
-* The [txnbuild API reference](https://godoc.org/github.com/lantah/go/txnbuild).
+* The [orbitrclient API reference](https://godoc.org/github.com/stellar/go/clients/orbitrclient).
+* The [txnbuild API reference](https://godoc.org/github.com/stellar/go/txnbuild).
 
 ### Prerequisites
 * Go (this repository is officially supported on the last two releases of Go)
 * [Modules](https://github.com/golang/go/wiki/Modules) to manage dependencies
 
 ### Installing
-* `go get github.com/lantah/go/clients/horizonclient`
+* `go get github.com/lantah/go/clients/orbitrclient`
 
 ### Usage
 
 ``` golang
     ...
-    import hClient "github.com/lantah/go/clients/horizonclient"
+    import hClient "github.com/lantah/go/clients/orbitrclient"
     ...
 
     // Use the default pubnet client
@@ -40,14 +39,12 @@ This library is aimed at developers building Go applications that interact with 
     // Account contains information about the stellar account
     fmt.Print(account)
 ```
-For more examples, refer to the [documentation](https://godoc.org/github.com/lantah/go/clients/horizonclient).
+For more examples, please refer to the original stellar [documentation](https://godoc.org/github.com/stellar/go/clients/orbitrclient).
 
 ## Running the tests
 Run the unit tests from the package directory: `go test`
 
 ## Contributing
-Please read [Code of Conduct](https://github.com/stellar/.github/blob/master/CODE_OF_CONDUCT.md) to understand this project's communication rules.
-
 To submit improvements and fixes to this library, please see [CONTRIBUTING](../CONTRIBUTING.md).
 
 ## License

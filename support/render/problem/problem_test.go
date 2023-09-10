@@ -112,8 +112,8 @@ func TestProblemInflate(t *testing.T) {
 		want string
 	}{
 		"renders the type correctly",
-		P{Type: "https://stellar.org/horizon-errors/not_found", Status: 404},
-		"https://stellar.org/horizon-errors/not_found",
+		P{Type: "https://lantah.network/orbitr-errors/not_found", Status: 404},
+		"https://lantah.network/orbitr-errors/not_found",
 	}
 
 	t.Run(testCase.name, func(t *testing.T) {

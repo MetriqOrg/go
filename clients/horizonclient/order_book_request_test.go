@@ -1,10 +1,10 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -15,7 +15,7 @@ func TestOrderBookRequestBuildUrl(t *testing.T) {
 	endpoint, err := obr.BuildURL()
 
 	// It should return no errors and orderbook endpoint
-	// Horizon will return an error though because there are no parameters
+	// OrbitR will return an error though because there are no parameters
 	require.NoError(t, err)
 	assert.Equal(t, "order_book", endpoint)
 
@@ -37,7 +37,7 @@ func TestOrderBookRequestBuildUrl(t *testing.T) {
 func TestOrderBookRequestStreamOrderBooks(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 	orderbookRequest := OrderBookRequest{SellingAssetType: AssetTypeNative, BuyingAssetType: AssetType4, BuyingAssetCode: "ABC", BuyingAssetIssuer: "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU"}

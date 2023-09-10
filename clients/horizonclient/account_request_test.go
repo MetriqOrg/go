@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"testing"

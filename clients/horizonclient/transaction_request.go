@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/errors"
 )
 
@@ -52,13 +52,13 @@ func (tr TransactionRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the transactions endpoint
-func (tr TransactionRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (tr TransactionRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := tr.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }
 
 // TransactionHandler is a function that is called when a new transaction is received
@@ -73,7 +73,7 @@ func (tr TransactionRequest) StreamTransactions(ctx context.Context, client *Cli
 		return errors.Wrap(err, "unable to build endpoint")
 	}
 
-	url := fmt.Sprintf("%s%s", client.fixHorizonURL(), endpoint)
+	url := fmt.Sprintf("%s%s", client.fixOrbitRURL(), endpoint)
 
 	return client.stream(ctx, url, func(data []byte) error {
 		var transaction hProtocol.Transaction

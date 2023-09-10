@@ -23,7 +23,7 @@ import (
 func TestGramrMalformedTx(t *testing.T) {
 	handler := SubmitTransactionHandler{}
 
-	r := httptest.NewRequest("POST", "https://horizon.stellar.org/transactions", nil)
+	r := httptest.NewRequest("POST", "https://orbitr.lantah.network/transactions", nil)
 	w := httptest.NewRecorder()
 	_, err := handler.GetResource(w, r)
 	assert.Error(t, err)
@@ -65,7 +65,7 @@ func TestGramrNotSynced(t *testing.T) {
 
 	request, err := http.NewRequest(
 		"POST",
-		"https://horizon.stellar.org/transactions",
+		"https://orbitr.lantah.network/transactions",
 		strings.NewReader(form.Encode()),
 	)
 	require.NoError(t, err)
@@ -101,7 +101,7 @@ func TestTimeoutSubmission(t *testing.T) {
 
 	request, err := http.NewRequest(
 		"POST",
-		"https://horizon.stellar.org/transactions",
+		"https://orbitr.lantah.network/transactions",
 		strings.NewReader(form.Encode()),
 	)
 
@@ -139,7 +139,7 @@ func TestClientDisconnectSubmission(t *testing.T) {
 
 	request, err := http.NewRequest(
 		"POST",
-		"https://horizon.stellar.org/transactions",
+		"https://orbitr.lantah.network/transactions",
 		strings.NewReader(form.Encode()),
 	)
 
@@ -185,7 +185,7 @@ func TestDisableTxSubFlagSubmission(t *testing.T) {
 
 	request, err := http.NewRequest(
 		"POST",
-		"https://horizon.stellar.org/transactions",
+		"https://orbitr.lantah.network/transactions",
 		strings.NewReader(form.Encode()),
 	)
 

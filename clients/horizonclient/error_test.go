@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"testing"
@@ -23,7 +23,7 @@ func TestError_Error(t *testing.T) {
 			},
 		},
 	}
-	assert.Equal(t, `horizon error: "Transaction Failed" (tx_failed, op_underfunded, op_already_exists) - check horizon.Error.Problem for more information`, herr.Error())
+	assert.Equal(t, `orbitr error: "Transaction Failed" (tx_failed, op_underfunded, op_already_exists) - check orbitr.Error.Problem for more information`, herr.Error())
 
 	// transaction failed sad path: missing result_codes extra
 	herr = Error{
@@ -33,7 +33,7 @@ func TestError_Error(t *testing.T) {
 			Extras: map[string]interface{}{},
 		},
 	}
-	assert.Equal(t, `horizon error: "Transaction Failed" - check horizon.Error.Problem for more information`, herr.Error())
+	assert.Equal(t, `orbitr error: "Transaction Failed" - check orbitr.Error.Problem for more information`, herr.Error())
 
 	// transaction failed sad path: unparseable result_codes extra
 	herr = Error{
@@ -45,17 +45,17 @@ func TestError_Error(t *testing.T) {
 			},
 		},
 	}
-	assert.Equal(t, `horizon error: "Transaction Failed" - check horizon.Error.Problem for more information`, herr.Error())
+	assert.Equal(t, `orbitr error: "Transaction Failed" - check orbitr.Error.Problem for more information`, herr.Error())
 
 	// non-transaction errors
 	herr = Error{
 		Problem: problem.P{
-			Type:   "https://stellar.org/horizon-errors/not_found",
+			Type:   "https://lantah.network/orbitr-errors/not_found",
 			Title:  "Resource Missing",
 			Status: 404,
 		},
 	}
-	assert.Equal(t, `horizon error: "Resource Missing" - check horizon.Error.Problem for more information`, herr.Error())
+	assert.Equal(t, `orbitr error: "Resource Missing" - check orbitr.Error.Problem for more information`, herr.Error())
 }
 
 func TestError_ResultCodes(t *testing.T) {

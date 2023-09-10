@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/lantah/go/protocols/horizon/operations"
+	"github.com/lantah/go/protocols/orbitr/operations"
 	"github.com/lantah/go/support/errors"
 )
 
@@ -59,13 +59,13 @@ func (op OperationRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the operations endpoint
-func (op OperationRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (op OperationRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := op.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }
 
 // setEndpoint sets the endpoint for the OperationRequest
@@ -102,7 +102,7 @@ func (op OperationRequest) StreamOperations(ctx context.Context, client *Client,
 		return errors.Wrap(err, "unable to build endpoint for operation request")
 	}
 
-	url := fmt.Sprintf("%s%s", client.fixHorizonURL(), endpoint)
+	url := fmt.Sprintf("%s%s", client.fixOrbitRURL(), endpoint)
 	return client.stream(ctx, url, func(data []byte) error {
 		var baseRecord operations.Base
 

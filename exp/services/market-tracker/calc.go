@@ -3,7 +3,7 @@ package main
 import (
 	"math"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 )
 
 func calcSpreadPctForOrderBook(obStats hProtocol.OrderBookSummary) float64 {

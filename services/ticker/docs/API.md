@@ -238,7 +238,7 @@ Full documentation on Horizon's Orderbook endpoint can be found [here](https://d
 
 ### Example
 #### Endpoint
-GET `https://horizon.stellar.org/order_book?selling_asset_type=native&buying_asset_type=credit_alphanum4&buying_asset_code=BTC&buying_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH`
+GET `https://orbitr.lantah.network/order_book?selling_asset_type=native&buying_asset_type=credit_alphanum4&buying_asset_code=BTC&buying_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH`
 
 #### Response (application/json)
 ```json

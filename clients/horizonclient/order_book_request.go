@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/errors"
 )
 
@@ -39,13 +39,13 @@ func (obr OrderBookRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the order book endpoint
-func (obr OrderBookRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (obr OrderBookRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := obr.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }
 
 // OrderBookHandler is a function that is called when a new order summary is received
@@ -60,7 +60,7 @@ func (obr OrderBookRequest) StreamOrderBooks(ctx context.Context, client *Client
 		return errors.Wrap(err, "unable to build endpoint for orderbook request")
 	}
 
-	url := fmt.Sprintf("%s%s", client.fixHorizonURL(), endpoint)
+	url := fmt.Sprintf("%s%s", client.fixOrbitRURL(), endpoint)
 	return client.stream(ctx, url, func(data []byte) error {
 		var orderbook hProtocol.OrderBookSummary
 		err = json.Unmarshal(data, &orderbook)

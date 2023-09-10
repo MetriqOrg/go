@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/keypair"
 	"github.com/lantah/go/support/http/httpdecode"
 	supportlog "github.com/lantah/go/support/log"
@@ -19,7 +19,7 @@ import (
 
 type tokenHandler struct {
 	Logger                      *supportlog.Entry
-	HorizonClient               horizonclient.ClientInterface
+	OrbitRClient               orbitrclient.ClientInterface
 	NetworkPassphrase           string
 	SigningAddresses            []*keypair.FromAddress
 	JWK                         jose.JSONWebKey
@@ -98,12 +98,12 @@ func (h tokenHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var clientAccountExists bool
-	clientAccount, err := h.HorizonClient.AccountDetail(horizonclient.AccountRequest{AccountID: clientAccountID})
+	clientAccount, err := h.OrbitRClient.AccountDetail(orbitrclient.AccountRequest{AccountID: clientAccountID})
 	switch {
 	case err == nil:
 		clientAccountExists = true
 		l.Infof("Account exists.")
-	case horizonclient.IsNotFoundError(err):
+	case orbitrclient.IsNotFoundError(err):
 		clientAccountExists = false
 		l.Infof("Account does not exist.")
 	default:

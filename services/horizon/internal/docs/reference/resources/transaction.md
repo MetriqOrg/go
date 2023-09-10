@@ -42,13 +42,13 @@ To learn more about the concept of transactions in the Stellar network, take a l
 
 | rel        | Example                                                                                                                                              | Description                                                                                |
 |------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
-| self       | `https://horizon-testnet.stellar.org/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f`                                  |                                                                                            |
-| account    | `https://horizon-testnet.stellar.org/accounts/GCDLRUXOD6KA53G5ILL435TZAISNLPS4EKIHSOVY3MVD3DVJ333NO4DT`                                              | The source [account](../endpoints/accounts-single.md) for this transaction.                          |
-| ledger     | `https://horizon-testnet.stellar.org/ledgers/2352988`                                                                                                | The [ledger](../endpoints/ledgers-single.md) in which this transaction was applied.                  |
-| operations | `https://horizon-testnet.stellar.org/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f/operations{?cursor,limit,order}"` | [Operations](../endpoints/operations-for-transaction.md) included in this transaction.               |
-| effects    | `https://horizon-testnet.stellar.org/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f/effects{?cursor,limit,order}"`    | [Effects](../endpoints/effects-for-transaction.md) which resulted by operations in this transaction. |
-| precedes   | `https://horizon-testnet.stellar.org/transactions?order=asc&cursor=10106006507900928`                                                                | A collection of transactions that occur after this transaction.                            |
-| succeeds   | `https://horizon-testnet.stellar.org/transactions?order=desc&cursor=10106006507900928`                                                               | A collection of transactions that occur before this transaction.                           |
+| self       | `https://orbitr-testnet.lantah.network/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f`                                  |                                                                                            |
+| account    | `https://orbitr-testnet.lantah.network/accounts/GCDLRUXOD6KA53G5ILL435TZAISNLPS4EKIHSOVY3MVD3DVJ333NO4DT`                                              | The source [account](../endpoints/accounts-single.md) for this transaction.                          |
+| ledger     | `https://orbitr-testnet.lantah.network/ledgers/2352988`                                                                                                | The [ledger](../endpoints/ledgers-single.md) in which this transaction was applied.                  |
+| operations | `https://orbitr-testnet.lantah.network/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f/operations{?cursor,limit,order}"` | [Operations](../endpoints/operations-for-transaction.md) included in this transaction.               |
+| effects    | `https://orbitr-testnet.lantah.network/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f/effects{?cursor,limit,order}"`    | [Effects](../endpoints/effects-for-transaction.md) which resulted by operations in this transaction. |
+| precedes   | `https://orbitr-testnet.lantah.network/transactions?order=asc&cursor=10106006507900928`                                                                | A collection of transactions that occur after this transaction.                            |
+| succeeds   | `https://orbitr-testnet.lantah.network/transactions?order=desc&cursor=10106006507900928`                                                               | A collection of transactions that occur before this transaction.                           |
 
 ## Example
 
@@ -56,27 +56,27 @@ To learn more about the concept of transactions in the Stellar network, take a l
 {
   "_links": {
     "self": {
-      "href": "https://horizon-testnet.stellar.org/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f"
+      "href": "https://orbitr-testnet.lantah.network/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f"
     },
     "account": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GCDLRUXOD6KA53G5ILL435TZAISNLPS4EKIHSOVY3MVD3DVJ333NO4DT"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GCDLRUXOD6KA53G5ILL435TZAISNLPS4EKIHSOVY3MVD3DVJ333NO4DT"
     },
     "ledger": {
-      "href": "https://horizon-testnet.stellar.org/ledgers/2352988"
+      "href": "https://orbitr-testnet.lantah.network/ledgers/2352988"
     },
     "operations": {
-      "href": "https://horizon-testnet.stellar.org/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f/operations{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.lantah.network/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f/operations{?cursor,limit,order}",
       "templated": true
     },
     "effects": {
-      "href": "https://horizon-testnet.stellar.org/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f/effects{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.lantah.network/transactions/cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f/effects{?cursor,limit,order}",
       "templated": true
     },
     "precedes": {
-      "href": "https://horizon-testnet.stellar.org/transactions?order=asc&cursor=10106006507900928"
+      "href": "https://orbitr-testnet.lantah.network/transactions?order=asc&cursor=10106006507900928"
     },
     "succeeds": {
-      "href": "https://horizon-testnet.stellar.org/transactions?order=desc&cursor=10106006507900928"
+      "href": "https://orbitr-testnet.lantah.network/transactions?order=desc&cursor=10106006507900928"
     }
   },
   "id": "cb9a25394acb6fe0d1d9bdea5afc01cafe2c6fde59a96ddceb2564a65780a81f",

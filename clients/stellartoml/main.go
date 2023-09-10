@@ -89,7 +89,7 @@ type Response struct {
 	KycServer                     string      `toml:"KYC_SERVER"`
 	WebAuthEndpoint               string      `toml:"WEB_AUTH_ENDPOINT"`
 	SigningKey                    string      `toml:"SIGNING_KEY"`
-	HorizonUrl                    string      `toml:"HORIZON_URL"`
+	OrbitRUrl                    string      `toml:"ORBITR_URL"`
 	Accounts                      []string    `toml:"ACCOUNTS"`
 	UriRequestSigningKey          string      `toml:"URI_REQUEST_SIGNING_KEY"`
 	DirectPaymentServer           string      `toml:"DIRECT_PAYMENT_SERVER"`

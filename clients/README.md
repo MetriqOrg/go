@@ -2,10 +2,10 @@
 
 Packages here provide client libraries for accessing the ecosystem of Stellar services.
 
-* `horizonclient` - programmatic client access to Horizon (use in conjunction with [txnbuild](../txnbuild))
+* `orbitrclient` - programmatic client access to OrbitR (use in conjunction with [txnbuild](../txnbuild))
 * `stellartoml` - parse Stellar.toml files from the internet
 * `federation` - resolve federation addresses into stellar account IDs, suitable for use within a transaction
-* `horizon` (DEPRECATED) - the original Horizon client, now superceded by `horizonclient`
+* `orbitr` (DEPRECATED) - the original OrbitR client, now superceded by `orbitrclient`
 
 See [GoDoc](https://godoc.org/github.com/lantah/go/clients) for more details.
 

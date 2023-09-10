@@ -27,9 +27,9 @@ draft specification guide and thus has the following attributes:
 ## Example
 
 ```shell
-$ curl -X GET "https://horizon-testnet.stellar.org/accounts/accountthatdoesntexist"
+$ curl -X GET "https://orbitr-testnet.lantah.network/accounts/accountthatdoesntexist"
 {
-  "type": "https://stellar.org/horizon-errors/bad_request",
+  "type": "https://lantah.network/orbitr-errors/bad_request",
   "title": "Bad Request",
   "status": 400,
   "detail": "The request you sent was invalid in some way",

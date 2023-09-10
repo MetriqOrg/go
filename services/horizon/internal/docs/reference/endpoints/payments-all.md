@@ -39,20 +39,20 @@ GET /payments{?cursor,limit,order,include_failed}
 
 ```sh
 # Retrieve the first 200 payments, ordered chronologically.
-curl "https://horizon-testnet.stellar.org/payments?limit=200"
+curl "https://orbitr-testnet.lantah.network/payments?limit=200"
 ```
 
 ```sh
 # Retrieve a page of payments to occur immediately before the transaction
 # specified by the paging token "1234".
-curl "https://horizon-testnet.stellar.org/payments?cursor=1234&order=desc"
+curl "https://orbitr-testnet.lantah.network/payments?cursor=1234&order=desc"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 server.payments()
   .call()
@@ -68,7 +68,7 @@ server.payments()
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 var paymentHandler = function (paymentResponse) {
   console.log(paymentResponse);

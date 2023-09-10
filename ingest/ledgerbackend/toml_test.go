@@ -37,12 +37,12 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 			peerPort:          newUint(12345),
 			logPath:           nil,
 			expectedError: "invalid captive core toml: NETWORK_PASSPHRASE in captive core config file: " +
-				"Public Global Stellar Network ; September 2015 does not match Horizon network-passphrase " +
+				"Public Global Lantah Network ; 2023 does not match Horizon network-passphrase " +
 				"flag: bogus passphrase",
 		},
 		{
 			name:              "mismatching HTTP_PORT",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "appendix-with-fields.cfg"),
 			httpPort:          newUint(1161),
 			peerPort:          newUint(12345),
@@ -52,7 +52,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "mismatching PEER_PORT",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "appendix-with-fields.cfg"),
 			httpPort:          newUint(6789),
 			peerPort:          newUint(2346),
@@ -62,7 +62,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "mismatching LOG_FILE_PATH",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "appendix-with-fields.cfg"),
 			httpPort:          newUint(6789),
 			peerPort:          newUint(12345),
@@ -72,7 +72,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "duplicate HOME_DOMAIN entry",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "duplicate-home-domain.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -82,7 +82,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "empty HOME_DOMAIN entry",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "empty-home-domain.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -92,7 +92,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "HOME_DOMAIN with empty QUALITY",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "empty-home-domain-quality.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -102,7 +102,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "HOME_DOMAIN with invalid QUALITY",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "invalid-home-domain-quality.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -112,7 +112,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "duplicate VALIDATOR entry",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "duplicate-validator.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -122,7 +122,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "VALIDATOR with invalid public key",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "validator-has-invalid-public-key.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -132,7 +132,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "VALIDATOR with invalid quality",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "validator-has-invalid-quality.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -142,7 +142,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "VALIDATOR without home domain",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "validator-missing-home-domain.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -152,7 +152,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "VALIDATOR without name",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "validator-missing-name.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -162,7 +162,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "VALIDATOR without public key",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "validator-missing-public-key.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -172,7 +172,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "VALIDATOR without quality",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "validator-missing-quality.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -182,7 +182,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "field not supported by captive core",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "invalid-captive-core-field.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -191,7 +191,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 		},
 		{
 			name:              "database field was invalid for captive core",
-			networkPassphrase: "Public Global Stellar Network ; September 2015",
+			networkPassphrase: "Public Global Lantah Network ; 2023",
 			appendPath:        filepath.Join("testdata", "invalid-captive-core-database-field.cfg"),
 			httpPort:          nil,
 			peerPort:          nil,
@@ -368,7 +368,7 @@ func TestGenerateConfig(t *testing.T) {
 			var err error
 			var captiveCoreToml *CaptiveCoreToml
 			params := CaptiveCoreTomlParams{
-				NetworkPassphrase:              "Public Global Stellar Network ; September 2015",
+				NetworkPassphrase:              "Public Global Lantah Network ; 2023",
 				HistoryArchiveURLs:             []string{"http://localhost:1170"},
 				HTTPPort:                       testCase.httpPort,
 				PeerPort:                       testCase.peerPort,
@@ -403,7 +403,7 @@ func TestExternalStorageConfigUsesDatabaseToml(t *testing.T) {
 	logPath := "logPath"
 
 	params := CaptiveCoreTomlParams{
-		NetworkPassphrase:  "Public Global Stellar Network ; September 2015",
+		NetworkPassphrase:  "Public Global Lantah Network ; 2023",
 		HistoryArchiveURLs: []string{"http://localhost:1170"},
 		HTTPPort:           &httpPort,
 		PeerPort:           &peerPort,
@@ -431,7 +431,7 @@ func TestDBConfigDefaultsToSqlite(t *testing.T) {
 	logPath := "logPath"
 
 	params := CaptiveCoreTomlParams{
-		NetworkPassphrase:  "Public Global Stellar Network ; September 2015",
+		NetworkPassphrase:  "Public Global Lantah Network ; 2023",
 		HistoryArchiveURLs: []string{"http://localhost:1170"},
 		HTTPPort:           &httpPort,
 		PeerPort:           &peerPort,
@@ -460,7 +460,7 @@ func TestNonDBConfigDoesNotUpdateDatabase(t *testing.T) {
 
 	// UseDB not set, which means it's false
 	params := CaptiveCoreTomlParams{
-		NetworkPassphrase:  "Public Global Stellar Network ; September 2015",
+		NetworkPassphrase:  "Public Global Lantah Network ; 2023",
 		HistoryArchiveURLs: []string{"http://localhost:1170"},
 		HTTPPort:           &httpPort,
 		PeerPort:           &peerPort,

@@ -1,4 +1,4 @@
-name: Horizon
+name: OrbitR
 
 on:
   push:
@@ -31,8 +31,8 @@ jobs:
         ports:
           - 5432:5432
     env:
-      HORIZON_INTEGRATION_TESTS_ENABLED: true
-      HORIZON_INTEGRATION_TESTS_CORE_MAX_SUPPORTED_PROTOCOL: ${{ matrix.protocol-version }}
+      ORBITR_INTEGRATION_TESTS_ENABLED: true
+      ORBITR_INTEGRATION_TESTS_CORE_MAX_SUPPORTED_PROTOCOL: ${{ matrix.protocol-version }}
       PROTOCOL_20_CORE_DEBIAN_PKG_VERSION: 19.13.1-1469.76fed6ead.focal~soroban
       PROTOCOL_20_CORE_DOCKER_IMG: lantah/unsafe-gramr-next:19.13.1-1469.76fed6ead.focal-soroban
       PROTOCOL_20_SOROBAN_RPC_DOCKER_IMG: stellar/soroban-rpc:0.9.4-fix-fees-31
@@ -70,15 +70,15 @@ jobs:
         shell: bash
         run: |
           docker pull "$PROTOCOL_${{ matrix.protocol-version }}_CORE_DOCKER_IMG"
-          echo HORIZON_INTEGRATION_TESTS_DOCKER_IMG="$PROTOCOL_${{ matrix.protocol-version }}_CORE_DOCKER_IMG" >> $GITHUB_ENV
+          echo ORBITR_INTEGRATION_TESTS_DOCKER_IMG="$PROTOCOL_${{ matrix.protocol-version }}_CORE_DOCKER_IMG" >> $GITHUB_ENV
 
       - if: ${{ matrix.protocol-version == '20' }}
         name: Pull and set Soroban RPC image
         shell: bash
         run: |
           docker pull "$PROTOCOL_${{ matrix.protocol-version }}_SOROBAN_RPC_DOCKER_IMG"
-          echo HORIZON_INTEGRATION_TESTS_SOROBAN_RPC_DOCKER_IMG="$PROTOCOL_${{ matrix.protocol-version }}_SOROBAN_RPC_DOCKER_IMG" >> $GITHUB_ENV
-          echo HORIZON_INTEGRATION_TESTS_ENABLE_SOROBAN_RPC=true >> $GITHUB_ENV
+          echo ORBITR_INTEGRATION_TESTS_SOROBAN_RPC_DOCKER_IMG="$PROTOCOL_${{ matrix.protocol-version }}_SOROBAN_RPC_DOCKER_IMG" >> $GITHUB_ENV
+          echo ORBITR_INTEGRATION_TESTS_ENABLE_SOROBAN_RPC=true >> $GITHUB_ENV
 
       - if: ${{ startsWith(matrix.ingestion-backend, 'captive-core') }}
         name: Install and enable Captive Core
@@ -93,37 +93,37 @@ jobs:
           sudo bash -c 'echo "deb https://apt.stellar.org focal unstable" > /etc/apt/sources.list.d/SDF-unstable.list'
           sudo apt-get update && sudo apt-get install -y gramr="$PROTOCOL_${{ matrix.protocol-version }}_CORE_DEBIAN_PKG_VERSION"
           echo "Using gramr version $(gramr version)"
-          echo 'HORIZON_INTEGRATION_TESTS_ENABLE_CAPTIVE_CORE=true' >> $GITHUB_ENV
-          echo 'HORIZON_INTEGRATION_TESTS_CAPTIVE_CORE_BIN=/usr/bin/gramr' >> $GITHUB_ENV
+          echo 'ORBITR_INTEGRATION_TESTS_ENABLE_CAPTIVE_CORE=true' >> $GITHUB_ENV
+          echo 'ORBITR_INTEGRATION_TESTS_CAPTIVE_CORE_BIN=/usr/bin/gramr' >> $GITHUB_ENV
 
       - if: ${{ matrix.ingestion-backend == 'captive-core-remote-storage' }}
         name: Setup Captive Core Remote Storage
-        run: echo 'HORIZON_INTEGRATION_TESTS_CAPTIVE_CORE_USE_DB=true' >> $GITHUB_ENV
+        run: echo 'ORBITR_INTEGRATION_TESTS_CAPTIVE_CORE_USE_DB=true' >> $GITHUB_ENV
 
-      - name: Build Horizon reproducible build
+      - name: Build OrbitR reproducible build
         run: |
-          go build -v -trimpath -buildvcs=false ./services/horizon
+          go build -v -trimpath -buildvcs=false ./services/orbitr
           touch empty
 
       - name: Calculate the source hash
         id: calculate_source_hash
         run: |
-          combined_hash=$(echo "horizon-hash-${{ hashFiles('./horizon') }}-${{ hashFiles('./clients/horizonclient/**') }}-${{ hashFiles('./protocols/horizon/**') }}-${{ hashFiles('./txnbuild/**') }}-${{ hashFiles('./ingest/**') }}-${{ hashFiles('./xdr/**') }}-${{ hashFiles('./services/**') }}-${{ env.PROTOCOL_20_CORE_DOCKER_IMG }}-${{ env.PROTOCOL_19_CORE_DOCKER_IMG }}-${{ env.PREFIX }}" | sha256sum | cut -d ' ' -f 1)
+          combined_hash=$(echo "orbitr-hash-${{ hashFiles('./orbitr') }}-${{ hashFiles('./clients/orbitrclient/**') }}-${{ hashFiles('./protocols/orbitr/**') }}-${{ hashFiles('./txnbuild/**') }}-${{ hashFiles('./ingest/**') }}-${{ hashFiles('./xdr/**') }}-${{ hashFiles('./services/**') }}-${{ env.PROTOCOL_20_CORE_DOCKER_IMG }}-${{ env.PROTOCOL_19_CORE_DOCKER_IMG }}-${{ env.PREFIX }}" | sha256sum | cut -d ' ' -f 1)
           echo "COMBINED_SOURCE_HASH=$combined_hash" >> "$GITHUB_ENV"
 
-      - name: Restore Horizon binary and integration tests source hash to cache
-        id: horizon_binary_tests_hash
+      - name: Restore OrbitR binary and integration tests source hash to cache
+        id: orbitr_binary_tests_hash
         uses: actions/cache/restore@v3
         with:
           path: ./empty
           lookup-only: true
           key: ${{ env.COMBINED_SOURCE_HASH }}
 
-      - if: ${{ steps.horizon_binary_tests_hash.outputs.cache-hit != 'true' }}
-        run: go test -race -timeout 45m -v ./services/horizon/internal/integration/...
+      - if: ${{ steps.orbitr_binary_tests_hash.outputs.cache-hit != 'true' }}
+        run: go test -race -timeout 45m -v ./services/orbitr/internal/integration/...
 
-      - name: Save Horizon binary and integration tests source hash to cache
-        if: ${{ success() && steps.horizon_binary_tests_hash.outputs.cache-hit != 'true' }}
+      - name: Save OrbitR binary and integration tests source hash to cache
+        if: ${{ success() && steps.orbitr_binary_tests_hash.outputs.cache-hit != 'true' }}
         uses: actions/cache/save@v3
         with:
           path: ./empty
@@ -143,9 +143,9 @@ jobs:
 
       - name: Build and test the Verify Range Docker image
         run: |
-          docker build -f services/horizon/docker/verify-range/Dockerfile -t stellar/horizon-verify-range services/horizon/docker/verify-range/
+          docker build -f services/orbitr/docker/verify-range/Dockerfile -t stellar/orbitr-verify-range services/orbitr/docker/verify-range/
           # Any range should do for basic testing, this range was chosen pretty early in history so that it only takes a few mins to run
-          docker run -e BRANCH=$(git rev-parse HEAD) -e FROM=10000063 -e TO=10000127 stellar/horizon-verify-range
+          docker run -e BRANCH=$(git rev-parse HEAD) -e FROM=10000063 -e TO=10000127 stellar/orbitr-verify-range
 
       # Push image
       - if: github.ref == 'refs/heads/master'
@@ -157,4 +157,4 @@ jobs:
 
       - if: github.ref == 'refs/heads/master'
         name: Push to DockerHub
-        run: docker push stellar/horizon-verify-range:latest
+        run: docker push stellar/orbitr-verify-range:latest

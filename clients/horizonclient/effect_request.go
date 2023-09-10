@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/lantah/go/protocols/horizon/effects"
+	"github.com/lantah/go/protocols/orbitr/effects"
 	"github.com/lantah/go/support/errors"
 )
 
@@ -58,7 +58,7 @@ func (er EffectRequest) BuildURL() (endpoint string, err error) {
 	return endpoint, err
 }
 
-// StreamEffects streams horizon effects. It can be used to stream all effects or account specific effects.
+// StreamEffects streams orbitr effects. It can be used to stream all effects or account specific effects.
 // Use context.WithCancel to stop streaming or context.Background() if you want to stream indefinitely.
 // EffectHandler is a user-supplied function that is executed for each streamed effect received.
 func (er EffectRequest) StreamEffects(ctx context.Context, client *Client, handler EffectHandler) error {
@@ -67,7 +67,7 @@ func (er EffectRequest) StreamEffects(ctx context.Context, client *Client, handl
 		return errors.Wrap(err, "unable to build endpoint for effects request")
 	}
 
-	url := fmt.Sprintf("%s%s", client.fixHorizonURL(), endpoint)
+	url := fmt.Sprintf("%s%s", client.fixOrbitRURL(), endpoint)
 	return client.stream(ctx, url, func(data []byte) error {
 		var baseEffect effects.Base
 		// unmarshal into the base effect type
@@ -87,11 +87,11 @@ func (er EffectRequest) StreamEffects(ctx context.Context, client *Client, handl
 }
 
 // HTTPRequest returns the http request for the effects endpoint
-func (er EffectRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (er EffectRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := er.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }

@@ -62,7 +62,7 @@ func TestFriendbotHandler_validate(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		horizonClient:       horizonclient.DefaultTestNetClient,
-		horizonURL:          "https://horizon-testnet.stellar.org/",
+		horizonURL:          "https://orbitr-testnet.lantah.network/",
 	}
 	err = fh.validate()
 	require.EqualError(t, err, "network passphrase cannot be empty")
@@ -72,7 +72,7 @@ func TestFriendbotHandler_validate(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		horizonClient:       horizonclient.DefaultTestNetClient,
-		horizonURL:          "https://horizon-testnet.stellar.org/",
+		horizonURL:          "https://orbitr-testnet.lantah.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 	}
 	err = fh.validate()
@@ -83,7 +83,7 @@ func TestFriendbotHandler_validate(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		horizonClient:       horizonclient.DefaultTestNetClient,
-		horizonURL:          "https://horizon-testnet.stellar.org/",
+		horizonURL:          "https://orbitr-testnet.lantah.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       1,
 	}
@@ -98,7 +98,7 @@ func TestFriendbotHandler_serveHTTP_missingAddress(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		horizonClient:       horizonclient.DefaultTestNetClient,
-		horizonURL:          "https://horizon-testnet.stellar.org/",
+		horizonURL:          "https://orbitr-testnet.lantah.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -129,7 +129,7 @@ func TestFriendbotHandler_serveHTTP_invalidAddress(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		horizonClient:       horizonclient.DefaultTestNetClient,
-		horizonURL:          "https://horizon-testnet.stellar.org/",
+		horizonURL:          "https://orbitr-testnet.lantah.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -165,7 +165,7 @@ func TestFriendbotHandler_serveHTTP_accountDoesntExist(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		horizonClient:       &horizonMock,
-		horizonURL:          "https://horizon-testnet.stellar.org/",
+		horizonURL:          "https://orbitr-testnet.lantah.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -201,7 +201,7 @@ func TestFriendbotHandler_serveHTTP_missingTrustline(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		horizonClient:       &horizonMock,
-		horizonURL:          "https://horizon-testnet.stellar.org/",
+		horizonURL:          "https://orbitr-testnet.lantah.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -252,7 +252,7 @@ func TestFriendbotHandler_serveHTTP_issuerAccountDoesntExist(t *testing.T) {
 		issuerAccountSecret: "SDVFEIZ3WH5F6GHGK56QITTC5IO6QJ2UIQDWCHE72DAFZFSXYPIHQ6EV", // GDDIO6SFRD4SJEQFJOSKPIDYTDM7LM4METFBKN4NFGVR5DTGB7H75N5S
 		assetCode:           "FOO",
 		horizonClient:       &horizonMock,
-		horizonURL:          "https://horizon-testnet.stellar.org/",
+		horizonURL:          "https://orbitr-testnet.lantah.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -305,7 +305,7 @@ func TestFriendbotHandler_serveHTTP(t *testing.T) {
 		issuerAccountSecret: "SDVFEIZ3WH5F6GHGK56QITTC5IO6QJ2UIQDWCHE72DAFZFSXYPIHQ6EV", // GDDIO6SFRD4SJEQFJOSKPIDYTDM7LM4METFBKN4NFGVR5DTGB7H75N5S
 		assetCode:           "FOO",
 		horizonClient:       &horizonMock,
-		horizonURL:          "https://horizon-testnet.stellar.org/",
+		horizonURL:          "https://orbitr-testnet.lantah.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}

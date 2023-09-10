@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/errors"
 )
 
@@ -42,13 +42,13 @@ func (lr LedgerRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the ledger endpoint
-func (lr LedgerRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (lr LedgerRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := lr.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }
 
 // LedgerHandler is a function that is called when a new ledger is received
@@ -64,7 +64,7 @@ func (lr LedgerRequest) StreamLedgers(ctx context.Context, client *Client,
 		return errors.Wrap(err, "unable to build endpoint for ledger request")
 	}
 
-	url := fmt.Sprintf("%s%s", client.fixHorizonURL(), endpoint)
+	url := fmt.Sprintf("%s%s", client.fixOrbitRURL(), endpoint)
 	return client.stream(ctx, url, func(data []byte) error {
 		var ledger hProtocol.Ledger
 		err = json.Unmarshal(data, &ledger)

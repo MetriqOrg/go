@@ -33,14 +33,14 @@ GET /accounts/{account}/effects{?cursor,limit,order}
 ### curl Example Request
 
 ```sh
-curl "https://horizon-testnet.stellar.org/accounts/GA2HGBJIJKI6O4XEM7CZWY5PS6GKSXL6D34ERAJYQSPYA6X6AI7HYW36/effects?limit=1"
+curl "https://orbitr-testnet.lantah.network/accounts/GA2HGBJIJKI6O4XEM7CZWY5PS6GKSXL6D34ERAJYQSPYA6X6AI7HYW36/effects?limit=1"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 server.effects()
   .forAccount("GA2HGBJIJKI6O4XEM7CZWY5PS6GKSXL6D34ERAJYQSPYA6X6AI7HYW36")
@@ -58,7 +58,7 @@ server.effects()
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
 
 var effectHandler = function (effectResponse) {
   console.log(effectResponse);
@@ -82,13 +82,13 @@ The list of effects.
 {
   "_links": {
     "self": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GA2HGBJIJKI6O4XEM7CZWY5PS6GKSXL6D34ERAJYQSPYA6X6AI7HYW36/effects?cursor=&limit=1&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GA2HGBJIJKI6O4XEM7CZWY5PS6GKSXL6D34ERAJYQSPYA6X6AI7HYW36/effects?cursor=&limit=1&order=asc"
     },
     "next": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GA2HGBJIJKI6O4XEM7CZWY5PS6GKSXL6D34ERAJYQSPYA6X6AI7HYW36/effects?cursor=1919197546291201-1&limit=1&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GA2HGBJIJKI6O4XEM7CZWY5PS6GKSXL6D34ERAJYQSPYA6X6AI7HYW36/effects?cursor=1919197546291201-1&limit=1&order=asc"
     },
     "prev": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GA2HGBJIJKI6O4XEM7CZWY5PS6GKSXL6D34ERAJYQSPYA6X6AI7HYW36/effects?cursor=1919197546291201-1&limit=1&order=desc"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GA2HGBJIJKI6O4XEM7CZWY5PS6GKSXL6D34ERAJYQSPYA6X6AI7HYW36/effects?cursor=1919197546291201-1&limit=1&order=desc"
     }
   },
   "_embedded": {
@@ -96,13 +96,13 @@ The list of effects.
       {
         "_links": {
           "operation": {
-            "href": "https://horizon-testnet.stellar.org/operations/1919197546291201"
+            "href": "https://orbitr-testnet.lantah.network/operations/1919197546291201"
           },
           "succeeds": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=desc&cursor=1919197546291201-1"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=1919197546291201-1"
           },
           "precedes": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=asc&cursor=1919197546291201-1"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=1919197546291201-1"
           }
         },
         "id": "0001919197546291201-0000000001",

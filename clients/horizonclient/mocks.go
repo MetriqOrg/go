@@ -1,16 +1,16 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
-	"github.com/lantah/go/protocols/horizon/effects"
-	"github.com/lantah/go/protocols/horizon/operations"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/protocols/orbitr/operations"
 	"github.com/lantah/go/txnbuild"
 	"github.com/stretchr/testify/mock"
 )
 
-// MockClient is a mockable horizon client.
+// MockClient is a mockable orbitr client.
 type MockClient struct {
 	mock.Mock
 }

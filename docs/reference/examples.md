@@ -16,7 +16,7 @@ package main
 import (
 	"log"
 
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/keypair"
 	"github.com/lantah/go/network"
 	"github.com/lantah/go/txnbuild"
@@ -32,11 +32,11 @@ func main() {
 	log.Println("Address 0:", pair.Address())
 
 	// Create and fund the address on TestNet, using friendbot
-	client := horizonclient.DefaultTestNetClient
+	client := orbitrclient.DefaultTestNetClient
 	client.Fund(pair.Address())
 
 	// Get information about the account we just created
-	accountRequest := horizonclient.AccountRequest{AccountID: pair.Address()}
+	accountRequest := orbitrclient.AccountRequest{AccountID: pair.Address()}
 	hAccount0, err := client.AccountDetail(accountRequest)
 	if err != nil {
 		log.Fatal(err)
@@ -74,7 +74,7 @@ func main() {
 	// Submit the transaction
 	resp, err := client.SubmitTransactionXDR(txeBase64)
 	if err != nil {
-		hError := err.(*horizonclient.Error)
+		hError := err.(*orbitrclient.Error)
 		log.Fatal("Error submitting transaction:", hError.Problem)
 	}
 

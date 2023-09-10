@@ -14,7 +14,7 @@ import (
 
 const (
 	// PublicNetworkPassphrase is the pass phrase used for every transaction intended for the public stellar network
-	PublicNetworkPassphrase = "Public Global Stellar Network ; September 2015"
+	PublicNetworkPassphrase = "Public Global Lantah Network ; 2023"
 	// TestNetworkPassphrase is the pass phrase used for every transaction intended for the SDF-run test network
 	TestNetworkPassphrase = "Test SDF Network ; September 2015"
 	// FutureNetworkPassphrase is the pass phrase used for every transaction intended for the SDF-run future network

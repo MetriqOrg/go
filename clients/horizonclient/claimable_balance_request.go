@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"fmt"
@@ -48,11 +48,11 @@ func (cbr ClaimableBalanceRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the claimable balances endpoint
-func (cbr ClaimableBalanceRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (cbr ClaimableBalanceRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := cbr.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }

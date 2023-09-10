@@ -14,11 +14,11 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/exp/support/jwtkey"
 	"github.com/lantah/go/keypair"
 	"github.com/lantah/go/network"
-	"github.com/lantah/go/protocols/horizon"
+	"github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/strkey"
 	supportlog "github.com/lantah/go/support/log"
 	"github.com/lantah/go/support/render/problem"
@@ -62,17 +62,17 @@ func TestToken_formInputSuccess(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{
 					LowThreshold:  1,
 					MedThreshold:  10,
 					HighThreshold: 100,
 				},
-				Signers: []horizon.Signer{
+				Signers: []orbitr.Signer{
 					{
 						Key:    account.Address(),
 						Weight: 100,
@@ -83,7 +83,7 @@ func TestToken_formInputSuccess(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:            supportlog.DefaultLogger,
-		HorizonClient:     horizonClient,
+		OrbitRClient:     orbitrClient,
 		NetworkPassphrase: network.TestNetworkPassphrase,
 		SigningAddresses:  []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:               jwk,
@@ -163,17 +163,17 @@ func TestToken_formInputSuccess_jwtHeaderAndPayloadAreDeterministic(t *testing.T
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{
 					LowThreshold:  1,
 					MedThreshold:  10,
 					HighThreshold: 100,
 				},
-				Signers: []horizon.Signer{
+				Signers: []orbitr.Signer{
 					{
 						Key:    account.Address(),
 						Weight: 100,
@@ -184,7 +184,7 @@ func TestToken_formInputSuccess_jwtHeaderAndPayloadAreDeterministic(t *testing.T
 
 	h := tokenHandler{
 		Logger:            supportlog.DefaultLogger,
-		HorizonClient:     horizonClient,
+		OrbitRClient:     orbitrClient,
 		NetworkPassphrase: network.TestNetworkPassphrase,
 		SigningAddresses:  []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:               jwk,
@@ -273,17 +273,17 @@ func TestToken_jsonInputSuccess(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{
 					LowThreshold:  1,
 					MedThreshold:  10,
 					HighThreshold: 100,
 				},
-				Signers: []horizon.Signer{
+				Signers: []orbitr.Signer{
 					{
 						Key:    account.Address(),
 						Weight: 100,
@@ -294,7 +294,7 @@ func TestToken_jsonInputSuccess(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:            supportlog.DefaultLogger,
-		HorizonClient:     horizonClient,
+		OrbitRClient:     orbitrClient,
 		NetworkPassphrase: network.TestNetworkPassphrase,
 		SigningAddresses:  []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:               jwk,
@@ -370,17 +370,17 @@ func TestToken_jsonInputValidRotatingServerSigners(t *testing.T) {
 	accountSigner2 := keypair.MustRandom()
 	t.Logf("Client account signer 2: %s", accountSigner2.Address())
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{
 					LowThreshold:  1,
 					MedThreshold:  10,
 					HighThreshold: 100,
 				},
-				Signers: []horizon.Signer{
+				Signers: []orbitr.Signer{
 					{
 						Key:    accountSigner1.Address(),
 						Weight: 40,
@@ -397,7 +397,7 @@ func TestToken_jsonInputValidRotatingServerSigners(t *testing.T) {
 	homeDomain := "example.com"
 	h := tokenHandler{
 		Logger:            supportlog.DefaultLogger,
-		HorizonClient:     horizonClient,
+		OrbitRClient:     orbitrClient,
 		NetworkPassphrase: network.TestNetworkPassphrase,
 		SigningAddresses:  serverKeyAddresses,
 		JWK:               jwk,
@@ -517,17 +517,17 @@ func TestToken_jsonInputValidMultipleSigners(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{
 					LowThreshold:  1,
 					MedThreshold:  10,
 					HighThreshold: 100,
 				},
-				Signers: []horizon.Signer{
+				Signers: []orbitr.Signer{
 					{
 						Key:    accountSigner1.Address(),
 						Weight: 40,
@@ -542,7 +542,7 @@ func TestToken_jsonInputValidMultipleSigners(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:            supportlog.DefaultLogger,
-		HorizonClient:     horizonClient,
+		OrbitRClient:     orbitrClient,
 		NetworkPassphrase: network.TestNetworkPassphrase,
 		SigningAddresses:  []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:               jwk,
@@ -626,17 +626,17 @@ func TestToken_jsonInputNotEnoughWeight(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{
 					LowThreshold:  1,
 					MedThreshold:  10,
 					HighThreshold: 100,
 				},
-				Signers: []horizon.Signer{
+				Signers: []orbitr.Signer{
 					{
 						Key:    account.Address(),
 						Weight: 10,
@@ -647,7 +647,7 @@ func TestToken_jsonInputNotEnoughWeight(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:            supportlog.DefaultLogger,
-		HorizonClient:     horizonClient,
+		OrbitRClient:     orbitrClient,
 		NetworkPassphrase: network.TestNetworkPassphrase,
 		SigningAddresses:  []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:               jwk,
@@ -713,17 +713,17 @@ func TestToken_jsonInputUnrecognizedSigner(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{
 					LowThreshold:  1,
 					MedThreshold:  10,
 					HighThreshold: 100,
 				},
-				Signers: []horizon.Signer{
+				Signers: []orbitr.Signer{
 					{
 						Key:    keypair.MustRandom().Address(),
 						Weight: 100,
@@ -734,7 +734,7 @@ func TestToken_jsonInputUnrecognizedSigner(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:            supportlog.DefaultLogger,
-		HorizonClient:     horizonClient,
+		OrbitRClient:     orbitrClient,
 		NetworkPassphrase: network.TestNetworkPassphrase,
 		SigningAddresses:  []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:               jwk,
@@ -800,14 +800,14 @@ func TestToken_jsonInputAccountNotExistSuccess(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{},
-			&horizonclient.Error{
+			orbitr.Account{},
+			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -816,7 +816,7 @@ func TestToken_jsonInputAccountNotExistSuccess(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:                      supportlog.DefaultLogger,
-		HorizonClient:               horizonClient,
+		OrbitRClient:               orbitrClient,
 		NetworkPassphrase:           network.TestNetworkPassphrase,
 		SigningAddresses:            []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:                         jwk,
@@ -905,14 +905,14 @@ func TestToken_jsonInputAccountNotExistFail(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{},
-			&horizonclient.Error{
+			orbitr.Account{},
+			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -921,7 +921,7 @@ func TestToken_jsonInputAccountNotExistFail(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:                      supportlog.DefaultLogger,
-		HorizonClient:               horizonClient,
+		OrbitRClient:               orbitrClient,
 		NetworkPassphrase:           network.TestNetworkPassphrase,
 		SigningAddresses:            []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:                         jwk,
@@ -988,14 +988,14 @@ func TestToken_jsonInputAccountNotExistNotAllowed(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{},
-			&horizonclient.Error{
+			orbitr.Account{},
+			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -1004,7 +1004,7 @@ func TestToken_jsonInputAccountNotExistNotAllowed(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:                      supportlog.DefaultLogger,
-		HorizonClient:               horizonClient,
+		OrbitRClient:               orbitrClient,
 		NetworkPassphrase:           network.TestNetworkPassphrase,
 		SigningAddresses:            []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:                         jwk,
@@ -1073,14 +1073,14 @@ func TestToken_jsonInputUnrecognizedServerSigner(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{},
-			&horizonclient.Error{
+			orbitr.Account{},
+			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -1089,7 +1089,7 @@ func TestToken_jsonInputUnrecognizedServerSigner(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:                      supportlog.DefaultLogger,
-		HorizonClient:               horizonClient,
+		OrbitRClient:               orbitrClient,
 		NetworkPassphrase:           network.TestNetworkPassphrase,
 		SigningAddresses:            []*keypair.FromAddress{serverKey2.FromAddress()},
 		JWK:                         jwk,
@@ -1170,14 +1170,14 @@ func TestToken_jsonInputNoWebAuthDomainSuccess(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{},
-			&horizonclient.Error{
+			orbitr.Account{},
+			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -1186,7 +1186,7 @@ func TestToken_jsonInputNoWebAuthDomainSuccess(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:                      supportlog.DefaultLogger,
-		HorizonClient:               horizonClient,
+		OrbitRClient:               orbitrClient,
 		NetworkPassphrase:           network.TestNetworkPassphrase,
 		SigningAddresses:            []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:                         jwk,
@@ -1275,14 +1275,14 @@ func TestToken_jsonInputInvalidWebAuthDomainFail(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{},
-			&horizonclient.Error{
+			orbitr.Account{},
+			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://stellar.org/horizon-errors/not_found",
+					Type:   "https://lantah.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -1291,7 +1291,7 @@ func TestToken_jsonInputInvalidWebAuthDomainFail(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:                      supportlog.DefaultLogger,
-		HorizonClient:               horizonClient,
+		OrbitRClient:               orbitrClient,
 		NetworkPassphrase:           network.TestNetworkPassphrase,
 		SigningAddresses:            []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:                         jwk,
@@ -1360,17 +1360,17 @@ func TestToken_successWithIdMemo(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{
 					LowThreshold:  1,
 					MedThreshold:  10,
 					HighThreshold: 100,
 				},
-				Signers: []horizon.Signer{
+				Signers: []orbitr.Signer{
 					{
 						Key:    account.Address(),
 						Weight: 100,
@@ -1381,7 +1381,7 @@ func TestToken_successWithIdMemo(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:            supportlog.DefaultLogger,
-		HorizonClient:     horizonClient,
+		OrbitRClient:     orbitrClient,
 		NetworkPassphrase: network.TestNetworkPassphrase,
 		SigningAddresses:  []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:               jwk,
@@ -1470,17 +1470,17 @@ func TestToken_successWithMuxedAccount(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("Signed: %s", txSigned)
 
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: account.Address()}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: account.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{
 					LowThreshold:  1,
 					MedThreshold:  10,
 					HighThreshold: 100,
 				},
-				Signers: []horizon.Signer{
+				Signers: []orbitr.Signer{
 					{
 						Key:    account.Address(),
 						Weight: 100,
@@ -1491,7 +1491,7 @@ func TestToken_successWithMuxedAccount(t *testing.T) {
 
 	h := tokenHandler{
 		Logger:            supportlog.DefaultLogger,
-		HorizonClient:     horizonClient,
+		OrbitRClient:     orbitrClient,
 		NetworkPassphrase: network.TestNetworkPassphrase,
 		SigningAddresses:  []*keypair.FromAddress{serverKey.FromAddress()},
 		JWK:               jwk,

@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/lantah/go/support/errors"
 )
 
-// LiquidityPoolRequest struct contains data for getting liquidity pool details from a horizon server.
+// LiquidityPoolRequest struct contains data for getting liquidity pool details from a orbitr server.
 type LiquidityPoolRequest struct {
 	LiquidityPoolID string
 }
@@ -39,11 +39,11 @@ func (r LiquidityPoolRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the liquidity pool endpoint
-func (r LiquidityPoolRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (r LiquidityPoolRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := r.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }

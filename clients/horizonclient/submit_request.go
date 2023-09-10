@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/lantah/go/support/errors"
 )
 
-// BuildURL returns the url for submitting transactions to a running horizon instance
+// BuildURL returns the url for submitting transactions to a running orbitr instance
 func (sr submitRequest) BuildURL() (endpoint string, err error) {
 	if sr.endpoint == "" || sr.transactionXdr == "" {
 		return endpoint, errors.New("invalid request: too few parameters")
@@ -22,11 +22,11 @@ func (sr submitRequest) BuildURL() (endpoint string, err error) {
 	return endpoint, err
 }
 
-// HTTPRequest returns the http request for submitting transactions to a running horizon instance
-func (sr submitRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+// HTTPRequest returns the http request for submitting transactions to a running orbitr instance
+func (sr submitRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	form := url.Values{}
 	form.Set("tx", sr.transactionXdr)
-	request, err := http.NewRequest("POST", horizonURL+sr.endpoint, strings.NewReader(form.Encode()))
+	request, err := http.NewRequest("POST", orbitrURL+sr.endpoint, strings.NewReader(form.Encode()))
 	if err != nil {
 		return nil, err
 	}

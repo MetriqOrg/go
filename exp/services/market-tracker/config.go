@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	hClient "github.com/lantah/go/clients/horizonclient"
+	hClient "github.com/lantah/go/clients/orbitrclient"
 )
 
 // Asset represents an asset on the Stellar network

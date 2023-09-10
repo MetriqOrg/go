@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"fmt"
@@ -30,11 +30,11 @@ func (ar AssetRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the assets endpoint
-func (ar AssetRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (ar AssetRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := ar.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }

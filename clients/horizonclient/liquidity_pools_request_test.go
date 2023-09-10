@@ -1,9 +1,9 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -32,7 +32,7 @@ func TestLiquidityPoolsRequestBuildUrl(t *testing.T) {
 func TestLiquidityPoolsRequest(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -47,9 +47,9 @@ func TestLiquidityPoolsRequest(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.IsType(t, response, hProtocol.LiquidityPoolsPage{})
 		links := response.Links
-		assert.Equal(t, links.Self.Href, "https://horizon.stellar.org/liquidity_pools?limit=200\u0026order=asc")
+		assert.Equal(t, links.Self.Href, "https://orbitr.lantah.network/liquidity_pools?limit=200\u0026order=asc")
 
-		assert.Equal(t, links.Next.Href, "https://horizon.stellar.org/liquidity_pools?limit=200\u0026order=asc")
+		assert.Equal(t, links.Next.Href, "https://orbitr.lantah.network/liquidity_pools?limit=200\u0026order=asc")
 
 		record := response.Embedded.Records[0]
 		assert.IsType(t, record, hProtocol.LiquidityPool{})
@@ -69,20 +69,20 @@ func TestLiquidityPoolsRequest(t *testing.T) {
 
 	_, err = client.LiquidityPools(request)
 	if assert.Error(t, err) {
-		assert.Contains(t, err.Error(), "horizon error")
-		horizonError, ok := err.(*Error)
+		assert.Contains(t, err.Error(), "orbitr error")
+		orbitrError, ok := err.(*Error)
 		assert.Equal(t, ok, true)
-		assert.Equal(t, horizonError.Problem.Title, "Bad Request")
+		assert.Equal(t, orbitrError.Problem.Title, "Bad Request")
 	}
 }
 
 var liquidityPoolsResponse = `{
   "_links": {
     "self": {
-      "href": "https://horizon.stellar.org/liquidity_pools?limit=200\u0026order=asc"
+      "href": "https://orbitr.lantah.network/liquidity_pools?limit=200\u0026order=asc"
     },
     "next": {
-      "href": "https://horizon.stellar.org/liquidity_pools?limit=200\u0026order=asc"
+      "href": "https://orbitr.lantah.network/liquidity_pools?limit=200\u0026order=asc"
     }
   },
   "_embedded": {

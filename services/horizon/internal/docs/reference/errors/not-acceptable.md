@@ -29,9 +29,9 @@ draft specification guide and thus has the following attributes:
 ## Example
 
 ```shell
-$ curl -X GET -H "Accept: application/xml" "https://horizon-testnet.stellar.org/accounts/GALWEV6GY73RJ255JC7XUOZ2L7WZ5JJDTKATB2MUK7F3S67DVT2A6R5G"
+$ curl -X GET -H "Accept: application/xml" "https://orbitr-testnet.lantah.network/accounts/GALWEV6GY73RJ255JC7XUOZ2L7WZ5JJDTKATB2MUK7F3S67DVT2A6R5G"
 {
-  "type": "https://stellar.org/horizon-errors/not_acceptable",
+  "type": "https://lantah.network/orbitr-errors/not_acceptable",
   "title": "An acceptable response content-type could not be provided for this request",
   "status": 406
 }

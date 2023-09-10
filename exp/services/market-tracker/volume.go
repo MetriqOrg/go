@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 )
 
 // Volume stores volume of a various base pair in both GRAM and USD.
@@ -56,7 +56,7 @@ func initVolumes(cfg Config, c trackerClient, watchedTPs []prometheusWatchedTP) 
 	end := time.Now()
 	start := end.Add(time.Duration(-24 * time.Hour))
 	res := 15 * 60                                     // resolution length, in seconds
-	cRes := time.Duration(res*1000) * time.Millisecond // horizon request must be in milliseconds
+	cRes := time.Duration(res*1000) * time.Millisecond // orbitr request must be in milliseconds
 
 	for i, wtp := range watchedTPs {
 		// TODO: Calculate volume for assets with non-native counter.
@@ -98,7 +98,7 @@ func initVolumes(cfg Config, c trackerClient, watchedTPs []prometheusWatchedTP) 
 func updateVolume(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatchedTP, volumeHistMap map[string][]volumeHist) {
 	req := mustCreateGramPriceRequest()
 	historyUnit := time.Duration(15 * 60 * time.Second) // length of each individual unit of volume history
-	cRes := time.Duration(60*1000) * time.Millisecond   // horizon client requests have a 1 minute resolution, in milliseconds
+	cRes := time.Duration(60*1000) * time.Millisecond   // orbitr client requests have a 1 minute resolution, in milliseconds
 	day := time.Duration(24 * 60 * 60 * time.Second)    // number of seconds in a day
 	watchedTPs := *watchedTPsPtr
 	forLoopDuration := time.Duration(0)
@@ -226,7 +226,7 @@ func constructVolumeHistory(tas []hProtocol.TradeAggregation, gramPrices []gramP
 		// find total volume of records in this interval
 		// TODO: This loop does not correctly include records before the start
 		// time. however, that should not happen, given that we define start before
-		// calling the horizon client.
+		// calling the orbitr client.
 		currBaseVolume := 0.0
 		currCounterVolume := 0.0
 		currTradeCount := 0.0

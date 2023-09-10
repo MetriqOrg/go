@@ -1,10 +1,10 @@
-package horizonclient
+package orbitrclient
 
 import "github.com/lantah/go/support/errors"
 
-// IsNotFoundError returns true if the error is a horizonclient.Error with
+// IsNotFoundError returns true if the error is a orbitrclient.Error with
 // a not_found problem indicating that the resource is not found on
-// Horizon.
+// OrbitR.
 func IsNotFoundError(err error) bool {
 	var hErr *Error
 
@@ -20,11 +20,11 @@ func IsNotFoundError(err error) bool {
 		return false
 	}
 
-	return hErr.Problem.Type == "https://stellar.org/horizon-errors/not_found"
+	return hErr.Problem.Type == "https://lantah.network/orbitr-errors/not_found"
 }
 
-// GetError returns an error that can be interpreted as a horizon-specific
-// error. If err cannot be interpreted as a horizon-specific error, a nil error
+// GetError returns an error that can be interpreted as a orbitr-specific
+// error. If err cannot be interpreted as a orbitr-specific error, a nil error
 // is returned. The caller should still check whether err is nil.
 func GetError(err error) *Error {
 	var hErr *Error

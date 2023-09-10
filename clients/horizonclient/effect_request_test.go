@@ -1,10 +1,10 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
 	"testing"
 
-	"github.com/lantah/go/protocols/horizon/effects"
+	"github.com/lantah/go/protocols/orbitr/effects"
 	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -72,7 +72,7 @@ func TestEffectRequestBuildUrl(t *testing.T) {
 func TestEffectRequestStreamEffects(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -135,7 +135,7 @@ func TestEffectRequestStreamEffects(t *testing.T) {
 func TestNextEffectsPage(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -155,7 +155,7 @@ func TestNextEffectsPage(t *testing.T) {
 
 	hmock.On(
 		"GET",
-		"https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc",
+		"https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc",
 	).ReturnString(200, emptyEffectsPage)
 
 	nextPage, err := client.NextEffectsPage(efp)
@@ -167,7 +167,7 @@ func TestNextEffectsPage(t *testing.T) {
 func TestSequenceBumpedNewSeq(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 	effectRequest := EffectRequest{ForAccount: "GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD"}
@@ -204,7 +204,7 @@ func TestSequenceBumpedNewSeq(t *testing.T) {
 func TestTradeEffectOfferID(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 	effectRequest := EffectRequest{ForAccount: "GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD"}
@@ -237,19 +237,19 @@ func TestTradeEffectOfferID(t *testing.T) {
 	}
 }
 
-var effectStreamResponse = `data: {"_links":{"operation":{"href":"https://horizon-testnet.stellar.org/operations/2531135896703017"},"succeeds":{"href":"https://horizon-testnet.stellar.org/effects?order=desc\u0026cursor=2531135896703017-1"},"precedes":{"href":"https://horizon-testnet.stellar.org/effects?order=asc\u0026cursor=2531135896703017-1"}},"id":"0002531135896703017-0000000001","paging_token":"2531135896703017-1","account":"GBNZN27NAOHRJRCMHQF2ZN2F6TAPVEWKJIGZIRNKIADWIS2HDENIS6CI","type":"account_credited","type_i":2,"created_at":"2019-04-03T10:14:17Z","asset_type":"credit_alphanum4","asset_code":"qwop","asset_issuer":"GBM4HXXNDBWWQBXOL4QCTZIUQAP6XFUI3FPINUGUPBMULMTEHJPIKX6T","amount":"0.0460000"}
+var effectStreamResponse = `data: {"_links":{"operation":{"href":"https://orbitr-testnet.lantah.network/operations/2531135896703017"},"succeeds":{"href":"https://orbitr-testnet.lantah.network/effects?order=desc\u0026cursor=2531135896703017-1"},"precedes":{"href":"https://orbitr-testnet.lantah.network/effects?order=asc\u0026cursor=2531135896703017-1"}},"id":"0002531135896703017-0000000001","paging_token":"2531135896703017-1","account":"GBNZN27NAOHRJRCMHQF2ZN2F6TAPVEWKJIGZIRNKIADWIS2HDENIS6CI","type":"account_credited","type_i":2,"created_at":"2019-04-03T10:14:17Z","asset_type":"credit_alphanum4","asset_code":"qwop","asset_issuer":"GBM4HXXNDBWWQBXOL4QCTZIUQAP6XFUI3FPINUGUPBMULMTEHJPIKX6T","amount":"0.0460000"}
 `
 
 var firstEffectsPage = `{
   "_links": {
     "self": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=&limit=10&order=asc"
     },
     "next": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-1&limit=10&order=desc"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-1&limit=10&order=desc"
     }
   },
   "_embedded": {
@@ -257,13 +257,13 @@ var firstEffectsPage = `{
       {
         "_links": {
           "operation": {
-            "href": "https://horizon-testnet.stellar.org/operations/1557363731492865"
+            "href": "https://orbitr-testnet.lantah.network/operations/1557363731492865"
           },
           "succeeds": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=desc&cursor=1557363731492865-1"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=1557363731492865-1"
           },
           "precedes": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=asc&cursor=1557363731492865-1"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=1557363731492865-1"
           }
         },
         "id": "0001557363731492865-0000000001",
@@ -277,13 +277,13 @@ var firstEffectsPage = `{
       {
         "_links": {
           "operation": {
-            "href": "https://horizon-testnet.stellar.org/operations/1557363731492865"
+            "href": "https://orbitr-testnet.lantah.network/operations/1557363731492865"
           },
           "succeeds": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=desc&cursor=1557363731492865-3"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=1557363731492865-3"
           },
           "precedes": {
-            "href": "https://horizon-testnet.stellar.org/effects?order=asc&cursor=1557363731492865-3"
+            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=1557363731492865-3"
           }
         },
         "id": "0001557363731492865-0000000003",
@@ -303,13 +303,13 @@ var firstEffectsPage = `{
 var sequenceBumpedPage = `{
 	"_links": {
 	  "self": {
-		"href": "https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=&limit=10&order=asc"
+		"href": "https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=&limit=10&order=asc"
 	  },
 	  "next": {
-		"href": "https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc"
+		"href": "https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc"
 	  },
 	  "prev": {
-		"href": "https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-1&limit=10&order=desc"
+		"href": "https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-1&limit=10&order=desc"
 	  }
 	},
 	"_embedded": {
@@ -317,13 +317,13 @@ var sequenceBumpedPage = `{
 		{
 		  "_links": {
 			"operation": {
-			  "href": "https://horizon-testnet.stellar.org/operations/249108107265"
+			  "href": "https://orbitr-testnet.lantah.network/operations/249108107265"
 			},
 			"succeeds": {
-			  "href": "https://horizon-testnet.stellar.org/effects?order=desc\u0026cursor=249108107265-1"
+			  "href": "https://orbitr-testnet.lantah.network/effects?order=desc\u0026cursor=249108107265-1"
 			},
 			"precedes": {
-			  "href": "https://horizon-testnet.stellar.org/effects?order=asc\u0026cursor=249108107265-1"
+			  "href": "https://orbitr-testnet.lantah.network/effects?order=asc\u0026cursor=249108107265-1"
 			}
 		  },
 		  "id": "0000000249108107265-0000000001",
@@ -345,13 +345,13 @@ var tradeEffectPage = `
 		{
 		  "_links": {
 			"operation": {
-			  "href": "https://horizon-testnet.stellar.org/operations/224209713045979100"
+			  "href": "https://orbitr-testnet.lantah.network/operations/224209713045979100"
 			},
 			"succeeds": {
-			  "href": "https://horizon-testnet.stellar.org/effects?order=desc&cursor=224209713045979100-3"
+			  "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=224209713045979100-3"
 			},
 			"precedes": {
-			  "href": "https://horizon-testnet.stellar.org/effects?order=asc&cursor=224209713045979100-3"
+			  "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=224209713045979100-3"
 			}
 		  },
 		  "id": "2214209713045979100-0000000003",
@@ -377,13 +377,13 @@ var tradeEffectPage = `
 var emptyEffectsPage = `{
   "_links": {
     "self": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc"
     },
     "next": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://horizon-testnet.stellar.org/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=desc"
+      "href": "https://orbitr-testnet.lantah.network/accounts/GCDIZFWLOTBWHTPODXCBH6XNXPFMSQFRVIDRP3JLEKQZN66G7NF3ANOD/effects?cursor=1557363731492865-3&limit=10&order=desc"
     }
   },
   "_embedded": {

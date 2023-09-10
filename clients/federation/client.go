@@ -51,7 +51,7 @@ func (c *Client) LookupByAddress(addy string) (*proto.NameResponse, error) {
 // account id is used to resolve what server the request should be made against.
 func (c *Client) LookupByAccountID(aid string) (*proto.IDResponse, error) {
 
-	domain, err := c.Horizon.HomeDomainForAccount(aid)
+	domain, err := c.OrbitR.HomeDomainForAccount(aid)
 	if err != nil {
 		return nil, errors.Wrap(err, "get homedomain failed")
 	}

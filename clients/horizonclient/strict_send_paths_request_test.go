@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"testing"
@@ -13,7 +13,7 @@ func TestStrictSendPathsRequestBuildUrl(t *testing.T) {
 	endpoint, err := pr.BuildURL()
 
 	// It should return no errors and paths endpoint
-	// Horizon will return an error though because there are no parameters
+	// OrbitR will return an error though because there are no parameters
 	require.NoError(t, err)
 	assert.Equal(t, "paths/strict-send", endpoint)
 
@@ -55,7 +55,7 @@ func TestStrictSendPathsRequestBuildUrl(t *testing.T) {
 func TestStrictSendPathsRequest(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -109,9 +109,9 @@ func TestStrictSendPathsRequest(t *testing.T) {
 
 	_, err = client.StrictSendPaths(pr)
 	if assert.Error(t, err) {
-		assert.Contains(t, err.Error(), "horizon error")
-		horizonError, ok := err.(*Error)
+		assert.Contains(t, err.Error(), "orbitr error")
+		orbitrError, ok := err.(*Error)
 		assert.Equal(t, ok, true)
-		assert.Equal(t, horizonError.Problem.Title, "Bad Request")
+		assert.Equal(t, orbitrError.Problem.Title, "Bad Request")
 	}
 }

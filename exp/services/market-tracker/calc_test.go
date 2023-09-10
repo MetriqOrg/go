@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/stretchr/testify/assert"
 )
 

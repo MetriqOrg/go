@@ -1,14 +1,14 @@
 /*
-Package horizonclient provides client access to a Horizon server, allowing an application to post transactions and look up ledger information.
+Package orbitrclient provides client access to a OrbitR server, allowing an application to post transactions and look up ledger information.
 
-This library provides an interface to the Stellar Horizon service. It supports the building of Go applications on
-top of the Stellar network (https://www.stellar.org/). Transactions may be constructed using the sister package to
+This library provides an interface to the Lantah OrbitR service. It supports the building of Go applications on
+top of the Lantah network (https://www.lantah.org/). Transactions may be constructed using the sister package to
 this one, txnbuild (https://github.com/lantah/go/tree/master/txnbuild), and then submitted with this client to any
-Horizon instance for processing onto the ledger. Together, these two libraries provide a complete Stellar SDK.
+OrbitR instance for processing onto the ledger. Together, these two libraries provide a complete Stellar SDK.
 
 For more information and further examples, see https://github.com/lantah/go/blob/master/docs/reference/readme.md
 */
-package horizonclient
+package orbitrclient
 
 import (
 	"context"
@@ -18,9 +18,9 @@ import (
 	"sync"
 	"time"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
-	"github.com/lantah/go/protocols/horizon/effects"
-	"github.com/lantah/go/protocols/horizon/operations"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/protocols/orbitr/operations"
 	"github.com/lantah/go/support/clock"
 	"github.com/lantah/go/support/render/problem"
 	"github.com/lantah/go/txnbuild"
@@ -69,7 +69,7 @@ const (
 	accountRequiresMemo = "MQ=="
 )
 
-// Error struct contains the problem returned by Horizon
+// Error struct contains the problem returned by OrbitR
 type Error struct {
 	Response *http.Response
 	Problem  problem.P
@@ -95,8 +95,8 @@ var (
 	// when any of the destination accounts required a memo in the transaction.
 	ErrAccountRequiresMemo = errors.New("destination account requires a memo in the transaction")
 
-	// HorizonTimeout is the default number of nanoseconds before a request to horizon times out.
-	HorizonTimeout = 60 * time.Second
+	// OrbitRTimeout is the default number of nanoseconds before a request to orbitr times out.
+	OrbitRTimeout = 60 * time.Second
 
 	// MinuteResolution represents 1 minute used as `resolution` parameter in trade aggregation
 	MinuteResolution = time.Duration(1 * time.Minute)
@@ -117,7 +117,7 @@ var (
 	WeekResolution = time.Duration(168 * time.Hour)
 )
 
-// HTTP represents the HTTP client that a horizon client uses to communicate
+// HTTP represents the HTTP client that a orbitr client uses to communicate
 type HTTP interface {
 	Do(req *http.Request) (resp *http.Response, err error)
 	Get(url string) (resp *http.Response, err error)
@@ -125,25 +125,25 @@ type HTTP interface {
 }
 
 // UniversalTimeHandler is a function that is called to return the UTC unix time in seconds.
-// This handler is used when getting the time from a horizon server, which can be used to calculate
+// This handler is used when getting the time from a orbitr server, which can be used to calculate
 // transaction timebounds.
 type UniversalTimeHandler func() int64
 
-// Client struct contains data for creating a horizon client that connects to the stellar network.
+// Client struct contains data for creating a orbitr client that connects to the stellar network.
 type Client struct {
-	// URL of Horizon server to connect
-	HorizonURL        string
-	fixHorizonURLOnce sync.Once
+	// URL of OrbitR server to connect
+	OrbitRURL        string
+	fixOrbitRURLOnce sync.Once
 
 	// HTTP client to make requests with
 	HTTP HTTP
 
-	// AppName is the name of the application using the horizonclient package
+	// AppName is the name of the application using the orbitrclient package
 	AppName string
 
-	// AppVersion is the version of the application using the horizonclient package
+	// AppVersion is the version of the application using the orbitrclient package
 	AppVersion     string
-	horizonTimeout time.Duration
+	orbitrTimeout time.Duration
 
 	// clock is a Clock returning the current time.
 	clock *clock.Clock
@@ -157,7 +157,7 @@ type AdminClient struct {
 	http HTTP
 
 	// max client wait time for response
-	horizonTimeout time.Duration
+	orbitrTimeout time.Duration
 }
 
 // SubmitTxOpts represents the submit transaction options
@@ -172,7 +172,7 @@ type AdminClientInterface interface {
 	SetIngestionAssetFilter(hProtocol.AssetFilterConfig) error
 }
 
-// ClientInterface contains methods implemented by the horizon client
+// ClientInterface contains methods implemented by the orbitr client
 type ClientInterface interface {
 	Accounts(request AccountsRequest) (hProtocol.AccountsPage, error)
 	AccountDetail(request AccountRequest) (hProtocol.Account, error)
@@ -236,26 +236,26 @@ type ClientInterface interface {
 
 // DefaultTestNetClient is a default client to connect to test network.
 var DefaultTestNetClient = &Client{
-	HorizonURL:     "https://horizon-testnet.stellar.org/",
+	OrbitRURL:     "https://orbitr-testnet.lantah.network/",
 	HTTP:           http.DefaultClient,
-	horizonTimeout: HorizonTimeout,
+	orbitrTimeout: OrbitRTimeout,
 }
 
 // DefaultPublicNetClient is a default client to connect to public network.
 var DefaultPublicNetClient = &Client{
-	HorizonURL:     "https://horizon.stellar.org/",
+	OrbitRURL:     "https://orbitr.lantah.network/",
 	HTTP:           http.DefaultClient,
-	horizonTimeout: HorizonTimeout,
+	orbitrTimeout: OrbitRTimeout,
 }
 
-// HorizonRequest contains methods implemented by request structs for horizon endpoints.
-// Action needed in release: horizonclient-v8.0.0: remove BuildURL()
-type HorizonRequest interface {
+// OrbitRRequest contains methods implemented by request structs for orbitr endpoints.
+// Action needed in release: orbitrclient-v8.0.0: remove BuildURL()
+type OrbitRRequest interface {
 	BuildURL() (string, error)
-	HTTPRequest(horizonURL string) (*http.Request, error)
+	HTTPRequest(orbitrURL string) (*http.Request, error)
 }
 
-// AccountsRequest struct contains data for making requests to the accounts endpoint of a horizon server.
+// AccountsRequest struct contains data for making requests to the accounts endpoint of a orbitr server.
 // Either "Signer" or "Asset" fields should be set when retrieving Accounts.
 // At the moment, you can't use both filters at the same time.
 type AccountsRequest struct {
@@ -268,7 +268,7 @@ type AccountsRequest struct {
 	Limit         uint
 }
 
-// AccountRequest struct contains data for making requests to the show account endpoint of a horizon server.
+// AccountRequest struct contains data for making requests to the show account endpoint of a orbitr server.
 // "AccountID" and "DataKey" fields should both be set when retrieving AccountData.
 // When getting the AccountDetail, only "AccountID" needs to be set.
 type AccountRequest struct {
@@ -276,7 +276,7 @@ type AccountRequest struct {
 	DataKey   string
 }
 
-// EffectRequest struct contains data for getting effects from a horizon server.
+// EffectRequest struct contains data for getting effects from a orbitr server.
 // "ForAccount", "ForLedger", "ForOperation" and "ForTransaction": Not more than one of these
 // can be set at a time. If none are set, the default is to return all effects.
 // The query parameters (Order, Cursor and Limit) are optional. All or none can be set.
@@ -291,7 +291,7 @@ type EffectRequest struct {
 	Limit            uint
 }
 
-// AssetRequest struct contains data for getting asset details from a horizon server.
+// AssetRequest struct contains data for getting asset details from a orbitr server.
 // If "ForAssetCode" and "ForAssetIssuer" are not set, it returns all assets.
 // The query parameters (Order, Cursor and Limit) are optional. All or none can be set.
 type AssetRequest struct {
@@ -302,7 +302,7 @@ type AssetRequest struct {
 	Limit          uint
 }
 
-// LedgerRequest struct contains data for getting ledger details from a horizon server.
+// LedgerRequest struct contains data for getting ledger details from a orbitr server.
 // The query parameters (Order, Cursor and Limit) are optional. All or none can be set.
 type LedgerRequest struct {
 	Order       Order
@@ -315,7 +315,7 @@ type feeStatsRequest struct {
 	endpoint string
 }
 
-// OfferRequest struct contains data for getting offers made by an account from a horizon server.
+// OfferRequest struct contains data for getting offers made by an account from a orbitr server.
 // The query parameters (Order, Cursor and Limit) are optional. All or none can be set.
 type OfferRequest struct {
 	OfferID    string
@@ -328,7 +328,7 @@ type OfferRequest struct {
 	Limit      uint
 }
 
-// OperationRequest struct contains data for getting operation details from a horizon server.
+// OperationRequest struct contains data for getting operation details from a orbitr server.
 // "ForAccount", "ForLedger", "ForTransaction": Only one of these can be set at a time. If none
 // are provided, the default is to return all operations.
 // The query parameters (Order, Cursor, Limit and IncludeFailed) are optional. All or none can be set.
@@ -352,7 +352,7 @@ type submitRequest struct {
 	transactionXdr string
 }
 
-// TransactionRequest struct contains data for getting transaction details from a horizon server.
+// TransactionRequest struct contains data for getting transaction details from a orbitr server.
 // "ForAccount", "ForClaimableBalance", "ForLedger": Only one of these can be set at a time.
 // If none are provided, the default is to return all transactions.
 // The query parameters (Order, Cursor, Limit and IncludeFailed) are optional. All or none can be set.
@@ -368,7 +368,7 @@ type TransactionRequest struct {
 	IncludeFailed       bool
 }
 
-// OrderBookRequest struct contains data for getting the orderbook for an asset pair from a horizon server.
+// OrderBookRequest struct contains data for getting the orderbook for an asset pair from a orbitr server.
 // Limit is optional. All other parameters are required.
 type OrderBookRequest struct {
 	SellingAssetType   AssetType
@@ -380,7 +380,7 @@ type OrderBookRequest struct {
 	Limit              uint
 }
 
-// PathsRequest struct contains data for getting available strict receive path payments from a horizon server.
+// PathsRequest struct contains data for getting available strict receive path payments from a orbitr server.
 // All the Destination related parameters are required and you need to include either
 // SourceAccount or SourceAssets.
 // See https://developers.stellar.org/api/aggregations/paths/strict-receive/
@@ -394,7 +394,7 @@ type PathsRequest struct {
 	SourceAssets           string
 }
 
-// StrictSendPathsRequest struct contains data for getting available strict send path payments from a horizon server.
+// StrictSendPathsRequest struct contains data for getting available strict send path payments from a orbitr server.
 // All the Source related parameters are required and you need to include either
 // DestinationAccount or DestinationAssets.
 // See https://developers.stellar.org/api/aggregations/paths/strict-send/
@@ -407,7 +407,7 @@ type StrictSendPathsRequest struct {
 	SourceAmount       string
 }
 
-// TradeRequest struct contains data for getting trade details from a horizon server.
+// TradeRequest struct contains data for getting trade details from a orbitr server.
 // "ForAccount", "ForOfferID": Only one of these can be set at a time. If none are provided, the
 // default is to return all trades.
 // All other query parameters are optional. All or none can be set.
@@ -427,7 +427,7 @@ type TradeRequest struct {
 	Limit              uint
 }
 
-// TradeAggregationRequest struct contains data for getting trade aggregations from a horizon server.
+// TradeAggregationRequest struct contains data for getting trade aggregations from a orbitr server.
 // The query parameters (Order and Limit) are optional. All or none can be set.
 // All other parameters are required.
 type TradeAggregationRequest struct {
@@ -456,12 +456,12 @@ type ClaimableBalanceRequest struct {
 	Limit    uint
 }
 
-// ServerTimeRecord contains data for the current unix time of a horizon server instance, and the local time when it was recorded.
+// ServerTimeRecord contains data for the current unix time of a orbitr server instance, and the local time when it was recorded.
 type ServerTimeRecord struct {
 	ServerTime        int64
 	LocalTimeRecorded int64
 }
 
-// ServerTimeMap holds the ServerTimeRecord for different horizon instances.
+// ServerTimeMap holds the ServerTimeRecord for different orbitr instances.
 var ServerTimeMap = make(map[string]ServerTimeRecord)
 var serverTimeMapMutex = &sync.Mutex{}

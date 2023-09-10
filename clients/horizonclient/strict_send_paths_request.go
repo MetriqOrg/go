@@ -1,4 +1,4 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"fmt"
@@ -36,11 +36,11 @@ func (pr StrictSendPathsRequest) BuildURL() (endpoint string, err error) {
 }
 
 // HTTPRequest returns the http request for the strict send path payment endpoint
-func (pr StrictSendPathsRequest) HTTPRequest(horizonURL string) (*http.Request, error) {
+func (pr StrictSendPathsRequest) HTTPRequest(orbitrURL string) (*http.Request, error) {
 	endpoint, err := pr.BuildURL()
 	if err != nil {
 		return nil, err
 	}
 
-	return http.NewRequest("GET", horizonURL+endpoint, nil)
+	return http.NewRequest("GET", orbitrURL+endpoint, nil)
 }

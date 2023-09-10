@@ -1,9 +1,9 @@
-package horizonclient
+package orbitrclient
 
 import (
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -14,7 +14,7 @@ func TestPathsRequestBuildUrl(t *testing.T) {
 	endpoint, err := pr.BuildURL()
 
 	// It should return no errors and orderbook endpoint
-	// Horizon will return an error though because there are no parameters
+	// OrbitR will return an error though because there are no parameters
 	require.NoError(t, err)
 	assert.Equal(t, "paths", endpoint)
 
@@ -43,7 +43,7 @@ func TestPathsRequestBuildUrl(t *testing.T) {
 func TestPathsRequest(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -80,10 +80,10 @@ func TestPathsRequest(t *testing.T) {
 
 	_, err = client.StrictReceivePaths(pr)
 	if assert.Error(t, err) {
-		assert.Contains(t, err.Error(), "horizon error")
-		horizonError, ok := err.(*Error)
+		assert.Contains(t, err.Error(), "orbitr error")
+		orbitrError, ok := err.(*Error)
 		assert.Equal(t, ok, true)
-		assert.Equal(t, horizonError.Problem.Title, "Bad Request")
+		assert.Equal(t, orbitrError.Problem.Title, "Bad Request")
 	}
 
 }
@@ -91,7 +91,7 @@ func TestPathsRequest(t *testing.T) {
 func TestStrictReceivePathsRequest(t *testing.T) {
 	hmock := httptest.NewClient()
 	client := &Client{
-		HorizonURL: "https://localhost/",
+		OrbitRURL: "https://localhost/",
 		HTTP:       hmock,
 	}
 
@@ -128,16 +128,16 @@ func TestStrictReceivePathsRequest(t *testing.T) {
 
 	_, err = client.StrictReceivePaths(pr)
 	if assert.Error(t, err) {
-		assert.Contains(t, err.Error(), "horizon error")
-		horizonError, ok := err.(*Error)
+		assert.Contains(t, err.Error(), "orbitr error")
+		orbitrError, ok := err.(*Error)
 		assert.Equal(t, ok, true)
-		assert.Equal(t, horizonError.Problem.Title, "Bad Request")
+		assert.Equal(t, orbitrError.Problem.Title, "Bad Request")
 	}
 
 }
 
 var badRequestResponse = `{
-  "type": "https://stellar.org/horizon-errors/bad_request",
+  "type": "https://lantah.network/orbitr-errors/bad_request",
   "title": "Bad Request",
   "status": 400,
   "detail": "The request you sent was invalid in some way",
