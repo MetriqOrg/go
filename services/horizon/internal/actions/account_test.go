@@ -10,13 +10,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/protocols/horizon/base"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/base"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 )
 
 var (
@@ -164,8 +164,8 @@ var (
 func TestAccountInfo(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 
 	var thresholds xdr.Thresholds
 	tt.Assert.NoError(
@@ -238,7 +238,7 @@ func TestAccountInfo(t *testing.T) {
 	}, 0, 0, 0, 0, 0)
 	assert.NoError(t, err)
 
-	account, err := AccountInfo(tt.Ctx, &history.Q{tt.HorizonSession()}, accountID)
+	account, err := AccountInfo(tt.Ctx, &history.Q{tt.OrbitRSession()}, accountID)
 	tt.Assert.NoError(err)
 
 	tt.Assert.Equal(int64(8589934593), account.Sequence)
@@ -265,16 +265,16 @@ func TestAccountInfo(t *testing.T) {
 	tt.Assert.True(account.Links.Data.Templated)
 
 	// try to fetch account which does not exist
-	_, err = AccountInfo(tt.Ctx, &history.Q{tt.HorizonSession()}, "GDBAPLDCAEJV6LSEDFEAUDAVFYSNFRUYZ4X75YYJJMMX5KFVUOHX46SQ")
+	_, err = AccountInfo(tt.Ctx, &history.Q{tt.OrbitRSession()}, "GDBAPLDCAEJV6LSEDFEAUDAVFYSNFRUYZ4X75YYJJMMX5KFVUOHX46SQ")
 	tt.Assert.True(q.NoRows(errors.Cause(err)))
 }
 
 func TestGetAccountsHandlerPageNoResults(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := &GetAccountsHandler{}
 	records, err := handler.GetResourcePage(
 		httptest.NewRecorder(),
@@ -294,9 +294,9 @@ func TestGetAccountsHandlerPageNoResults(t *testing.T) {
 func TestGetAccountsHandlerPageResultsBySigner(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := &GetAccountsHandler{}
 
 	err := q.UpsertAccounts(tt.Ctx, []history.AccountEntry{account1, account2, account3})
@@ -368,9 +368,9 @@ func TestGetAccountsHandlerPageResultsBySigner(t *testing.T) {
 func TestGetAccountsHandlerPageResultsBySponsor(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := &GetAccountsHandler{}
 
 	err := q.UpsertAccounts(tt.Ctx, []history.AccountEntry{account1, account2, account3})
@@ -400,9 +400,9 @@ func TestGetAccountsHandlerPageResultsBySponsor(t *testing.T) {
 func TestGetAccountsHandlerPageResultsByAsset(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := &GetAccountsHandler{}
 
 	err := q.UpsertAccounts(tt.Ctx, []history.AccountEntry{account1, account2})
@@ -502,9 +502,9 @@ func createLP(tt *test.T, q *history.Q) history.LiquidityPool {
 func TestGetAccountsHandlerPageResultsByLiquidityPool(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := &GetAccountsHandler{}
 
 	err := q.UpsertAccounts(tt.Ctx, []history.AccountEntry{account1, account2})
@@ -693,7 +693,7 @@ func TestGetAccountsHandlerInvalidParams(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 			tt := test.Start(t)
 			defer tt.Finish()
-			q := &history.Q{tt.HorizonSession()}
+			q := &history.Q{tt.OrbitRSession()}
 			handler := &GetAccountsHandler{}
 
 			_, err := handler.GetResourcePage(

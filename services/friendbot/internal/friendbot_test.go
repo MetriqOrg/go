@@ -6,14 +6,14 @@ import (
 
 	"github.com/lantah/go/txnbuild"
 
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/keypair"
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFriendbot_Pay(t *testing.T) {
-	mockSubmitTransaction := func(minion *Minion, hclient horizonclient.ClientInterface, tx string) (*hProtocol.Transaction, error) {
+	mockSubmitTransaction := func(minion *Minion, hclient orbitrclient.ClientInterface, tx string) (*hProtocol.Transaction, error) {
 		// Instead of submitting the tx, we emulate a success.
 		txSuccess := hProtocol.Transaction{EnvelopeXdr: tx, Successful: true}
 		return &txSuccess, nil
@@ -42,7 +42,7 @@ func TestFriendbot_Pay(t *testing.T) {
 		Keypair:              minionKeypair.(*keypair.Full),
 		BotAccount:           botAccount,
 		BotKeypair:           botKeypair.(*keypair.Full),
-		Network:              "Test SDF Network ; September 2015",
+		Network:              "Test Lantah Network ; 2023",
 		StartingBalance:      "10000.00",
 		SubmitTransaction:    mockSubmitTransaction,
 		CheckSequenceRefresh: CheckSequenceRefresh,

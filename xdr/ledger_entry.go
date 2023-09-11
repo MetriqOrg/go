@@ -94,7 +94,7 @@ func (entry *LedgerEntry) Normalize() *LedgerEntry {
 				},
 			}
 		} else if trustLineEntry.Ext.V == 1 {
-			// horizon doesn't make use of TrustLineEntryExtensionV2.liquidityPoolUseCount
+			// orbitr doesn't make use of TrustLineEntryExtensionV2.liquidityPoolUseCount
 			// so clear out those fields to make state verifier pass
 			trustLineEntry.Ext.V1.Ext.V = 0
 			trustLineEntry.Ext.V1.Ext.V2 = nil

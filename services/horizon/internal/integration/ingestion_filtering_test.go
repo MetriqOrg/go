@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/clients/horizonclient"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/ingest/filters"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/clients/orbitrclient"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/ingest/filters"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +17,7 @@ func TestFilteringWithNoFilters(t *testing.T) {
 	tt := assert.New(t)
 	const adminPort uint16 = 6000
 	itest := integration.NewTest(t, integration.Config{
-		HorizonIngestParameters: map[string]string{
+		OrbitRIngestParameters: map[string]string{
 			"admin-port": strconv.Itoa(int(adminPort)),
 		},
 	})
@@ -46,7 +46,7 @@ func TestFilteringAccountWhiteList(t *testing.T) {
 	tt := assert.New(t)
 	const adminPort uint16 = 6000
 	itest := integration.NewTest(t, integration.Config{
-		HorizonIngestParameters: map[string]string{
+		OrbitRIngestParameters: map[string]string{
 			"admin-port": strconv.Itoa(int(adminPort)),
 		},
 	})
@@ -91,7 +91,7 @@ func TestFilteringAccountWhiteList(t *testing.T) {
 		},
 	)
 	_, err = itest.Client().TransactionDetail(txResp.Hash)
-	tt.True(horizonclient.IsNotFoundError(err))
+	tt.True(orbitrclient.IsNotFoundError(err))
 
 	// Make sure that when using a whitelisted account, the transaction is stored
 	txResp = itest.MustSubmitOperations(itest.MasterAccount(), itest.Master(),
@@ -109,7 +109,7 @@ func TestFilteringAssetWhiteList(t *testing.T) {
 	tt := assert.New(t)
 	const adminPort uint16 = 6000
 	itest := integration.NewTest(t, integration.Config{
-		HorizonIngestParameters: map[string]string{
+		OrbitRIngestParameters: map[string]string{
 			"admin-port": strconv.Itoa(int(adminPort)),
 		},
 	})
@@ -155,7 +155,7 @@ func TestFilteringAssetWhiteList(t *testing.T) {
 		},
 	)
 	_, err = itest.Client().TransactionDetail(txResp.Hash)
-	tt.True(horizonclient.IsNotFoundError(err))
+	tt.True(orbitrclient.IsNotFoundError(err))
 
 	// Make sure that when using a whitelisted asset, the transaction is stored
 	txResp = itest.MustSubmitOperations(itest.MasterAccount(), itest.Master(),

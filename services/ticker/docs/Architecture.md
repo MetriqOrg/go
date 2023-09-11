@@ -9,7 +9,7 @@ The following diagram illustrates the proposed services, tasks, external sources
 ![Stellar Ticker Architecture Overview](images/StellarTicker.png)
 
 Here is a quick overview of each of the proposed services, tasks and other components:
-- **Trade ingester (service):** connects to the Horizon Trade Stream API in order to stream new trades performed on the Stellar Network and ingest them into the PostgreSQL Database.
+- **Trade ingester (service):** connects to the Horizon Trade Stream API in order to stream new trades performed on the Lantah Network and ingest them into the PostgreSQL Database.
 - **Market & Assets Data Ingester:** connects to other Horizon APIs to retrieve other important data, such as assets.
 - **Trade Aggregator:** provides the logic for querying / aggregating trade and market data from the database and outputting it to either the JSON Generator or the GraphQL server.
 JSON Generator: gets the data provided by the trade Aggregator, formats it into the desired JSON format (similar to what we have in http://ticker.stellar.org) and output it to a file.

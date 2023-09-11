@@ -3,10 +3,10 @@ schema {
 }
 
 type Query {
-	# retrieve all validated assets on the Stellar network.
+	# retrieve all validated assets on the Lantah Network.
 	assets: [Asset!]!
 
-	# retrieve all validated issuers on the Stellar network.
+	# retrieve all validated issuers on the Lantah Network.
 	issuers: [Issuer!]!
 
 	# retrieve trade stats from the last <numHoursAgo> hours

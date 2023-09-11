@@ -1,12 +1,12 @@
-package horizon
+package orbitr
 
 import (
 	"encoding/json"
 	"strings"
 	"testing"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,20 +27,20 @@ func TestRootAction(t *testing.T) {
 		}`)
 	defer server.Close()
 
-	ht.App.config.GramrURL = server.URL
+	ht.App.config.GravityURL = server.URL
 	ht.App.config.NetworkPassphrase = "test"
-	assert.NoError(t, ht.App.UpdateGramrInfo(ht.Ctx))
+	assert.NoError(t, ht.App.UpdateGravityInfo(ht.Ctx))
 	ht.App.UpdateCoreLedgerState(ht.Ctx)
-	ht.App.UpdateHorizonLedgerState(ht.Ctx)
+	ht.App.UpdateOrbitRLedgerState(ht.Ctx)
 
 	w := ht.Get("/")
 
 	if ht.Assert.Equal(200, w.Code) {
-		var actual horizon.Root
+		var actual orbitr.Root
 		err := json.Unmarshal(w.Body.Bytes(), &actual)
 		ht.Require.NoError(err)
-		ht.Assert.Equal("devel", actual.HorizonVersion)
-		ht.Assert.Equal("test-core", actual.GramrVersion)
+		ht.Assert.Equal("devel", actual.OrbitRVersion)
+		ht.Assert.Equal("test-core", actual.GravityVersion)
 		ht.Assert.Equal(int32(4), actual.CoreSupportedProtocolVersion)
 		ht.Assert.Equal(int32(3), actual.CurrentProtocolVersion)
 		ht.Assert.Equal(int32(64), actual.CoreSequence)
@@ -95,13 +95,13 @@ func TestRootCoreClientInfoErrored(t *testing.T) {
 	server := test.NewStaticMockServer(`{}`)
 	defer server.Close()
 
-	ht.App.config.GramrURL = server.URL
+	ht.App.config.GravityURL = server.URL
 	ht.App.UpdateCoreLedgerState(ht.Ctx)
 
 	w := ht.Get("/")
 
 	if ht.Assert.Equal(200, w.Code) {
-		var actual horizon.Root
+		var actual orbitr.Root
 		err := json.Unmarshal(w.Body.Bytes(), &actual)
 		ht.Require.NoError(err)
 		ht.Assert.Equal(int32(18), actual.CurrentProtocolVersion)

@@ -9,7 +9,7 @@ func Test_HistoryDBLedgerSourceCurrentLedger(t *testing.T) {
 	state := &State{
 		RWMutex: sync.RWMutex{},
 		current: Status{
-			HorizonStatus: HorizonStatus{
+			OrbitRStatus: OrbitRStatus{
 				ExpHistoryLatest: 3,
 			},
 		},
@@ -30,7 +30,7 @@ func Test_HistoryDBLedgerSourceNextLedger(t *testing.T) {
 	state := &State{
 		RWMutex: sync.RWMutex{},
 		current: Status{
-			HorizonStatus: HorizonStatus{
+			OrbitRStatus: OrbitRStatus{
 				ExpHistoryLatest: 3,
 			},
 		},

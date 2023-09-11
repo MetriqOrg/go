@@ -10,19 +10,19 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/historyarchive"
-	"github.com/stellar/go/keypair"
-	horizoncmd "github.com/stellar/go/services/horizon/cmd"
-	horizon "github.com/stellar/go/services/horizon/internal"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/db2/schema"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/support/collections/set"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/db/dbtest"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/historyarchive"
+	"github.com/lantah/go/keypair"
+	orbitrcmd "github.com/lantah/go/services/orbitr/cmd"
+	orbitr "github.com/lantah/go/services/orbitr/internal"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/db2/schema"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/support/collections/set"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/db/dbtest"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 )
 
 func submitLiquidityPoolOps(itest *integration.Test, tt *assert.Assertions) (submittedOperations []txnbuild.Operation, lastLedger int32) {
@@ -107,7 +107,7 @@ func submitLiquidityPoolOps(itest *integration.Test, tt *assert.Assertions) (sub
 	}
 	itest.MustSubmitOperations(tradeAccount, tradeKeys, ops...)
 
-	pool, err := itest.Client().LiquidityPoolDetail(horizonclient.LiquidityPoolRequest{
+	pool, err := itest.Client().LiquidityPoolDetail(orbitrclient.LiquidityPoolRequest{
 		LiquidityPoolID: poolIDHexString,
 	})
 	tt.NoError(err)
@@ -264,7 +264,7 @@ func submitClawbackOps(itest *integration.Test, tt *assert.Assertions) (submitte
 	allOps = append(allOps, &pesetasCreateCB)
 	itest.MustSubmitOperations(itest.MasterAccount(), itest.Master(), &pesetasCreateCB)
 
-	listCBResp, err := itest.Client().ClaimableBalances(horizonclient.ClaimableBalanceRequest{
+	listCBResp, err := itest.Client().ClaimableBalances(orbitrclient.ClaimableBalanceRequest{
 		Claimant: accountKeyPair.Address(),
 	})
 	tt.NoError(err)
@@ -298,7 +298,7 @@ func submitClaimableBalanceOps(itest *integration.Test, tt *assert.Assertions) (
 	allOps := []txnbuild.Operation{&createCB}
 	itest.MustSubmitOperations(itest.MasterAccount(), itest.Master(), &createCB)
 
-	listCBResp, err := itest.Client().ClaimableBalances(horizonclient.ClaimableBalanceRequest{
+	listCBResp, err := itest.Client().ClaimableBalances(orbitrclient.ClaimableBalanceRequest{
 		Claimant: accountKeyPair.Address(),
 	})
 	tt.NoError(err)
@@ -467,7 +467,7 @@ func initializeDBIntegrationTest(t *testing.T) (*integration.Test, int32) {
 	reachedLedger := func() bool {
 		root, err := itest.Client().Root()
 		tt.NoError(err)
-		return root.HorizonSequence >= ledgerOfLastSubmittedTx
+		return root.OrbitRSequence >= ledgerOfLastSubmittedTx
 	}
 	tt.Eventually(reachedLedger, 15*time.Second, 5*time.Second)
 
@@ -478,9 +478,9 @@ func TestReingestDB(t *testing.T) {
 	itest, reachedLedger := initializeDBIntegrationTest(t)
 	tt := assert.New(t)
 
-	horizonConfig := itest.GetHorizonIngestConfig()
+	orbitrConfig := itest.GetOrbitRIngestConfig()
 	t.Run("validate parallel range", func(t *testing.T) {
-		horizoncmd.RootCmd.SetArgs(command(t, horizonConfig,
+		orbitrcmd.RootCmd.SetArgs(command(t, orbitrConfig,
 			"db",
 			"reingest",
 			"range",
@@ -489,16 +489,16 @@ func TestReingestDB(t *testing.T) {
 			"2",
 		))
 
-		assert.EqualError(t, horizoncmd.RootCmd.Execute(), "Invalid range: {10 2} from > to")
+		assert.EqualError(t, orbitrcmd.RootCmd.Execute(), "Invalid range: {10 2} from > to")
 	})
 
 	t.Logf("reached ledger is %v", reachedLedger)
 	// cap reachedLedger to the nearest checkpoint ledger because reingest range cannot ingest past the most
 	// recent checkpoint ledger when using captive core
 	toLedger := uint32(reachedLedger)
-	archive, err := historyarchive.Connect(horizonConfig.HistoryArchiveURLs[0], historyarchive.ConnectOptions{
-		NetworkPassphrase:   horizonConfig.NetworkPassphrase,
-		CheckpointFrequency: horizonConfig.CheckpointFrequency,
+	archive, err := historyarchive.Connect(orbitrConfig.HistoryArchiveURLs[0], historyarchive.ConnectOptions{
+		NetworkPassphrase:   orbitrConfig.NetworkPassphrase,
+		CheckpointFrequency: orbitrConfig.CheckpointFrequency,
 	})
 	tt.NoError(err)
 
@@ -520,16 +520,16 @@ func TestReingestDB(t *testing.T) {
 	}
 
 	// We just want to test reingestion, so there's no reason for a background
-	// Horizon to run. Keeping it running will actually cause the Captive Core
+	// OrbitR to run. Keeping it running will actually cause the Captive Core
 	// subprocesses to conflict.
-	itest.StopHorizon()
+	itest.StopOrbitR()
 
-	horizonConfig.CaptiveCoreConfigPath = filepath.Join(
-		filepath.Dir(horizonConfig.CaptiveCoreConfigPath),
+	orbitrConfig.CaptiveCoreConfigPath = filepath.Join(
+		filepath.Dir(orbitrConfig.CaptiveCoreConfigPath),
 		"captive-core-reingest-range-integration-tests.cfg",
 	)
 
-	horizoncmd.RootCmd.SetArgs(command(t, horizonConfig, "db",
+	orbitrcmd.RootCmd.SetArgs(command(t, orbitrConfig, "db",
 		"reingest",
 		"range",
 		"--parallel-workers=1",
@@ -537,29 +537,29 @@ func TestReingestDB(t *testing.T) {
 		fmt.Sprintf("%d", toLedger),
 	))
 
-	tt.NoError(horizoncmd.RootCmd.Execute())
-	tt.NoError(horizoncmd.RootCmd.Execute(), "Repeat the same reingest range against db, should not have errors.")
+	tt.NoError(orbitrcmd.RootCmd.Execute())
+	tt.NoError(orbitrcmd.RootCmd.Execute(), "Repeat the same reingest range against db, should not have errors.")
 }
 
-func command(t *testing.T, horizonConfig horizon.Config, args ...string) []string {
+func command(t *testing.T, orbitrConfig orbitr.Config, args ...string) []string {
 	return append([]string{
-		"--gramr-url",
-		horizonConfig.GramrURL,
+		"--gravity-url",
+		orbitrConfig.GravityURL,
 		"--history-archive-urls",
-		horizonConfig.HistoryArchiveURLs[0],
+		orbitrConfig.HistoryArchiveURLs[0],
 		"--db-url",
-		horizonConfig.DatabaseURL,
-		"--gramr-db-url",
-		horizonConfig.GramrDatabaseURL,
-		"--gramr-binary-path",
-		horizonConfig.CaptiveCoreBinaryPath,
+		orbitrConfig.DatabaseURL,
+		"--gravity-db-url",
+		orbitrConfig.GravityDatabaseURL,
+		"--gravity-binary-path",
+		orbitrConfig.CaptiveCoreBinaryPath,
 		"--captive-core-config-path",
-		horizonConfig.CaptiveCoreConfigPath,
+		orbitrConfig.CaptiveCoreConfigPath,
 		"--captive-core-use-db=" +
-			strconv.FormatBool(horizonConfig.CaptiveCoreConfigUseDB),
-		"--enable-captive-core-ingestion=" + strconv.FormatBool(horizonConfig.EnableCaptiveCoreIngestion),
+			strconv.FormatBool(orbitrConfig.CaptiveCoreConfigUseDB),
+		"--enable-captive-core-ingestion=" + strconv.FormatBool(orbitrConfig.EnableCaptiveCoreIngestion),
 		"--network-passphrase",
-		horizonConfig.NetworkPassphrase,
+		orbitrConfig.NetworkPassphrase,
 		// due to ARTIFICIALLY_ACCELERATE_TIME_FOR_TESTING
 		"--checkpoint-frequency",
 		"8",
@@ -571,18 +571,18 @@ func command(t *testing.T, horizonConfig horizon.Config, args ...string) []strin
 
 func TestMigrateIngestIsTrueByDefault(t *testing.T) {
 	tt := assert.New(t)
-	// Create a fresh Horizon database
+	// Create a fresh OrbitR database
 	newDB := dbtest.Postgres(t)
-	freshHorizonPostgresURL := newDB.DSN
+	freshOrbitRPostgresURL := newDB.DSN
 
-	horizoncmd.RootCmd.SetArgs([]string{
+	orbitrcmd.RootCmd.SetArgs([]string{
 		// ingest is set to true by default
-		"--db-url", freshHorizonPostgresURL,
+		"--db-url", freshOrbitRPostgresURL,
 		"db", "migrate", "up",
 	})
-	tt.NoError(horizoncmd.RootCmd.Execute())
+	tt.NoError(orbitrcmd.RootCmd.Execute())
 
-	dbConn, err := db.Open("postgres", freshHorizonPostgresURL)
+	dbConn, err := db.Open("postgres", freshOrbitRPostgresURL)
 	tt.NoError(err)
 
 	status, err := schema.Status(dbConn.DB.DB)
@@ -592,18 +592,18 @@ func TestMigrateIngestIsTrueByDefault(t *testing.T) {
 
 func TestMigrateChecksIngestFlag(t *testing.T) {
 	tt := assert.New(t)
-	// Create a fresh Horizon database
+	// Create a fresh OrbitR database
 	newDB := dbtest.Postgres(t)
-	freshHorizonPostgresURL := newDB.DSN
+	freshOrbitRPostgresURL := newDB.DSN
 
-	horizoncmd.RootCmd.SetArgs([]string{
+	orbitrcmd.RootCmd.SetArgs([]string{
 		"--ingest=false",
-		"--db-url", freshHorizonPostgresURL,
+		"--db-url", freshOrbitRPostgresURL,
 		"db", "migrate", "up",
 	})
-	tt.NoError(horizoncmd.RootCmd.Execute())
+	tt.NoError(orbitrcmd.RootCmd.Execute())
 
-	dbConn, err := db.Open("postgres", freshHorizonPostgresURL)
+	dbConn, err := db.Open("postgres", freshOrbitRPostgresURL)
 	tt.NoError(err)
 
 	status, err := schema.Status(dbConn.DB.DB)
@@ -615,13 +615,13 @@ func TestFillGaps(t *testing.T) {
 	itest, reachedLedger := initializeDBIntegrationTest(t)
 	tt := assert.New(t)
 
-	// Create a fresh Horizon database
+	// Create a fresh OrbitR database
 	newDB := dbtest.Postgres(t)
-	freshHorizonPostgresURL := newDB.DSN
-	horizonConfig := itest.GetHorizonIngestConfig()
-	horizonConfig.DatabaseURL = freshHorizonPostgresURL
+	freshOrbitRPostgresURL := newDB.DSN
+	orbitrConfig := itest.GetOrbitRIngestConfig()
+	orbitrConfig.DatabaseURL = freshOrbitRPostgresURL
 	// Initialize the DB schema
-	dbConn, err := db.Open("postgres", freshHorizonPostgresURL)
+	dbConn, err := db.Open("postgres", freshOrbitRPostgresURL)
 	tt.NoError(err)
 	historyQ := history.Q{SessionInterface: dbConn}
 	defer func() {
@@ -635,14 +635,14 @@ func TestFillGaps(t *testing.T) {
 	// cap reachedLedger to the nearest checkpoint ledger because reingest range cannot ingest past the most
 	// recent checkpoint ledger when using captive core
 	toLedger := uint32(reachedLedger)
-	archive, err := historyarchive.Connect(horizonConfig.HistoryArchiveURLs[0], historyarchive.ConnectOptions{
-		NetworkPassphrase:   horizonConfig.NetworkPassphrase,
-		CheckpointFrequency: horizonConfig.CheckpointFrequency,
+	archive, err := historyarchive.Connect(orbitrConfig.HistoryArchiveURLs[0], historyarchive.ConnectOptions{
+		NetworkPassphrase:   orbitrConfig.NetworkPassphrase,
+		CheckpointFrequency: orbitrConfig.CheckpointFrequency,
 	})
 	tt.NoError(err)
 
 	t.Run("validate parallel range", func(t *testing.T) {
-		horizoncmd.RootCmd.SetArgs(command(t, horizonConfig,
+		orbitrcmd.RootCmd.SetArgs(command(t, orbitrConfig,
 			"db",
 			"fill-gaps",
 			"--parallel-workers=2",
@@ -650,7 +650,7 @@ func TestFillGaps(t *testing.T) {
 			"2",
 		))
 
-		assert.EqualError(t, horizoncmd.RootCmd.Execute(), "Invalid range: {10 2} from > to")
+		assert.EqualError(t, orbitrcmd.RootCmd.Execute(), "Invalid range: {10 2} from > to")
 	})
 
 	// make sure a full checkpoint has elapsed otherwise there will be nothing to reingest
@@ -668,34 +668,34 @@ func TestFillGaps(t *testing.T) {
 	}
 
 	// We just want to test reingestion, so there's no reason for a background
-	// Horizon to run. Keeping it running will actually cause the Captive Core
+	// OrbitR to run. Keeping it running will actually cause the Captive Core
 	// subprocesses to conflict.
-	itest.StopHorizon()
+	itest.StopOrbitR()
 
 	var oldestLedger, latestLedger int64
 	tt.NoError(historyQ.ElderLedger(context.Background(), &oldestLedger))
 	tt.NoError(historyQ.LatestLedger(context.Background(), &latestLedger))
 	tt.NoError(historyQ.DeleteRangeAll(context.Background(), oldestLedger, latestLedger))
 
-	horizonConfig.CaptiveCoreConfigPath = filepath.Join(
-		filepath.Dir(horizonConfig.CaptiveCoreConfigPath),
+	orbitrConfig.CaptiveCoreConfigPath = filepath.Join(
+		filepath.Dir(orbitrConfig.CaptiveCoreConfigPath),
 		"captive-core-reingest-range-integration-tests.cfg",
 	)
-	horizoncmd.RootCmd.SetArgs(command(t, horizonConfig, "db", "fill-gaps", "--parallel-workers=1"))
-	tt.NoError(horizoncmd.RootCmd.Execute())
+	orbitrcmd.RootCmd.SetArgs(command(t, orbitrConfig, "db", "fill-gaps", "--parallel-workers=1"))
+	tt.NoError(orbitrcmd.RootCmd.Execute())
 
 	tt.NoError(historyQ.LatestLedger(context.Background(), &latestLedger))
 	tt.Equal(int64(0), latestLedger)
 
-	horizoncmd.RootCmd.SetArgs(command(t, horizonConfig, "db", "fill-gaps", "3", "4"))
-	tt.NoError(horizoncmd.RootCmd.Execute())
+	orbitrcmd.RootCmd.SetArgs(command(t, orbitrConfig, "db", "fill-gaps", "3", "4"))
+	tt.NoError(orbitrcmd.RootCmd.Execute())
 	tt.NoError(historyQ.LatestLedger(context.Background(), &latestLedger))
 	tt.NoError(historyQ.ElderLedger(context.Background(), &oldestLedger))
 	tt.Equal(int64(3), oldestLedger)
 	tt.Equal(int64(4), latestLedger)
 
-	horizoncmd.RootCmd.SetArgs(command(t, horizonConfig, "db", "fill-gaps", "6", "7"))
-	tt.NoError(horizoncmd.RootCmd.Execute())
+	orbitrcmd.RootCmd.SetArgs(command(t, orbitrConfig, "db", "fill-gaps", "6", "7"))
+	tt.NoError(orbitrcmd.RootCmd.Execute())
 	tt.NoError(historyQ.LatestLedger(context.Background(), &latestLedger))
 	tt.NoError(historyQ.ElderLedger(context.Background(), &oldestLedger))
 	tt.Equal(int64(3), oldestLedger)
@@ -705,8 +705,8 @@ func TestFillGaps(t *testing.T) {
 	tt.NoError(err)
 	tt.Equal([]history.LedgerRange{{StartSequence: 5, EndSequence: 5}}, gaps)
 
-	horizoncmd.RootCmd.SetArgs(command(t, horizonConfig, "db", "fill-gaps"))
-	tt.NoError(horizoncmd.RootCmd.Execute())
+	orbitrcmd.RootCmd.SetArgs(command(t, orbitrConfig, "db", "fill-gaps"))
+	tt.NoError(orbitrcmd.RootCmd.Execute())
 	tt.NoError(historyQ.LatestLedger(context.Background(), &latestLedger))
 	tt.NoError(historyQ.ElderLedger(context.Background(), &oldestLedger))
 	tt.Equal(int64(3), oldestLedger)
@@ -715,8 +715,8 @@ func TestFillGaps(t *testing.T) {
 	tt.NoError(err)
 	tt.Empty(gaps)
 
-	horizoncmd.RootCmd.SetArgs(command(t, horizonConfig, "db", "fill-gaps", "2", "8"))
-	tt.NoError(horizoncmd.RootCmd.Execute())
+	orbitrcmd.RootCmd.SetArgs(command(t, orbitrConfig, "db", "fill-gaps", "2", "8"))
+	tt.NoError(orbitrcmd.RootCmd.Execute())
 	tt.NoError(historyQ.LatestLedger(context.Background(), &latestLedger))
 	tt.NoError(historyQ.ElderLedger(context.Background(), &oldestLedger))
 	tt.Equal(int64(2), oldestLedger)
@@ -731,7 +731,7 @@ func TestResumeFromInitializedDB(t *testing.T) {
 	tt := assert.New(t)
 
 	// Stop the integration test, and restart it with the same database
-	err := itest.RestartHorizon()
+	err := itest.RestartOrbitR()
 	tt.NoError(err)
 
 	successfullyResumed := func() bool {
@@ -739,7 +739,7 @@ func TestResumeFromInitializedDB(t *testing.T) {
 		tt.NoError(err)
 		// It must be able to reach the ledger and surpass it
 		const ledgersPastStopPoint = 4
-		return root.HorizonSequence > (reachedLedger + ledgersPastStopPoint)
+		return root.OrbitRSequence > (reachedLedger + ledgersPastStopPoint)
 	}
 
 	tt.Eventually(successfullyResumed, 1*time.Minute, 1*time.Second)

@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"fmt"
@@ -20,33 +20,33 @@ func Test_createCaptiveCoreDefaultConfig(t *testing.T) {
 	}{
 		{
 			name:               "testnet default config",
-			config:             Config{Network: StellarTestnet},
+			config:             Config{Network: LantahTestnet},
 			networkPassphrase:  TestnetConf.NetworkPassphrase,
 			historyArchiveURLs: TestnetConf.HistoryArchiveURLs,
 		},
 		{
 			name:               "pubnet default config",
-			config:             Config{Network: StellarPubnet},
+			config:             Config{Network: LantahPubnet},
 			networkPassphrase:  PubnetConf.NetworkPassphrase,
 			historyArchiveURLs: PubnetConf.HistoryArchiveURLs,
 		},
 		{
 			name: "testnet validation; history archive urls supplied",
-			config: Config{Network: StellarTestnet,
+			config: Config{Network: LantahTestnet,
 				HistoryArchiveURLs: []string{"network history archive urls supplied"},
 			},
 			errStr: fmt.Sprintf(errorMsgDefaultConfig, HistoryArchiveURLsFlagName),
 		},
 		{
 			name: "pubnet validation; history archive urls supplied",
-			config: Config{Network: StellarPubnet,
+			config: Config{Network: LantahPubnet,
 				HistoryArchiveURLs: []string{"network history archive urls supplied"},
 			},
 			errStr: fmt.Sprintf(errorMsgDefaultConfig, HistoryArchiveURLsFlagName),
 		},
 		{
 			name: "testnet validation; network passphrase supplied",
-			config: Config{Network: StellarTestnet,
+			config: Config{Network: LantahTestnet,
 				NetworkPassphrase:  "network passphrase supplied",
 				HistoryArchiveURLs: []string{},
 			},
@@ -54,7 +54,7 @@ func Test_createCaptiveCoreDefaultConfig(t *testing.T) {
 		},
 		{
 			name: "pubnet validation; network passphrase supplied",
-			config: Config{Network: StellarPubnet,
+			config: Config{Network: LantahPubnet,
 				NetworkPassphrase:  "pubnet network passphrase supplied",
 				HistoryArchiveURLs: []string{},
 			},

@@ -17,10 +17,10 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/services/horizon/internal/txsub/sequence"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/txsub/sequence"
+	"github.com/lantah/go/xdr"
 )
 
 type SystemTestSuite struct {
@@ -45,7 +45,7 @@ func (suite *SystemTestSuite) SetupTest() {
 		Pending:         NewDefaultSubmissionList(),
 		Submitter:       suite.submitter,
 		SubmissionQueue: sequence.NewManager(),
-		DB: func(ctx context.Context) HorizonDB {
+		DB: func(ctx context.Context) OrbitRDB {
 			return suite.db
 		},
 	}

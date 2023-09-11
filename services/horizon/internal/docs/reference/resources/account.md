@@ -3,9 +3,9 @@ title: Account
 replacement: https://developers.stellar.org/api/resources/accounts/
 ---
 
-In the Stellar network, users interact using **accounts** which can be controlled by a corresponding keypair that can authorize transactions. One can create a new account with the [Create Account](./operation.md#create-account) operation.
+In the Lantah Network, users interact using **accounts** which can be controlled by a corresponding keypair that can authorize transactions. One can create a new account with the [Create Account](./operation.md#create-account) operation.
 
-To learn more about the concept of accounts in the Stellar network, take a look at the [Stellar account concept guide](https://www.stellar.org/developers/learn/concepts/accounts.html).
+To learn more about the concept of accounts in the Lantah Network, take a look at the [Stellar account concept guide](https://www.stellar.org/developers/learn/concepts/accounts.html).
 
 When horizon returns information about an account it uses the following format:
 

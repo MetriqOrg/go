@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"encoding/base64"
@@ -8,10 +8,10 @@ import (
 	"github.com/guregu/null"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/xdr"
 )
 
 var (
@@ -36,8 +36,8 @@ var (
 func TestDataActions_Show(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
-	test.ResetHorizonDB(t, ht.HorizonDB)
-	q := &history.Q{ht.HorizonSession()}
+	test.ResetOrbitRDB(t, ht.OrbitRDB)
+	q := &history.Q{ht.OrbitRSession()}
 
 	// Makes StateMiddleware happy
 	err := q.UpdateLastLedgerIngest(ht.Ctx, 100)

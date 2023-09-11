@@ -3,10 +3,10 @@ package history_test
 import (
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/reap"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/reap"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 func TestReapLookupTables(t *testing.T) {
@@ -15,7 +15,7 @@ func TestReapLookupTables(t *testing.T) {
 	ledgerState := &ledger.State{}
 	ledgerState.SetStatus(tt.Scenario("kahuna"))
 
-	db := tt.HorizonSession()
+	db := tt.OrbitRSession()
 
 	sys := reap.New(0, db, ledgerState)
 
@@ -46,7 +46,7 @@ func TestReapLookupTables(t *testing.T) {
 	err := sys.DeleteUnretainedHistory(tt.Ctx)
 	tt.Require.NoError(err)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 
 	err = q.Begin(tt.Ctx)
 	tt.Require.NoError(err)

@@ -4,9 +4,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/keypair"
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/errors"
 	"github.com/lantah/go/txnbuild"
 	"github.com/stretchr/testify/assert"
@@ -16,11 +16,11 @@ import (
 // in which Minion.Run() will try to send multiple messages to a channel that gets closed
 // immediately after receiving one message.
 func TestMinion_NoChannelErrors(t *testing.T) {
-	mockSubmitTransaction := func(minion *Minion, hclient horizonclient.ClientInterface, tx string) (txn *hProtocol.Transaction, err error) {
+	mockSubmitTransaction := func(minion *Minion, hclient orbitrclient.ClientInterface, tx string) (txn *hProtocol.Transaction, err error) {
 		return txn, nil
 	}
 
-	mockCheckSequenceRefresh := func(minion *Minion, hclient horizonclient.ClientInterface) (err error) {
+	mockCheckSequenceRefresh := func(minion *Minion, hclient orbitrclient.ClientInterface) (err error) {
 		return errors.New("could not refresh sequence")
 	}
 
@@ -47,7 +47,7 @@ func TestMinion_NoChannelErrors(t *testing.T) {
 		Keypair:              minionKeypair.(*keypair.Full),
 		BotAccount:           botAccount,
 		BotKeypair:           botKeypair.(*keypair.Full),
-		Network:              "Test SDF Network ; September 2015",
+		Network:              "Test Lantah Network ; 2023",
 		StartingBalance:      "10000.00",
 		SubmitTransaction:    mockSubmitTransaction,
 		CheckSequenceRefresh: mockCheckSequenceRefresh,
@@ -78,14 +78,14 @@ func TestMinion_CorrectNumberOfTxSubmissions(t *testing.T) {
 		mux          sync.Mutex
 	)
 
-	mockSubmitTransaction := func(minion *Minion, hclient horizonclient.ClientInterface, tx string) (txn *hProtocol.Transaction, err error) {
+	mockSubmitTransaction := func(minion *Minion, hclient orbitrclient.ClientInterface, tx string) (txn *hProtocol.Transaction, err error) {
 		mux.Lock()
 		numTxSubmits++
 		mux.Unlock()
 		return txn, nil
 	}
 
-	mockCheckSequenceRefresh := func(minion *Minion, hclient horizonclient.ClientInterface) (err error) {
+	mockCheckSequenceRefresh := func(minion *Minion, hclient orbitrclient.ClientInterface) (err error) {
 		return nil
 	}
 
@@ -112,7 +112,7 @@ func TestMinion_CorrectNumberOfTxSubmissions(t *testing.T) {
 		Keypair:              minionKeypair.(*keypair.Full),
 		BotAccount:           botAccount,
 		BotKeypair:           botKeypair.(*keypair.Full),
-		Network:              "Test SDF Network ; September 2015",
+		Network:              "Test Lantah Network ; 2023",
 		StartingBalance:      "10000.00",
 		SubmitTransaction:    mockSubmitTransaction,
 		CheckSequenceRefresh: mockCheckSequenceRefresh,

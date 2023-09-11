@@ -6,14 +6,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/protocols/orbitr/operations"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 )
 
 func TestLiquidityPoolHappyPath(t *testing.T) {
@@ -67,7 +67,7 @@ func TestLiquidityPoolHappyPath(t *testing.T) {
 	tt.NoError(err)
 	poolIDHexString := xdr.Hash(poolID).HexString()
 
-	pools, err := itest.Client().LiquidityPools(horizonclient.LiquidityPoolsRequest{})
+	pools, err := itest.Client().LiquidityPools(orbitrclient.LiquidityPoolsRequest{})
 	tt.NoError(err)
 	tt.Len(pools.Embedded.Records, 1)
 
@@ -93,7 +93,7 @@ func TestLiquidityPoolHappyPath(t *testing.T) {
 		},
 	)
 
-	pool, err = itest.Client().LiquidityPoolDetail(horizonclient.LiquidityPoolRequest{
+	pool, err = itest.Client().LiquidityPoolDetail(orbitrclient.LiquidityPoolRequest{
 		LiquidityPoolID: poolIDHexString,
 	})
 	tt.NoError(err)
@@ -128,7 +128,7 @@ func TestLiquidityPoolHappyPath(t *testing.T) {
 		},
 	)
 
-	account, err := itest.Client().AccountDetail(horizonclient.AccountRequest{
+	account, err := itest.Client().AccountDetail(orbitrclient.AccountRequest{
 		AccountID: shareKeys.Address(),
 	})
 	tt.NoError(err)
@@ -148,7 +148,7 @@ func TestLiquidityPoolHappyPath(t *testing.T) {
 	nativeBalance := account.Balances[2]
 	tt.Equal("native", nativeBalance.Asset.Type)
 
-	stats, err := itest.Client().Assets(horizonclient.AssetRequest{})
+	stats, err := itest.Client().Assets(orbitrclient.AssetRequest{})
 	tt.NoError(err)
 	tt.Len(stats.Embedded.Records, 1)
 
@@ -196,7 +196,7 @@ func TestLiquidityPoolHappyPath(t *testing.T) {
 		},
 	)
 
-	account, err = itest.Client().AccountDetail(horizonclient.AccountRequest{
+	account, err = itest.Client().AccountDetail(orbitrclient.AccountRequest{
 		AccountID: shareKeys.Address(),
 	})
 	tt.NoError(err)
@@ -212,7 +212,7 @@ func TestLiquidityPoolHappyPath(t *testing.T) {
 	nativeBalance = account.Balances[1]
 	tt.Equal("native", nativeBalance.Asset.Type)
 
-	ops, err := itest.Client().Operations(horizonclient.OperationRequest{
+	ops, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForLiquidityPool: poolIDHexString,
 	})
 	tt.NoError(err)
@@ -278,7 +278,7 @@ func TestLiquidityPoolHappyPath(t *testing.T) {
 	tt.Equal(poolIDHexString, op5.LiquidityPoolID)
 	tt.Equal("0.0000000", op5.Limit)
 
-	effs, err := itest.Client().Effects(horizonclient.EffectRequest{
+	effs, err := itest.Client().Effects(orbitrclient.EffectRequest{
 		ForLiquidityPool: poolIDHexString,
 	})
 	tt.NoError(err)
@@ -394,7 +394,7 @@ func TestLiquidityPoolHappyPath(t *testing.T) {
 	tt.Equal(shareKeys.Address(), ef9.Account)
 	tt.Equal("64e163b66108152665ee325cc333211446277c86bfe021b9da6bb1769b0daea1", ef9.LiquidityPoolID)
 
-	trades, err := itest.Client().Trades(horizonclient.TradeRequest{})
+	trades, err := itest.Client().Trades(orbitrclient.TradeRequest{})
 	tt.NoError(err)
 
 	tt.Len(trades.Embedded.Records, 1)
@@ -492,7 +492,7 @@ func TestLiquidityPoolRevoke(t *testing.T) {
 	)
 
 	// Check if claimable balances have been created
-	claimableBalances, err := itest.Client().ClaimableBalances(horizonclient.ClaimableBalanceRequest{})
+	claimableBalances, err := itest.Client().ClaimableBalances(orbitrclient.ClaimableBalanceRequest{})
 	tt.NoError(err)
 	tt.Len(claimableBalances.Embedded.Records, 2)
 
@@ -515,7 +515,7 @@ func TestLiquidityPoolRevoke(t *testing.T) {
 	tt.Equal(shareAccount.GetAccountID(), cb2.Claimants[0].Destination)
 	tt.Equal(xdr.ClaimPredicateTypeClaimPredicateUnconditional, cb2.Claimants[0].Predicate.Type)
 
-	ops, err := itest.Client().Operations(horizonclient.OperationRequest{
+	ops, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForLiquidityPool: poolIDHexString,
 	})
 	tt.NoError(err)
@@ -550,7 +550,7 @@ func TestLiquidityPoolRevoke(t *testing.T) {
 	tt.Equal(master.Address(), op3.Asset.Issuer)
 	tt.Equal("authorized", op3.ClearFlagsS[0])
 
-	effs, err := itest.Client().Effects(horizonclient.EffectRequest{
+	effs, err := itest.Client().Effects(orbitrclient.EffectRequest{
 		ForLiquidityPool: poolIDHexString,
 		Limit:            20,
 	})
@@ -675,7 +675,7 @@ func TestLiquidityPoolFailedDepositAndWithdraw(t *testing.T) {
 	tt.Error(err)
 	hash, err := tx.HashHex(integration.StandaloneNetworkPassphrase)
 	tt.NoError(err)
-	opsResponse, err := itest.Client().Operations(horizonclient.OperationRequest{
+	opsResponse, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: hash,
 	})
 	tt.NoError(err)
@@ -709,7 +709,7 @@ func TestLiquidityPoolFailedDepositAndWithdraw(t *testing.T) {
 
 	hash, err = tx.HashHex(integration.StandaloneNetworkPassphrase)
 	tt.NoError(err)
-	opsResponse, err = itest.Client().Operations(horizonclient.OperationRequest{
+	opsResponse, err = itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: hash,
 	})
 	tt.NoError(err)

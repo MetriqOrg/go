@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/stellar/go/amount"
-	protocol "github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/xdr"
 )
 
 // PopulateOffer constructs an offer response struct from an offer row extracted from the
-// the horizon offers table.
+// the orbitr offers table.
 func PopulateOffer(ctx context.Context, dest *protocol.Offer, row history.Offer, ledger *history.Ledger) {
 	dest.ID = int64(row.OfferID)
 	dest.PT = fmt.Sprintf("%d", row.OfferID)
@@ -34,7 +34,7 @@ func PopulateOffer(ctx context.Context, dest *protocol.Offer, row history.Offer,
 	if ledger != nil {
 		dest.LastModifiedTime = &ledger.ClosedAt
 	}
-	lb := hal.LinkBuilder{horizonContext.BaseURL(ctx)}
+	lb := hal.LinkBuilder{orbitrContext.BaseURL(ctx)}
 	dest.Links.Self = lb.Linkf("/offers/%d", row.OfferID)
 	dest.Links.OfferMaker = lb.Linkf("/accounts/%s", row.SellerID)
 }

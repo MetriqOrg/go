@@ -5,9 +5,9 @@ import (
 )
 
 // TruncateIngestStateTables clears out ingestion state tables.
-// Ingestion state tables are horizon database tables populated by
+// Ingestion state tables are orbitr database tables populated by
 // the ingestion system using history archive snapshots.
-// Any horizon database tables which cannot be populated using
+// Any orbitr database tables which cannot be populated using
 // history archive snapshots will not be truncated.
 func (q *Q) TruncateIngestStateTables(ctx context.Context) error {
 	return q.TruncateTables(ctx, []string{

@@ -8,9 +8,9 @@ import (
 	"testing"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/xdr"
 )
 
 var (
@@ -88,8 +88,8 @@ func insertOffer(tt *test.T, q *Q, offer Offer) error {
 func TestGetOfferByID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := insertOffer(tt, q, eurOffer)
 	tt.Assert.NoError(err)
@@ -101,8 +101,8 @@ func TestGetOfferByID(t *testing.T) {
 func TestGetNonExistentOfferByID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	_, err := q.GetOfferByID(tt.Ctx, 12345)
 	tt.Assert.True(q.NoRows(err))
@@ -120,8 +120,8 @@ func streamAllOffersInTx(q *Q, ctx context.Context, f func(offer Offer) error) e
 func TestStreamAllOffersRequiresTx(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.StreamAllOffers(tt.Ctx, func(offer Offer) error {
 		return nil
@@ -139,8 +139,8 @@ func TestStreamAllOffersRequiresTx(t *testing.T) {
 func TestQueryEmptyOffers(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	var offers []Offer
 	err := streamAllOffersInTx(q, tt.Ctx, func(offer Offer) error {
@@ -170,8 +170,8 @@ func TestQueryEmptyOffers(t *testing.T) {
 func TestInsertOffers(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := insertOffer(tt, q, eurOffer)
 	tt.Assert.NoError(err)
@@ -225,8 +225,8 @@ func TestInsertOffers(t *testing.T) {
 func TestUpdateOffer(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := insertOffer(tt, q, eurOffer)
 	tt.Assert.NoError(err)
@@ -281,8 +281,8 @@ func TestUpdateOffer(t *testing.T) {
 func TestRemoveOffer(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := insertOffer(tt, q, eurOffer)
 	tt.Assert.NoError(err)
@@ -346,8 +346,8 @@ func TestRemoveOffer(t *testing.T) {
 func TestGetOffers(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := insertOffer(tt, q, eurOffer)
 	tt.Assert.NoError(err)

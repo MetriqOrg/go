@@ -10,11 +10,11 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/guregu/null"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/toid"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/toid"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -181,14 +181,14 @@ func FeeBumpScenario(tt *test.T, q *Q, successful bool) FeeBumpFixture {
 
 	innerHash, err := network.HashTransaction(
 		fixture.Envelope.FeeBump.Tx.InnerTx.V1.Tx,
-		"Test SDF Network ; September 2015",
+		"Test Lantah Network ; 2023",
 	)
 	tt.Assert.NoError(err)
 	fixture.InnerHash = hex.EncodeToString(innerHash[:])
 
 	outerHash, err := network.HashFeeBumpTransaction(
 		fixture.Envelope.FeeBump.Tx,
-		"Test SDF Network ; September 2015",
+		"Test Lantah Network ; 2023",
 	)
 	tt.Assert.NoError(err)
 	fixture.OuterHash = hex.EncodeToString(outerHash[:])

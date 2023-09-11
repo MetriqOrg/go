@@ -2,19 +2,19 @@
 title: Overview
 ---
 
-Horizon is an API server for the Stellar ecosystem.  It acts as the interface between [gramr](https://github.com/lantah/gramr) and applications that want to access the Stellar network. It allows you to submit transactions to the network, check the status of accounts, subscribe to event streams, etc. See [an overview of the Stellar ecosystem](https://www.stellar.org/developers/guides/) for details of where Horizon fits in.
+Horizon is an API server for the Stellar ecosystem.  It acts as the interface between [gravity](https://github.com/lantah/gravity) and applications that want to access the Lantah Network. It allows you to submit transactions to the network, check the status of accounts, subscribe to event streams, etc. See [an overview of the Stellar ecosystem](https://www.stellar.org/developers/guides/) for details of where Horizon fits in.
 
-Horizon provides a RESTful API to allow client applications to interact with the Stellar network. You can communicate with Horizon using cURL or just your web browser. However, if you're building a client application, you'll likely want to use a Stellar SDK in the language of your client.
+Horizon provides a RESTful API to allow client applications to interact with the Lantah Network. You can communicate with Horizon using cURL or just your web browser. However, if you're building a client application, you'll likely want to use a Stellar SDK in the language of your client.
 SDF provides a [JavaScript SDK](https://www.stellar.org/developers/js-stellar-sdk/reference/index.html) for clients to use to interact with Horizon.
 
-SDF runs a instance of Horizon that is connected to the test net: [https://orbitr-testnet.lantah.network/](https://orbitr-testnet.lantah.network/) and one that is connected to the public Stellar network:
+SDF runs a instance of Horizon that is connected to the test net: [https://orbitr-testnet.lantah.network/](https://orbitr-testnet.lantah.network/) and one that is connected to the public Lantah Network:
 [https://orbitr.lantah.network/](https://orbitr.lantah.network/).
 
 ## Libraries
 
 SDF maintained libraries:<br />
 - [JavaScript](https://github.com/stellar/js-stellar-sdk)
-- [Go](https://github.com/stellar/go/tree/master/clients/horizonclient)
+- [Go](https://github.com/lantah/go/tree/master/clients/horizonclient)
 - [Java](https://github.com/stellar/java-stellar-sdk)
 
 Community maintained libraries for interacting with Horizon in other languages:<br>

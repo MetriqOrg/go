@@ -5,15 +5,15 @@ clientData:
 replacement: https://developers.stellar.org/api/resources/transactions/post/
 ---
 
-Posts a new [transaction](../resources/transaction.md) to the Stellar Network.
+Posts a new [transaction](../resources/transaction.md) to the Lantah Network.
 Note that creating a valid transaction and signing it properly is the
 responsibility of your client library.
 
 Transaction submission and the subsequent validation and inclusion into the
-Stellar Network's ledger is a [complicated and asynchronous
+Lantah Network's ledger is a [complicated and asynchronous
 process](https://www.stellar.org/developers/learn/concepts/transactions.html#life-cycle).
 To reduce the complexity, horizon manages these asynchronous processes for the
-client and will wait to hear results from the Stellar Network before returning
+client and will wait to hear results from the Lantah Network before returning
 an HTTP response to a client.
 
 Transaction submission to horizon aims to be

@@ -3,11 +3,11 @@ title: Asset
 replacement: https://developers.stellar.org/api/resources/assets/
 ---
 
-**Assets** are the units that are traded on the Stellar Network.
+**Assets** are the units that are traded on the Lantah Network.
 
 An asset consists of an type, code, and issuer.
 
-To learn more about the concept of assets in the Stellar network, take a look at the [Stellar assets concept guide](https://www.stellar.org/developers/guides/concepts/assets.html).
+To learn more about the concept of assets in the Lantah Network, take a look at the [Stellar assets concept guide](https://www.stellar.org/developers/guides/concepts/assets.html).
 
 ## Attributes
 

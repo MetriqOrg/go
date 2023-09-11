@@ -8,14 +8,14 @@ import (
 	"github.com/buger/goreplay/proto"
 )
 
-var horizonURLs = regexp.MustCompile(`https:\/\/.*?(stellar\.org|127.0.0.1:8000)`)
+var orbitrURLs = regexp.MustCompile(`https:\/\/.*?(stellar\.org|127.0.0.1:8000)`)
 var findResultMetaXDR = regexp.MustCompile(`"result_meta_xdr":[ ]?"([^"]*)",`)
 
 // removeRegexps contains a list of regular expressions that, when matched,
 // will be changed to an empty string. This is done to exclude known
-// differences in responses between two Horizon version.
+// differences in responses between two OrbitR version.
 //
-// Let's say that next Horizon version adds a new bool field:
+// Let's say that next OrbitR version adds a new bool field:
 // `is_authorized` on account balances list. You want to remove this
 // field so it's not reported for each `/accounts/{id}` response.
 var removeRegexps = []*regexp.Regexp{}
@@ -84,8 +84,8 @@ func normalizeResponseBody(body []byte) string {
 	normalizedBody := string(body)
 	// `result_meta_xdr` can differ between core instances (confirmed this with core team)
 	normalizedBody = findResultMetaXDR.ReplaceAllString(normalizedBody, "")
-	// Remove Horizon URL from the _links
-	normalizedBody = horizonURLs.ReplaceAllString(normalizedBody, "")
+	// Remove OrbitR URL from the _links
+	normalizedBody = orbitrURLs.ReplaceAllString(normalizedBody, "")
 
 	for _, reg := range removeRegexps {
 		normalizedBody = reg.ReplaceAllString(normalizedBody, "")

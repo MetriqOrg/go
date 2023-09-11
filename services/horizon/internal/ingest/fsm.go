@@ -8,12 +8,12 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/support/errors"
-	logpkg "github.com/stellar/go/support/log"
-	"github.com/stellar/go/toid"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/support/errors"
+	logpkg "github.com/lantah/go/support/log"
+	"github.com/lantah/go/toid"
+	"github.com/lantah/go/xdr"
 )
 
 var (
@@ -21,13 +21,13 @@ var (
 )
 
 // ErrReingestRangeConflict indicates that the reingest range overlaps with
-// horizon's most recently ingested ledger
+// orbitr's most recently ingested ledger
 type ErrReingestRangeConflict struct {
 	maximumLedgerSequence uint32
 }
 
 func (e ErrReingestRangeConflict) Error() string {
-	return fmt.Sprintf("reingest range overlaps with horizon ingestion, supplied range shouldn't contain ledger %d", e.maximumLedgerSequence)
+	return fmt.Sprintf("reingest range overlaps with orbitr ingestion, supplied range shouldn't contain ledger %d", e.maximumLedgerSequence)
 }
 
 type State int
@@ -329,7 +329,7 @@ func (b buildState) run(s *system) (transition, error) {
 
 	if err = s.updateCursor(b.checkpointLedger - 1); err != nil {
 		// Don't return updateCursor error.
-		log.WithError(err).Warn("error updating gramr cursor")
+		log.WithError(err).Warn("error updating gravity cursor")
 	}
 
 	log.Info("Starting ingestion system from empty state...")
@@ -456,10 +456,10 @@ func (r resumeState) run(s *system) (transition, error) {
 			Info("bumping ingest ledger to next ledger after ingested ledger in db")
 
 		// Update cursor if there's more than one ingesting instance: either
-		// Captive-Core or DB ingestion connected to another Gramr.
+		// Captive-Core or DB ingestion connected to another Gravity.
 		if err = s.updateCursor(lastIngestedLedger); err != nil {
 			// Don't return updateCursor error.
-			log.WithError(err).Warn("error updating gramr cursor")
+			log.WithError(err).Warn("error updating gravity cursor")
 		}
 
 		// resume immediately so Captive-Core catchup is not slowed down
@@ -524,7 +524,7 @@ func (r resumeState) run(s *system) (transition, error) {
 
 	if err = s.updateCursor(ingestLedger); err != nil {
 		// Don't return updateCursor error.
-		log.WithError(err).Warn("error updating gramr cursor")
+		log.WithError(err).Warn("error updating gravity cursor")
 	}
 
 	duration = time.Since(startTime).Seconds()
@@ -628,7 +628,7 @@ func (h historyRangeState) run(s *system) (transition, error) {
 	}
 
 	// We should be ingesting the ledger which occurs after
-	// lastHistoryLedger. Otherwise, some other horizon node has
+	// lastHistoryLedger. Otherwise, some other orbitr node has
 	// already completed the ingest history range operation and
 	// we should go back to the init state
 	if lastHistoryLedger != h.fromLedger-1 {

@@ -89,7 +89,7 @@ func (h *HistoryArchiveState) Buckets() ([]Hash, error) {
 // This can be later compared with LedgerHeader.BucketListHash of the checkpoint
 // ledger to ensure data in history archive has not been changed by a malicious
 // actor.
-// Warning: Ledger header should be fetched from a trusted (!) gramr
+// Warning: Ledger header should be fetched from a trusted (!) gravity
 // instead of ex. history archives!
 func (h *HistoryArchiveState) BucketListHash() (xdr.Hash, error) {
 	total := []byte{}

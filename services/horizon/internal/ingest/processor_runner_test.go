@@ -12,11 +12,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest/processors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
+	"github.com/lantah/go/xdr"
 )
 
 func TestProcessorRunnerRunHistoryArchiveIngestionGenesis(t *testing.T) {
@@ -169,7 +169,7 @@ func TestProcessorRunnerRunHistoryArchiveIngestionProtocolVersionNotSupported(t 
 	_, err := runner.RunHistoryArchiveIngestion(100, false, 200, xdr.Hash{})
 	assert.EqualError(t, err,
 		fmt.Sprintf(
-			"Error while checking for supported protocol version: This Horizon version does not support protocol version 200. The latest supported protocol version is %d. Please upgrade to the latest Horizon version.",
+			"Error while checking for supported protocol version: This OrbitR version does not support protocol version 200. The latest supported protocol version is %d. Please upgrade to the latest OrbitR version.",
 			MaxSupportedProtocolVersion,
 		),
 	)
@@ -434,7 +434,7 @@ func TestProcessorRunnerRunAllProcessorsOnLedgerProtocolVersionNotSupported(t *t
 	_, err := runner.RunAllProcessorsOnLedger(ledger)
 	assert.EqualError(t, err,
 		fmt.Sprintf(
-			"Error while checking for supported protocol version: This Horizon version does not support protocol version 200. The latest supported protocol version is %d. Please upgrade to the latest Horizon version.",
+			"Error while checking for supported protocol version: This OrbitR version does not support protocol version 200. The latest supported protocol version is %d. Please upgrade to the latest OrbitR version.",
 			MaxSupportedProtocolVersion,
 		),
 	)

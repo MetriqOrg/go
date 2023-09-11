@@ -9,18 +9,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/services/horizon/internal/corestate"
-	hProblem "github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/txsub"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/services/orbitr/internal/corestate"
+	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/txsub"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )
 
-func TestGramrMalformedTx(t *testing.T) {
+func TestGravityMalformedTx(t *testing.T) {
 	handler := SubmitTransactionHandler{}
 
 	r := httptest.NewRequest("POST", "https://orbitr.lantah.network/transactions", nil)
@@ -49,7 +49,7 @@ func (m *networkSubmitterMock) Submit(ctx context.Context, rawTx string, envelop
 	return a.Get(0).(chan txsub.Result)
 }
 
-func TestGramrNotSynced(t *testing.T) {
+func TestGravityNotSynced(t *testing.T) {
 	mock := &coreStateGetterMock{}
 	mock.On("GetCoreState").Return(corestate.State{
 		Synced: false,
@@ -178,7 +178,7 @@ func TestDisableTxSubFlagSubmission(t *testing.T) {
 		Type:   "transaction_submission_disabled",
 		Title:  "Transaction Submission Disabled",
 		Status: http.StatusMethodNotAllowed,
-		Detail: "Transaction submission has been disabled for Horizon. " +
+		Detail: "Transaction submission has been disabled for OrbitR. " +
 			"To enable it again, remove env variable DISABLE_TX_SUB.",
 		Extras: map[string]interface{}{},
 	}

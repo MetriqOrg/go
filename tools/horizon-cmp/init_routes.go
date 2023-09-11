@@ -1,7 +1,7 @@
 package main
 
 import (
-	cmp "github.com/stellar/go/tools/horizon-cmp/internal"
+	cmp "github.com/lantah/go/tools/orbitr-cmp/internal"
 )
 
 var routes = cmp.Routes{

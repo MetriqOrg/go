@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 )
 
 // Fuzz is go-fuzz function for fuzzing xdr.ClaimPredicate JSON

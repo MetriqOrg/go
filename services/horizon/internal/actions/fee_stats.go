@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/operationfeestats"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/operationfeestats"
 )
 
 // FeeStatsHandler is the action handler for the /fee_stats endpoint
@@ -14,7 +14,7 @@ type FeeStatsHandler struct {
 
 // GetResource fee stats resource
 func (handler FeeStatsHandler) GetResource(w HeaderWriter, r *http.Request) (interface{}, error) {
-	feeStats := horizon.FeeStats{}
+	feeStats := orbitr.FeeStats{}
 
 	cur, ok := operationfeestats.CurrentState()
 	feeStats.LastLedgerBaseFee = cur.LastBaseFee

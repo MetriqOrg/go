@@ -1,8 +1,8 @@
 // Package ledger provides useful utilities concerning ledgers within stellar,
 // specifically as a central location to store a cached snapshot of the state of
-// both horizon's and gramr's views of the ledger.  This package is
-// intended to be at the lowest levels of horizon's dependency tree, please keep
-// it free of dependencies to other horizon packages.
+// both orbitr's and gravity's views of the ledger.  This package is
+// intended to be at the lowest levels of orbitr's dependency tree, please keep
+// it free of dependencies to other orbitr packages.
 package ledger
 
 import (
@@ -12,18 +12,18 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// Status represents a snapshot of both horizon's and gramr's view of the
+// Status represents a snapshot of both orbitr's and gravity's view of the
 // ledger.
 type Status struct {
 	CoreStatus
-	HorizonStatus
+	OrbitRStatus
 }
 
 type CoreStatus struct {
 	CoreLatest int32 `db:"core_latest"`
 }
 
-type HorizonStatus struct {
+type OrbitRStatus struct {
 	HistoryLatest         int32     `db:"history_latest"`
 	HistoryLatestClosedAt time.Time `db:"history_latest_closed_at"`
 	HistoryElder          int32     `db:"history_elder"`
@@ -31,7 +31,7 @@ type HorizonStatus struct {
 }
 
 // State is an in-memory data structure which holds a snapshot of both
-// horizon's and gramr's view of the the network
+// orbitr's and gravity's view of the the network
 type State struct {
 	sync.RWMutex
 	current Status
@@ -59,23 +59,23 @@ func (c *State) SetStatus(next Status) {
 	c.current = next
 }
 
-// SetCoreStatus updates the cached snapshot of the ledger state of Gramr
+// SetCoreStatus updates the cached snapshot of the ledger state of Gravity
 func (c *State) SetCoreStatus(next CoreStatus) {
 	c.Lock()
 	defer c.Unlock()
 	c.current.CoreStatus = next
 }
 
-// SetHorizonStatus updates the cached snapshot of the ledger state of Horizon
-func (c *State) SetHorizonStatus(next HorizonStatus) {
+// SetOrbitRStatus updates the cached snapshot of the ledger state of OrbitR
+func (c *State) SetOrbitRStatus(next OrbitRStatus) {
 	c.Lock()
 	defer c.Unlock()
-	c.current.HorizonStatus = next
+	c.current.OrbitRStatus = next
 }
 
 func (c *State) RegisterMetrics(registry *prometheus.Registry) {
 	c.Metrics.HistoryLatestLedgerCounter = prometheus.NewCounterFunc(
-		prometheus.CounterOpts{Namespace: "horizon", Subsystem: "history", Name: "latest_ledger"},
+		prometheus.CounterOpts{Namespace: "orbitr", Subsystem: "history", Name: "latest_ledger"},
 		func() float64 {
 			ls := c.CurrentStatus()
 			return float64(ls.HistoryLatest)
@@ -85,7 +85,7 @@ func (c *State) RegisterMetrics(registry *prometheus.Registry) {
 
 	c.Metrics.HistoryLatestLedgerClosedAgoGauge = prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "history", Name: "latest_ledger_closed_ago_seconds",
+			Namespace: "orbitr", Subsystem: "history", Name: "latest_ledger_closed_ago_seconds",
 			Help: "seconds since the close of the last ingested ledger",
 		},
 		func() float64 {
@@ -96,7 +96,7 @@ func (c *State) RegisterMetrics(registry *prometheus.Registry) {
 	registry.MustRegister(c.Metrics.HistoryLatestLedgerClosedAgoGauge)
 
 	c.Metrics.HistoryElderLedgerCounter = prometheus.NewCounterFunc(
-		prometheus.CounterOpts{Namespace: "horizon", Subsystem: "history", Name: "elder_ledger"},
+		prometheus.CounterOpts{Namespace: "orbitr", Subsystem: "history", Name: "elder_ledger"},
 		func() float64 {
 			ls := c.CurrentStatus()
 			return float64(ls.HistoryElder)
@@ -105,7 +105,7 @@ func (c *State) RegisterMetrics(registry *prometheus.Registry) {
 	registry.MustRegister(c.Metrics.HistoryElderLedgerCounter)
 
 	c.Metrics.CoreLatestLedgerCounter = prometheus.NewCounterFunc(
-		prometheus.CounterOpts{Namespace: "horizon", Subsystem: "gramr", Name: "latest_ledger"},
+		prometheus.CounterOpts{Namespace: "orbitr", Subsystem: "gravity", Name: "latest_ledger"},
 		func() float64 {
 			ls := c.CurrentStatus()
 			return float64(ls.CoreLatest)

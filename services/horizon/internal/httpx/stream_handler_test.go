@@ -15,12 +15,12 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/stellar/go/services/horizon/internal/actions"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/render/sse"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/render/hal"
+	"github.com/lantah/go/services/orbitr/internal/actions"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/render/sse"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/render/hal"
 )
 
 type testingFactory struct {
@@ -493,7 +493,7 @@ func TestRepeatableReadStream(t *testing.T) {
 		request := streamRequest(t, "limit=2")
 		request = request.WithContext(context.WithValue(
 			request.Context(),
-			&horizonContext.SessionContextKey,
+			&orbitrContext.SessionContextKey,
 			session,
 		))
 
@@ -532,7 +532,7 @@ func TestRepeatableReadStream(t *testing.T) {
 		request := streamRequest(t, "")
 		request = request.WithContext(context.WithValue(
 			request.Context(),
-			&horizonContext.SessionContextKey,
+			&orbitrContext.SessionContextKey,
 			session,
 		))
 

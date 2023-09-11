@@ -87,7 +87,7 @@ func TestLiquidityPoolExchanges(t *testing.T) {
 }
 
 // TestLiquidityPoolMath is a robust suite of tests to ensure that theliquidity
-// pool calculation functions are correct, taken from Gramr's tests here:
+// pool calculation functions are correct, taken from Gravity's tests here:
 //
 // https://github.com/stellar/stellar-core/blob/master/src/transactions/test/ExchangeTests.cpp#L948
 func TestLiquidityPoolMath(t *testing.T) {

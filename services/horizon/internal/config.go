@@ -1,16 +1,16 @@
-package horizon
+package orbitr
 
 import (
 	"net/url"
 	"time"
 
-	"github.com/stellar/go/ingest/ledgerbackend"
+	"github.com/lantah/go/ingest/ledgerbackend"
 
 	"github.com/sirupsen/logrus"
 	"github.com/stellar/throttled"
 )
 
-// Config is the configuration for horizon.  It gets populated by the
+// Config is the configuration for orbitr.  It gets populated by the
 // app's main function and is provided to NewApp.
 type Config struct {
 	DatabaseURL        string
@@ -30,13 +30,13 @@ type Config struct {
 	CaptiveCoreReuseStoragePath bool
 	CaptiveCoreConfigUseDB      bool
 
-	GramrDatabaseURL string
-	GramrURL         string
+	GravityDatabaseURL string
+	GravityURL         string
 
 	// MaxDBConnections has a priority over all 4 values below.
 	MaxDBConnections            int
-	HorizonDBMaxOpenConnections int
-	HorizonDBMaxIdleConnections int
+	OrbitRDBMaxOpenConnections int
+	OrbitRDBMaxIdleConnections int
 
 	SSEUpdateFrequency time.Duration
 	ConnectionTimeout  time.Duration
@@ -49,12 +49,12 @@ type Config struct {
 	MaxPathLength uint
 	// MaxAssetsPerPathRequest is the maximum number of assets considered for `/paths/strict-send` and `/paths/strict-receive`
 	MaxAssetsPerPathRequest int
-	// DisablePoolPathFinding configures horizon to run path finding without including liquidity pools
+	// DisablePoolPathFinding configures orbitr to run path finding without including liquidity pools
 	// in the path finding search.
 	DisablePoolPathFinding bool
-	// DisablePathFinding configures horizon without the path finding endpoint.
+	// DisablePathFinding configures orbitr without the path finding endpoint.
 	DisablePathFinding bool
-	// MaxPathFindingRequests is the maximum number of path finding requests horizon will allow
+	// MaxPathFindingRequests is the maximum number of path finding requests orbitr will allow
 	// in a 1-second period. A value of 0 disables the limit.
 	MaxPathFindingRequests uint
 
@@ -62,28 +62,28 @@ type Config struct {
 	SentryDSN         string
 	LogglyToken       string
 	LogglyTag         string
-	// TLSCert is a path to a certificate file to use for horizon's TLS config
+	// TLSCert is a path to a certificate file to use for orbitr's TLS config
 	TLSCert string
-	// TLSKey is the path to a private key file to use for horizon's TLS config
+	// TLSKey is the path to a private key file to use for orbitr's TLS config
 	TLSKey string
-	// Ingest toggles whether this horizon instance should run the data ingestion subsystem.
+	// Ingest toggles whether this orbitr instance should run the data ingestion subsystem.
 	Ingest bool
-	// CursorName is the cursor used for ingesting from gramr.
-	// Setting multiple cursors in different Horizon instances allows multiple
-	// Horizons to ingest from the same gramr instance without cursor
+	// CursorName is the cursor used for ingesting from gravity.
+	// Setting multiple cursors in different OrbitR instances allows multiple
+	// OrbitRs to ingest from the same gravity instance without cursor
 	// collisions.
 	CursorName string
 	// HistoryRetentionCount represents the minimum number of ledgers worth of
-	// history data to retain in the horizon database. For the purposes of
+	// history data to retain in the orbitr database. For the purposes of
 	// determining a "retention duration", each ledger roughly corresponds to 10
 	// seconds of real time.
 	HistoryRetentionCount uint
 	// StaleThreshold represents the number of ledgers a history database may be
-	// out-of-date by before horizon begins to respond with an error to history
+	// out-of-date by before orbitr begins to respond with an error to history
 	// requests.
 	StaleThreshold uint
 	// SkipCursorUpdate causes the ingestor to skip reporting the "last imported
-	// ledger" state to gramr.
+	// ledger" state to gravity.
 	SkipCursorUpdate bool
 	// IngestDisableStateVerification disables state verification
 	// `System.verifyState()` when set to `true`.
@@ -99,22 +99,22 @@ type Config struct {
 	// IngestEnableExtendedLogLedgerStats enables extended ledger stats in
 	// logging.
 	IngestEnableExtendedLogLedgerStats bool
-	// ApplyMigrations will apply pending migrations to the horizon database
-	// before starting the horizon service
+	// ApplyMigrations will apply pending migrations to the orbitr database
+	// before starting the orbitr service
 	ApplyMigrations bool
 	// CheckpointFrequency establishes how many ledgers exist between checkpoints
 	CheckpointFrequency uint32
-	// BehindCloudflare determines if Horizon instance is behind Cloudflare. In
+	// BehindCloudflare determines if OrbitR instance is behind Cloudflare. In
 	// such case http.Request.RemoteAddr will be replaced with Cloudflare header.
 	BehindCloudflare bool
-	// BehindAWSLoadBalancer determines if Horizon instance is behind AWS load
+	// BehindAWSLoadBalancer determines if OrbitR instance is behind AWS load
 	// balances like ELB or ALB. In such case http.Request.RemoteAddr will be
 	// replaced with the last IP in X-Forwarded-For header.
 	BehindAWSLoadBalancer bool
 	// RoundingSlippageFilter excludes trades from /trade_aggregations with rounding slippage >x bps
 	RoundingSlippageFilter int
-	// Stellar network: 'testnet' or 'pubnet'
+	// Lantah Network: 'testnet' or 'pubnet'
 	Network string
-	// DisableTxSub disables transaction submission functionality for Horizon.
+	// DisableTxSub disables transaction submission functionality for OrbitR.
 	DisableTxSub bool
 }

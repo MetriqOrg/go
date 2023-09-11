@@ -14,8 +14,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
 )
 
 var (

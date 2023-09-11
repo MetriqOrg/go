@@ -7,9 +7,9 @@ import (
 
 	"github.com/guregu/null"
 
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/toid"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/toid"
+	"github.com/lantah/go/xdr"
 )
 
 func createInsertTrades(
@@ -197,7 +197,7 @@ func FilterTradesByType(trades []Trade, tradeType string) []Trade {
 	return result
 }
 
-// TradeScenario inserts trade rows into the Horizon DB
+// TradeScenario inserts trade rows into the OrbitR DB
 func TradeScenario(tt *test.T, q *Q) TradeFixtures {
 	builder := q.NewTradeBatchInsertBuilder(0)
 

@@ -8,25 +8,25 @@ Thank you for helping us test the new ingestion system in Horizon.
 
 ## What is the new ingestion system?
 
-The new ingestion system solves issues found in the previous version like: inconsistent data, relying on Gramr database directly, slow responses for specific queries, etc. It allows new kind of features in Horizon, ex. faster path-finding. We published a [blog post](https://www.stellar.org/developers-blog/our-new-horizon-ingestion-engine) with more details, please check it out!
+The new ingestion system solves issues found in the previous version like: inconsistent data, relying on Gravity database directly, slow responses for specific queries, etc. It allows new kind of features in Horizon, ex. faster path-finding. We published a [blog post](https://www.stellar.org/developers-blog/our-new-horizon-ingestion-engine) with more details, please check it out!
 
 ## Why would you want to upgrade?
 
 * Ingestion can now run on multiple servers, which means that even if one of your ingesting instances is down, the ingestion will continue on other instances.
 * New features like faster path-finding, accounts for signer endpoint, finding all accounts with a given asset, etc. More new features (and plugins!) to come.
-* Ingestion does not generate a high load on Gramr database.
-* With batched requests (not implemented yet) you can get a consistent snapshot of the latest ledger data. Previously this wasn't possible, because some entries were loaded from Gramr database and others from the Horizon database, and these could be at different ledgers.
+* Ingestion does not generate a high load on Gravity database.
+* With batched requests (not implemented yet) you can get a consistent snapshot of the latest ledger data. Previously this wasn't possible, because some entries were loaded from Gravity database and others from the Horizon database, and these could be at different ledgers.
 * We will continue to update Horizon 0.* releases with security fixes until end-of-life, but the 1.x release will become the default and recommended version soon. It's better to test this now within your organization. And again, use this release in staging environments only!
 
 ## Before you upgrade
 
 * You can rollback to the older version but only when using alpha or beta versions. We won't support rolling back when a stable version is released. To rollback: migrate DB down, rollback to the previous version and run `horizon db init-asset-stats` to regenerate assets stats in your DB.
 * If you were using the new ingestion in one of the previous versions of Horizon, you must first remove `ENABLE_EXPERIMENTAL_INGESTION` feature flag and restart all Horizon instances before deploying a new version.
-* The init stage (state ingestion) for the public Stellar network requires around 1.5GB of RAM. This memory is released after the state ingestion. State ingestion is performed only once. Restarting the server will not trigger it unless Horizon has been upgraded to a newer version (with an updated ingestion pipeline). We are evaluating alternative solutions to making these RAM requirements smaller.It's worth noting that the required memory will become smaller and smaller as more of the buckets in the history archive become [CAP-20](https://github.com/stellar/stellar-protocol/blob/master/core/cap-0020.md) compatible.
+* The init stage (state ingestion) for the public Lantah Network requires around 1.5GB of RAM. This memory is released after the state ingestion. State ingestion is performed only once. Restarting the server will not trigger it unless Horizon has been upgraded to a newer version (with an updated ingestion pipeline). We are evaluating alternative solutions to making these RAM requirements smaller.It's worth noting that the required memory will become smaller and smaller as more of the buckets in the history archive become [CAP-20](https://github.com/stellar/stellar-protocol/blob/master/core/cap-0020.md) compatible.
 * The CPU footprint of the new ingestion is modest. We were able to successfully run ingestion on an [AWS `c5.large`](https://aws.amazon.com/ec2/instance-types/c5/) instance. However, we highly recommend `c5.xlarge` instances. The init stage takes a few minutes on `c5.xlarge`. `c5.xlarge` is the equivalent of 4 vCPUs and 8GB of RAM. The definition of vCPU for the c5 large family in AWS is the following:
 > The 2nd generation Intel Xeon Scalable Processors (Cascade Lake) or 1st generation Intel Xeon Platinum 8000 series (Skylake-SP) processor with a sustained all core Turbo frequency of up to 3.4GHz, and single core turbo frequency of up to 3.5 GHz.
 
-* The state data requires an additional 6GB DB disk space for the public Stellar network (as of January 2020). The disk usage will increase when the number of Stellar ledger entries increases.
+* The state data requires an additional 6GB DB disk space for the public Lantah Network (as of January 2020). The disk usage will increase when the number of Stellar ledger entries increases.
   * `accounts_signers` table: 2340 MB
   * `trust_lines` table: 2052 MB
   * `accounts` table: 1545 MB

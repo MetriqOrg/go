@@ -5,14 +5,14 @@ import (
 	"errors"
 	"time"
 
-	"github.com/lantah/go/protocols/horizon"
-	"github.com/lantah/go/protocols/horizon/base"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/base"
 	"github.com/lantah/go/support/render/hal"
 	"github.com/lantah/go/xdr"
 )
 
 // TypeNames maps from operation type to the string used to represent that type
-// in horizon's JSON responses
+// in orbitr's JSON responses
 var TypeNames = map[xdr.OperationType]string{
 	xdr.OperationTypeCreateAccount:                 "create_account",
 	xdr.OperationTypePayment:                       "payment",
@@ -70,7 +70,7 @@ type Base struct {
 	// is present in Transaction. But, if the Transaction field is nil then TransactionHash is useful.
 	// Transaction is non nil when the "join=transactions" parameter is present in the operations request
 	TransactionHash string               `json:"transaction_hash"`
-	Transaction     *horizon.Transaction `json:"transaction,omitempty"`
+	Transaction     *orbitr.Transaction `json:"transaction,omitempty"`
 	Sponsor         string               `json:"sponsor,omitempty"`
 }
 
@@ -136,7 +136,7 @@ type PathPaymentStrictSend struct {
 }
 
 // ManageData represents a ManageData operation as it is serialized into json
-// for the horizon API.
+// for the orbitr API.
 type ManageData struct {
 	Base
 	Name  string `json:"name"`
@@ -248,7 +248,7 @@ type CreateClaimableBalance struct {
 	Base
 	Asset     string             `json:"asset"`
 	Amount    string             `json:"amount"`
-	Claimants []horizon.Claimant `json:"claimants"`
+	Claimants []orbitr.Claimant `json:"claimants"`
 }
 
 // ClaimClaimableBalance is the json resource representing a single operation whose type is
@@ -356,7 +356,7 @@ type LiquidityPoolWithdraw struct {
 //	events present in tx meta. Only asset contract events that have a reference to classic account in
 //	either the 'from' or 'to' participants will be included here as an asset balance change.
 //	Any pure contract-to-contract events with no reference to classic accounts are not included,
-//	as there is no explicit model in horizon for contract addresses yet.
+//	as there is no explicit model in orbitr for contract addresses yet.
 type InvokeHostFunction struct {
 	Base
 	Function            string                       `json:"function"`

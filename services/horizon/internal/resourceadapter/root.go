@@ -4,17 +4,17 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/support/render/hal"
+	"github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/support/render/hal"
 )
 
 // Populate fills in the details
 func PopulateRoot(
 	ctx context.Context,
-	dest *horizon.Root,
+	dest *orbitr.Root,
 	ledgerState ledger.Status,
 	hVersion, cVersion string,
 	passphrase string,
@@ -24,18 +24,18 @@ func PopulateRoot(
 	templates map[string]string,
 ) {
 	dest.IngestSequence = ledgerState.ExpHistoryLatest
-	dest.HorizonSequence = ledgerState.HistoryLatest
-	dest.HorizonLatestClosedAt = ledgerState.HistoryLatestClosedAt
+	dest.OrbitRSequence = ledgerState.HistoryLatest
+	dest.OrbitRLatestClosedAt = ledgerState.HistoryLatestClosedAt
 	dest.HistoryElderSequence = ledgerState.HistoryElder
 	dest.CoreSequence = ledgerState.CoreLatest
-	dest.HorizonVersion = hVersion
-	dest.GramrVersion = cVersion
+	dest.OrbitRVersion = hVersion
+	dest.GravityVersion = cVersion
 	dest.NetworkPassphrase = passphrase
 	dest.CurrentProtocolVersion = currentProtocolVersion
 	dest.SupportedProtocolVersion = ingest.MaxSupportedProtocolVersion
 	dest.CoreSupportedProtocolVersion = coreSupportedProtocolVersion
 
-	lb := hal.LinkBuilder{Base: horizonContext.BaseURL(ctx)}
+	lb := hal.LinkBuilder{Base: orbitrContext.BaseURL(ctx)}
 	if friendBotURL != nil {
 		friendbotLinkBuild := hal.LinkBuilder{Base: friendBotURL}
 		l := friendbotLinkBuild.Link("{?addr}")

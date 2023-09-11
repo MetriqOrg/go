@@ -1,5 +1,5 @@
 // Package test contains simple test helpers that should not
-// have any dependencies on horizon's packages.  think constants,
+// have any dependencies on orbitr's packages.  think constants,
 // custom matchers, generic helpers etc.
 package test
 
@@ -11,8 +11,8 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	tdb "github.com/stellar/go/services/horizon/internal/test/db"
-	"github.com/stellar/go/support/log"
+	tdb "github.com/lantah/go/services/orbitr/internal/test/db"
+	"github.com/lantah/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -23,13 +23,13 @@ type StaticMockServer struct {
 	LastRequest *http.Request
 }
 
-// T provides a common set of functionality for each test in horizon
+// T provides a common set of functionality for each test in orbitr
 type T struct {
 	T          *testing.T
 	Assert     *assert.Assertions
 	Require    *require.Assertions
 	Ctx        context.Context
-	HorizonDB  *sqlx.DB
+	OrbitRDB  *sqlx.DB
 	CoreDB     *sqlx.DB
 	EndLogTest func() []logrus.Entry
 }
@@ -49,8 +49,8 @@ func Start(t *testing.T) *T {
 	logger := log.New()
 
 	result.Ctx = log.Set(context.Background(), logger)
-	result.HorizonDB = tdb.Horizon(t)
-	result.CoreDB = tdb.Gramr(t)
+	result.OrbitRDB = tdb.OrbitR(t)
+	result.CoreDB = tdb.Gravity(t)
 	result.Assert = assert.New(t)
 	result.Require = require.New(t)
 	result.EndLogTest = logger.StartTest(log.DebugLevel)

@@ -12,11 +12,11 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/lantah/go/services/horizon/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
 
-	horizon "github.com/lantah/go/services/horizon/internal"
-	"github.com/lantah/go/services/horizon/internal/db2/schema"
-	"github.com/lantah/go/services/horizon/internal/ingest"
+	orbitr "github.com/lantah/go/services/orbitr/internal"
+	"github.com/lantah/go/services/orbitr/internal/db2/schema"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
 	support "github.com/lantah/go/support/config"
 	"github.com/lantah/go/support/db"
 	"github.com/lantah/go/support/errors"
@@ -25,12 +25,12 @@ import (
 
 var dbCmd = &cobra.Command{
 	Use:   "db [command]",
-	Short: "commands to manage horizon's postgres db",
+	Short: "commands to manage orbitr's postgres db",
 }
 
 var dbMigrateCmd = &cobra.Command{
 	Use:   "migrate [command]",
-	Short: "commands to run schema migrations on horizon's postgres db",
+	Short: "commands to run schema migrations on orbitr's postgres db",
 }
 
 func requireAndSetFlags(names ...string) error {
@@ -60,9 +60,9 @@ func requireAndSetFlags(names ...string) error {
 var dbInitCmd = &cobra.Command{
 	Use:   "init",
 	Short: "install schema",
-	Long:  "init initializes the postgres database used by horizon.",
+	Long:  "init initializes the postgres database used by orbitr.",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := requireAndSetFlags(horizon.DatabaseURLFlagName, horizon.IngestFlagName); err != nil {
+		if err := requireAndSetFlags(orbitr.DatabaseURLFlagName, orbitr.IngestFlagName); err != nil {
 			return err
 		}
 
@@ -114,7 +114,7 @@ var dbMigrateDownCmd = &cobra.Command{
 	Short: "run downwards db schema migrations",
 	Long:  "performs a downards schema migration command",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := requireAndSetFlags(horizon.DatabaseURLFlagName, horizon.IngestFlagName); err != nil {
+		if err := requireAndSetFlags(orbitr.DatabaseURLFlagName, orbitr.IngestFlagName); err != nil {
 			return err
 		}
 
@@ -138,7 +138,7 @@ var dbMigrateRedoCmd = &cobra.Command{
 	Short: "redo db schema migrations",
 	Long:  "performs a redo schema migration command",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := requireAndSetFlags(horizon.DatabaseURLFlagName, horizon.IngestFlagName); err != nil {
+		if err := requireAndSetFlags(orbitr.DatabaseURLFlagName, orbitr.IngestFlagName); err != nil {
 			return err
 		}
 
@@ -162,7 +162,7 @@ var dbMigrateStatusCmd = &cobra.Command{
 	Short: "print current database migration status",
 	Long:  "print current database migration status",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := requireAndSetFlags(horizon.DatabaseURLFlagName); err != nil {
+		if err := requireAndSetFlags(orbitr.DatabaseURLFlagName); err != nil {
 			return err
 		}
 
@@ -192,7 +192,7 @@ var dbMigrateUpCmd = &cobra.Command{
 	Short: "run upwards db schema migrations",
 	Long:  "performs an upwards schema migration command",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := requireAndSetFlags(horizon.DatabaseURLFlagName, horizon.IngestFlagName); err != nil {
+		if err := requireAndSetFlags(orbitr.DatabaseURLFlagName, orbitr.IngestFlagName); err != nil {
 			return err
 		}
 
@@ -220,12 +220,12 @@ var dbReapCmd = &cobra.Command{
 	Short: "reaps (i.e. removes) any reapable history data",
 	Long:  "reap removes any historical data that is earlier than the configured retention cutoff",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		app, err := horizon.NewAppFromFlags(config, flags)
+		app, err := orbitr.NewAppFromFlags(config, flags)
 		if err != nil {
 			return err
 		}
 		ctx := context.Background()
-		app.UpdateHorizonLedgerState(ctx)
+		app.UpdateOrbitRLedgerState(ctx)
 		return app.DeleteUnretainedHistory(ctx)
 	},
 }
@@ -256,7 +256,7 @@ func ingestRangeCmdOpts() support.ConfigOptions {
 			OptType:     types.Bool,
 			Required:    false,
 			FlagDefault: false,
-			Usage: "[optional] if this flag is set, horizon will be blocked " +
+			Usage: "[optional] if this flag is set, orbitr will be blocked " +
 				"from ingesting until the reingestion command completes (incompatible with --parallel-workers > 1)",
 		},
 		{
@@ -265,7 +265,7 @@ func ingestRangeCmdOpts() support.ConfigOptions {
 			OptType:     types.Uint,
 			Required:    false,
 			FlagDefault: uint(1),
-			Usage:       "[optional] if this flag is set to > 1, horizon will parallelize reingestion using the supplied number of workers",
+			Usage:       "[optional] if this flag is set to > 1, orbitr will parallelize reingestion using the supplied number of workers",
 		},
 		{
 			Name:        "parallel-job-size",
@@ -321,7 +321,7 @@ var dbReingestRangeCmd = &cobra.Command{
 			}
 		}
 
-		err := horizon.ApplyFlags(config, flags, horizon.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true})
+		err := orbitr.ApplyFlags(config, flags, orbitr.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true})
 		if err != nil {
 			return err
 		}
@@ -337,8 +337,8 @@ var dbReingestRangeCmd = &cobra.Command{
 var dbFillGapsCmdOpts = ingestRangeCmdOpts()
 var dbFillGapsCmd = &cobra.Command{
 	Use:   "fill-gaps [Start sequence number] [End sequence number]",
-	Short: "Ingests any gaps found in the horizon db",
-	Long:  "Ingests any gaps found in the horizon db. The command takes an optional start and end parameters which restrict the range of ledgers ingested.",
+	Short: "Ingests any gaps found in the orbitr db",
+	Long:  "Ingests any gaps found in the orbitr db. The command takes an optional start and end parameters which restrict the range of ledgers ingested.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := dbFillGapsCmdOpts.RequireE(); err != nil {
 			return err
@@ -369,7 +369,7 @@ var dbFillGapsCmd = &cobra.Command{
 			withRange = true
 		}
 
-		err := horizon.ApplyFlags(config, flags, horizon.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true})
+		err := orbitr.ApplyFlags(config, flags, orbitr.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true})
 		if err != nil {
 			return err
 		}
@@ -392,7 +392,7 @@ var dbFillGapsCmd = &cobra.Command{
 	},
 }
 
-func runDBReingestRange(ledgerRanges []history.LedgerRange, reingestForce bool, parallelWorkers uint, config horizon.Config) error {
+func runDBReingestRange(ledgerRanges []history.LedgerRange, reingestForce bool, parallelWorkers uint, config orbitr.Config) error {
 	var err error
 
 	if reingestForce && parallelWorkers > 1 {
@@ -412,21 +412,21 @@ func runDBReingestRange(ledgerRanges []history.LedgerRange, reingestForce bool, 
 		RemoteCaptiveCoreURL:        config.RemoteCaptiveCoreURL,
 		CaptiveCoreToml:             config.CaptiveCoreToml,
 		CaptiveCoreStoragePath:      config.CaptiveCoreStoragePath,
-		GramrCursor:                 config.CursorName,
-		GramrURL:                    config.GramrURL,
+		GravityCursor:                 config.CursorName,
+		GravityURL:                    config.GravityURL,
 		RoundingSlippageFilter:      config.RoundingSlippageFilter,
 		EnableIngestionFiltering:    config.EnableIngestionFiltering,
 	}
 
 	if ingestConfig.HistorySession, err = db.Open("postgres", config.DatabaseURL); err != nil {
-		return fmt.Errorf("cannot open Horizon DB: %v", err)
+		return fmt.Errorf("cannot open OrbitR DB: %v", err)
 	}
 
 	if !config.EnableCaptiveCoreIngestion {
-		if config.GramrDatabaseURL == "" {
-			return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
+		if config.GravityDatabaseURL == "" {
+			return fmt.Errorf("flag --%s cannot be empty", orbitr.GravityDBURLFlagName)
 		}
-		if ingestConfig.CoreSession, err = db.Open("postgres", config.GramrDatabaseURL); err != nil {
+		if ingestConfig.CoreSession, err = db.Open("postgres", config.GravityDatabaseURL); err != nil {
 			ingestConfig.HistorySession.Close()
 			return fmt.Errorf("cannot open Core DB: %v", err)
 		}
@@ -453,11 +453,11 @@ func runDBReingestRange(ledgerRanges []history.LedgerRange, reingestForce bool, 
 	err = system.ReingestRange(ledgerRanges, reingestForce)
 	if err != nil {
 		if _, ok := errors.Cause(err).(ingest.ErrReingestRangeConflict); ok {
-			return fmt.Errorf(`The range you have provided overlaps with Horizon's most recently ingested ledger.
+			return fmt.Errorf(`The range you have provided overlaps with OrbitR's most recently ingested ledger.
 It is not possible to run the reingest command on this range in parallel with
-Horizon's ingestion system.
-Either reduce the range so that it doesn't overlap with Horizon's ingestion system,
-or, use the force flag to ensure that Horizon's ingestion system is blocked until
+OrbitR's ingestion system.
+Either reduce the range so that it doesn't overlap with OrbitR's ingestion system,
+or, use the force flag to ensure that OrbitR's ingestion system is blocked until
 the reingest command completes.`)
 		}
 
@@ -469,10 +469,10 @@ the reingest command completes.`)
 
 var dbDetectGapsCmd = &cobra.Command{
 	Use:   "detect-gaps",
-	Short: "detects ingestion gaps in Horizon's database",
-	Long:  "detects ingestion gaps in Horizon's database and prints a list of reingest commands needed to fill the gaps",
+	Short: "detects ingestion gaps in OrbitR's database",
+	Long:  "detects ingestion gaps in OrbitR's database and prints a list of reingest commands needed to fill the gaps",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := requireAndSetFlags(horizon.DatabaseURLFlagName); err != nil {
+		if err := requireAndSetFlags(orbitr.DatabaseURLFlagName); err != nil {
 			return err
 		}
 
@@ -487,7 +487,7 @@ var dbDetectGapsCmd = &cobra.Command{
 			hlog.Info("No gaps found")
 			return nil
 		}
-		fmt.Println("Horizon commands to run in order to fill in the gaps:")
+		fmt.Println("OrbitR commands to run in order to fill in the gaps:")
 		cmdname := os.Args[0]
 		for _, g := range gaps {
 			fmt.Printf("%s db reingest range %d %d\n", cmdname, g.StartSequence, g.EndSequence)
@@ -496,23 +496,23 @@ var dbDetectGapsCmd = &cobra.Command{
 	},
 }
 
-func runDBDetectGaps(config horizon.Config) ([]history.LedgerRange, error) {
-	horizonSession, err := db.Open("postgres", config.DatabaseURL)
+func runDBDetectGaps(config orbitr.Config) ([]history.LedgerRange, error) {
+	orbitrSession, err := db.Open("postgres", config.DatabaseURL)
 	if err != nil {
 		return nil, err
 	}
-	defer horizonSession.Close()
-	q := &history.Q{horizonSession}
+	defer orbitrSession.Close()
+	q := &history.Q{orbitrSession}
 	return q.GetLedgerGaps(context.Background())
 }
 
-func runDBDetectGapsInRange(config horizon.Config, start, end uint32) ([]history.LedgerRange, error) {
-	horizonSession, err := db.Open("postgres", config.DatabaseURL)
+func runDBDetectGapsInRange(config orbitr.Config, start, end uint32) ([]history.LedgerRange, error) {
+	orbitrSession, err := db.Open("postgres", config.DatabaseURL)
 	if err != nil {
 		return nil, err
 	}
-	defer horizonSession.Close()
-	q := &history.Q{horizonSession}
+	defer orbitrSession.Close()
+	q := &history.Q{orbitrSession}
 	return q.GetLedgerGapsInRange(context.Background(), start, end)
 }
 

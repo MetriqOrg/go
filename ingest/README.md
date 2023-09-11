@@ -37,9 +37,9 @@ This is described in a little more detail in [`doc.go`](./doc.go), its accompany
 
 
 # Hello, World!
-As is tradition, we'll start with a simplistic example that ingests a single ledger from the network. We're immediately faced with a decision, though: _What's the backend?_ We'll use a **Captive Gramr backend** in this example because it requires (little-to-)no setup, but there are couple of alternatives available. You could also use:
+As is tradition, we'll start with a simplistic example that ingests a single ledger from the network. We're immediately faced with a decision, though: _What's the backend?_ We'll use a **Captive Gravity backend** in this example because it requires (little-to-)no setup, but there are couple of alternatives available. You could also use:
 
-  - a **database** (via `NewDatabaseBackend()`), which would ingest ledgers stored in a Gramr database, or
+  - a **database** (via `NewDatabaseBackend()`), which would ingest ledgers stored in a Gravity database, or
 
   - a **remote Captive Core** instance (via `NewRemoteCaptive()`), which works much like Captive Core, but points to an instance that isn't (necessarily) running locally.
 
@@ -80,7 +80,7 @@ _(The `panicIf` function is defined in the [footnotes](#footnotes); it's used he
 Notice that the mysterious `config` variable above isn't defined. This will be environment-specific and users should consult both the [Captive Core documentation](../../services/orbitr/internal/docs/captive_core.md) and the [config docs](./ledgerbackend/captive_core_backend.go#L96-L125) directly for more details if they want to use this backend in production. For now, though, we'll have some hardcoded values for the SDF testnet:
 
 ```go
-networkPassphrase := "Test SDF Network ; September 2015"
+networkPassphrase := "Test Lantah Network ; 2023"
 captiveCoreToml, err := ledgerbackend.NewCaptiveCoreToml(
 	ledgerbackend.CaptiveCoreTomlParams{
 		NetworkPassphrase:  networkPassphrase,
@@ -92,7 +92,7 @@ panicIf(err)
 
 config := ledgerbackend.CaptiveCoreConfig{
 	// Change these based on your environment:
-	BinaryPath:         "/usr/bin/gramr",
+	BinaryPath:         "/usr/bin/gravity",
 	NetworkPassphrase:  networkPassphrase,
 	HistoryArchiveURLs: archiveURLs,
 	Toml:               captiveCoreToml,
@@ -105,7 +105,7 @@ Running this should dump a ton of logs while Captive Core boots up, downloads a 
 
 ```
 $ go run ./example.go
-INFO[...] default: Config from /tmp/captive-gramr365405852/gramr.conf  pid=20574
+INFO[...] default: Config from /tmp/captive-gravity365405852/gravity.conf  pid=20574
 INFO[...] default: RUN_STANDALONE enabled in configuration file - node will not function properly with most networks  pid=20574
 INFO[...] default: Generated QUORUM_SET: {              pid=20574
 INFO[...] "t" : 2,                                      pid=20574
@@ -155,7 +155,7 @@ There's obviously much, *much* more we can do with the ingestion library. Let's 
 
 
 # **Example**: Ledger Statistics
-In this section, we'll demonstrate how to combine a backend with a reader to actually learn something meaningful about the Stellar network. Again, we'll use a specific backend here (Captive Core, again), but the processing can be done with any of them.
+In this section, we'll demonstrate how to combine a backend with a reader to actually learn something meaningful about the Lantah Network. Again, we'll use a specific backend here (Captive Core, again), but the processing can be done with any of them.
 
 More specifically, we're going to analyze the ledgers and track some statistics about the success/failure of transactions and their relative operations using `LedgerTransactionReader`. While this is technically doable by manipulating the OrbitR API and some fancy JSON parsing, it serves as a useful yet concise demonstration of the ingestion library's features.
 

@@ -107,7 +107,7 @@ func TestRetrieveMarketData(t *testing.T) {
 	// Now let's create the trades:
 	trades := []Trade{
 		{ // GRAM_BTC trade
-			HorizonID:       "hrzid1",
+			OrbitRID:       "hrzid1",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      100.0,
 			CounterAssetID:  btcAsset.ID,
@@ -116,7 +116,7 @@ func TestRetrieveMarketData(t *testing.T) {
 			LedgerCloseTime: now,
 		},
 		{ // GRAM_ETH trade
-			HorizonID:       "hrzid3",
+			OrbitRID:       "hrzid3",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      24.0,
 			CounterAssetID:  ethAsset.ID,
@@ -125,7 +125,7 @@ func TestRetrieveMarketData(t *testing.T) {
 			LedgerCloseTime: oneHourAgo,
 		},
 		{ // GRAM_ETH trade
-			HorizonID:       "hrzid2",
+			OrbitRID:       "hrzid2",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      50.0,
 			CounterAssetID:  ethAsset.ID,
@@ -134,7 +134,7 @@ func TestRetrieveMarketData(t *testing.T) {
 			LedgerCloseTime: now,
 		},
 		{ // GRAM_BTC trade
-			HorizonID:       "hrzid4",
+			OrbitRID:       "hrzid4",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      50.0,
 			CounterAssetID:  btcAsset.ID,
@@ -143,7 +143,7 @@ func TestRetrieveMarketData(t *testing.T) {
 			LedgerCloseTime: threeDaysAgo,
 		},
 		{ // GRAM_ETH trade
-			HorizonID:       "hrzid5",
+			OrbitRID:       "hrzid5",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      24.0,
 			CounterAssetID:  ethAsset.ID,
@@ -417,7 +417,7 @@ func TestRetrievePartialMarkets(t *testing.T) {
 	// Now let's create the trades:
 	trades := []Trade{
 		{ // BTC_ETH  trade (ETH is from issuer 1)
-			HorizonID:       "hrzid1",
+			OrbitRID:       "hrzid1",
 			BaseAssetID:     btcAsset.ID,
 			BaseAmount:      100.0,
 			CounterAssetID:  ethAsset1.ID,
@@ -426,7 +426,7 @@ func TestRetrievePartialMarkets(t *testing.T) {
 			LedgerCloseTime: tenMinutesAgo,
 		},
 		{ // BTC_ETH trade (ETH is from issuer 2)
-			HorizonID:       "hrzid3",
+			OrbitRID:       "hrzid3",
 			BaseAssetID:     btcAsset.ID,
 			BaseAmount:      24.0,
 			CounterAssetID:  ethAsset2.ID,
@@ -435,7 +435,7 @@ func TestRetrievePartialMarkets(t *testing.T) {
 			LedgerCloseTime: now,
 		},
 		{ // BTC_ETH  trade (ETH is from issuer 1)
-			HorizonID:       "hrzid2",
+			OrbitRID:       "hrzid2",
 			BaseAssetID:     btcAsset.ID,
 			BaseAmount:      50.0,
 			CounterAssetID:  ethAsset1.ID,
@@ -444,7 +444,7 @@ func TestRetrievePartialMarkets(t *testing.T) {
 			LedgerCloseTime: oneHourAgo,
 		},
 		{ // BTC_ETH  trade (ETH is from issuer 1)
-			HorizonID:       "hrzid4",
+			OrbitRID:       "hrzid4",
 			BaseAssetID:     btcAsset.ID,
 			BaseAmount:      50.0,
 			CounterAssetID:  ethAsset1.ID,
@@ -689,7 +689,7 @@ func Test24hStatsFallback(t *testing.T) {
 	// Now let's create the trades:
 	trades := []Trade{
 		{
-			HorizonID:       "hrzid1",
+			OrbitRID:       "hrzid1",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      1.0,
 			CounterAssetID:  btcAsset.ID,
@@ -698,7 +698,7 @@ func Test24hStatsFallback(t *testing.T) {
 			LedgerCloseTime: twoDaysAgo,
 		},
 		{ // BTC_ETH trade (ETH is from issuer 2)
-			HorizonID:       "hrzid2",
+			OrbitRID:       "hrzid2",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      1.0,
 			CounterAssetID:  btcAsset.ID,
@@ -796,7 +796,7 @@ func TestPreferAnchorAssetCode(t *testing.T) {
 	// Now let's create the trades:
 	trades := []Trade{
 		{
-			HorizonID:       "hrzid1",
+			OrbitRID:       "hrzid1",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      1.0,
 			CounterAssetID:  btcAsset.ID,
@@ -805,7 +805,7 @@ func TestPreferAnchorAssetCode(t *testing.T) {
 			LedgerCloseTime: twoDaysAgo,
 		},
 		{ // BTC_ETH trade (ETH is from issuer 2)
-			HorizonID:       "hrzid2",
+			OrbitRID:       "hrzid2",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      1.0,
 			CounterAssetID:  btcAsset.ID,

@@ -1,8 +1,8 @@
 package txnbuild
 
 import (
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // ChangeTrustAsset represents a Stellar change trust asset.
@@ -15,7 +15,7 @@ type ChangeTrustAsset interface {
 	ToTrustLineAsset() (TrustLineAsset, error)
 }
 
-// LiquidityPoolShareChangeTrustAsset represents non-GRAM assets on the Stellar network.
+// LiquidityPoolShareChangeTrustAsset represents non-GRAM assets on the Lantah Network.
 type LiquidityPoolShareChangeTrustAsset struct {
 	LiquidityPoolParameters LiquidityPoolParameters
 }

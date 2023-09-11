@@ -1,12 +1,12 @@
-package horizon
+package orbitr
 
 import (
 	"testing"
 
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 func TestEffectActions_Index(t *testing.T) {
@@ -21,7 +21,7 @@ func TestEffectActions_Index(t *testing.T) {
 			ht.Assert.PageOf(11, w.Body)
 		}
 
-		// test streaming, regression for https://github.com/stellar/go/services/horizon/internal/issues/147
+		// test streaming, regression for https://github.com/lantah/go/services/orbitr/internal/issues/147
 		w = ht.Get("/effects?limit=2", test.RequestHelperStreaming)
 		ht.Assert.Equal(200, w.Code)
 
@@ -42,7 +42,7 @@ func TestEffectActions_Index(t *testing.T) {
 		}
 
 		// Makes StateMiddleware happy
-		q := history.Q{ht.HorizonSession()}
+		q := history.Q{ht.OrbitRSession()}
 		err := q.UpdateLastLedgerIngest(ht.Ctx, 3)
 		ht.Assert.NoError(err)
 		err = q.UpdateIngestVersion(ht.Ctx, ingest.CurrentVersion)
@@ -121,7 +121,7 @@ func TestEffectActions_Index(t *testing.T) {
 			e1 := result[0]
 
 			var ledger2 history.Ledger
-			err := ht.HorizonDB.Get(&ledger2, "SELECT * FROM history_ledgers WHERE sequence = 2")
+			err := ht.OrbitRDB.Get(&ledger2, "SELECT * FROM history_ledgers WHERE sequence = 2")
 			ht.Require.NoError(err, "failed to load ledger")
 
 			ht.Assert.Equal(ledger2.ClosedAt.UTC(), e1.LedgerCloseTime.UTC())
@@ -132,8 +132,8 @@ func TestEffectActions_Index(t *testing.T) {
 func TestEffectsForFeeBumpTransaction(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
-	test.ResetHorizonDB(t, ht.HorizonDB)
-	q := &history.Q{ht.HorizonSession()}
+	test.ResetOrbitRDB(t, ht.OrbitRDB)
+	q := &history.Q{ht.OrbitRSession()}
 	fixture := history.FeeBumpScenario(ht.T, q, true)
 
 	w := ht.Get("/transactions/" + fixture.OuterHash + "/effects")

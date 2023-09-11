@@ -10,24 +10,24 @@ import (
 	"time"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/test"
-	supportProblem "github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/toid"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/protocols/orbitr/operations"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	supportProblem "github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/toid"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestInvokeHostFnDetailsInPaymentOperations(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{OnlyPayments: true}
 
 	txIndex := int32(1)
@@ -172,7 +172,7 @@ func TestGetOperationsWithoutFilter(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("base")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{}
 
 	records, err := handler.GetResourcePage(
@@ -190,7 +190,7 @@ func TestGetOperationsExclusiveFilters(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("base")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{}
 
 	testCases := []struct {
@@ -249,7 +249,7 @@ func TestGetOperationsFilterByAccountID(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("base")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{}
 
 	testCases := []struct {
@@ -290,7 +290,7 @@ func TestGetOperationsFilterByTxID(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("base")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{}
 
 	testCases := []struct {
@@ -364,7 +364,7 @@ func TestGetOperationsIncludeFailed(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("failed_transactions")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{}
 
 	records, err := handler.GetResourcePage(
@@ -449,7 +449,7 @@ func TestGetOperationsIncludeFailed(t *testing.T) {
 	}
 
 	// NULL value
-	_, err = tt.HorizonSession().ExecRaw(tt.Ctx,
+	_, err = tt.OrbitRSession().ExecRaw(tt.Ctx,
 		`UPDATE history_transactions SET successful = NULL WHERE transaction_hash = ?`,
 		"56e3216045d579bea40f2d35a09406de3a894ecb5be70dbda5ec9c0427a0d5a1",
 	)
@@ -494,7 +494,7 @@ func TestGetOperationsFilterByLedgerID(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("base")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{}
 
 	testCases := []struct {
@@ -565,7 +565,7 @@ func TestGetOperationsOnlyPayments(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("base")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{
 		OnlyPayments: true,
 	}
@@ -645,7 +645,7 @@ func TestOperation_CreatedAt(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("base")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{}
 
 	records, err := handler.GetResourcePage(
@@ -670,7 +670,7 @@ func TestGetOperationsPagination(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("base")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{
 		LedgerState: &ledger.State{},
 	}
@@ -729,7 +729,7 @@ func TestGetOperations_IncludeTransactions(t *testing.T) {
 	defer tt.Finish()
 	tt.Scenario("failed_transactions")
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOperationsHandler{}
 
 	_, err := handler.GetResourcePage(
@@ -791,7 +791,7 @@ func TestGetOperation(t *testing.T) {
 	record, err := handler.GetResource(
 		httptest.NewRecorder(),
 		makeRequest(
-			t, map[string]string{}, map[string]string{"id": "8589938689"}, tt.HorizonSession(),
+			t, map[string]string{}, map[string]string{"id": "8589938689"}, tt.OrbitRSession(),
 		),
 	)
 	tt.Assert.NoError(err)
@@ -802,7 +802,7 @@ func TestGetOperation(t *testing.T) {
 	_, err = handler.GetResource(
 		httptest.NewRecorder(),
 		makeRequest(
-			t, map[string]string{}, map[string]string{"id": "9589938689"}, tt.HorizonSession(),
+			t, map[string]string{}, map[string]string{"id": "9589938689"}, tt.OrbitRSession(),
 		),
 	)
 
@@ -811,7 +811,7 @@ func TestGetOperation(t *testing.T) {
 	_, err = handler.GetResource(
 		httptest.NewRecorder(),
 		makeRequest(
-			t, map[string]string{}, map[string]string{"id": "0"}, tt.HorizonSession(),
+			t, map[string]string{}, map[string]string{"id": "0"}, tt.OrbitRSession(),
 		),
 	)
 	tt.Assert.Equal(err, problem.BeforeHistory)
@@ -828,7 +828,7 @@ func TestOperation_IncludeTransaction(t *testing.T) {
 	record, err := handler.GetResource(
 		httptest.NewRecorder(),
 		makeRequest(
-			t, map[string]string{}, map[string]string{"id": "261993009153"}, tt.HorizonSession(),
+			t, map[string]string{}, map[string]string{"id": "261993009153"}, tt.OrbitRSession(),
 		),
 	)
 
@@ -840,7 +840,7 @@ func TestOperation_IncludeTransaction(t *testing.T) {
 	record, err = handler.GetResource(
 		httptest.NewRecorder(),
 		makeRequest(
-			t, map[string]string{"join": "transactions"}, map[string]string{"id": "261993009153"}, tt.HorizonSession(),
+			t, map[string]string{"join": "transactions"}, map[string]string{"id": "261993009153"}, tt.OrbitRSession(),
 		),
 	)
 	op = record.(operations.BumpSequence)

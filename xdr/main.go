@@ -12,9 +12,9 @@ import (
 	"io"
 	"strings"
 
-	xdr "github.com/stellar/go-xdr/xdr3"
+	xdr "github.com/lantah/go-xdr/xdr3"
 
-	"github.com/stellar/go/support/errors"
+	"github.com/lantah/go/support/errors"
 )
 
 // CommitHash is the commit hash that was used to generate the xdr in this folder.

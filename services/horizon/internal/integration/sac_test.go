@@ -9,21 +9,21 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/strkey"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/protocols/orbitr/operations"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/strkey"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 )
 
 const sac_contract = "soroban_sac_test.wasm"
 
 // Tests use precompiled wasm bin files that are added to the testdata directory.
-// Refer to ./services/horizon/internal/integration/contracts/README.md on how to recompile
+// Refer to ./services/orbitr/internal/integration/contracts/README.md on how to recompile
 // contract code if needed to new wasm.
 
 func TestContractMintToAccount(t *testing.T) {
@@ -33,7 +33,7 @@ func TestContractMintToAccount(t *testing.T) {
 
 	itest := integration.NewTest(t, integration.Config{
 		ProtocolVersion:    20,
-		HorizonEnvironment: map[string]string{"INGEST_DISABLE_STATE_VERIFICATION": "true", "CONNECTION_TIMEOUT": "360000"},
+		OrbitREnvironment: map[string]string{"INGEST_DISABLE_STATE_VERIFICATION": "true", "CONNECTION_TIMEOUT": "360000"},
 		EnableSorobanRPC:   true,
 	})
 
@@ -757,7 +757,7 @@ type assetStats struct {
 }
 
 func assertAssetStats(itest *integration.Test, expected assetStats) {
-	assets, err := itest.Client().Assets(horizonclient.AssetRequest{
+	assets, err := itest.Client().Assets(orbitrclient.AssetRequest{
 		ForAssetCode:   expected.code,
 		ForAssetIssuer: expected.issuer,
 		Limit:          1,
@@ -811,9 +811,9 @@ func assertContainsEffect(t *testing.T, fx []effects.Effect, effectTypes ...effe
 // used for checking SAC effects.
 func getTxEffects(itest *integration.Test, txHash string, asset xdr.Asset) []effects.Effect {
 	t := itest.CurrentTest()
-	effects, err := itest.Client().Effects(horizonclient.EffectRequest{
+	effects, err := itest.Client().Effects(orbitrclient.EffectRequest{
 		ForTransaction: txHash,
-		Order:          horizonclient.OrderDesc,
+		Order:          orbitrclient.OrderDesc,
 	})
 	assert.NoError(t, err)
 	result := effects.Embedded.Records
@@ -823,7 +823,7 @@ func getTxEffects(itest *integration.Test, txHash string, asset xdr.Asset) []eff
 }
 
 func assertEventPayments(itest *integration.Test, txHash string, asset xdr.Asset, from string, to string, evtType string, amount string) {
-	ops, err := itest.Client().Operations(horizonclient.OperationRequest{
+	ops, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: txHash,
 		Limit:          1,
 	})

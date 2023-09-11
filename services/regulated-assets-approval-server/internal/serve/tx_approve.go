@@ -9,20 +9,20 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/services/regulated-assets-approval-server/internal/serve/httperror"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/http/httpdecode"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/httperror"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/http/httpdecode"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/txnbuild"
 )
 
 type txApproveHandler struct {
 	issuerKP          *keypair.Full
 	assetCode         string
-	horizonClient     horizonclient.ClientInterface
+	orbitrClient     orbitrclient.ClientInterface
 	networkPassphrase string
 	db                *sqlx.DB
 	kycThreshold      int64
@@ -41,8 +41,8 @@ func (h txApproveHandler) validate() error {
 	if h.assetCode == "" {
 		return errors.New("asset code cannot be empty")
 	}
-	if h.horizonClient == nil {
-		return errors.New("horizon client cannot be nil")
+	if h.orbitrClient == nil {
+		return errors.New("orbitr client cannot be nil")
 	}
 	if h.networkPassphrase == "" {
 		return errors.New("network passphrase cannot be empty")
@@ -175,7 +175,7 @@ func (h txApproveHandler) txApprove(ctx context.Context, in txApproveRequest) (r
 		return NewRejectedTxApprovalResponse("The payment asset is not supported by this issuer."), nil
 	}
 
-	acc, err := h.horizonClient.AccountDetail(horizonclient.AccountRequest{AccountID: paymentSource})
+	acc, err := h.orbitrClient.AccountDetail(orbitrclient.AccountRequest{AccountID: paymentSource})
 	if err != nil {
 		return nil, errors.Wrapf(err, "getting detail for payment source account %s", paymentSource)
 	}
@@ -320,7 +320,7 @@ func (h txApproveHandler) handleSuccessResponseIfNeeded(ctx context.Context, tx 
 	}
 
 	// pull current account details from the network then validate the tx sequence number
-	acc, err := h.horizonClient.AccountDetail(horizonclient.AccountRequest{AccountID: paymentSource})
+	acc, err := h.orbitrClient.AccountDetail(orbitrclient.AccountRequest{AccountID: paymentSource})
 	if err != nil {
 		return nil, errors.Wrapf(err, "getting detail for payment source account %s", paymentSource)
 	}

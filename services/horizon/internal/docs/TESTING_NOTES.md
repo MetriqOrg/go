@@ -1,6 +1,6 @@
 # **Testing with Horizon**
 
-Run all the Go monorepo unit tests like so (assuming you are at stellar/go, or run from stellar/go/services/horizon for just the Horizon subset):
+Run all the Go monorepo unit tests like so (assuming you are at lantah/go, or run from lantah/go/services/horizon for just the Horizon subset):
 
 ```bash
 go test ./...
@@ -9,14 +9,14 @@ go test ./...
 or run individual Horizon tests like so, providing the expected arguments:
 
 ```bash
-go test github.com/stellar/go/services/horizon/...
+go test github.com/lantah/go/services/horizon/...
 ```
 
 Before running integration tests, you also need to set some environment variables:
 ```bash
 export HORIZON_INTEGRATION_TESTS_ENABLED=true
 export HORIZON_INTEGRATION_TESTS_CORE_MAX_SUPPORTED_PROTOCOL=19
-export HORIZON_INTEGRATION_TESTS_DOCKER_IMG=stellar/gramr:19.11.0-1323.7fb6d5e88.focal
+export HORIZON_INTEGRATION_TESTS_DOCKER_IMG=stellar/gravity:19.11.0-1323.7fb6d5e88.focal
 ```
 Make sure to check [horizon.yml](/.github/workflows/horizon.yml) for the latest core image version.
 

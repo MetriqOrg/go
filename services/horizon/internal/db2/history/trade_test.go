@@ -1,11 +1,11 @@
 package history
 
 import (
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 var (
@@ -42,8 +42,8 @@ func filterByAccount(trades []Trade, account string) []Trade {
 func TestSelectTrades(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 	fixtures := TradeScenario(tt, q)
 
 	for _, account := range append([]string{allAccounts}, fixtures.Addresses...) {
@@ -71,8 +71,8 @@ func TestSelectTrades(t *testing.T) {
 func TestSelectTradesCursor(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 	fixtures := TradeScenario(tt, q)
 
 	for _, account := range append([]string{allAccounts}, fixtures.Addresses...) {
@@ -110,8 +110,8 @@ func TestSelectTradesCursor(t *testing.T) {
 func TestTradesQueryForOffer(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 	fixtures := TradeScenario(tt, q)
 	tt.Assert.NotEmpty(fixtures.TradesByOffer)
 
@@ -133,8 +133,8 @@ func TestTradesQueryForOffer(t *testing.T) {
 func TestTradesQueryForLiquidityPool(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 	fixtures := TradeScenario(tt, q)
 	tt.Assert.NotEmpty(fixtures.TradesByOffer)
 
@@ -156,8 +156,8 @@ func TestTradesQueryForLiquidityPool(t *testing.T) {
 func TestTradesForAssetPair(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 	fixtures := TradeScenario(tt, q)
 	eurAsset := xdr.MustNewCreditAsset("EUR", issuer.Address())
 	chfAsset := xdr.MustNewCreditAsset("CHF", "GAXMF43TGZHW3QN3REOUA2U5PW5BTARXGGYJ3JIFHW3YT6QRKRL3CPPU")
@@ -205,8 +205,8 @@ func reverseTrade(expected Trade) Trade {
 func TestTradesForReverseAssetPair(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 	fixtures := TradeScenario(tt, q)
 	eurAsset := xdr.MustNewCreditAsset("EUR", issuer.Address())
 	chfAsset := xdr.MustNewCreditAsset("CHF", "GAXMF43TGZHW3QN3REOUA2U5PW5BTARXGGYJ3JIFHW3YT6QRKRL3CPPU")

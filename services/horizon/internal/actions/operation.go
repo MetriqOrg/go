@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"net/http"
 
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	supportProblem "github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/toid"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	supportProblem "github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/toid"
 )
 
 // Joinable query struct for join query parameter
@@ -87,7 +87,7 @@ func (handler GetOperationsHandler) GetResourcePage(w HeaderWriter, r *http.Requ
 		return nil, err
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +161,7 @@ func (handler GetOperationByIDHandler) GetResource(w HeaderWriter, r *http.Reque
 		return nil, err
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}

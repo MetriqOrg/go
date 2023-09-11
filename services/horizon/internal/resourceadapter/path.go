@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/paths"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/paths"
 )
 
 func extractAsset(asset string, t, c, i *string) error {
@@ -26,7 +26,7 @@ func extractAsset(asset string, t, c, i *string) error {
 }
 
 // PopulatePath converts the paths.Path into a Path
-func PopulatePath(ctx context.Context, dest *horizon.Path, p paths.Path) (err error) {
+func PopulatePath(ctx context.Context, dest *orbitr.Path, p paths.Path) (err error) {
 	dest.DestinationAmount = amount.String(p.DestinationAmount)
 	dest.SourceAmount = amount.String(p.SourceAmount)
 
@@ -48,7 +48,7 @@ func PopulatePath(ctx context.Context, dest *horizon.Path, p paths.Path) (err er
 		return
 	}
 
-	dest.Path = make([]horizon.Asset, len(p.Path))
+	dest.Path = make([]orbitr.Asset, len(p.Path))
 	for i, a := range p.Path {
 		err = extractAsset(
 			a,

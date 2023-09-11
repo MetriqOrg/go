@@ -9,11 +9,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -120,7 +120,7 @@ func TestStateVerifier(t *testing.T) {
 	}
 
 	// Trigger state rebuild to check if ingesting from history archive works
-	session := itest.HorizonIngest().HistoryQ().Clone()
+	session := itest.OrbitRIngest().HistoryQ().Clone()
 	q := &history.Q{SessionInterface: session}
 	err = q.Begin(context.Background())
 	assert.NoError(t, err)
@@ -150,12 +150,12 @@ func waitForStateVerifications(itest *integration.Test, count int) bool {
 		assert.NoError(t, err)
 		metrics := string(metricsBytes)
 
-		stateInvalid := strings.Contains(metrics, "horizon_ingest_state_invalid 1")
+		stateInvalid := strings.Contains(metrics, "orbitr_ingest_state_invalid 1")
 		assert.False(t, stateInvalid, "State is invalid!")
 
 		notVerifiedYet := strings.Contains(
 			metrics,
-			fmt.Sprintf("horizon_ingest_state_verify_duration_seconds_count %d", count-1),
+			fmt.Sprintf("orbitr_ingest_state_verify_duration_seconds_count %d", count-1),
 		)
 		if notVerifiedYet {
 			time.Sleep(time.Second)

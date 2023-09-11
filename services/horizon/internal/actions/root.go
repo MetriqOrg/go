@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
 )
 
 type GetRootHandler struct {
@@ -14,11 +14,11 @@ type GetRootHandler struct {
 	CoreStateGetter
 	NetworkPassphrase string
 	FriendbotURL      *url.URL
-	HorizonVersion    string
+	OrbitRVersion    string
 }
 
 func (handler GetRootHandler) GetResource(w HeaderWriter, r *http.Request) (interface{}, error) {
-	var res horizon.Root
+	var res orbitr.Root
 	templates := map[string]string{
 		"accounts":           AccountsQuery{}.URITemplate(),
 		"claimableBalances":  ClaimableBalancesQuery{}.URITemplate(),
@@ -32,7 +32,7 @@ func (handler GetRootHandler) GetResource(w HeaderWriter, r *http.Request) (inte
 		r.Context(),
 		&res,
 		handler.LedgerState.CurrentStatus(),
-		handler.HorizonVersion,
+		handler.OrbitRVersion,
 		coreState.CoreVersion,
 		handler.NetworkPassphrase,
 		coreState.CurrentProtocolVersion,

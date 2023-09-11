@@ -11,7 +11,7 @@ This repo contains various tools and services that you can use and deploy, as we
 * [OrbitR Server](services/orbitr): Full-featured API server for the Lantah network
 * [Go OrbitR SDK - orbitrclient](clients/orbitrclient): Client for OrbitR server (queries and transaction submission)
 * [Go OrbitR SDK - txnbuild](txnbuild): Construct Lantah transactions and operations
-* [Ticker](services/ticker): An API server that provides statistics about assets and markets on the Stellar network
+* [Ticker](services/ticker): An API server that provides statistics about assets and markets on the Lantah Network
 * [Keystore](services/keystore): An API server that is used to store and manage encrypted keys for Stellar client applications
 * Servers for Anchors & Financial Institutions
   * [Compliance Server](services/compliance): Allows financial institutions to exchange KYC information
@@ -41,7 +41,7 @@ Each of these directories have their own README file that explain further the na
 
 ### Other packages
 
-In addition to the packages described above, this repository contains various packages related to working with the Stellar network from a go program.  It's recommended that you use [godoc](https://godoc.org/github.com/stellar/go#pkg-subdirectories) to browse the documentation for each.
+In addition to the packages described above, this repository contains various packages related to working with the Lantah Network from a go program.  It's recommended that you use [godoc](https://godoc.org/github.com/stellar/go#pkg-subdirectories) to browse the documentation for each.
 
 
 ## Package source layout

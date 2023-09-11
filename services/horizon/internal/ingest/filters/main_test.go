@@ -3,15 +3,15 @@ package filters
 import (
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 func TestItGetsFilters(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 
 	filtersService := NewFilters()
 

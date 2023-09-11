@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/support/errors"
 )
 
@@ -27,9 +27,9 @@ func (a Account) GetSequenceNumber() (int64, error) {
 	return a.Sequence, nil
 }
 
-// RefreshSequenceNumber gets an Account's correct in-memory sequence number from Horizon.
-func (a *Account) RefreshSequenceNumber(hclient horizonclient.ClientInterface) error {
-	accountRequest := horizonclient.AccountRequest{AccountID: a.GetAccountID()}
+// RefreshSequenceNumber gets an Account's correct in-memory sequence number from OrbitR.
+func (a *Account) RefreshSequenceNumber(hclient orbitrclient.ClientInterface) error {
+	accountRequest := orbitrclient.AccountRequest{AccountID: a.GetAccountID()}
 	accountDetail, err := hclient.AccountDetail(accountRequest)
 	if err != nil {
 		return errors.Wrap(err, "getting account detail")

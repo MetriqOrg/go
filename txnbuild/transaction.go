@@ -1,11 +1,11 @@
 /*
-Package txnbuild implements transactions and operations on the Stellar network.
+Package txnbuild implements transactions and operations on the Lantah Network.
 This library provides an interface to the Stellar transaction model. It supports the building of Go applications on
-top of the Stellar network (https://www.stellar.org/). Transactions constructed by this library may be submitted
-to any Horizon instance for processing onto the ledger, using any Stellar SDK client. The recommended client for Go
-programmers is horizonclient (https://github.com/stellar/go/tree/master/clients/horizonclient). Together, these two
+top of the Lantah Network (https://www.lantah.org/). Transactions constructed by this library may be submitted
+to any OrbitR instance for processing onto the ledger, using any Stellar SDK client. The recommended client for Go
+programmers is orbitrclient (https://github.com/lantah/go/tree/master/clients/orbitrclient). Together, these two
 libraries provide a complete Stellar SDK.
-For more information and further examples, see https://github.com/stellar/go/blob/master/docs/reference/readme.md
+For more information and further examples, see https://github.com/lantah/go/blob/master/docs/reference/readme.md
 */
 package txnbuild
 
@@ -21,15 +21,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/strkey"
-	"github.com/stellar/go/support/collections/set"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/strkey"
+	"github.com/lantah/go/support/collections/set"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
-// MinBaseFee is the minimum transaction fee for the Stellar network of 100 µg (0.0001 GRAM).
+// MinBaseFee is the minimum transaction fee for the Lantah Network of 100 µg (0.0001 GRAM).
 const MinBaseFee = 100
 
 // Account represents the aspects of a Stellar account necessary to construct transactions. See
@@ -405,8 +405,8 @@ func (t *Transaction) ClaimableBalanceID(operationIndex int) (string, error) {
 		return "", errors.New("operation is not CreateClaimableBalance")
 	}
 
-	// We mimic the relevant code from Gramr
-	// https://github.com/stellar/gramr/blob/9f3cc04e6ec02c38974c42545a86cdc79809252b/src/test/TestAccount.cpp#L285
+	// We mimic the relevant code from Gravity
+	// https://github.com/stellar/gravity/blob/9f3cc04e6ec02c38974c42545a86cdc79809252b/src/test/TestAccount.cpp#L285
 	//
 	// Note that the source account must be *unmuxed* for this to work.
 	muxedAccountId := xdr.MustMuxedAddress(t.sourceAccount.AccountID).ToAccountId()

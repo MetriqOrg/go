@@ -4,15 +4,15 @@ import (
 	"testing"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 func TestQueryEmptyAccountSigners(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	signer := "GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO0"
 	results, err := q.AccountsForSigner(tt.Ctx, signer, db2.PageQuery{Order: "asc", Limit: 10})
@@ -24,7 +24,7 @@ func TestInsertAccountSigner(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	account := "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2"
 	signer := "GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO4"
@@ -53,7 +53,7 @@ func TestInsertAccountSignerSponsor(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	account := "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2"
 	signer := "GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO4"
@@ -79,7 +79,7 @@ func TestMultipleAccountsForSigner(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	account := "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH1"
 	signer := "GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO2"
@@ -116,7 +116,7 @@ func TestRemoveNonExistentAccountSigner(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	account := "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH3"
 	signer := "GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO5"
@@ -129,7 +129,7 @@ func TestRemoveAccountSigner(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	account := "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH6"
 	signer := "GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO7"
@@ -160,7 +160,7 @@ func TestGetAccountSignersByAccountID(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	account := "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH6"
 	signer := "GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO7"

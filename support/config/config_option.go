@@ -12,8 +12,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/strutils"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/strutils"
 )
 
 // ConfigOptions is a group of ConfigOptions that can be for convenience
@@ -64,7 +64,7 @@ type ConfigOption struct {
 	EnvVar         string                    // e.g. "DATABASE_URL". Defaults to uppercase/underscore representation of name
 	OptType        types.BasicKind           // The type of this option, e.g. types.Bool
 	FlagDefault    interface{}               // A default if no option is provided. Omit or set to `nil` if no default
-	Required       bool                      // Whether this option must be set for Horizon to run
+	Required       bool                      // Whether this option must be set for OrbitR to run
 	Usage          string                    // Help text
 	CustomSetValue func(*ConfigOption) error // Optional function for custom validation/transformation
 	ConfigKey      interface{}               // Pointer to the final key in the linked Config struct

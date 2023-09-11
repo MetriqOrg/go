@@ -4,10 +4,10 @@ import (
 	"go/types"
 
 	"github.com/spf13/cobra"
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/services/regulated-assets-approval-server/internal/configureissuer"
-	"github.com/stellar/go/support/config"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/services/regulated-assets-approval-server/internal/configureissuer"
+	"github.com/lantah/go/support/config"
 )
 
 type ConfigureIssuer struct{}
@@ -30,11 +30,11 @@ func (c *ConfigureIssuer) Command() *cobra.Command {
 			Required:  true,
 		},
 		{
-			Name:        "horizon-url",
-			Usage:       "Horizon URL used for looking up account details",
+			Name:        "orbitr-url",
+			Usage:       "OrbitR URL used for looking up account details",
 			OptType:     types.String,
-			ConfigKey:   &opts.HorizonURL,
-			FlagDefault: horizonclient.DefaultTestNetClient.HorizonURL,
+			ConfigKey:   &opts.OrbitRURL,
+			FlagDefault: orbitrclient.DefaultTestNetClient.OrbitRURL,
 			Required:    true,
 		},
 		{
@@ -46,7 +46,7 @@ func (c *ConfigureIssuer) Command() *cobra.Command {
 		},
 		{
 			Name:        "network-passphrase",
-			Usage:       "Network passphrase of the Stellar network transactions should be signed for",
+			Usage:       "Network passphrase of the Lantah Network transactions should be signed for",
 			OptType:     types.String,
 			ConfigKey:   &opts.NetworkPassphrase,
 			FlagDefault: network.TestNetworkPassphrase,

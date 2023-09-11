@@ -6,12 +6,12 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	horizonclient "github.com/stellar/go/clients/horizonclient"
-	hlog "github.com/stellar/go/support/log"
+	orbitrclient "github.com/lantah/go/clients/orbitrclient"
+	hlog "github.com/lantah/go/support/log"
 )
 
 var DatabaseURL string
-var Client *horizonclient.Client
+var Client *orbitrclient.Client
 var UseTestNet bool
 var Logger = hlog.New()
 
@@ -53,10 +53,10 @@ func init() {
 func initConfig() {
 	if UseTestNet {
 		Logger.Debug("Using Stellar Default Test Network")
-		Client = horizonclient.DefaultTestNetClient
+		Client = orbitrclient.DefaultTestNetClient
 	} else {
 		Logger.Debug("Using Stellar Default Public Network")
-		Client = horizonclient.DefaultPublicNetClient
+		Client = orbitrclient.DefaultPublicNetClient
 	}
 }
 

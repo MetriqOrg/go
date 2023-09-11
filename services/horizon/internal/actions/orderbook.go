@@ -3,11 +3,11 @@ package actions
 import (
 	"net/http"
 
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
-	"github.com/stellar/go/support/render/problem"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
+	"github.com/lantah/go/support/render/problem"
 )
 
 // StreamableObjectResponse is an interface for objects returned by streamable object endpoints

@@ -1,6 +1,6 @@
 // Package db provides helpers to connect to test databases.  It has no
-// internal dependencies on horizon and so should be able to be imported by
-// any horizon package.
+// internal dependencies on orbitr and so should be able to be imported by
+// any orbitr package.
 package db
 
 import (
@@ -11,22 +11,22 @@ import (
 	// pq enables postgres support
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	db "github.com/stellar/go/support/db/dbtest"
+	db "github.com/lantah/go/support/db/dbtest"
 )
 
 var (
-	horizonDB     *db.DB
+	orbitrDB     *db.DB
 	coreDB        *db.DB
 	coreDBConn    *sqlx.DB
-	horizonDBConn *sqlx.DB
+	orbitrDBConn *sqlx.DB
 )
 
-func horizonPostgres(t *testing.T) *db.DB {
-	if horizonDB != nil {
-		return horizonDB
+func orbitrPostgres(t *testing.T) *db.DB {
+	if orbitrDB != nil {
+		return orbitrDB
 	}
-	horizonDB = db.Postgres(t)
-	return horizonDB
+	orbitrDB = db.Postgres(t)
+	return orbitrDB
 }
 
 func corePostgres(t *testing.T) *db.DB {
@@ -37,30 +37,30 @@ func corePostgres(t *testing.T) *db.DB {
 	return coreDB
 }
 
-func Horizon(t *testing.T) *sqlx.DB {
-	if horizonDBConn != nil {
-		return horizonDBConn
+func OrbitR(t *testing.T) *sqlx.DB {
+	if orbitrDBConn != nil {
+		return orbitrDBConn
 	}
 
-	horizonDBConn = horizonPostgres(t).Open()
-	return horizonDBConn
+	orbitrDBConn = orbitrPostgres(t).Open()
+	return orbitrDBConn
 }
 
-func HorizonURL() string {
-	if horizonDB == nil {
-		log.Panic(fmt.Errorf("Horizon not initialized"))
+func OrbitRURL() string {
+	if orbitrDB == nil {
+		log.Panic(fmt.Errorf("OrbitR not initialized"))
 	}
-	return horizonDB.DSN
+	return orbitrDB.DSN
 }
 
-func HorizonROURL() string {
-	if horizonDB == nil {
-		log.Panic(fmt.Errorf("Horizon not initialized"))
+func OrbitRROURL() string {
+	if orbitrDB == nil {
+		log.Panic(fmt.Errorf("OrbitR not initialized"))
 	}
-	return horizonDB.RO_DSN
+	return orbitrDB.RO_DSN
 }
 
-func Gramr(t *testing.T) *sqlx.DB {
+func Gravity(t *testing.T) *sqlx.DB {
 	if coreDBConn != nil {
 		return coreDBConn
 	}
@@ -68,9 +68,9 @@ func Gramr(t *testing.T) *sqlx.DB {
 	return coreDBConn
 }
 
-func GramrURL() string {
+func GravityURL() string {
 	if coreDB == nil {
-		log.Panic(fmt.Errorf("Gramr not initialized"))
+		log.Panic(fmt.Errorf("Gravity not initialized"))
 	}
 	return coreDB.DSN
 }

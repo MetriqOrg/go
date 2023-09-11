@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/protocols/orbitr/operations"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -21,7 +21,7 @@ const add_u64_contract = "soroban_add_u64.wasm"
 const increment_contract = "soroban_increment_contract.wasm"
 
 // Tests use precompiled wasm bin files that are added to the testdata directory.
-// Refer to ./services/horizon/internal/integration/contracts/README.md on how to recompile
+// Refer to ./services/orbitr/internal/integration/contracts/README.md on how to recompile
 // contract code if needed to new wasm.
 
 func TestContractInvokeHostFunctionInstallContract(t *testing.T) {
@@ -35,7 +35,7 @@ func TestContractInvokeHostFunctionInstallContract(t *testing.T) {
 	})
 
 	// establish which account will be contract owner, and load it's current seq
-	sourceAccount, err := itest.Client().AccountDetail(horizonclient.AccountRequest{
+	sourceAccount, err := itest.Client().AccountDetail(orbitrclient.AccountRequest{
 		AccountID: itest.Master().Address(),
 	})
 	require.NoError(t, err)
@@ -63,7 +63,7 @@ func TestContractInvokeHostFunctionInstallContract(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, invokeHostFunctionResult.Code, xdr.InvokeHostFunctionResultCodeInvokeHostFunctionSuccess)
 
-	clientInvokeOp, err := itest.Client().Operations(horizonclient.OperationRequest{
+	clientInvokeOp, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: tx.Hash,
 	})
 	require.NoError(t, err)
@@ -85,7 +85,7 @@ func TestContractInvokeHostFunctionCreateContractByAddress(t *testing.T) {
 	})
 
 	// establish which account will be contract owner, and load it's current seq
-	sourceAccount, err := itest.Client().AccountDetail(horizonclient.AccountRequest{
+	sourceAccount, err := itest.Client().AccountDetail(orbitrclient.AccountRequest{
 		AccountID: itest.Master().Address(),
 	})
 	require.NoError(t, err)
@@ -116,7 +116,7 @@ func TestContractInvokeHostFunctionCreateContractByAddress(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, invokeHostFunctionResult.Code, xdr.InvokeHostFunctionResultCodeInvokeHostFunctionSuccess)
 
-	clientInvokeOp, err := itest.Client().Operations(horizonclient.OperationRequest{
+	clientInvokeOp, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: tx.Hash,
 	})
 	require.NoError(t, err)
@@ -139,7 +139,7 @@ func TestContractInvokeHostFunctionInvokeStatelessContractFn(t *testing.T) {
 	})
 
 	// establish which account will be contract owner
-	sourceAccount, err := itest.Client().AccountDetail(horizonclient.AccountRequest{
+	sourceAccount, err := itest.Client().AccountDetail(orbitrclient.AccountRequest{
 		AccountID: itest.Master().Address(),
 	})
 	require.NoError(t, err)
@@ -216,7 +216,7 @@ func TestContractInvokeHostFunctionInvokeStatelessContractFn(t *testing.T) {
 	assert.NoError(t, xdr.SafeUnmarshalBase64(tx.ResultMetaXdr, &transactionMeta))
 	assert.True(t, expectedScVal.Equals(transactionMeta.V3.SorobanMeta.ReturnValue))
 
-	clientInvokeOp, err := itest.Client().Operations(horizonclient.OperationRequest{
+	clientInvokeOp, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: tx.Hash,
 	})
 	require.NoError(t, err)
@@ -248,7 +248,7 @@ func TestContractInvokeHostFunctionInvokeStatefulContractFn(t *testing.T) {
 	})
 
 	// establish which account will be contract owner
-	sourceAccount, err := itest.Client().AccountDetail(horizonclient.AccountRequest{
+	sourceAccount, err := itest.Client().AccountDetail(orbitrclient.AccountRequest{
 		AccountID: itest.Master().Address(),
 	})
 	require.NoError(t, err)
@@ -312,7 +312,7 @@ func TestContractInvokeHostFunctionInvokeStatefulContractFn(t *testing.T) {
 	assert.NoError(t, xdr.SafeUnmarshalBase64(clientTx.ResultMetaXdr, &transactionMeta))
 	assert.True(t, expectedScVal.Equals(transactionMeta.V3.SorobanMeta.ReturnValue))
 
-	clientInvokeOp, err := itest.Client().Operations(horizonclient.OperationRequest{
+	clientInvokeOp, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: tx.Hash,
 	})
 	require.NoError(t, err)

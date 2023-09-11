@@ -6,12 +6,12 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . ./
 ENV GOFLAGS="-ldflags=-X=github.com/lantah/go/support/app.version=${VERSION}-(built-from-source)"
-RUN go install github.com/lantah/go/services/horizon
+RUN go install github.com/lantah/go/services/orbitr
 
 FROM ubuntu:22.04
-ARG GRAMR_VERSION 
-ENV GRAMR_VERSION=${GRAMR_VERSION:-*}
-ENV GRAMR_BINARY_PATH /usr/bin/stellar-core
+ARG GRAVITY_VERSION 
+ENV GRAVITY_VERSION=${GRAVITY_VERSION:-*}
+ENV GRAVITY_BINARY_PATH /usr/bin/stellar-core
 
 ENV DEBIAN_FRONTEND=noninteractive
 # ca-certificates are required to make tls connections
@@ -19,10 +19,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
 RUN wget -qO - https://apt.stellar.org/SDF.asc | APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=true apt-key add -
 RUN echo "deb https://apt.stellar.org focal stable" >/etc/apt/sources.list.d/SDF.list
 RUN echo "deb https://apt.stellar.org focal unstable" >/etc/apt/sources.list.d/SDF-unstable.list
-RUN apt-get update && apt-get install -y stellar-core=${GRAMR_VERSION}
+RUN apt-get update && apt-get install -y stellar-core=${GRAVITY_VERSION}
 RUN apt-get clean
 
-COPY --from=builder /go/bin/horizon ./
+COPY --from=builder /go/bin/orbitr ./
 
-ENTRYPOINT ["./horizon"]
+ENTRYPOINT ["./orbitr"]
     

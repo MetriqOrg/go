@@ -13,42 +13,42 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sirupsen/logrus"
 
-	"github.com/lantah/go/clients/gramr"
+	"github.com/lantah/go/clients/gravity"
 	"github.com/lantah/go/historyarchive"
 	"github.com/lantah/go/support/log"
 	"github.com/lantah/go/xdr"
 )
 
-// Ensure CaptiveGramr implements LedgerBackend
-var _ LedgerBackend = (*CaptiveGramr)(nil)
+// Ensure CaptiveGravity implements LedgerBackend
+var _ LedgerBackend = (*CaptiveGravity)(nil)
 
 // ErrCannotStartFromGenesis is returned when attempting to prepare a range from ledger 1
 var ErrCannotStartFromGenesis = errors.New("CaptiveCore is unable to start from ledger 1, start from ledger 2")
 
-func (c *CaptiveGramr) roundDownToFirstReplayAfterCheckpointStart(ledger uint32) uint32 {
+func (c *CaptiveGravity) roundDownToFirstReplayAfterCheckpointStart(ledger uint32) uint32 {
 	r := c.checkpointManager.GetCheckpointRange(ledger)
 	if r.Low <= 1 {
-		// Gramr doesn't stream ledger 1
+		// Gravity doesn't stream ledger 1
 		return 2
 	}
 	// All other checkpoints start at the next multiple of 64
 	return r.Low
 }
 
-// CaptiveGramr is a ledger backend that starts internal Gramr
+// CaptiveGravity is a ledger backend that starts internal Gravity
 // subprocess responsible for streaming ledger data. It provides better decoupling
 // than DatabaseBackend but requires some extra init time.
 //
 // It operates in two modes:
-//   - When a BoundedRange is prepared it starts Gramr in catchup mode that
-//     replays ledgers in memory. This is very fast but requires Gramr to
+//   - When a BoundedRange is prepared it starts Gravity in catchup mode that
+//     replays ledgers in memory. This is very fast but requires Gravity to
 //     keep ledger state in RAM. It requires around 3GB of RAM as of August 2020.
-//   - When a UnboundedRange is prepared it runs Gramr catchup mode to
+//   - When a UnboundedRange is prepared it runs Gravity catchup mode to
 //     sync with the first ledger and then runs it in a normal mode. This
 //     requires the configAppendPath to be provided because a quorum set needs to
 //     be selected.
 //
-// When running CaptiveGramr will create a temporary folder to store
+// When running CaptiveGravity will create a temporary folder to store
 // bucket files and other temporary files. The folder is removed when Close is
 // called.
 //
@@ -56,43 +56,43 @@ func (c *CaptiveGramr) roundDownToFirstReplayAfterCheckpointStart(ledger uint32)
 // temporary folder.
 //
 // Currently BoundedRange requires a full-trust on history archive. This issue is
-// being fixed in Gramr.
+// being fixed in Gravity.
 //
 // While using BoundedRanges is straightforward there are a few gotchas connected
 // to UnboundedRanges:
 //   - PrepareRange takes more time because all ledger entries must be stored on
 //     disk instead of RAM.
 //   - If GetLedger is not called frequently (every 5 sec. on average) the
-//     Gramr process can go out of sync with the network. This happens
-//     because there is no buffering of communication pipe and CaptiveGramr
-//     has a very small internal buffer and Gramr will not close the new
+//     Gravity process can go out of sync with the network. This happens
+//     because there is no buffering of communication pipe and CaptiveGravity
+//     has a very small internal buffer and Gravity will not close the new
 //     ledger if it's not read.
 //
-// Except for the Close function, CaptiveGramr is not thread-safe and should
+// Except for the Close function, CaptiveGravity is not thread-safe and should
 // not be accessed by multiple go routines. Close is thread-safe and can be called
 // from another go routine. Once Close is called it will interrupt and cancel any
 // pending operations.
 //
-// Requires Gramr v13.2.0+.
-type CaptiveGramr struct {
+// Requires Gravity v13.2.0+.
+type CaptiveGravity struct {
 	archive           historyarchive.ArchiveInterface
 	checkpointManager historyarchive.CheckpointManager
 	ledgerHashStore   TrustedLedgerHashStore
 	useDB             bool
 
-	// cancel is the CancelFunc for context which controls the lifetime of a CaptiveGramr instance.
-	// Once it is invoked CaptiveGramr will not be able to stream ledgers from Gramr or
-	// spawn new instances of Gramr.
+	// cancel is the CancelFunc for context which controls the lifetime of a CaptiveGravity instance.
+	// Once it is invoked CaptiveGravity will not be able to stream ledgers from Gravity or
+	// spawn new instances of Gravity.
 	cancel context.CancelFunc
 
-	gramrRunner gramrRunnerInterface
-	// gramrLock protects access to gramrRunner. When the read lock
-	// is acquired gramrRunner can be accessed. When the write lock is acquired
-	// gramrRunner can be updated.
-	gramrLock sync.RWMutex
+	gravityRunner gravityRunnerInterface
+	// gravityLock protects access to gravityRunner. When the read lock
+	// is acquired gravityRunner can be accessed. When the write lock is acquired
+	// gravityRunner can be updated.
+	gravityLock sync.RWMutex
 
 	// For testing
-	gramrRunnerFactory func() gramrRunnerInterface
+	gravityRunnerFactory func() gravityRunnerInterface
 
 	// cachedMeta keeps that ledger data of the last fetched ledger. Updated in GetLedger().
 	cachedMeta *xdr.LedgerCloseMeta
@@ -100,7 +100,7 @@ type CaptiveGramr struct {
 	// ledgerSequenceLock mutex is used to protect the member variables used in the
 	// read-only GetLatestLedgerSequence method from concurrent write operations.
 	// This is required when GetLatestLedgerSequence is called from other goroutine
-	// such as writing Prometheus metric captive_gramr_latest_ledger.
+	// such as writing Prometheus metric captive_gravity_latest_ledger.
 	ledgerSequenceLock sync.RWMutex
 
 	prepared           *Range  // non-nil if any range is prepared
@@ -110,14 +110,14 @@ type CaptiveGramr struct {
 	previousLedgerHash *string
 
 	config            CaptiveCoreConfig
-	gramrClient *gramr.Client
+	gravityClient *gravity.Client
 }
 
-// CaptiveCoreConfig contains all the parameters required to create a CaptiveGramr instance
+// CaptiveCoreConfig contains all the parameters required to create a CaptiveGravity instance
 type CaptiveCoreConfig struct {
-	// BinaryPath is the file path to the Gramr binary
+	// BinaryPath is the file path to the Gravity binary
 	BinaryPath string
-	// NetworkPassphrase is the Stellar network passphrase used by captive core when connecting to the Stellar network
+	// NetworkPassphrase is the Lantah Network passphrase used by captive core when connecting to the Lantah Network
 	NetworkPassphrase string
 	// HistoryArchiveURLs are a list of history archive urls
 	HistoryArchiveURLs []string
@@ -132,12 +132,12 @@ type CaptiveCoreConfig struct {
 	CheckpointFrequency uint32
 	// LedgerHashStore is an optional store used to obtain hashes for ledger sequences from a trusted source
 	LedgerHashStore TrustedLedgerHashStore
-	// Log is an (optional) custom logger which will capture any output from the Gramr process.
+	// Log is an (optional) custom logger which will capture any output from the Gravity process.
 	// If Log is omitted then all output will be printed to stdout.
 	Log *log.Entry
-	// Context is the (optional) context which controls the lifetime of a CaptiveGramr instance. Once the context is done
-	// the CaptiveGramr instance will not be able to stream ledgers from Gramr or spawn new
-	// instances of Gramr. If Context is omitted CaptiveGramr will default to using context.Background.
+	// Context is the (optional) context which controls the lifetime of a CaptiveGravity instance. Once the context is done
+	// the CaptiveGravity instance will not be able to stream ledgers from Gravity or spawn new
+	// instances of Gravity. If Context is omitted CaptiveGravity will default to using context.Background.
 	Context context.Context
 	// StoragePath is the (optional) base path passed along to Core's
 	// BUCKET_DIR_PATH which specifies where various bucket data should be
@@ -152,8 +152,8 @@ type CaptiveCoreConfig struct {
 	UseDB bool
 }
 
-// NewCaptive returns a new CaptiveGramr instance.
-func NewCaptive(config CaptiveCoreConfig) (*CaptiveGramr, error) {
+// NewCaptive returns a new CaptiveGravity instance.
+func NewCaptive(config CaptiveCoreConfig) (*CaptiveGravity, error) {
 	// Here we set defaults in the config. Because config is not a pointer this code should
 	// not mutate the original CaptiveCoreConfig instance which was passed into NewCaptive()
 
@@ -186,7 +186,7 @@ func NewCaptive(config CaptiveCoreConfig) (*CaptiveGramr, error) {
 		return nil, errors.Wrap(err, "Error connecting to ALL history archives.")
 	}
 
-	c := &CaptiveGramr{
+	c := &CaptiveGravity{
 		archive:           &archivePool,
 		ledgerHashStore:   config.LedgerHashStore,
 		useDB:             config.UseDB,
@@ -195,12 +195,12 @@ func NewCaptive(config CaptiveCoreConfig) (*CaptiveGramr, error) {
 		checkpointManager: historyarchive.NewCheckpointManager(config.CheckpointFrequency),
 	}
 
-	c.gramrRunnerFactory = func() gramrRunnerInterface {
-		return newGramrRunner(config)
+	c.gravityRunnerFactory = func() gravityRunnerInterface {
+		return newGravityRunner(config)
 	}
 
 	if config.Toml != nil && config.Toml.HTTPPort != 0 {
-		c.gramrClient = &gramr.Client{
+		c.gravityClient = &gravity.Client{
 			HTTP: &http.Client{
 				Timeout: 2 * time.Second,
 			},
@@ -211,14 +211,14 @@ func NewCaptive(config CaptiveCoreConfig) (*CaptiveGramr, error) {
 	return c, nil
 }
 
-func (c *CaptiveGramr) coreSyncedMetric() float64 {
-	if c.gramrClient == nil {
+func (c *CaptiveGravity) coreSyncedMetric() float64 {
+	if c.gravityClient == nil {
 		return -2
 	}
 
-	info, err := c.gramrClient.Info(c.config.Context)
+	info, err := c.gravityClient.Info(c.config.Context)
 	if err != nil {
-		c.config.Log.WithError(err).Warn("Cannot connect to Captive Gramr HTTP server")
+		c.config.Log.WithError(err).Warn("Cannot connect to Captive Gravity HTTP server")
 		return -1
 	}
 
@@ -229,37 +229,37 @@ func (c *CaptiveGramr) coreSyncedMetric() float64 {
 	}
 }
 
-func (c *CaptiveGramr) coreVersionMetric() float64 {
-	if c.gramrClient == nil {
+func (c *CaptiveGravity) coreVersionMetric() float64 {
+	if c.gravityClient == nil {
 		return -2
 	}
 
-	info, err := c.gramrClient.Info(c.config.Context)
+	info, err := c.gravityClient.Info(c.config.Context)
 	if err != nil {
-		c.config.Log.WithError(err).Warn("Cannot connect to Captive Gramr HTTP server")
+		c.config.Log.WithError(err).Warn("Cannot connect to Captive Gravity HTTP server")
 		return -1
 	}
 
 	return float64(info.Info.ProtocolVersion)
 }
 
-func (c *CaptiveGramr) registerMetrics(registry *prometheus.Registry, namespace string) {
+func (c *CaptiveGravity) registerMetrics(registry *prometheus.Registry, namespace string) {
 	coreSynced := prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: namespace, Subsystem: "ingest", Name: "captive_gramr_synced",
+			Namespace: namespace, Subsystem: "ingest", Name: "captive_gravity_synced",
 			Help: "1 if sync, 0 if not synced, -1 if unable to connect or HTTP server disabled.",
 		},
 		c.coreSyncedMetric,
 	)
 	supportedProtocolVersion := prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: namespace, Subsystem: "ingest", Name: "captive_gramr_supported_protocol_version",
+			Namespace: namespace, Subsystem: "ingest", Name: "captive_gravity_supported_protocol_version",
 			Help: "determines the supported version of the protocol by Captive-Core",
 		},
 		c.coreVersionMetric,
 	)
 	latestLedger := prometheus.NewGaugeFunc(prometheus.GaugeOpts{
-		Namespace: namespace, Subsystem: "ingest", Name: "captive_gramr_latest_ledger",
+		Namespace: namespace, Subsystem: "ingest", Name: "captive_gravity_latest_ledger",
 		Help: "sequence number of the latest ledger available in the ledger backend",
 	},
 		func() float64 {
@@ -273,7 +273,7 @@ func (c *CaptiveGramr) registerMetrics(registry *prometheus.Registry, namespace 
 	registry.MustRegister(coreSynced, supportedProtocolVersion, latestLedger)
 }
 
-func (c *CaptiveGramr) getLatestCheckpointSequence() (uint32, error) {
+func (c *CaptiveGravity) getLatestCheckpointSequence() (uint32, error) {
 	has, err := c.archive.GetRootHAS()
 	if err != nil {
 		return 0, errors.Wrap(err, "error getting root HAS")
@@ -282,7 +282,7 @@ func (c *CaptiveGramr) getLatestCheckpointSequence() (uint32, error) {
 	return has.CurrentLedger, nil
 }
 
-func (c *CaptiveGramr) openOfflineReplaySubprocess(from, to uint32) error {
+func (c *CaptiveGravity) openOfflineReplaySubprocess(from, to uint32) error {
 	latestCheckpointSequence, err := c.getLatestCheckpointSequence()
 	if err != nil {
 		return errors.Wrap(err, "error getting latest checkpoint sequence")
@@ -304,10 +304,10 @@ func (c *CaptiveGramr) openOfflineReplaySubprocess(from, to uint32) error {
 		)
 	}
 
-	c.gramrRunner = c.gramrRunnerFactory()
-	err = c.gramrRunner.catchup(from, to)
+	c.gravityRunner = c.gravityRunnerFactory()
+	err = c.gravityRunner.catchup(from, to)
 	if err != nil {
-		return errors.Wrap(err, "error running gramr")
+		return errors.Wrap(err, "error running gravity")
 	}
 
 	// The next ledger should be the first ledger of the checkpoint containing
@@ -324,16 +324,16 @@ func (c *CaptiveGramr) openOfflineReplaySubprocess(from, to uint32) error {
 	return nil
 }
 
-func (c *CaptiveGramr) openOnlineReplaySubprocess(ctx context.Context, from uint32) error {
+func (c *CaptiveGravity) openOnlineReplaySubprocess(ctx context.Context, from uint32) error {
 	runFrom, ledgerHash, err := c.runFromParams(ctx, from)
 	if err != nil {
-		return errors.Wrap(err, "error calculating ledger and hash for gramr run")
+		return errors.Wrap(err, "error calculating ledger and hash for gravity run")
 	}
 
-	c.gramrRunner = c.gramrRunnerFactory()
-	err = c.gramrRunner.runFrom(runFrom, ledgerHash)
+	c.gravityRunner = c.gravityRunnerFactory()
+	err = c.gravityRunner.runFrom(runFrom, ledgerHash)
 	if err != nil {
-		return errors.Wrap(err, "error running gramr")
+		return errors.Wrap(err, "error running gravity")
 	}
 
 	// In the online mode we update nextLedger after streaming the first ledger.
@@ -351,10 +351,10 @@ func (c *CaptiveGramr) openOnlineReplaySubprocess(ctx context.Context, from uint
 	return nil
 }
 
-// runFromParams receives a ledger sequence and calculates the required values to call gramr run with --start-ledger and --start-hash
-func (c *CaptiveGramr) runFromParams(ctx context.Context, from uint32) (uint32, string, error) {
+// runFromParams receives a ledger sequence and calculates the required values to call gravity run with --start-ledger and --start-hash
+func (c *CaptiveGravity) runFromParams(ctx context.Context, from uint32) (uint32, string, error) {
 	if from == 1 {
-		// Trying to start-from 1 results in an error from Gramr:
+		// Trying to start-from 1 results in an error from Gravity:
 		// Target ledger 1 is not newer than last closed ledger 1 - nothing to do
 		// TODO maybe we can fix it by generating 1st ledger meta
 		// like GenesisLedgerStateReader?
@@ -364,8 +364,8 @@ func (c *CaptiveGramr) runFromParams(ctx context.Context, from uint32) (uint32, 
 	if from <= c.checkpointManager.GetCheckpoint(0) {
 		// The line below is to support a special case for streaming ledger 2
 		// that works for all other ledgers <= 63 (fast-forward).
-		// We can't set from=2 because Gramr will not allow starting from 1.
-		// To solve this we start from 3 and exploit the fast that Gramr
+		// We can't set from=2 because Gravity will not allow starting from 1.
+		// To solve this we start from 3 and exploit the fast that Gravity
 		// will stream data from 2 for the first checkpoint.
 		from = 3
 	}
@@ -378,7 +378,7 @@ func (c *CaptiveGramr) runFromParams(ctx context.Context, from uint32) (uint32, 
 	// We don't allow starting the online mode starting with more than two
 	// checkpoints from now. Such requests are likely buggy.
 	// We should allow only one checkpoint here but sometimes there are up to a
-	// minute delays when updating root HAS by gramr.
+	// minute delays when updating root HAS by gravity.
 	twoCheckPointsLength := (c.checkpointManager.GetCheckpoint(0) + 1) * 2
 	maxLedger := latestCheckpointSequence + twoCheckPointsLength
 	if from > maxLedger {
@@ -428,33 +428,33 @@ func (c *CaptiveGramr) runFromParams(ctx context.Context, from uint32) (uint32, 
 
 // nextExpectedSequence returns nextLedger (if currently set) or start of
 // prepared range. Otherwise it returns 0.
-// This is done because `nextLedger` is 0 between the moment Gramr is
+// This is done because `nextLedger` is 0 between the moment Gravity is
 // started and streaming the first ledger (in such case we return first ledger
 // in requested range).
-func (c *CaptiveGramr) nextExpectedSequence() uint32 {
+func (c *CaptiveGravity) nextExpectedSequence() uint32 {
 	if c.nextLedger == 0 && c.prepared != nil {
 		return c.prepared.from
 	}
 	return c.nextLedger
 }
 
-func (c *CaptiveGramr) startPreparingRange(ctx context.Context, ledgerRange Range) (bool, error) {
-	c.gramrLock.Lock()
-	defer c.gramrLock.Unlock()
+func (c *CaptiveGravity) startPreparingRange(ctx context.Context, ledgerRange Range) (bool, error) {
+	c.gravityLock.Lock()
+	defer c.gravityLock.Unlock()
 
 	if c.isPrepared(ledgerRange) {
 		return true, nil
 	}
 
-	if c.gramrRunner != nil {
-		if err := c.gramrRunner.close(); err != nil {
+	if c.gravityRunner != nil {
+		if err := c.gravityRunner.close(); err != nil {
 			return false, errors.Wrap(err, "error closing existing session")
 		}
 
-		// Make sure Gramr is terminated before starting a new instance.
-		processExited, _ := c.gramrRunner.getProcessExitError()
+		// Make sure Gravity is terminated before starting a new instance.
+		processExited, _ := c.gravityRunner.getProcessExitError()
 		if !processExited {
-			return false, errors.New("the previous Gramr instance is still running")
+			return false, errors.New("the previous Gravity instance is still running")
 		}
 	}
 
@@ -472,16 +472,16 @@ func (c *CaptiveGramr) startPreparingRange(ctx context.Context, ledgerRange Rang
 }
 
 // PrepareRange prepares the given range (including from and to) to be loaded.
-// Captive gramr backend needs to initialize Gramr state to be
+// Captive gravity backend needs to initialize Gravity state to be
 // able to stream ledgers.
-// Gramr mode depends on the provided ledgerRange:
-//   - For BoundedRange it will start Gramr in catchup mode.
+// Gravity mode depends on the provided ledgerRange:
+//   - For BoundedRange it will start Gravity in catchup mode.
 //   - For UnboundedRange it will first catchup to starting ledger and then run
-//     it normally (including connecting to the Stellar network).
+//     it normally (including connecting to the Lantah Network).
 //
 // Please note that using a BoundedRange, currently, requires a full-trust on
-// history archive. This issue is being fixed in Gramr.
-func (c *CaptiveGramr) PrepareRange(ctx context.Context, ledgerRange Range) error {
+// history archive. This issue is being fixed in Gravity.
+func (c *CaptiveGravity) PrepareRange(ctx context.Context, ledgerRange Range) error {
 	if alreadyPrepared, err := c.startPreparingRange(ctx, ledgerRange); err != nil {
 		return errors.Wrap(err, "error starting prepare range")
 	} else if alreadyPrepared {
@@ -501,23 +501,23 @@ func (c *CaptiveGramr) PrepareRange(ctx context.Context, ledgerRange Range) erro
 }
 
 // IsPrepared returns true if a given ledgerRange is prepared.
-func (c *CaptiveGramr) IsPrepared(ctx context.Context, ledgerRange Range) (bool, error) {
-	c.gramrLock.RLock()
-	defer c.gramrLock.RUnlock()
+func (c *CaptiveGravity) IsPrepared(ctx context.Context, ledgerRange Range) (bool, error) {
+	c.gravityLock.RLock()
+	defer c.gravityLock.RUnlock()
 
 	return c.isPrepared(ledgerRange), nil
 }
 
-func (c *CaptiveGramr) isPrepared(ledgerRange Range) bool {
+func (c *CaptiveGravity) isPrepared(ledgerRange Range) bool {
 	if c.closed {
 		return false
 	}
 
-	if c.gramrRunner == nil || c.gramrRunner.context().Err() != nil {
+	if c.gravityRunner == nil || c.gravityRunner.context().Err() != nil {
 		return false
 	}
 
-	if exited, _ := c.gramrRunner.getProcessExitError(); exited {
+	if exited, _ := c.gravityRunner.getProcessExitError(); exited {
 		return false
 	}
 
@@ -554,22 +554,22 @@ func (c *CaptiveGramr) isPrepared(ledgerRange Range) bool {
 // (even for UnboundedRange), then return it's LedgerCloseMeta.
 //
 // Call PrepareRange first to instruct the backend which ledgers to fetch.
-// CaptiveGramr requires PrepareRange call first to initialize Gramr.
+// CaptiveGravity requires PrepareRange call first to initialize Gravity.
 // Requesting a ledger on non-prepared backend will return an error.
 //
 // Please note that requesting a ledger sequence far after current
 // ledger will block the execution for a long time.
 //
-// Because ledger data is streamed from Gramr sequentially, users should
+// Because ledger data is streamed from Gravity sequentially, users should
 // request sequences in a non-decreasing order. If the requested sequence number
 // is less than the last requested sequence number, an error will be returned.
 //
 // This function behaves differently for bounded and unbounded ranges:
 //   - BoundedRange: After getting the last ledger in a range this method will
 //     also Close() the backend.
-func (c *CaptiveGramr) GetLedger(ctx context.Context, sequence uint32) (xdr.LedgerCloseMeta, error) {
-	c.gramrLock.RLock()
-	defer c.gramrLock.RUnlock()
+func (c *CaptiveGravity) GetLedger(ctx context.Context, sequence uint32) (xdr.LedgerCloseMeta, error) {
+	c.gravityLock.RLock()
+	defer c.gravityLock.RUnlock()
 
 	if c.cachedMeta != nil && sequence == c.cachedMeta.LedgerSequence() {
 		// GetLedger can be called multiple times using the same sequence, ex. to create
@@ -578,18 +578,18 @@ func (c *CaptiveGramr) GetLedger(ctx context.Context, sequence uint32) (xdr.Ledg
 	}
 
 	if c.closed {
-		return xdr.LedgerCloseMeta{}, errors.New("gramr is no longer usable")
+		return xdr.LedgerCloseMeta{}, errors.New("gravity is no longer usable")
 	}
 
 	if c.prepared == nil {
 		return xdr.LedgerCloseMeta{}, errors.New("session is not prepared, call PrepareRange first")
 	}
 
-	if c.gramrRunner == nil {
-		return xdr.LedgerCloseMeta{}, errors.New("gramr cannot be nil, call PrepareRange first")
+	if c.gravityRunner == nil {
+		return xdr.LedgerCloseMeta{}, errors.New("gravity cannot be nil, call PrepareRange first")
 	}
 	if c.closed {
-		return xdr.LedgerCloseMeta{}, errors.New("gramr has an error, call PrepareRange first")
+		return xdr.LedgerCloseMeta{}, errors.New("gravity has an error, call PrepareRange first")
 	}
 
 	if sequence < c.nextExpectedSequence() {
@@ -613,7 +613,7 @@ func (c *CaptiveGramr) GetLedger(ctx context.Context, sequence uint32) (xdr.Ledg
 		select {
 		case <-ctx.Done():
 			return xdr.LedgerCloseMeta{}, ctx.Err()
-		case result, ok := <-c.gramrRunner.getMetaPipe():
+		case result, ok := <-c.gravityRunner.getMetaPipe():
 			found, ledger, err := c.handleMetaPipeResult(sequence, result, ok)
 			if found || err != nil {
 				return ledger, err
@@ -622,16 +622,16 @@ func (c *CaptiveGramr) GetLedger(ctx context.Context, sequence uint32) (xdr.Ledg
 	}
 }
 
-func (c *CaptiveGramr) handleMetaPipeResult(sequence uint32, result metaResult, ok bool) (bool, xdr.LedgerCloseMeta, error) {
+func (c *CaptiveGravity) handleMetaPipeResult(sequence uint32, result metaResult, ok bool) (bool, xdr.LedgerCloseMeta, error) {
 	if err := c.checkMetaPipeResult(result, ok); err != nil {
-		c.gramrRunner.close()
+		c.gravityRunner.close()
 		return false, xdr.LedgerCloseMeta{}, err
 	}
 
 	seq := result.LedgerCloseMeta.LedgerSequence()
 	// If we got something unexpected; close and reset
 	if c.nextLedger != 0 && seq != c.nextLedger {
-		c.gramrRunner.close()
+		c.gravityRunner.close()
 		return false, xdr.LedgerCloseMeta{}, errors.Errorf(
 			"unexpected ledger sequence (expected=%d actual=%d)",
 			c.nextLedger,
@@ -639,7 +639,7 @@ func (c *CaptiveGramr) handleMetaPipeResult(sequence uint32, result metaResult, 
 		)
 	} else if c.nextLedger == 0 && seq > c.prepared.from {
 		// First stream ledger is greater than prepared.from
-		c.gramrRunner.close()
+		c.gravityRunner.close()
 		return false, xdr.LedgerCloseMeta{}, errors.Errorf(
 			"unexpected ledger sequence (expected=<=%d actual=%d)",
 			c.prepared.from,
@@ -650,7 +650,7 @@ func (c *CaptiveGramr) handleMetaPipeResult(sequence uint32, result metaResult, 
 	newPreviousLedgerHash := result.LedgerCloseMeta.PreviousLedgerHash().HexString()
 	if c.previousLedgerHash != nil && *c.previousLedgerHash != newPreviousLedgerHash {
 		// We got something unexpected; close and reset
-		c.gramrRunner.close()
+		c.gravityRunner.close()
 		return false, xdr.LedgerCloseMeta{}, errors.Errorf(
 			"unexpected previous ledger hash for ledger %d (expected=%s actual=%s)",
 			seq,
@@ -672,7 +672,7 @@ func (c *CaptiveGramr) handleMetaPipeResult(sequence uint32, result metaResult, 
 	if seq == sequence {
 		// If we got the _last_ ledger in a segment, close before returning.
 		if c.lastLedger != nil && *c.lastLedger == seq {
-			if err := c.gramrRunner.close(); err != nil {
+			if err := c.gravityRunner.close(); err != nil {
 				return false, xdr.LedgerCloseMeta{}, errors.Wrap(err, "error closing session")
 			}
 		}
@@ -682,27 +682,27 @@ func (c *CaptiveGramr) handleMetaPipeResult(sequence uint32, result metaResult, 
 	return false, xdr.LedgerCloseMeta{}, nil
 }
 
-func (c *CaptiveGramr) checkMetaPipeResult(result metaResult, ok bool) error {
+func (c *CaptiveGravity) checkMetaPipeResult(result metaResult, ok bool) error {
 	// There are 4 error scenarios we check for:
 	// 1. User initiated shutdown by canceling the parent context or calling Close().
-	// 2. The gramr process exited unexpectedly with an error message.
+	// 2. The gravity process exited unexpectedly with an error message.
 	// 3. Some error was encountered while consuming the ledgers emitted by captive core (e.g. parsing invalid xdr)
-	// 4. The gramr process exited unexpectedly without an error message
-	if err := c.gramrRunner.context().Err(); err != nil {
+	// 4. The gravity process exited unexpectedly without an error message
+	if err := c.gravityRunner.context().Err(); err != nil {
 		// Case 1 - User initiated shutdown by canceling the parent context or calling Close()
 		return err
 	}
 	if !ok || result.err != nil {
-		exited, err := c.gramrRunner.getProcessExitError()
+		exited, err := c.gravityRunner.getProcessExitError()
 		if exited && err != nil {
-			// Case 2 - The gramr process exited unexpectedly with an error message
-			return errors.Wrap(err, "gramr exited unexpectedly")
+			// Case 2 - The gravity process exited unexpectedly with an error message
+			return errors.Wrap(err, "gravity exited unexpectedly")
 		} else if result.err != nil {
 			// Case 3 - Some error was encountered while consuming the ledger stream emitted by captive core.
 			return result.err
 		} else if exited {
-			// case 4 - The gramr process exited unexpectedly without an error message
-			return errors.Errorf("gramr exited unexpectedly")
+			// case 4 - The gravity process exited unexpectedly without an error message
+			return errors.Errorf("gravity exited unexpectedly")
 		} else if !ok {
 			// This case should never happen because the ledger buffer channel can only be closed
 			// if and only if the process exits or the context is canceled.
@@ -720,43 +720,43 @@ func (c *CaptiveGramr) checkMetaPipeResult(result metaResult, ok bool) error {
 // Note that for UnboundedRange the returned sequence number is not necessarily
 // the latest sequence closed by the network. It's always the last value available
 // in the backend.
-func (c *CaptiveGramr) GetLatestLedgerSequence(ctx context.Context) (uint32, error) {
-	c.gramrLock.RLock()
-	defer c.gramrLock.RUnlock()
+func (c *CaptiveGravity) GetLatestLedgerSequence(ctx context.Context) (uint32, error) {
+	c.gravityLock.RLock()
+	defer c.gravityLock.RUnlock()
 
 	c.ledgerSequenceLock.RLock()
 	defer c.ledgerSequenceLock.RUnlock()
 
 	if c.closed {
-		return 0, errors.New("gramr is no longer usable")
+		return 0, errors.New("gravity is no longer usable")
 	}
 	if c.prepared == nil {
-		return 0, errors.New("gramr must be prepared, call PrepareRange first")
+		return 0, errors.New("gravity must be prepared, call PrepareRange first")
 	}
-	if c.gramrRunner == nil {
-		return 0, errors.New("gramr cannot be nil, call PrepareRange first")
+	if c.gravityRunner == nil {
+		return 0, errors.New("gravity cannot be nil, call PrepareRange first")
 	}
 	if c.closed {
-		return 0, errors.New("gramr is closed, call PrepareRange first")
+		return 0, errors.New("gravity is closed, call PrepareRange first")
 
 	}
 	if c.lastLedger == nil {
-		return c.nextExpectedSequence() - 1 + uint32(len(c.gramrRunner.getMetaPipe())), nil
+		return c.nextExpectedSequence() - 1 + uint32(len(c.gravityRunner.getMetaPipe())), nil
 	}
 	return *c.lastLedger, nil
 }
 
-// Close closes existing Gramr process, streaming sessions and removes all
-// temporary files. Note, once a CaptiveGramr instance is closed it can no longer be used and
+// Close closes existing Gravity process, streaming sessions and removes all
+// temporary files. Note, once a CaptiveGravity instance is closed it can no longer be used and
 // all subsequent calls to PrepareRange(), GetLedger(), etc will fail.
 // Close is thread-safe and can be called from another go routine.
-func (c *CaptiveGramr) Close() error {
-	c.gramrLock.RLock()
-	defer c.gramrLock.RUnlock()
+func (c *CaptiveGravity) Close() error {
+	c.gravityLock.RLock()
+	defer c.gravityLock.RUnlock()
 
 	c.closed = true
 
-	// after the CaptiveGramr context is canceled all subsequent calls to PrepareRange() will fail
+	// after the CaptiveGravity context is canceled all subsequent calls to PrepareRange() will fail
 	c.cancel()
 
 	// TODO: Sucks to ignore the error here, but no worse than it was before,
@@ -765,8 +765,8 @@ func (c *CaptiveGramr) Close() error {
 		c.ledgerHashStore.Close()
 	}
 
-	if c.gramrRunner != nil {
-		return c.gramrRunner.close()
+	if c.gravityRunner != nil {
+		return c.gravityRunner.close()
 	}
 	return nil
 }

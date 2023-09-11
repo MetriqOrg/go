@@ -1,4 +1,4 @@
-package gramr
+package gravity
 
 import (
 	"context"

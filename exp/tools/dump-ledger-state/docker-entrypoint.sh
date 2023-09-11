@@ -8,21 +8,21 @@ while ! psql -U circleci -d core -h localhost -p 5432 -c 'select 1' >/dev/null 2
     sleep 1
 done
 
-echo "using version $(gramr version)"
+echo "using version $(gravity version)"
 
 if [ -z ${TESTNET+x} ]; then
-    gramr --conf ./gramr.cfg new-db
+    gravity --conf ./gravity.cfg new-db
 else
-    gramr --conf ./gramr-testnet.cfg new-db
+    gravity --conf ./gravity-testnet.cfg new-db
 fi
 
 if [ -z ${LATEST_LEDGER+x} ]; then
     # Get latest ledger
     echo "Getting latest checkpoint ledger..."
     if [ -z ${TESTNET+x} ]; then
-        export LATEST_LEDGER=`curl -s http://gramr8history.lantah.network/.well-known/stellar-history.json | jq -r '.currentLedger'`
+        export LATEST_LEDGER=`curl -s http://gravity8history.lantah.network/.well-known/stellar-history.json | jq -r '.currentLedger'`
     else
-        export LATEST_LEDGER=`curl -s http://testgramr1history.lantah.network/.well-known/stellar-history.json | jq -r '.currentLedger'`
+        export LATEST_LEDGER=`curl -s http://testgravity1history.lantah.network/.well-known/stellar-history.json | jq -r '.currentLedger'`
     fi
 fi
 
@@ -34,6 +34,6 @@ fi
 echo "Latest ledger: $LATEST_LEDGER"
 
 if ! ./run_test.sh; then
-    echo "ingestion dump (git commit \`$GITCOMMIT\`) of ledger \`$LATEST_LEDGER\` does not match gramr db."
+    echo "ingestion dump (git commit \`$GITCOMMIT\`) of ledger \`$LATEST_LEDGER\` does not match gravity db."
     exit 1
 fi

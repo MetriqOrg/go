@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -28,38 +28,38 @@ func TestSetup_accountAlreadyConfigured(t *testing.T) {
 	opts := Options{
 		AssetCode:           "FOO",
 		BaseURL:             "https://domain.test.com/",
-		HorizonURL:          horizonclient.DefaultTestNetClient.HorizonURL,
+		OrbitRURL:          orbitrclient.DefaultTestNetClient.OrbitRURL,
 		IssuerAccountSecret: issuerKP.Seed(),
 		NetworkPassphrase:   network.TestNetworkPassphrase,
 	}
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: issuerKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: issuerKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: issuerKP.Address(),
-			Flags: horizon.AccountFlags{
+			Flags: orbitr.AccountFlags{
 				AuthRequired:  true,
 				AuthRevocable: true,
 			},
 			HomeDomain: "domain.test.com",
 			Sequence:   10,
 		}, nil)
-	horizonMock.
-		On("Assets", horizonclient.AssetRequest{
+	orbitrMock.
+		On("Assets", orbitrclient.AssetRequest{
 			ForAssetCode:   opts.AssetCode,
 			ForAssetIssuer: issuerKP.Address(),
 			Limit:          1,
 		}).
-		Return(horizon.AssetsPage{
-			Embedded: struct{ Records []horizon.AssetStat }{
-				Records: []horizon.AssetStat{
+		Return(orbitr.AssetsPage{
+			Embedded: struct{ Records []orbitr.AssetStat }{
+				Records: []orbitr.AssetStat{
 					{Amount: "0.0000001"},
 				},
 			},
 		}, nil)
 
-	err := setup(opts, &horizonMock)
+	err := setup(opts, &orbitrMock)
 	require.NoError(t, err)
 
 	require.Contains(t, buf.String(), "Account already configured. Aborting without performing any action.")
@@ -68,12 +68,12 @@ func TestSetup_accountAlreadyConfigured(t *testing.T) {
 func TestGetOrFundIssuerAccount_failsIfNotDefaultTesntet(t *testing.T) {
 	issuerKP := keypair.MustRandom()
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: issuerKP.Address()}).
-		Return(horizon.Account{}, problem.NotFound)
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: issuerKP.Address()}).
+		Return(orbitr.Account{}, problem.NotFound)
 
-	_, err := getOrFundIssuerAccount(issuerKP.Address(), &horizonMock)
+	_, err := getOrFundIssuerAccount(issuerKP.Address(), &orbitrMock)
 	wantErrMsg := fmt.Sprintf("getting detail for account %s: problem: not_found", issuerKP.Address())
 	require.True(t, strings.Contains(err.Error(), wantErrMsg))
 }
@@ -83,28 +83,28 @@ func TestSetup(t *testing.T) {
 	opts := Options{
 		AssetCode:           "FOO",
 		BaseURL:             "https://domain.test.com/",
-		HorizonURL:          horizonclient.DefaultTestNetClient.HorizonURL,
+		OrbitRURL:          orbitrclient.DefaultTestNetClient.OrbitRURL,
 		IssuerAccountSecret: issuerKP.Seed(),
 		NetworkPassphrase:   network.TestNetworkPassphrase,
 	}
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: issuerKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: issuerKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: issuerKP.Address(),
 			Sequence:  10,
 		}, nil)
-	horizonMock.
-		On("Assets", horizonclient.AssetRequest{
+	orbitrMock.
+		On("Assets", orbitrclient.AssetRequest{
 			ForAssetCode:   opts.AssetCode,
 			ForAssetIssuer: issuerKP.Address(),
 			Limit:          1,
 		}).
-		Return(horizon.AssetsPage{}, nil)
+		Return(orbitr.AssetsPage{}, nil)
 
 	var didTestSubmitTransaction bool
-	horizonMock.
+	orbitrMock.
 		On("SubmitTransaction", mock.AnythingOfType("*txnbuild.Transaction")).
 		Run(func(args mock.Arguments) {
 			tx, ok := args.Get(0).(*txnbuild.Transaction)
@@ -148,7 +148,7 @@ func TestSetup(t *testing.T) {
 					Amount:        "0",
 					SourceAccount: issuerKP.Address(),
 				},
-				// a trustline is generated to the desired so horizon creates entry at `{horizon-url}/assets`. This was added as many Wallets reach that endpoint to check if a given asset exists.
+				// a trustline is generated to the desired so orbitr creates entry at `{orbitr-url}/assets`. This was added as many Wallets reach that endpoint to check if a given asset exists.
 				&txnbuild.ChangeTrust{
 					Line:          testAsset.MustToChangeTrustAsset(),
 					SourceAccount: trustorAccKP,
@@ -191,9 +191,9 @@ func TestSetup(t *testing.T) {
 
 			didTestSubmitTransaction = true
 		}).
-		Return(horizon.Transaction{}, nil)
+		Return(orbitr.Transaction{}, nil)
 
-	err := setup(opts, &horizonMock)
+	err := setup(opts, &orbitrMock)
 	require.NoError(t, err)
 
 	require.True(t, didTestSubmitTransaction)

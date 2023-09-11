@@ -17,14 +17,14 @@ var findResultMetaXDR = regexp.MustCompile(`"result_meta_xdr":[ ]?"([^"]*)",`)
 
 // removeRegexps contains a list of regular expressions that, when matched,
 // will be changed to an empty string. This is done to exclude known
-// differences in responses between two Horizon version.
+// differences in responses between two OrbitR version.
 //
-// Let's say that next Horizon version adds a new bool field:
+// Let's say that next OrbitR version adds a new bool field:
 // `is_authorized` on account balances list. You want to remove this
 // field so it's not reported for each `/accounts/{id}` response.
 var removeRegexps = []*regexp.Regexp{
 	// regexp.MustCompile(`This (is ){0,1}usually`),
-	// Removes joined transaction (join=transactions) added in Horizon 0.19.0.
+	// Removes joined transaction (join=transactions) added in OrbitR 0.19.0.
 	// Remove for future versions.
 	// regexp.MustCompile(`(?msU)"transaction":\s*{\s*("memo|"_links)[\n\s\S]*][\n\s\S]*}(,\s{9}|,)`),
 	// regexp.MustCompile(`\s*"is_authorized": true,`),
@@ -34,7 +34,7 @@ var removeRegexps = []*regexp.Regexp{
 	// regexp.MustCompile(`\s*"last_modified_ledger": [0-9]+,`),
 	// regexp.MustCompile(`\s*"public_key": "G.*",`),
 	// regexp.MustCompile(`,\s*"paging_token": ?""`),
-	// Removes last_modified_time field, introduced in horizon 1.3.0
+	// Removes last_modified_time field, introduced in orbitr 1.3.0
 	// regexp.MustCompile(`\s*"last_modified_time": ?"[^"]*",`),
 }
 
@@ -57,21 +57,21 @@ var replaceRegexps = []replace{
 	// 	`"data":${1}{${2}},"paging_token":${3}""`,
 	// },
 	// {regexp.MustCompile(
-	// 	// fee_charged is a string since horizon 1.3.0
+	// 	// fee_charged is a string since orbitr 1.3.0
 	// 	`"fee_charged":( ?)([\d]+),`),
 	// 	`"fee_charged":${1}"${2}",`,
 	// },
 	// {regexp.MustCompile(
-	// 	// max_fee is a string since horizon 1.3.0
+	// 	// max_fee is a string since orbitr 1.3.0
 	// 	`"max_fee":( ?)([\d]+),`),
 	// 	`"max_fee":${1}"${2}",`,
 	// },
-	// // Removes trailing SSE data, fixed in horizon 1.7.0
+	// // Removes trailing SSE data, fixed in orbitr 1.7.0
 	// {regexp.MustCompile(
 	// 	`\nretry:.*\nevent:.*\ndata:.*\n`),
 	// 	``,
 	// },
-	// // Removes clawback, fixed in horizon 2.1.0
+	// // Removes clawback, fixed in orbitr 2.1.0
 	// {regexp.MustCompile(
 	// 	`,\s*"auth_clawback_enabled":\s*false`),
 	// 	``,
@@ -154,7 +154,7 @@ func NewResponse(domain, path string, stream bool) *Response {
 	normalizedBody := response.Body
 	// `result_meta_xdr` can differ between core instances (confirmed this with core team)
 	normalizedBody = findResultMetaXDR.ReplaceAllString(normalizedBody, "")
-	// Remove Horizon URL from the _links
+	// Remove OrbitR URL from the _links
 	normalizedBody = strings.Replace(normalizedBody, domain, "", -1)
 
 	for _, reg := range removeRegexps {

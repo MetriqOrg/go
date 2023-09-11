@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"log"
@@ -6,10 +6,10 @@ import (
 
 	"github.com/stellar/throttled"
 
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/services/horizon/internal/test"
-	tdb "github.com/stellar/go/services/horizon/internal/test/db"
-	supportLog "github.com/stellar/go/support/log"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	tdb "github.com/lantah/go/services/orbitr/internal/test/db"
+	supportLog "github.com/lantah/go/support/log"
 )
 
 func NewTestApp(dsn string) *App {
@@ -23,7 +23,7 @@ func NewTestApp(dsn string) *App {
 func NewTestConfig(dsn string) Config {
 	return Config{
 		DatabaseURL:            dsn,
-		GramrDatabaseURL: tdb.GramrURL(),
+		GravityDatabaseURL: tdb.GravityURL(),
 		RateQuota: &throttled.RateQuota{
 			MaxRate:  throttled.PerHour(1000),
 			MaxBurst: 100,

@@ -3,15 +3,15 @@ set -e
 
 apt-get clean
 apt-get update
-apt-get install -y stellar-horizon=$PACKAGE_VERSION
+apt-get install -y stellar-orbitr=$PACKAGE_VERSION
 
 mkdir released
 cd released
 
-wget https://github.com/stellar/go/releases/download/$TAG/$TAG-darwin-amd64.tar.gz
-wget https://github.com/stellar/go/releases/download/$TAG/$TAG-linux-amd64.tar.gz
-wget https://github.com/stellar/go/releases/download/$TAG/$TAG-linux-arm.tar.gz
-wget https://github.com/stellar/go/releases/download/$TAG/$TAG-windows-amd64.zip
+wget https://github.com/lantah/go/releases/download/$TAG/$TAG-darwin-amd64.tar.gz
+wget https://github.com/lantah/go/releases/download/$TAG/$TAG-linux-amd64.tar.gz
+wget https://github.com/lantah/go/releases/download/$TAG/$TAG-linux-arm.tar.gz
+wget https://github.com/lantah/go/releases/download/$TAG/$TAG-windows-amd64.zip
 
 tar -xvf $TAG-darwin-amd64.tar.gz
 tar -xvf $TAG-linux-amd64.tar.gz
@@ -37,13 +37,13 @@ echo "RESULTS"
 echo "======="
 echo ""
 echo "compiled version"
-./dist/$TAG-linux-amd64/horizon version
+./dist/$TAG-linux-amd64/orbitr version
 
 echo "github releases version"
-./released/$TAG-linux-amd64/horizon version
+./released/$TAG-linux-amd64/orbitr version
 
 echo "debian package version"
-stellar-horizon version
+stellar-orbitr version
 
 echo ""
 
@@ -55,21 +55,21 @@ do
     msg=""
     
     if [ -f "./released/$TAG-$S.tar.gz" ]; then
-        released=($(shasum -a 256 ./released/$TAG-$S/horizon))
+        released=($(shasum -a 256 ./released/$TAG-$S/orbitr))
     else
         # windows
-        released=($(shasum -a 256 ./released/$TAG-$S/horizon.exe))
+        released=($(shasum -a 256 ./released/$TAG-$S/orbitr.exe))
     fi
 
     if [ -f "./dist/$TAG-$S.tar.gz" ]; then
-        dist=($(shasum -a 256 ./dist/$TAG-$S/horizon))
+        dist=($(shasum -a 256 ./dist/$TAG-$S/orbitr))
     else
         # windows
-        dist=($(shasum -a 256 ./dist/$TAG-$S/horizon.exe))
+        dist=($(shasum -a 256 ./dist/$TAG-$S/orbitr.exe))
     fi
 
     if [ $S == "linux-amd64" ]; then
-        path=$(which stellar-horizon)
+        path=$(which stellar-orbitr)
         debian=($(shasum -a 256 $path))
 
         if [[ "$released" == "$dist" && "$dist" == "$debian" ]]; then

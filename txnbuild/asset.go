@@ -3,15 +3,15 @@ package txnbuild
 import (
 	"bytes"
 
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // AssetType represents the type of a Stellar asset.
 type AssetType xdr.AssetType
 
 // AssetTypeNative, AssetTypeCreditAlphanum4, AssetTypeCreditAlphanum12 enumerate the different
-// types of asset on the Stellar network.
+// types of asset on the Lantah Network.
 const (
 	AssetTypeNative           AssetType = AssetType(xdr.AssetTypeAssetTypeNative)
 	AssetTypeCreditAlphanum4  AssetType = AssetType(xdr.AssetTypeAssetTypeCreditAlphanum4)
@@ -104,7 +104,7 @@ func (na NativeAsset) MustToTrustLineAsset() TrustLineAsset {
 	return TrustLineAssetWrapper{na}
 }
 
-// CreditAsset represents non-GRAM assets on the Stellar network.
+// CreditAsset represents non-GRAM assets on the Lantah Network.
 type CreditAsset struct {
 	Code   string
 	Issuer string

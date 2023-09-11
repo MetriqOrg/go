@@ -4,16 +4,16 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/xdr"
 )
 
 func TestCreateAssetsSortedOrder(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	assets := []xdr.Asset{
 		usdAsset, nativeAsset, eurAsset,
 		xdr.MustNewCreditAsset("CNY", issuer.Address()),
@@ -53,9 +53,9 @@ func TestCreateAssetsSortedOrder(t *testing.T) {
 func TestCreateAssets(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	// CreateAssets creates new rows
 	assets := []xdr.Asset{

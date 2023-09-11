@@ -4,16 +4,16 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	supportProblem "github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	supportProblem "github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 )
 
 // TransactionQuery query struct for transactions/id end-point
@@ -34,14 +34,14 @@ func (handler GetTransactionByHashHandler) GetResource(w HeaderWriter, r *http.R
 		return nil, err
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
 
 	var (
 		record   history.Transaction
-		resource horizon.Transaction
+		resource orbitr.Transaction
 	)
 
 	err = historyQ.TransactionByHash(ctx, &record, qp.TransactionHash)
@@ -112,7 +112,7 @@ func (handler GetTransactionsHandler) GetResourcePage(w HeaderWriter, r *http.Re
 		return nil, err
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (handler GetTransactionsHandler) GetResourcePage(w HeaderWriter, r *http.Re
 	var response []hal.Pageable
 
 	for _, record := range records {
-		var res horizon.Transaction
+		var res orbitr.Transaction
 		err = resourceadapter.PopulateTransaction(ctx, record.TransactionHash, &res, record)
 		if err != nil {
 			return nil, errors.Wrap(err, "could not populate transaction")

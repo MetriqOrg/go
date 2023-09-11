@@ -29,8 +29,8 @@ type Change struct {
 // - for update, pre is previous state and post is the current state,
 // - for removed, pre is previous state and post is null.
 //
-// gramr source:
-// https://github.com/lantah/gramr/blob/e584b43/src/ledger/LedgerTxn.cpp#L582
+// gravity source:
+// https://github.com/lantah/gravity/blob/e584b43/src/ledger/LedgerTxn.cpp#L582
 func GetChangesFromLedgerEntryChanges(ledgerEntryChanges xdr.LedgerEntryChanges) []Change {
 	changes := make([]Change, 0, len(ledgerEntryChanges))
 	for i, entryChange := range ledgerEntryChanges {

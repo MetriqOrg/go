@@ -7,11 +7,11 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
 	"github.com/stretchr/testify/assert"
 
-	protocol "github.com/stellar/go/protocols/horizon"
+	protocol "github.com/lantah/go/protocols/orbitr"
 )
 
 type intObject int
@@ -467,8 +467,8 @@ func TestOrderbookGetResourceValidation(t *testing.T) {
 func TestOrderbookGetResource(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 
 	var eurAssetType, eurAssetCode, eurAssetIssuer string
 	if err := eurAsset.Extract(&eurAssetType, &eurAssetCode, &eurAssetIssuer); err != nil {

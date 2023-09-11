@@ -3,14 +3,14 @@ package history
 import (
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 func TestLedgerCache(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	var lc LedgerCache
 	lc.Queue(2)

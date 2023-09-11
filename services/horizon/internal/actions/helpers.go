@@ -15,15 +15,15 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/gorilla/schema"
 
-	"github.com/stellar/go/services/horizon/internal/assets"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	hProblem "github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/toid"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/assets"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/toid"
+	"github.com/lantah/go/xdr"
 )
 
 // TODO: move these constants to urlparam.go as we should parse the params with http handlers
@@ -368,8 +368,8 @@ func getURLParam(r *http.Request, key string) (string, bool) {
 // FullURL returns a URL containing the information regarding the original
 // request stored in the context.
 func FullURL(ctx context.Context) *url.URL {
-	url := horizonContext.BaseURL(ctx)
-	r := horizonContext.RequestFromContext(ctx)
+	url := orbitrContext.BaseURL(ctx)
+	r := orbitrContext.RequestFromContext(ctx)
 	if r != nil {
 		url.Path = r.URL.Path
 		url.RawQuery = r.URL.RawQuery

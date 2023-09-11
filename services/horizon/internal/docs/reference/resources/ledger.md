@@ -5,7 +5,7 @@ replacement: https://developers.stellar.org/api/resources/ledgers/
 
 A **ledger** resource contains information about a given ledger.
 
-To learn more about the concept of ledgers in the Stellar network, take a look at the [Stellar ledger concept guide](https://www.stellar.org/developers/learn/concepts/ledger.html).
+To learn more about the concept of ledgers in the Lantah Network, take a look at the [Stellar ledger concept guide](https://www.stellar.org/developers/learn/concepts/ledger.html).
 
 ## Attributes
 
@@ -26,10 +26,10 @@ To learn more about the concept of ledgers in the Stellar network, take a look a
 | base_fee                     | number | The [fee] the network charges per operation in a transaction.                                                                |
 | base_reserve                 | string | The [reserve][fee] the network uses when calculating an account's minimum balance.                                           |
 | max_tx_set_size              | number | The maximum number of transactions validators have agreed to process in a given ledger.                                      |
-| protocol_version             | number | The protocol version that the stellar network was running when this ledger was committed.                                    |
+| protocol_version             | number | The protocol version that the lantah network was running when this ledger was committed.                                    |
 | header_xdr                   | string | A base64 encoded string of the raw `LedgerHeader` xdr struct for this ledger.                                                |
-| base_fee_in_stroops          | number | The [fee] the network charges per operation in a transaction.  Expressed in µg.                                         |
-| base_reserve_in_stroops      | number | The [reserve][fee] the network uses when calculating an account's minimum balance. Expressed in µg.                     |
+| base_fee_in_µg          | number | The [fee] the network charges per operation in a transaction.  Expressed in µg.                                         |
+| base_reserve_in_µg      | number | The [reserve][fee] the network uses when calculating an account's minimum balance. Expressed in µg.                     |
 
 ## Links
 |              | Example                                           | Relation                        | templated |
@@ -79,8 +79,8 @@ To learn more about the concept of ledgers in the Stellar network, take a look a
   "max_tx_set_size": 50,
   "protocol_version": 8,
   "header_xdr": "...",
-  "base_fee_in_stroops": 100,
-  "base_reserve_in_stroops": 100000000
+  "base_fee_in_µg": 100,
+  "base_reserve_in_µg": 100000000
 }
 ```
 

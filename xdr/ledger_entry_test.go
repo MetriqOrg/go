@@ -3,8 +3,8 @@ package xdr
 import (
 	"testing"
 
-	"github.com/stellar/go/gxdr"
-	"github.com/stellar/go/randxdr"
+	"github.com/lantah/go/gxdr"
+	"github.com/lantah/go/randxdr"
 
 	"github.com/stretchr/testify/assert"
 )

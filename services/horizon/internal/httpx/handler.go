@@ -5,17 +5,17 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/stellar/go/services/horizon/internal/actions"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/render"
-	hProblem "github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/render/sse"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/support/render/httpjson"
-	"github.com/stellar/go/support/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/actions"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/render"
+	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/render/sse"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/support/render/httpjson"
+	"github.com/lantah/go/support/render/problem"
 )
 
 type objectAction interface {
@@ -98,7 +98,7 @@ func repeatableReadStream(
 	generateEvents sse.GenerateEventsFunc,
 ) sse.GenerateEventsFunc {
 	var session db.SessionInterface
-	if val := r.Context().Value(&horizonContext.SessionContextKey); val != nil {
+	if val := r.Context().Value(&orbitrContext.SessionContextKey); val != nil {
 		session = val.(db.SessionInterface)
 	}
 

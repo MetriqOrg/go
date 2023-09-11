@@ -3,8 +3,8 @@ package reap
 import (
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 func TestDeleteUnretainedHistory(t *testing.T) {
@@ -13,7 +13,7 @@ func TestDeleteUnretainedHistory(t *testing.T) {
 	ledgerState := &ledger.State{}
 	ledgerState.SetStatus(tt.Scenario("kahuna"))
 
-	db := tt.HorizonSession()
+	db := tt.OrbitRSession()
 
 	sys := New(0, db, ledgerState)
 

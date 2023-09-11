@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	strtime "github.com/stellar/go/support/time"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	strtime "github.com/lantah/go/support/time"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/guregu/null"
@@ -18,7 +18,7 @@ import (
 func TestTradeAggregations(t *testing.T) {
 	itest := integration.NewTest(t, integration.Config{})
 	ctx := context.Background()
-	historyQ := itest.HorizonIngest().HistoryQ()
+	historyQ := itest.OrbitRIngest().HistoryQ()
 
 	// Insert some trades
 	now := strtime.Now().RoundDown(60_000)

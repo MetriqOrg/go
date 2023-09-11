@@ -7,13 +7,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/services/horizon/internal/ledger"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
 )
 
 func TestPopulateRoot(t *testing.T) {
-	res := &horizon.Root{}
+	res := &orbitr.Root{}
 	templates := map[string]string{
 		"accounts":           "/accounts{?signer,asset_type,asset_issuer,asset_code}",
 		"offers":             "/offers",
@@ -27,7 +27,7 @@ func TestPopulateRoot(t *testing.T) {
 			CoreStatus: ledger.CoreStatus{
 				CoreLatest: 1,
 			},
-			HorizonStatus: ledger.HorizonStatus{
+			OrbitRStatus: ledger.OrbitRStatus{
 				HistoryLatest: 3, HistoryElder: 2,
 			},
 		},
@@ -42,22 +42,22 @@ func TestPopulateRoot(t *testing.T) {
 
 	assert.Equal(t, int32(1), res.CoreSequence)
 	assert.Equal(t, int32(2), res.HistoryElderSequence)
-	assert.Equal(t, int32(3), res.HorizonSequence)
-	assert.Equal(t, "hVersion", res.HorizonVersion)
-	assert.Equal(t, "cVersion", res.GramrVersion)
+	assert.Equal(t, int32(3), res.OrbitRSequence)
+	assert.Equal(t, "hVersion", res.OrbitRVersion)
+	assert.Equal(t, "cVersion", res.GravityVersion)
 	assert.Equal(t, "passphrase", res.NetworkPassphrase)
 	assert.Equal(t, "https://friendbot.example.com/{?addr}", res.Links.Friendbot.Href)
 	assert.Equal(t, uint32(ingest.MaxSupportedProtocolVersion), res.SupportedProtocolVersion)
 
 	// Without testbot
-	res = &horizon.Root{}
+	res = &orbitr.Root{}
 	PopulateRoot(context.Background(),
 		res,
 		ledger.Status{
 			CoreStatus: ledger.CoreStatus{
 				CoreLatest: 1,
 			},
-			HorizonStatus: ledger.HorizonStatus{
+			OrbitRStatus: ledger.OrbitRStatus{
 				HistoryLatest: 3, HistoryElder: 2,
 			},
 		},
@@ -72,20 +72,20 @@ func TestPopulateRoot(t *testing.T) {
 
 	assert.Equal(t, int32(1), res.CoreSequence)
 	assert.Equal(t, int32(2), res.HistoryElderSequence)
-	assert.Equal(t, int32(3), res.HorizonSequence)
-	assert.Equal(t, "hVersion", res.HorizonVersion)
-	assert.Equal(t, "cVersion", res.GramrVersion)
+	assert.Equal(t, int32(3), res.OrbitRSequence)
+	assert.Equal(t, "hVersion", res.OrbitRVersion)
+	assert.Equal(t, "cVersion", res.GravityVersion)
 	assert.Equal(t, "passphrase", res.NetworkPassphrase)
 	assert.Empty(t, res.Links.Friendbot)
 
-	res = &horizon.Root{}
+	res = &orbitr.Root{}
 	PopulateRoot(context.Background(),
 		res,
 		ledger.Status{
 			CoreStatus: ledger.CoreStatus{
 				CoreLatest: 1,
 			},
-			HorizonStatus: ledger.HorizonStatus{
+			OrbitRStatus: ledger.OrbitRStatus{
 				HistoryLatest: 3, HistoryElder: 2,
 			},
 		},

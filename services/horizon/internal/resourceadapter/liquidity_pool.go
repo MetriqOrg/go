@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stellar/go/amount"
-	protocol "github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/xdr"
 )
 
 // PopulateLiquidityPool fills out the resource's fields
@@ -42,7 +42,7 @@ func PopulateLiquidityPool(
 		dest.LastModifiedTime = &ledger.ClosedAt
 	}
 
-	lb := hal.LinkBuilder{Base: horizonContext.BaseURL(ctx)}
+	lb := hal.LinkBuilder{Base: orbitrContext.BaseURL(ctx)}
 	self := fmt.Sprintf("/liquidity_pools/%s", dest.ID)
 	dest.Links.Self = lb.Link(self)
 	dest.PT = dest.ID

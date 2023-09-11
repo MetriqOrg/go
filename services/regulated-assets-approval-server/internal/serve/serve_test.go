@@ -5,19 +5,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/stretchr/testify/require"
 )
 
-func TestHorizonClient(t *testing.T) {
-	opts := Options{HorizonURL: "my-horizon.domain.com"}
-	horizonClientInterface := opts.horizonClient()
+func TestOrbitRClient(t *testing.T) {
+	opts := Options{OrbitRURL: "my-orbitr.domain.com"}
+	orbitrClientInterface := opts.orbitrClient()
 
-	horizonClient, ok := horizonClientInterface.(*horizonclient.Client)
+	orbitrClient, ok := orbitrClientInterface.(*orbitrclient.Client)
 	require.True(t, ok)
-	require.Equal(t, "my-horizon.domain.com", horizonClient.HorizonURL)
+	require.Equal(t, "my-orbitr.domain.com", orbitrClient.OrbitRURL)
 
-	httpClient, ok := horizonClient.HTTP.(*http.Client)
+	httpClient, ok := orbitrClient.HTTP.(*http.Client)
 	require.True(t, ok)
 	require.Equal(t, http.Client{Timeout: 30 * time.Second}, *httpClient)
 }

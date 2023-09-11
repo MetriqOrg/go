@@ -5,22 +5,22 @@ import (
 	"net/http"
 	"testing"
 
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAssetsForAddressRequiresTransaction(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 
 	r := &http.Request{}
 	ctx := context.WithValue(
 		r.Context(),
-		&horizonContext.SessionContextKey,
+		&orbitrContext.SessionContextKey,
 		q,
 	)
 

@@ -4,7 +4,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -51,8 +51,8 @@ func assertAccountsContainAddresses(tt *test.T, accounts map[string]int64, addre
 func TestCreateAccountsSortedOrder(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	addresses := []string{
 		"GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H",
@@ -86,8 +86,8 @@ func TestCreateAccountsSortedOrder(t *testing.T) {
 func TestCreateAccounts(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	addresses := []string{
 		"GAOQJGUAB7NI7K7I62ORBXMN3J4SSWQUQ7FOEPSDJ322W2HMCNWPHXFB",

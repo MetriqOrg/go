@@ -9,7 +9,7 @@ wget -qO - https://apt.stellar.org/SDF.asc | apt-key add -
 echo "deb https://apt.stellar.org $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/SDF.list
 # echo "deb https://apt.stellar.org $(lsb_release -cs) unstable" | sudo tee -a /etc/apt/sources.list.d/SDF-unstable.list
 apt-get update
-apt-get install -y gramr=${GRAMR_VERSION}
+apt-get install -y gravity=${GRAVITY_VERSION}
 
 wget -q https://dl.google.com/go/go1.18.linux-amd64.tar.gz
 tar -C /usr/local -xzf go1.18.linux-amd64.tar.gz

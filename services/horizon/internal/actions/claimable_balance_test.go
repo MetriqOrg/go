@@ -5,20 +5,20 @@ import (
 	"testing"
 
 	"github.com/guregu/null"
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetClaimableBalanceByID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 
 	accountID := "GC3C4AKRBQLHOJ45U4XG35ESVWRDECWO5XLDGYADO6DPR3L7KIDVUMML"
 	asset := xdr.MustNewCreditAsset("USD", accountID)
@@ -145,8 +145,8 @@ func buildClaimableBalance(tt *test.T, balanceIDHash xdr.Hash, accountID string,
 func TestGetClaimableBalances(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 
 	entriesMeta := []struct {
 		id        xdr.Hash
@@ -529,8 +529,8 @@ func TestGetClaimableBalances(t *testing.T) {
 func TestCursorAndOrderValidation(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 
 	handler := GetClaimableBalancesHandler{}
 	_, err := handler.GetResourcePage(httptest.NewRecorder(), makeRequest(

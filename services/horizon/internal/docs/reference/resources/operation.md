@@ -5,20 +5,20 @@ replacement: https://developers.stellar.org/api/resources/operations/
 
 [Operations](https://www.stellar.org/developers/learn/concepts/operations.html) are objects that represent a desired change to the ledger: payments,
 offers to exchange currency, changes made to account options, etc.  Operations
-are submitted to the Stellar network grouped in a [Transaction](./transaction.md).
+are submitted to the Lantah Network grouped in a [Transaction](./transaction.md).
 
-To learn more about the concept of operations in the Stellar network, take a look at the [Stellar operations concept guide](https://www.stellar.org/developers/learn/concepts/operations.html).
+To learn more about the concept of operations in the Lantah Network, take a look at the [Stellar operations concept guide](https://www.stellar.org/developers/learn/concepts/operations.html).
 
 ## Operation Types
 
 | type                                                    | type_i | description                                                                                                |
 |---------------------------------------------------------|--------|------------------------------------------------------------------------------------------------------------|
-| [CREATE_ACCOUNT](#create-account)                       | 0      | Creates a new account in Stellar network.                                                                  |
-| [PAYMENT](#payment)                                     | 1      | Sends a simple payment between two accounts in Stellar network.                                            |
-| [PATH_PAYMENT_STRICT_RECEIVE](#path-payment)            | 2      | Sends a path payment strict receive between two accounts in the Stellar network.                           |
-| [PATH_PAYMENT_STRICT_SEND](#path-payment-strict-send)   | 13     | Sends a path payment strict send between two accounts in the Stellar network.                              |
-| [MANAGE_SELL_OFFER](#manage-sell-offer)                 | 3      | Creates, updates or deletes a sell offer in the Stellar network.                                           |
-| [MANAGE_BUY_OFFER](#manage-buy-offer)                   | 12     | Creates, updates or deletes a buy offer in the Stellar network.                                            |
+| [CREATE_ACCOUNT](#create-account)                       | 0      | Creates a new account in Lantah Network.                                                                  |
+| [PAYMENT](#payment)                                     | 1      | Sends a simple payment between two accounts in Lantah Network.                                            |
+| [PATH_PAYMENT_STRICT_RECEIVE](#path-payment)            | 2      | Sends a path payment strict receive between two accounts in the Lantah Network.                           |
+| [PATH_PAYMENT_STRICT_SEND](#path-payment-strict-send)   | 13     | Sends a path payment strict send between two accounts in the Lantah Network.                              |
+| [MANAGE_SELL_OFFER](#manage-sell-offer)                 | 3      | Creates, updates or deletes a sell offer in the Lantah Network.                                           |
+| [MANAGE_BUY_OFFER](#manage-buy-offer)                   | 12     | Creates, updates or deletes a buy offer in the Lantah Network.                                            |
 | [CREATE_PASSIVE_SELL_OFFER](#create-passive-sell-offer) | 4      | Creates an offer that won't consume a counter offer that exactly matches this offer.                       |
 | [SET_OPTIONS](#set-options)                             | 5      | Sets account options (inflation destination, adding signers, etc.)                                         |
 | [CHANGE_TRUST](#change-trust)                           | 6      | Creates, updates or deletes a trust line.                                                                  |
@@ -299,7 +299,7 @@ Unlike [path payment strict receive](#path-payment), this operation sends precis
 ### Manage Sell Offer
 
 A "Manage Sell Offer" operation can create, update or delete a sell
-offer to trade assets in the Stellar network.
+offer to trade assets in the Lantah Network.
 It specifies an issuer, a price and amount of a given asset to
 buy or sell.
 
@@ -380,7 +380,7 @@ Both will fill only partially (or not at all) if there are few (or no) offers th
 ### Manage Buy Offer
 
 A "Manage Buy Offer" operation can create, update or delete a buy
-offer to trade assets in the Stellar network.
+offer to trade assets in the Lantah Network.
 It specifies an issuer, a price and amount of a given asset to
 buy or sell.
 

@@ -6,10 +6,10 @@ import (
 	stdio "io"
 	"testing"
 
-	"github.com/stellar/go/historyarchive"
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/historyarchive"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

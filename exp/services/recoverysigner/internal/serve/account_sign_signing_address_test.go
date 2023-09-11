@@ -442,7 +442,7 @@ func TestAccountSign_signingAddressAccountAuthenticatedOtherSignerSelected(t *te
 
 	wantBody := `{
 	"signature": "8Tew6rTol9me8H9u7ezJXg6SEqzOr7cwSf1y9+Vri275XEDH9xWtZ2klTX2uUSPy56otUoIySPqsV3dUFs2kDA==",
-	"network_passphrase": "Test SDF Network ; September 2015"
+	"network_passphrase": "Test Lantah Network ; 2023"
 }`
 	assert.JSONEq(t, wantBody, string(body))
 }
@@ -508,7 +508,7 @@ func TestAccountSign_signingAddressAccountAuthenticatedTxSourceAccountValid(t *t
 
 	wantBody := `{
 	"signature": "okp0ISR/hjU6ItsfXie6ArlQ3YWkBBqEAM5TJrthALdawV5DzcpuwBKi0QE/iBgoU7eY0hY3RPdxm8mXGNYfCQ==",
-	"network_passphrase": "Test SDF Network ; September 2015"
+	"network_passphrase": "Test Lantah Network ; 2023"
 }`
 	assert.JSONEq(t, wantBody, string(body))
 }
@@ -575,7 +575,7 @@ func TestAccountSign_signingAddressAccountAuthenticatedTxAndOpSourceAccountValid
 
 	wantBody := `{
 	"signature": "MKAkl+R3VT5DJw6Qed8jO8ERD4RcQ4dJlN+UR2n7nT6AVBXnKBk0zqBZnDuB153zfTYmuA5kmsRiNr5terHVBg==",
-	"network_passphrase": "Test SDF Network ; September 2015"
+	"network_passphrase": "Test Lantah Network ; 2023"
 }`
 	assert.JSONEq(t, wantBody, string(body))
 }
@@ -837,7 +837,7 @@ func TestAccountSign_signingAddressPhoneNumberOwnerAuthenticated(t *testing.T) {
 
 	wantBody := `{
 	"signature": "okp0ISR/hjU6ItsfXie6ArlQ3YWkBBqEAM5TJrthALdawV5DzcpuwBKi0QE/iBgoU7eY0hY3RPdxm8mXGNYfCQ==",
-	"network_passphrase": "Test SDF Network ; September 2015"
+	"network_passphrase": "Test Lantah Network ; 2023"
 }`
 	assert.JSONEq(t, wantBody, string(body))
 }
@@ -909,7 +909,7 @@ func TestAccountSign_signingAddressPhoneNumberOtherAuthenticated(t *testing.T) {
 
 	wantBody := `{
 	"signature": "okp0ISR/hjU6ItsfXie6ArlQ3YWkBBqEAM5TJrthALdawV5DzcpuwBKi0QE/iBgoU7eY0hY3RPdxm8mXGNYfCQ==",
-	"network_passphrase": "Test SDF Network ; September 2015"
+	"network_passphrase": "Test Lantah Network ; 2023"
 }`
 	assert.JSONEq(t, wantBody, string(body))
 }
@@ -981,7 +981,7 @@ func TestAccountSign_signingAddressEmailOwnerAuthenticated(t *testing.T) {
 
 	wantBody := `{
 	"signature": "okp0ISR/hjU6ItsfXie6ArlQ3YWkBBqEAM5TJrthALdawV5DzcpuwBKi0QE/iBgoU7eY0hY3RPdxm8mXGNYfCQ==",
-	"network_passphrase": "Test SDF Network ; September 2015"
+	"network_passphrase": "Test Lantah Network ; 2023"
 }`
 	assert.JSONEq(t, wantBody, string(body))
 }
@@ -1060,7 +1060,7 @@ func TestAccountSign_signingAddressEmailOwnerAuthenticatedOpSourceAccountIsAllow
 
 	wantBody := `{
 		"signature": "Tpl/yZoKkahakaX4fSrdIeBLL2oi4uKegs5bLXFj5fG6Rcfe2D4EeSHcjJmmO2ZscuY8pX8+YPo70AvCtfw9Ag==",
-		"network_passphrase": "Test SDF Network ; September 2015"
+		"network_passphrase": "Test Lantah Network ; 2023"
 	}`
 	assert.JSONEq(t, wantBody, string(body))
 }
@@ -1206,7 +1206,7 @@ func TestAccountSign_signingAddressEmailOtherAuthenticated(t *testing.T) {
 
 	wantBody := `{
 	"signature": "okp0ISR/hjU6ItsfXie6ArlQ3YWkBBqEAM5TJrthALdawV5DzcpuwBKi0QE/iBgoU7eY0hY3RPdxm8mXGNYfCQ==",
-	"network_passphrase": "Test SDF Network ; September 2015"
+	"network_passphrase": "Test Lantah Network ; 2023"
 }`
 	assert.JSONEq(t, wantBody, string(body))
 }
@@ -1384,7 +1384,7 @@ func TestAccountSign_signingAddressValidContentTypeForm(t *testing.T) {
 
 	wantBody := `{
 	"signature": "okp0ISR/hjU6ItsfXie6ArlQ3YWkBBqEAM5TJrthALdawV5DzcpuwBKi0QE/iBgoU7eY0hY3RPdxm8mXGNYfCQ==",
-	"network_passphrase": "Test SDF Network ; September 2015"
+	"network_passphrase": "Test Lantah Network ; 2023"
 }`
 	assert.JSONEq(t, wantBody, string(body))
 }

@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 // AssetStatsR is the result from the AssetStatsQ query
@@ -92,7 +92,7 @@ func TestAssetsStatsQExec(t *testing.T) {
 			tt.Require.NoError(err)
 
 			var results []AssetStatsR
-			err = history.Q{SessionInterface: tt.HorizonSession()}.Select(context.Background(), &results, sql)
+			err = history.Q{SessionInterface: tt.OrbitRSession()}.Select(context.Background(), &results, sql)
 			tt.Require.NoError(err)
 			if !tt.Assert.Equal(3, len(results)) {
 				return

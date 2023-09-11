@@ -17,11 +17,11 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/lantah/go/protocols/gramr"
+	"github.com/lantah/go/protocols/gravity"
 	"github.com/lantah/go/support/log"
 )
 
-type gramrRunnerInterface interface {
+type gravityRunnerInterface interface {
 	catchup(from, to uint32) error
 	runFrom(from uint32, hash string) error
 	getMetaPipe() <-chan metaResult
@@ -30,27 +30,27 @@ type gramrRunnerInterface interface {
 	close() error
 }
 
-type gramrRunnerMode int
+type gravityRunnerMode int
 
 const (
-	_ gramrRunnerMode = iota // unset
-	gramrRunnerModeOnline
-	gramrRunnerModeOffline
+	_ gravityRunnerMode = iota // unset
+	gravityRunnerModeOnline
+	gravityRunnerModeOffline
 )
 
-// gramrRunner uses a named pipe ( https://en.wikipedia.org/wiki/Named_pipe ) to stream ledgers directly
-// from Gramr
+// gravityRunner uses a named pipe ( https://en.wikipedia.org/wiki/Named_pipe ) to stream ledgers directly
+// from Gravity
 type pipe struct {
-	// gramrRunner will be reading ledgers emitted by Gramr from the pipe.
-	// After the Gramr process exits, gramrRunner should eventually close the reader.
+	// gravityRunner will be reading ledgers emitted by Gravity from the pipe.
+	// After the Gravity process exits, gravityRunner should eventually close the reader.
 	Reader io.ReadCloser
-	// gramrRunner is responsible for closing the named pipe file after the Gramr process exits.
-	// However, only the Gramr process will be writing to the pipe. gramrRunner should not
+	// gravityRunner is responsible for closing the named pipe file after the Gravity process exits.
+	// However, only the Gravity process will be writing to the pipe. gravityRunner should not
 	// write anything to the named pipe file which is why the type of File is io.Closer.
 	File io.Closer
 }
 
-type gramrRunner struct {
+type gravityRunner struct {
 	executablePath string
 
 	started      bool
@@ -60,7 +60,7 @@ type gramrRunner struct {
 	cancel       context.CancelFunc
 	ledgerBuffer *bufferedLedgerMetaReader
 	pipe         pipe
-	mode         gramrRunnerMode
+	mode         gravityRunnerMode
 
 	systemCaller systemCaller
 
@@ -85,17 +85,17 @@ func createRandomHexString(n int) string {
 	return string(b)
 }
 
-func newGramrRunner(config CaptiveCoreConfig) *gramrRunner {
+func newGravityRunner(config CaptiveCoreConfig) *gravityRunner {
 	ctx, cancel := context.WithCancel(config.Context)
 
-	runner := &gramrRunner{
+	runner := &gravityRunner{
 		executablePath: config.BinaryPath,
 		ctx:            ctx,
 		cancel:         cancel,
 		storagePath:    config.StoragePath,
 		useDB:          config.UseDB,
 		nonce: fmt.Sprintf(
-			"captive-gramr-%x",
+			"captive-gravity-%x",
 			rand.New(rand.NewSource(time.Now().UnixNano())).Uint64(),
 		),
 		log:  config.Log,
@@ -107,8 +107,8 @@ func newGramrRunner(config CaptiveCoreConfig) *gramrRunner {
 	return runner
 }
 
-func (r *gramrRunner) getFullStoragePath() string {
-	if runtime.GOOS == "windows" || r.mode == gramrRunnerModeOffline {
+func (r *gravityRunner) getFullStoragePath() string {
+	if runtime.GOOS == "windows" || r.mode == gravityRunnerModeOffline {
 		// On Windows, first we ALWAYS append something to the base storage path,
 		// because we will delete the directory entirely when OrbitR stops. We also
 		// add a random suffix in order to ensure that there aren't naming
@@ -116,7 +116,7 @@ func (r *gramrRunner) getFullStoragePath() string {
 		// This is done because it's impossible to send SIGINT on Windows so
 		// buckets can become corrupted.
 		// We also want to use random directories in offline mode (reingestion)
-		// because it's possible it's running multiple Gramrs on a single
+		// because it's possible it's running multiple Gravitys on a single
 		// machine.
 		return path.Join(r.storagePath, "captive-core-"+createRandomHexString(8))
 	} else {
@@ -128,7 +128,7 @@ func (r *gramrRunner) getFullStoragePath() string {
 	}
 }
 
-func (r *gramrRunner) establishStorageDirectory() error {
+func (r *gravityRunner) establishStorageDirectory() error {
 	info, err := r.systemCaller.stat(r.storagePath)
 	if os.IsNotExist(err) {
 		innerErr := r.systemCaller.mkdirAll(r.storagePath, os.FileMode(int(0755))) // rwx|rx|rx
@@ -146,7 +146,7 @@ func (r *gramrRunner) establishStorageDirectory() error {
 	return nil
 }
 
-func (r *gramrRunner) writeConf() (string, error) {
+func (r *gravityRunner) writeConf() (string, error) {
 	text, err := generateConfig(r.toml, r.mode)
 	if err != nil {
 		return "", err
@@ -155,8 +155,8 @@ func (r *gramrRunner) writeConf() (string, error) {
 	return string(text), r.systemCaller.writeFile(r.getConfFileName(), text, 0644)
 }
 
-func generateConfig(captiveCoreToml *CaptiveCoreToml, mode gramrRunnerMode) ([]byte, error) {
-	if mode == gramrRunnerModeOffline {
+func generateConfig(captiveCoreToml *CaptiveCoreToml, mode gravityRunnerMode) ([]byte, error) {
+	if mode == gravityRunnerModeOffline {
 		var err error
 		captiveCoreToml, err = captiveCoreToml.CatchupToml()
 		if err != nil {
@@ -175,8 +175,8 @@ func generateConfig(captiveCoreToml *CaptiveCoreToml, mode gramrRunnerMode) ([]b
 	return text, nil
 }
 
-func (r *gramrRunner) getConfFileName() string {
-	joinedPath := filepath.Join(r.storagePath, "gramr.conf")
+func (r *gravityRunner) getConfFileName() string {
+	joinedPath := filepath.Join(r.storagePath, "gravity.conf")
 
 	// Given that `storagePath` can be anything, we need the full, absolute path
 	// here so that everything Core needs is created under the storagePath
@@ -192,11 +192,11 @@ func (r *gramrRunner) getConfFileName() string {
 	return path
 }
 
-func (r *gramrRunner) getLogLineWriter() io.Writer {
+func (r *gravityRunner) getLogLineWriter() io.Writer {
 	rd, wr := io.Pipe()
 	br := bufio.NewReader(rd)
 
-	// Strip timestamps from log lines from captive gramr. We emit our own.
+	// Strip timestamps from log lines from captive gravity. We emit our own.
 	dateRx := regexp.MustCompile(`^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3} `)
 	go func() {
 		levelRx := regexp.MustCompile(`\[(\w+) ([A-Z]+)\] (.*)`)
@@ -239,23 +239,23 @@ func (r *gramrRunner) getLogLineWriter() io.Writer {
 	return wr
 }
 
-func (r *gramrRunner) offlineInfo() (gramr.InfoResponse, error) {
+func (r *gravityRunner) offlineInfo() (gravity.InfoResponse, error) {
 	allParams := []string{"--conf", r.getConfFileName(), "offline-info"}
 	cmd := r.systemCaller.command(r.executablePath, allParams...)
 	cmd.setDir(r.storagePath)
 	output, err := cmd.Output()
 	if err != nil {
-		return gramr.InfoResponse{}, errors.Wrap(err, "error executing offline-info cmd")
+		return gravity.InfoResponse{}, errors.Wrap(err, "error executing offline-info cmd")
 	}
-	var info gramr.InfoResponse
+	var info gravity.InfoResponse
 	err = json.Unmarshal(output, &info)
 	if err != nil {
-		return gramr.InfoResponse{}, errors.Wrap(err, "invalid output of offline-info cmd")
+		return gravity.InfoResponse{}, errors.Wrap(err, "invalid output of offline-info cmd")
 	}
 	return info, nil
 }
 
-func (r *gramrRunner) createCmd(params ...string) (cmdI, error) {
+func (r *gravityRunner) createCmd(params ...string) (cmdI, error) {
 	err := r.establishStorageDirectory()
 	if err != nil {
 		return nil, err
@@ -276,16 +276,16 @@ func (r *gramrRunner) createCmd(params ...string) (cmdI, error) {
 }
 
 // context returns the context.Context instance associated with the running captive core instance
-func (r *gramrRunner) context() context.Context {
+func (r *gravityRunner) context() context.Context {
 	return r.ctx
 }
 
 // catchup executes the catchup command on the captive core subprocess
-func (r *gramrRunner) catchup(from, to uint32) error {
+func (r *gravityRunner) catchup(from, to uint32) error {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
-	r.mode = gramrRunnerModeOffline
+	r.mode = gravityRunnerModeOffline
 	r.storagePath = r.getFullStoragePath()
 
 	// check if we have already been closed
@@ -326,7 +326,7 @@ func (r *gramrRunner) catchup(from, to uint32) error {
 	r.pipe, err = r.start(r.cmd)
 	if err != nil {
 		r.closeLogLineWriters(r.cmd)
-		return errors.Wrap(err, "error starting `gramr catchup` subprocess")
+		return errors.Wrap(err, "error starting `gravity catchup` subprocess")
 	}
 
 	r.started = true
@@ -346,11 +346,11 @@ func (r *gramrRunner) catchup(from, to uint32) error {
 }
 
 // runFrom executes the run command with a starting ledger on the captive core subprocess
-func (r *gramrRunner) runFrom(from uint32, hash string) error {
+func (r *gravityRunner) runFrom(from uint32, hash string) error {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
-	r.mode = gramrRunnerModeOnline
+	r.mode = gravityRunnerModeOnline
 	r.storagePath = r.getFullStoragePath()
 
 	// check if we have already been closed
@@ -368,13 +368,13 @@ func (r *gramrRunner) runFrom(from uint32, hash string) error {
 		// Check if on-disk core DB exists and what's the LCL there. If not what
 		// we need remove storage dir and start from scratch.
 		removeStorageDir := false
-		var info gramr.InfoResponse
+		var info gravity.InfoResponse
 		info, err = r.offlineInfo()
 		if err != nil {
 			r.log.Infof("Error running offline-info: %v, removing existing storage-dir contents", err)
 			removeStorageDir = true
 		} else if uint32(info.Info.Ledger.Num) > from {
-			r.log.Infof("Unexpected LCL in Gramr DB: %d (want: %d), removing existing storage-dir contents", info.Info.Ledger.Num, from)
+			r.log.Infof("Unexpected LCL in Gravity DB: %d (want: %d), removing existing storage-dir contents", info.Info.Ledger.Num, from)
 			removeStorageDir = true
 		}
 
@@ -406,7 +406,7 @@ func (r *gramrRunner) runFrom(from uint32, hash string) error {
 			}
 
 			if err = cmd.Run(); err != nil {
-				return errors.Wrap(err, "error runing gramr catchup")
+				return errors.Wrap(err, "error runing gravity catchup")
 			}
 		}
 
@@ -432,7 +432,7 @@ func (r *gramrRunner) runFrom(from uint32, hash string) error {
 	r.pipe, err = r.start(r.cmd)
 	if err != nil {
 		r.closeLogLineWriters(r.cmd)
-		return errors.Wrap(err, "error starting `gramr run` subprocess")
+		return errors.Wrap(err, "error starting `gravity run` subprocess")
 	}
 
 	r.started = true
@@ -451,7 +451,7 @@ func (r *gramrRunner) runFrom(from uint32, hash string) error {
 	return nil
 }
 
-func (r *gramrRunner) handleExit() {
+func (r *gravityRunner) handleExit() {
 	defer r.wg.Done()
 
 	// Pattern recommended in:
@@ -523,20 +523,20 @@ func (r *gramrRunner) handleExit() {
 }
 
 // closeLogLineWriters closes the go routines created by getLogLineWriter()
-func (r *gramrRunner) closeLogLineWriters(cmd cmdI) {
+func (r *gravityRunner) closeLogLineWriters(cmd cmdI) {
 	cmd.getStdout().(*io.PipeWriter).Close()
 	cmd.getStderr().(*io.PipeWriter).Close()
 }
 
 // getMetaPipe returns a channel which contains ledgers streamed from the captive core subprocess
-func (r *gramrRunner) getMetaPipe() <-chan metaResult {
+func (r *gravityRunner) getMetaPipe() <-chan metaResult {
 	return r.ledgerBuffer.getChannel()
 }
 
 // getProcessExitError returns an exit error (can be nil) of the process and a bool indicating
 // if the process has exited yet
 // getProcessExitError is thread safe
-func (r *gramrRunner) getProcessExitError() (bool, error) {
+func (r *gravityRunner) getProcessExitError() (bool, error) {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 	return r.processExited, r.processExitError
@@ -545,7 +545,7 @@ func (r *gramrRunner) getProcessExitError() (bool, error) {
 // close kills the captive core process if it is still running and performs
 // the necessary cleanup on the resources associated with the captive core process
 // close is both thread safe and idempotent
-func (r *gramrRunner) close() error {
+func (r *gravityRunner) close() error {
 	r.lock.Lock()
 	started := r.started
 	storagePath := r.storagePath
@@ -570,7 +570,7 @@ func (r *gramrRunner) close() error {
 	// only reap captive core sub process and related go routines if we've started
 	// otherwise, just cleanup the temp dir
 	if started {
-		// wait for the gramr process to terminate
+		// wait for the gravity process to terminate
 		r.wg.Wait()
 
 		// drain meta pipe channel to make sure the ledger buffer goroutine exits
@@ -585,7 +585,7 @@ func (r *gramrRunner) close() error {
 
 	if r.mode != 0 && (runtime.GOOS == "windows" ||
 		(r.processExitError != nil && r.processExitError != context.Canceled) ||
-		r.mode == gramrRunnerModeOffline) {
+		r.mode == gravityRunnerModeOffline) {
 		// It's impossible to send SIGINT on Windows so buckets can become
 		// corrupted. If we can't reuse it, then remove it.
 		// We also remove the storage path if there was an error terminating the

@@ -10,7 +10,7 @@ import (
 	hClient "github.com/lantah/go/clients/orbitrclient"
 )
 
-// Asset represents an asset on the Stellar network
+// Asset represents an asset on the Lantah Network
 type Asset struct {
 	ProtocolAssetType hClient.AssetType
 	AssetType         string `json:"type"`

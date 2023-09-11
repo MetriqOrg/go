@@ -8,11 +8,11 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/stellar/go/services/regulated-assets-approval-server/internal/serve/httperror"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/http/httpdecode"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/render/httpjson"
+	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/httperror"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/http/httpdecode"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/render/httpjson"
 )
 
 type kycPostRequest struct {

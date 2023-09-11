@@ -3,13 +3,13 @@ package actions
 import (
 	"net/http"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
-	"github.com/stellar/go/support/render/hal"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
+	"github.com/lantah/go/support/render/hal"
 )
 
 type GetLedgersHandler struct {
@@ -39,7 +39,7 @@ func (handler GetLedgersHandler) GetResourcePage(w HeaderWriter, r *http.Request
 
 	var result []hal.Pageable
 	for _, record := range records {
-		var ledger horizon.Ledger
+		var ledger orbitr.Ledger
 		resourceadapter.PopulateLedger(r.Context(), &ledger, record)
 		if err != nil {
 			return nil, err
@@ -77,7 +77,7 @@ func (handler GetLedgerByIDHandler) GetResource(w HeaderWriter, r *http.Request)
 	if err != nil {
 		return nil, err
 	}
-	var result horizon.Ledger
+	var result orbitr.Ledger
 	resourceadapter.PopulateLedger(r.Context(), &result, ledger)
 	return result, nil
 }

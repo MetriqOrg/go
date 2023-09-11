@@ -5,18 +5,18 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/stellar/go/clients/gramr"
-	proto "github.com/stellar/go/protocols/gramr"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/clients/gravity"
+	proto "github.com/lantah/go/protocols/gravity"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
 )
 
 // NewDefaultSubmitter returns a new, simple Submitter implementation
-// that submits directly to the gramr at `url` using the http client
+// that submits directly to the gravity at `url` using the http client
 // `h`.
 func NewDefaultSubmitter(h *http.Client, url string) Submitter {
 	return &submitter{
-		Gramr: &gramr.Client{
+		Gravity: &gravity.Client{
 			HTTP: h,
 			URL:  url,
 		},
@@ -25,14 +25,14 @@ func NewDefaultSubmitter(h *http.Client, url string) Submitter {
 }
 
 // submitter is the default implementation for the Submitter interface.  It
-// submits directly to the configured gramr instance using the
+// submits directly to the configured gravity instance using the
 // configured http client.
 type submitter struct {
-	Gramr *gramr.Client
+	Gravity *gravity.Client
 	Log         *log.Entry
 }
 
-// Submit sends the provided envelope to gramr and parses the response into
+// Submit sends the provided envelope to gravity and parses the response into
 // a SubmissionResult
 func (sub *submitter) Submit(ctx context.Context, env string) (result SubmissionResult) {
 	start := time.Now()
@@ -44,7 +44,7 @@ func (sub *submitter) Submit(ctx context.Context, env string) (result Submission
 		}).Info("Submitter result")
 	}()
 
-	cresp, err := sub.Gramr.SubmitTransaction(ctx, env)
+	cresp, err := sub.Gravity.SubmitTransaction(ctx, env)
 	if err != nil {
 		result.Err = errors.Wrap(err, "failed to submit")
 		return
@@ -52,7 +52,7 @@ func (sub *submitter) Submit(ctx context.Context, env string) (result Submission
 
 	// interpret response
 	if cresp.IsException() {
-		result.Err = errors.Errorf("gramr exception: %s", cresp.Exception)
+		result.Err = errors.Errorf("gravity exception: %s", cresp.Exception)
 		return
 	}
 
@@ -62,7 +62,7 @@ func (sub *submitter) Submit(ctx context.Context, env string) (result Submission
 	case proto.TXStatusPending, proto.TXStatusDuplicate, proto.TXStatusTryAgainLater:
 		//noop.  A nil Err indicates success
 	default:
-		result.Err = errors.Errorf("Unrecognized gramr status response: %s", cresp.Status)
+		result.Err = errors.Errorf("Unrecognized gravity status response: %s", cresp.Status)
 	}
 
 	return

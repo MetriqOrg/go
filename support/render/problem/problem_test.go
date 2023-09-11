@@ -10,8 +10,8 @@ import (
 	"testing"
 
 	ge "github.com/go-errors/errors"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/test"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -102,7 +102,7 @@ func TestProblemServerErrorConversion(t *testing.T) {
 	}
 }
 
-// TestProblemInflate test errors that come inflated from horizon
+// TestProblemInflate test errors that come inflated from orbitr
 func TestProblemInflate(t *testing.T) {
 	problem := New("", log.DefaultLogger, LogNoErrors)
 

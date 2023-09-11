@@ -3,10 +3,10 @@ package txnbuild
 import (
 	"testing"
 
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/gxdr"
-	"github.com/stellar/go/randxdr"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/gxdr"
+	"github.com/lantah/go/randxdr"
+	"github.com/lantah/go/xdr"
 	goxdr "github.com/xdrpp/goxdr/xdr"
 
 	"github.com/stretchr/testify/assert"

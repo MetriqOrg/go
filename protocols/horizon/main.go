@@ -1,6 +1,6 @@
-// Package horizon contains the type definitions for all of horizon's
+// Package orbitr contains the type definitions for all of orbitr's
 // response resources.
-package horizon
+package orbitr
 
 import (
 	"encoding/base64"
@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/lantah/go/protocols/horizon/base"
+	"github.com/lantah/go/protocols/orbitr/base"
 	"github.com/lantah/go/strkey"
 	"github.com/lantah/go/support/errors"
 	"github.com/lantah/go/support/render/hal"
@@ -19,7 +19,7 @@ import (
 )
 
 // KeyTypeNames maps from strkey version bytes into json string values to use in
-// horizon responses.
+// orbitr responses.
 var KeyTypeNames = map[strkey.VersionByte]string{
 	strkey.VersionByteAccountID:     "ed25519_public_key",
 	strkey.VersionByteSeed:          "ed25519_secret_seed",
@@ -168,12 +168,12 @@ type AssetStat struct {
 	base.Asset
 	PT         string `json:"paging_token"`
 	ContractID string `json:"contract_id,omitempty"`
-	// Action needed in release: horizon-v3.0.0: deprecated field
+	// Action needed in release: orbitr-v3.0.0: deprecated field
 	NumAccounts          int32 `json:"num_accounts"`
 	NumClaimableBalances int32 `json:"num_claimable_balances"`
 	NumLiquidityPools    int32 `json:"num_liquidity_pools"`
 	NumContracts         int32 `json:"num_contracts"`
-	// Action needed in release: horizon-v3.0.0: deprecated field
+	// Action needed in release: orbitr-v3.0.0: deprecated field
 	Amount                  string            `json:"amount"`
 	Accounts                AssetStatAccounts `json:"accounts"`
 	ClaimableBalancesAmount string            `json:"claimable_balances_amount"`
@@ -239,8 +239,8 @@ type Ledger struct {
 	ClosedAt                   time.Time `json:"closed_at"`
 	TotalCoins                 string    `json:"total_coins"`
 	FeePool                    string    `json:"fee_pool"`
-	BaseFee                    int32     `json:"base_fee_in_stroops"`
-	BaseReserve                int32     `json:"base_reserve_in_stroops"`
+	BaseFee                    int32     `json:"base_fee_in_µg"`
+	BaseReserve                int32     `json:"base_reserve_in_µg"`
 	MaxTxSetSize               int32     `json:"max_tx_set_size"`
 	ProtocolVersion            int32     `json:"protocol_version"`
 	HeaderXDR                  string    `json:"header_xdr"`
@@ -339,11 +339,11 @@ type Root struct {
 		Transactions        hal.Link  `json:"transactions"`
 	} `json:"_links"`
 
-	HorizonVersion               string    `json:"horizon_version"`
-	GramrVersion           string    `json:"core_version"`
+	OrbitRVersion               string    `json:"orbitr_version"`
+	GravityVersion           string    `json:"core_version"`
 	IngestSequence               uint32    `json:"ingest_latest_ledger"`
-	HorizonSequence              int32     `json:"history_latest_ledger"`
-	HorizonLatestClosedAt        time.Time `json:"history_latest_ledger_closed_at"`
+	OrbitRSequence              int32     `json:"history_latest_ledger"`
+	OrbitRLatestClosedAt        time.Time `json:"history_latest_ledger_closed_at"`
 	HistoryElderSequence         int32     `json:"history_elder_ledger"`
 	CoreSequence                 int32     `json:"core_latest_ledger"`
 	NetworkPassphrase            string    `json:"network_passphrase"`
@@ -398,7 +398,7 @@ func (p *TradePrice) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Trade represents a horizon digested trade
+// Trade represents a orbitr digested trade
 type Trade struct {
 	Links struct {
 		Self      hal.Link `json:"self"`
@@ -522,7 +522,7 @@ type Transaction struct {
 	MemoBytes         string    `json:"memo_bytes,omitempty"`
 	Memo              string    `json:"memo,omitempty"`
 	Signatures        []string  `json:"signatures"`
-	// Action needed in release: horizon-v3.0.0: remove valid_(after|before)
+	// Action needed in release: orbitr-v3.0.0: remove valid_(after|before)
 	ValidAfter         string                    `json:"valid_after,omitempty"`
 	ValidBefore        string                    `json:"valid_before,omitempty"`
 	Preconditions      *TransactionPreconditions `json:"preconditions,omitempty"`
@@ -634,7 +634,7 @@ type TransactionResultCodes struct {
 
 // KeyTypeFromAddress converts the version byte of the provided strkey encoded
 // value (for example an account id or a signer key) and returns the appropriate
-// horizon-specific type name.
+// orbitr-specific type name.
 func KeyTypeFromAddress(address string) (string, error) {
 	vb, err := strkey.Version(address)
 	if err != nil {
@@ -697,7 +697,7 @@ type OffersPage struct {
 	} `json:"_embedded"`
 }
 
-// AssetsPage contains page of assets returned by Horizon.
+// AssetsPage contains page of assets returned by OrbitR.
 type AssetsPage struct {
 	Links    hal.Links `json:"_links"`
 	Embedded struct {
@@ -705,7 +705,7 @@ type AssetsPage struct {
 	} `json:"_embedded"`
 }
 
-// LedgersPage contains page of ledger information returned by Horizon
+// LedgersPage contains page of ledger information returned by OrbitR
 type LedgersPage struct {
 	Links    hal.Links `json:"_links"`
 	Embedded struct {
@@ -730,7 +730,7 @@ type FeeDistribution struct {
 	P99  int64 `json:"p99,string"`
 }
 
-// FeeStats represents a response of fees from horizon
+// FeeStats represents a response of fees from orbitr
 // To do: implement fee suggestions if agreement is reached in https://github.com/lantah/go/issues/926
 type FeeStats struct {
 	LastLedger          uint32  `json:"last_ledger,string"`
@@ -741,7 +741,7 @@ type FeeStats struct {
 	MaxFee     FeeDistribution `json:"max_fee"`
 }
 
-// TransactionsPage contains records of transaction information returned by Horizon
+// TransactionsPage contains records of transaction information returned by OrbitR
 type TransactionsPage struct {
 	Links    hal.Links `json:"_links"`
 	Embedded struct {
@@ -749,7 +749,7 @@ type TransactionsPage struct {
 	} `json:"_embedded"`
 }
 
-// PathsPage contains records of payment paths found by horizon
+// PathsPage contains records of payment paths found by orbitr
 type PathsPage struct {
 	Links    hal.Links `json:"_links"`
 	Embedded struct {

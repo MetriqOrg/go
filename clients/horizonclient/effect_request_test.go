@@ -272,7 +272,7 @@ var firstEffectsPage = `{
         "type": "account_created",
         "type_i": 0,
         "created_at": "2019-05-16T07:13:25Z",
-        "starting_balance": "10000.0000000"
+        "starting_balance": "100000.000000"
       },
       {
         "_links": {
@@ -362,9 +362,9 @@ var tradeEffectPage = `
 		  "created_at": "2019-11-01T23:05:58Z",
 		  "seller": "GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX",
 		  "offer_id": "127538672",
-		  "sold_amount": "14.5984123",
+		  "sold_amount": "145.984123",
 		  "sold_asset_type": "native",
-		  "bought_amount": "1.0000000",
+		  "bought_amount": "10.000000",
 		  "bought_asset_type": "credit_alphanum4",
 		  "bought_asset_code": "USD",
 		  "bought_asset_issuer": "GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX"

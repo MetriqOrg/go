@@ -3,11 +3,11 @@ title: Transaction
 replacement: https://developers.stellar.org/api/resources/transactions/
 ---
 
-**Transactions** are the basic unit of change in the Stellar Network.
+**Transactions** are the basic unit of change in the Lantah Network.
 
 A transaction is a grouping of [operations](./operation.md).
 
-To learn more about the concept of transactions in the Stellar network, take a look at the [Stellar transactions concept guide](https://www.stellar.org/developers/learn/concepts/transactions.html).
+To learn more about the concept of transactions in the Lantah Network, take a look at the [Stellar transactions concept guide](https://www.stellar.org/developers/learn/concepts/transactions.html).
 
 ## Attributes
 
@@ -116,4 +116,4 @@ To learn more about the concept of transactions in the Stellar network, take a l
 
 
 ## Submitting transactions
-To submit a new transaction to Stellar network, it must first be built and signed locally. Then you can submit a hex representation of your transaction’s [XDR](../xdr.md) to the `/transactions` endpoint. Read more about submitting transactions in [Post Transaction](../endpoints/transactions-create.md) doc.
+To submit a new transaction to Lantah Network, it must first be built and signed locally. Then you can submit a hex representation of your transaction’s [XDR](../xdr.md) to the `/transactions` endpoint. Read more about submitting transactions in [Post Transaction](../endpoints/transactions-create.md) doc.

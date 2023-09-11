@@ -4,9 +4,9 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/xdr"
 )
 
 var (
@@ -16,8 +16,8 @@ var (
 func TestFindLiquidityPool(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
@@ -41,8 +41,8 @@ func removeLiquidityPool(t *test.T, q *Q, lp LiquidityPool, sequence uint32) {
 func TestRemoveLiquidityPool(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
@@ -94,8 +94,8 @@ func TestRemoveLiquidityPool(t *testing.T) {
 func TestStreamAllLiquidity(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 	otherLP := MakeTestPool(usdAsset, 10, eurAsset, 20)
@@ -121,8 +121,8 @@ func TestStreamAllLiquidity(t *testing.T) {
 func TestFindLiquidityPoolsByAssets(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
@@ -202,8 +202,8 @@ func TestFindLiquidityPoolsByAssets(t *testing.T) {
 func TestLiquidityPoolCompaction(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
@@ -268,8 +268,8 @@ func TestLiquidityPoolCompaction(t *testing.T) {
 func TestUpdateLiquidityPool(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	initialLP := MakeTestPool(usdAsset, 450, gramAsset, 450)
 	err := q.UpsertLiquidityPools(tt.Ctx, []LiquidityPool{initialLP})
@@ -296,8 +296,8 @@ func TestUpdateLiquidityPool(t *testing.T) {
 func TestGetLiquidityPoolsByID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	lp := MakeTestPool(usdAsset, 450, gramAsset, 450)
 
@@ -338,8 +338,8 @@ func clonePool(lp LiquidityPool) LiquidityPool {
 func TestLiquidityPoolByAccountId(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	pools := []LiquidityPool{
 		MakeTestPool(usdAsset, 450, gramAsset, 450),

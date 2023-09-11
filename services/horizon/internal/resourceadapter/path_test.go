@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/paths"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/paths"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,10 +22,10 @@ func TestPopulatePath(t *testing.T) {
 		DestinationAmount: 345,
 	}
 
-	var dest horizon.Path
+	var dest orbitr.Path
 	assert.NoError(t, PopulatePath(context.Background(), &dest, p))
 
-	assert.Equal(t, horizon.Path{
+	assert.Equal(t, orbitr.Path{
 		SourceAssetType:        "native",
 		SourceAssetCode:        "",
 		SourceAssetIssuer:      "",
@@ -34,7 +34,7 @@ func TestPopulatePath(t *testing.T) {
 		DestinationAssetCode:   "USDC",
 		DestinationAssetIssuer: "GC3C4AKRBQLHOJ45U4XG35ESVWRDECWO5XLDGYADO6DPR3L7KIDVUMML",
 		DestinationAmount:      "0.0000345",
-		Path: []horizon.Asset{
+		Path: []orbitr.Asset{
 			{
 				Type:   "credit_alphanum12",
 				Code:   "BINGO",

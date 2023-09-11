@@ -43,12 +43,12 @@ func hashFile(filename string) (hash, error) {
 	return h.Sum(nil), nil
 }
 
-func newFileWatcher(runner *gramrRunner) (*fileWatcher, error) {
+func newFileWatcher(runner *gravityRunner) (*fileWatcher, error) {
 	return newFileWatcherWithOptions(runner, hashFile, 10*time.Second)
 }
 
 func newFileWatcherWithOptions(
-	runner *gramrRunner,
+	runner *gravityRunner,
 	hashFile func(string) (hash, error),
 	tickerDuration time.Duration,
 ) (*fileWatcher, error) {

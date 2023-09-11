@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	proto "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/services/horizon/internal/codes"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	sdk "github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	proto "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/operations"
+	"github.com/lantah/go/services/orbitr/internal/codes"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 

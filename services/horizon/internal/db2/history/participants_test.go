@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 type transactionParticipant struct {
@@ -29,8 +29,8 @@ func getTransactionParticipants(tt *test.T, q *Q) []transactionParticipant {
 func TestTransactionParticipantsBatch(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	batch := q.NewTransactionParticipantsBatchInsertBuilder(0)
 

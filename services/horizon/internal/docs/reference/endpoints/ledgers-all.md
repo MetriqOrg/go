@@ -6,7 +6,7 @@ replacement: https://developers.stellar.org/api/resources/ledgers/
 ---
 
 This endpoint represents all [ledgers](../resources/ledger.md).
-This endpoint can also be used in [streaming](../streaming.md) mode so it is possible to use it to get notifications as ledgers are closed by the Stellar network.
+This endpoint can also be used in [streaming](../streaming.md) mode so it is possible to use it to get notifications as ledgers are closed by the Lantah Network.
 If called in streaming mode Horizon will start at the earliest known ledger unless a `cursor` is set. In that case it will start from the `cursor`. You can also set `cursor` value to `now` to only stream ledgers created since your request time.
 
 ## Request
@@ -107,8 +107,8 @@ This endpoint responds with a list of ledgers.  See [ledger resource](../resourc
         "closed_at": "1970-01-01T00:00:00Z",
         "total_coins": "100000000000.0000000",
         "fee_pool": "0.0000000",
-        "base_fee_in_stroops": 100,
-        "base_reserve_in_stroops": 100000000,
+        "base_fee_in_µg": 100,
+        "base_reserve_in_µg": 100000000,
         "max_tx_set_size": 50
       },
       {
@@ -141,8 +141,8 @@ This endpoint responds with a list of ledgers.  See [ledger resource](../resourc
         "closed_at": "2015-07-16T23:49:00Z",
         "total_coins": "100000000000.0000000",
         "fee_pool": "0.0000000",
-        "base_fee_in_stroops": 100,
-        "base_reserve_in_stroops": 100000000,
+        "base_fee_in_µg": 100,
+        "base_reserve_in_µg": 100000000,
         "max_tx_set_size": 100
       }
     ]
@@ -194,8 +194,8 @@ This endpoint responds with a list of ledgers.  See [ledger resource](../resourc
   "closed_at": "2015-07-20T15:51:52Z",
   "total_coins": "100000000000.0000000",
   "fee_pool": "0.0025600",
-  "base_fee_in_stroops": 100,
-  "base_reserve_in_stroops": "100000000",
+  "base_fee_in_µg": 100,
+  "base_reserve_in_µg": "100000000",
   "max_tx_set_size": 50
 }
 ```

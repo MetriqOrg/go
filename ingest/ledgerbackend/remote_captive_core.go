@@ -60,35 +60,35 @@ func (r Base64Ledger) MarshalJSON() ([]byte, error) {
 	return json.Marshal(base64)
 }
 
-// RemoteCaptiveGramr is an http client for interacting with a remote captive core server.
-type RemoteCaptiveGramr struct {
+// RemoteCaptiveGravity is an http client for interacting with a remote captive core server.
+type RemoteCaptiveGravity struct {
 	url                      *url.URL
 	client                   *http.Client
 	lock                     *sync.Mutex
 	prepareRangePollInterval time.Duration
 }
 
-// RemoteCaptiveOption values can be passed into NewRemoteCaptive to customize a RemoteCaptiveGramr instance.
-type RemoteCaptiveOption func(c *RemoteCaptiveGramr)
+// RemoteCaptiveOption values can be passed into NewRemoteCaptive to customize a RemoteCaptiveGravity instance.
+type RemoteCaptiveOption func(c *RemoteCaptiveGravity)
 
 // PrepareRangePollInterval configures how often the captive core server will be polled when blocking
 // on the PrepareRange operation.
 func PrepareRangePollInterval(d time.Duration) RemoteCaptiveOption {
-	return func(c *RemoteCaptiveGramr) {
+	return func(c *RemoteCaptiveGravity) {
 		c.prepareRangePollInterval = d
 	}
 }
 
-// NewRemoteCaptive returns a new RemoteCaptiveGramr instance.
+// NewRemoteCaptive returns a new RemoteCaptiveGravity instance.
 //
 // Only the captiveCoreURL parameter is required.
-func NewRemoteCaptive(captiveCoreURL string, options ...RemoteCaptiveOption) (RemoteCaptiveGramr, error) {
+func NewRemoteCaptive(captiveCoreURL string, options ...RemoteCaptiveOption) (RemoteCaptiveGravity, error) {
 	u, err := url.Parse(captiveCoreURL)
 	if err != nil {
-		return RemoteCaptiveGramr{}, errors.Wrap(err, "unparseable url")
+		return RemoteCaptiveGravity{}, errors.Wrap(err, "unparseable url")
 	}
 
-	client := RemoteCaptiveGramr{
+	client := RemoteCaptiveGravity{
 		prepareRangePollInterval: time.Second,
 		url:                      u,
 		client:                   &http.Client{Timeout: 10 * time.Second},
@@ -125,7 +125,7 @@ func decodeResponse(response *http.Response, payload interface{}) error {
 // Note that for UnboundedRange the returned sequence number is not necessarily
 // the latest sequence closed by the network. It's always the last value available
 // in the backend.
-func (c RemoteCaptiveGramr) GetLatestLedgerSequence(ctx context.Context) (sequence uint32, err error) {
+func (c RemoteCaptiveGravity) GetLatestLedgerSequence(ctx context.Context) (sequence uint32, err error) {
 	// TODO: Have a context on this request so we can cancel all outstanding
 	// requests, not just PrepareRange.
 	u := *c.url
@@ -149,21 +149,21 @@ func (c RemoteCaptiveGramr) GetLatestLedgerSequence(ctx context.Context) (sequen
 }
 
 // Close cancels any pending PrepareRange requests.
-func (c RemoteCaptiveGramr) Close() error {
+func (c RemoteCaptiveGravity) Close() error {
 	return nil
 }
 
 // PrepareRange prepares the given range (including from and to) to be loaded.
-// Captive gramr backend needs to initalize Gramr state to be
+// Captive gravity backend needs to initalize Gravity state to be
 // able to stream ledgers.
-// Gramr mode depends on the provided ledgerRange:
-//   - For BoundedRange it will start Gramr in catchup mode.
+// Gravity mode depends on the provided ledgerRange:
+//   - For BoundedRange it will start Gravity in catchup mode.
 //   - For UnboundedRange it will first catchup to starting ledger and then run
-//     it normally (including connecting to the Stellar network).
+//     it normally (including connecting to the Lantah Network).
 //
 // Please note that using a BoundedRange, currently, requires a full-trust on
-// history archive. This issue is being fixed in Gramr.
-func (c RemoteCaptiveGramr) PrepareRange(ctx context.Context, ledgerRange Range) error {
+// history archive. This issue is being fixed in Gravity.
+func (c RemoteCaptiveGravity) PrepareRange(ctx context.Context, ledgerRange Range) error {
 	// TODO: removing createContext call here means we could technically have
 	// multiple prepareRange requests happening at the same time. Do we still
 	// need to enforce that?
@@ -190,7 +190,7 @@ func (c RemoteCaptiveGramr) PrepareRange(ctx context.Context, ledgerRange Range)
 }
 
 // IsPrepared returns true if a given ledgerRange is prepared.
-func (c RemoteCaptiveGramr) IsPrepared(ctx context.Context, ledgerRange Range) (bool, error) {
+func (c RemoteCaptiveGravity) IsPrepared(ctx context.Context, ledgerRange Range) (bool, error) {
 	// TODO: Have some way to cancel all outstanding requests, not just
 	// PrepareRange.
 	u := *c.url
@@ -220,17 +220,17 @@ func (c RemoteCaptiveGramr) IsPrepared(ctx context.Context, ledgerRange Range) (
 	return parsed.Ready, nil
 }
 
-// GetLedger long-polls a remote gramr backend, until the requested
+// GetLedger long-polls a remote gravity backend, until the requested
 // ledger is ready.
 
 // Call PrepareRange first to instruct the backend which ledgers to fetch.
 //
 // Requesting a ledger on non-prepared backend will return an error.
 //
-// Because data is streamed from Gramr ledger after ledger user should
+// Because data is streamed from Gravity ledger after ledger user should
 // request sequences in a non-decreasing order. If the requested sequence number
 // is less than the last requested sequence number, an error will be returned.
-func (c RemoteCaptiveGramr) GetLedger(ctx context.Context, sequence uint32) (xdr.LedgerCloseMeta, error) {
+func (c RemoteCaptiveGravity) GetLedger(ctx context.Context, sequence uint32) (xdr.LedgerCloseMeta, error) {
 	for {
 		// TODO: Have some way to cancel all outstanding requests, not just
 		// PrepareRange.

@@ -1,5 +1,5 @@
 // Package history contains database record definitions useable for
-// reading rows from a the history portion of horizon's database
+// reading rows from a the history portion of orbitr's database
 package history
 
 import (
@@ -19,12 +19,12 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/support/collections/set"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	strtime "github.com/stellar/go/support/time"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/support/collections/set"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	strtime "github.com/lantah/go/support/time"
+	"github.com/lantah/go/xdr"
 )
 
 const (
@@ -701,7 +701,7 @@ type upsertField struct {
 	objects []interface{}
 }
 
-// Offer is row of data from the `offers` table from horizon DB
+// Offer is row of data from the `offers` table from orbitr DB
 type Offer struct {
 	SellerID string `db:"seller_id"`
 	OfferID  int64  `db:"offer_id"`
@@ -731,7 +731,7 @@ type OperationsQ struct {
 }
 
 // Q is a helper struct on which to hang common_trades queries against a history
-// portion of the horizon database.
+// portion of the orbitr database.
 type Q struct {
 	db.SessionInterface
 }
@@ -822,7 +822,7 @@ type TransactionsQ struct {
 	includeFailed bool
 }
 
-// TrustLine is row of data from the `trust_lines` table from horizon DB
+// TrustLine is row of data from the `trust_lines` table from orbitr DB
 type TrustLine struct {
 	AccountID          string        `db:"account_id"`
 	AssetType          xdr.AssetType `db:"asset_type"`

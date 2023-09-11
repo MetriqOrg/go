@@ -4,13 +4,13 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
+	"github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
 )
 
 // AccountOffersQuery query struct for offers end-point
@@ -30,7 +30,7 @@ func (handler GetOfferByID) GetResource(w HeaderWriter, r *http.Request) (interf
 		return nil, err
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (handler GetOfferByID) GetResource(w HeaderWriter, r *http.Request) (interf
 		return nil, err
 	}
 
-	var offerResponse horizon.Offer
+	var offerResponse orbitr.Offer
 	resourceadapter.PopulateOffer(ctx, &offerResponse, record, ledger)
 	return offerResponse, nil
 }
@@ -114,7 +114,7 @@ func (handler GetOffersHandler) GetResourcePage(
 		Buying:    buying,
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
@@ -168,7 +168,7 @@ func (handler GetAccountOffersHandler) GetResourcePage(
 		return nil, err
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
@@ -198,7 +198,7 @@ func getOffersPage(ctx context.Context, historyQ *history.Q, query history.Offer
 
 	var offers []hal.Pageable
 	for _, record := range records {
-		var offerResponse horizon.Offer
+		var offerResponse orbitr.Offer
 
 		var ledger *history.Ledger
 		if l, ok := ledgerCache.Records[int32(record.LastModifiedLedger)]; ok {

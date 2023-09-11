@@ -33,7 +33,7 @@ const (
 	upgradeChangesState
 )
 
-// LedgerChangeReader is a ChangeReader which returns Changes from Gramr
+// LedgerChangeReader is a ChangeReader which returns Changes from Gravity
 // for a single ledger
 type LedgerChangeReader struct {
 	*LedgerTransactionReader

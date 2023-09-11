@@ -5,9 +5,9 @@ import (
 	"sort"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // GetAssetID fetches the id for an Asset

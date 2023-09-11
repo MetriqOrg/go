@@ -5,30 +5,30 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/txnbuild"
 )
 
 type Options struct {
 	AssetCode           string
 	BaseURL             string
-	HorizonURL          string
+	OrbitRURL          string
 	IssuerAccountSecret string
 	NetworkPassphrase   string
 }
 
 func Setup(opts Options) {
-	hClient := &horizonclient.Client{
-		HorizonURL: opts.HorizonURL,
+	hClient := &orbitrclient.Client{
+		OrbitRURL: opts.OrbitRURL,
 		HTTP:       &http.Client{Timeout: 30 * time.Second},
 	}
-	if opts.HorizonURL == horizonclient.DefaultTestNetClient.HorizonURL && opts.NetworkPassphrase == network.TestNetworkPassphrase {
-		hClient = horizonclient.DefaultTestNetClient
+	if opts.OrbitRURL == orbitrclient.DefaultTestNetClient.OrbitRURL && opts.NetworkPassphrase == network.TestNetworkPassphrase {
+		hClient = orbitrclient.DefaultTestNetClient
 	}
 
 	issuerKP := keypair.MustParse(opts.IssuerAccountSecret)
@@ -42,7 +42,7 @@ func Setup(opts Options) {
 	log.Infof("🎉🎉🎉 Successfully configured asset issuer for %s:%s", opts.AssetCode, issuerKP.Address())
 }
 
-func setup(opts Options, hClient horizonclient.ClientInterface) error {
+func setup(opts Options, hClient orbitrclient.ClientInterface) error {
 	issuerKP, err := keypair.ParseFull(opts.IssuerAccountSecret)
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "parsing secret"))
@@ -57,7 +57,7 @@ func setup(opts Options, hClient horizonclient.ClientInterface) error {
 		Code:   opts.AssetCode,
 		Issuer: issuerKP.Address(),
 	}
-	assetResults, err := hClient.Assets(horizonclient.AssetRequest{
+	assetResults, err := hClient.Assets(orbitrclient.AssetRequest{
 		ForAssetCode:   asset.Code,
 		ForAssetIssuer: asset.Issuer,
 		Limit:          1,
@@ -102,7 +102,7 @@ func setup(opts Options, hClient horizonclient.ClientInterface) error {
 				Amount:        "0",
 				SourceAccount: asset.Issuer,
 			},
-			// a trustline is generated to the desired so horizon creates entry at `{horizon-url}/assets`. This was added as many Wallets reach that endpoint to check if a given asset exists.
+			// a trustline is generated to the desired so orbitr creates entry at `{orbitr-url}/assets`. This was added as many Wallets reach that endpoint to check if a given asset exists.
 			&txnbuild.ChangeTrust{
 				Line:          asset.MustToChangeTrustAsset(),
 				SourceAccount: trustorKP.Address(),
@@ -139,12 +139,12 @@ func setup(opts Options, hClient horizonclient.ClientInterface) error {
 	return nil
 }
 
-func getOrFundIssuerAccount(issuerAddress string, hClient horizonclient.ClientInterface) (*horizon.Account, error) {
-	issuerAcc, err := hClient.AccountDetail(horizonclient.AccountRequest{
+func getOrFundIssuerAccount(issuerAddress string, hClient orbitrclient.ClientInterface) (*orbitr.Account, error) {
+	issuerAcc, err := hClient.AccountDetail(orbitrclient.AccountRequest{
 		AccountID: issuerAddress,
 	})
 	if err != nil {
-		if !horizonclient.IsNotFoundError(err) || hClient != horizonclient.DefaultTestNetClient {
+		if !orbitrclient.IsNotFoundError(err) || hClient != orbitrclient.DefaultTestNetClient {
 			return nil, errors.Wrapf(err, "getting detail for account %s", issuerAddress)
 		}
 
@@ -157,7 +157,7 @@ func getOrFundIssuerAccount(issuerAddress string, hClient horizonclient.ClientIn
 	}
 
 	// now the account should be funded by the friendbot already
-	issuerAcc, err = hClient.AccountDetail(horizonclient.AccountRequest{
+	issuerAcc, err = hClient.AccountDetail(orbitrclient.AccountRequest{
 		AccountID: issuerAddress,
 	})
 	if err != nil {

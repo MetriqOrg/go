@@ -7,9 +7,9 @@ import (
 	"net/url"
 	"testing"
 
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

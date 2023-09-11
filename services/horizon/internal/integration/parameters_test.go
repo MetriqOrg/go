@@ -16,29 +16,29 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/stellar/go/services/horizon/internal/paths"
-	"github.com/stellar/go/services/horizon/internal/simplepath"
+	"github.com/stellar/go/services/orbitr/internal/paths"
+	"github.com/stellar/go/services/orbitr/internal/simplepath"
 
-	horizon "github.com/stellar/go/services/horizon/internal"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
+	orbitr "github.com/stellar/go/services/orbitr/internal"
+	"github.com/stellar/go/services/orbitr/internal/test/integration"
 
 	"github.com/stretchr/testify/assert"
 )
 
 var defaultCaptiveCoreParameters = map[string]string{
-	horizon.GramrBinaryPathName: os.Getenv("CAPTIVE_CORE_BIN"),
-	horizon.GramrURLFlagName:    "",
-	horizon.GramrDBURLFlagName:  "",
+	orbitr.GravityBinaryPathName: os.Getenv("CAPTIVE_CORE_BIN"),
+	orbitr.GravityURLFlagName:    "",
+	orbitr.GravityDBURLFlagName:  "",
 }
 
 var networkParamArgs = map[string]string{
-	horizon.EnableCaptiveCoreIngestionFlagName: "",
-	horizon.CaptiveCoreConfigPathName:          "",
-	horizon.CaptiveCoreHTTPPortFlagName:        "",
-	horizon.GramrBinaryPathName:          "",
-	horizon.GramrURLFlagName:             "",
-	horizon.HistoryArchiveURLsFlagName:         "",
-	horizon.NetworkPassphraseFlagName:          "",
+	orbitr.EnableCaptiveCoreIngestionFlagName: "",
+	orbitr.CaptiveCoreConfigPathName:          "",
+	orbitr.CaptiveCoreHTTPPortFlagName:        "",
+	orbitr.GravityBinaryPathName:          "",
+	orbitr.GravityURLFlagName:             "",
+	orbitr.HistoryArchiveURLsFlagName:         "",
+	orbitr.NetworkPassphraseFlagName:          "",
 }
 
 const (
@@ -78,17 +78,17 @@ func TestBucketDirDisallowed(t *testing.T) {
 	confName, _, cleanup := createCaptiveCoreConfig(config)
 	defer cleanup()
 	testConfig := integration.GetTestConfig()
-	testConfig.HorizonIngestParameters = map[string]string{
-		horizon.CaptiveCoreConfigPathName: confName,
-		horizon.GramrBinaryPathName: os.Getenv("CAPTIVE_CORE_BIN"),
+	testConfig.OrbitRIngestParameters = map[string]string{
+		orbitr.CaptiveCoreConfigPathName: confName,
+		orbitr.GravityBinaryPathName: os.Getenv("CAPTIVE_CORE_BIN"),
 	}
 	test := integration.NewTest(t, *testConfig)
-	err := test.StartHorizon()
-	assert.Equal(t, err.Error(), integration.HorizonInitErrStr+": error generating captive core configuration:"+
+	err := test.StartOrbitR()
+	assert.Equal(t, err.Error(), integration.OrbitRInitErrStr+": error generating captive core configuration:"+
 		" invalid captive core toml file: could not unmarshal captive core toml: setting BUCKET_DIR_PATH is disallowed"+
 		" for Captive Core, use CAPTIVE_CORE_STORAGE_PATH instead")
 	time.Sleep(1 * time.Second)
-	test.StopHorizon()
+	test.StopOrbitR()
 	test.Shutdown()
 }
 
@@ -114,12 +114,12 @@ func TestEnvironmentPreserved(t *testing.T) {
 	confName, _, cleanup := createCaptiveCoreConfig(SIMPLE_CAPTIVE_CORE_TOML)
 	defer cleanup()
 	testConfig := integration.GetTestConfig()
-	testConfig.HorizonEnvironment = map[string]string{"CAPTIVE_CORE_CONFIG_PATH": confName}
+	testConfig.OrbitREnvironment = map[string]string{"CAPTIVE_CORE_CONFIG_PATH": confName}
 	test := integration.NewTest(t, *testConfig)
 
-	err = test.StartHorizon()
+	err = test.StartOrbitR()
 	assert.NoError(t, err)
-	test.WaitForHorizon()
+	test.WaitForOrbitR()
 
 	envValue := os.Getenv("CAPTIVE_CORE_CONFIG_PATH")
 	assert.Equal(t, confName, envValue)
@@ -130,7 +130,7 @@ func TestEnvironmentPreserved(t *testing.T) {
 	assert.Equal(t, "original value", envValue)
 }
 
-// TestInvalidNetworkParameters Ensure that Horizon returns an error when
+// TestInvalidNetworkParameters Ensure that OrbitR returns an error when
 // using NETWORK environment variables, history archive urls or network passphrase
 // parameters are also set.
 func TestInvalidNetworkParameters(t *testing.T) {
@@ -138,7 +138,7 @@ func TestInvalidNetworkParameters(t *testing.T) {
 		t.Skip()
 	}
 
-	var captiveCoreConfigErrMsg = integration.HorizonInitErrStr + ": error generating captive " +
+	var captiveCoreConfigErrMsg = integration.OrbitRInitErrStr + ": error generating captive " +
 		"core configuration: invalid config: %s parameter not allowed with the %s parameter"
 	testCases := []struct {
 		name         string
@@ -148,32 +148,32 @@ func TestInvalidNetworkParameters(t *testing.T) {
 	}{
 		{
 			name: "history archive urls validation",
-			errMsg: fmt.Sprintf(captiveCoreConfigErrMsg, horizon.HistoryArchiveURLsFlagName,
-				horizon.NetworkFlagName),
-			networkValue: horizon.StellarPubnet,
-			param:        horizon.HistoryArchiveURLsFlagName,
+			errMsg: fmt.Sprintf(captiveCoreConfigErrMsg, orbitr.HistoryArchiveURLsFlagName,
+				orbitr.NetworkFlagName),
+			networkValue: orbitr.LantahPubnet,
+			param:        orbitr.HistoryArchiveURLsFlagName,
 		},
 		{
 			name: "network-passphrase validation",
-			errMsg: fmt.Sprintf(captiveCoreConfigErrMsg, horizon.NetworkPassphraseFlagName,
-				horizon.NetworkFlagName),
-			networkValue: horizon.StellarTestnet,
-			param:        horizon.NetworkPassphraseFlagName,
+			errMsg: fmt.Sprintf(captiveCoreConfigErrMsg, orbitr.NetworkPassphraseFlagName,
+				orbitr.NetworkFlagName),
+			networkValue: orbitr.LantahTestnet,
+			param:        orbitr.NetworkPassphraseFlagName,
 		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			localParams := integration.MergeMaps(networkParamArgs, map[string]string{
-				horizon.NetworkFlagName:                    testCase.networkValue,
-				horizon.EnableCaptiveCoreIngestionFlagName: "true",
+				orbitr.NetworkFlagName:                    testCase.networkValue,
+				orbitr.EnableCaptiveCoreIngestionFlagName: "true",
 				testCase.param:                             testCase.param, // set any value
 			})
 			testConfig := integration.GetTestConfig()
 			testConfig.SkipCoreContainerCreation = true
-			testConfig.HorizonIngestParameters = localParams
+			testConfig.OrbitRIngestParameters = localParams
 			test := integration.NewTest(t, *testConfig)
-			err := test.StartHorizon()
+			err := test.StartOrbitR()
 			// Adding sleep as a workaround for the race condition in the ingestion system.
 			// https://github.com/stellar/go/issues/5005
 			time.Sleep(2 * time.Second)
@@ -183,14 +183,14 @@ func TestInvalidNetworkParameters(t *testing.T) {
 	}
 }
 
-// TestNetworkParameter Ensure that Horizon successfully starts the captive-core
+// TestNetworkParameter Ensure that OrbitR successfully starts the captive-core
 // subprocess using the default configuration when --network [testnet|pubnet]
 // commandline parameter.
 //
-// In integration tests, we start Horizon and gramr containers in standalone mode
-// simultaneously. We usually wait for Horizon to begin ingesting to verify the test's
-// success. However, for "pubnet" or "testnet," we can not wait for Horizon to catch up,
-// so we skip starting gramr containers.
+// In integration tests, we start OrbitR and gravity containers in standalone mode
+// simultaneously. We usually wait for OrbitR to begin ingesting to verify the test's
+// success. However, for "pubnet" or "testnet," we can not wait for OrbitR to catch up,
+// so we skip starting gravity containers.
 func TestNetworkParameter(t *testing.T) {
 	if !integration.RunWithCaptiveCore {
 		t.Skip()
@@ -201,53 +201,53 @@ func TestNetworkParameter(t *testing.T) {
 		historyArchiveURLs []string
 	}{
 		{
-			networkValue:       horizon.StellarTestnet,
-			networkPassphrase:  horizon.TestnetConf.NetworkPassphrase,
-			historyArchiveURLs: horizon.TestnetConf.HistoryArchiveURLs,
+			networkValue:       orbitr.LantahTestnet,
+			networkPassphrase:  orbitr.TestnetConf.NetworkPassphrase,
+			historyArchiveURLs: orbitr.TestnetConf.HistoryArchiveURLs,
 		},
 		{
-			networkValue:       horizon.StellarPubnet,
-			networkPassphrase:  horizon.PubnetConf.NetworkPassphrase,
-			historyArchiveURLs: horizon.PubnetConf.HistoryArchiveURLs,
+			networkValue:       orbitr.LantahPubnet,
+			networkPassphrase:  orbitr.PubnetConf.NetworkPassphrase,
+			historyArchiveURLs: orbitr.PubnetConf.HistoryArchiveURLs,
 		},
 	}
 	for _, tt := range testCases {
 		t.Run(fmt.Sprintf("NETWORK parameter %s", tt.networkValue), func(t *testing.T) {
 			localParams := integration.MergeMaps(networkParamArgs, map[string]string{
-				horizon.NetworkFlagName: tt.networkValue,
+				orbitr.NetworkFlagName: tt.networkValue,
 			})
 			testConfig := integration.GetTestConfig()
 			testConfig.SkipCoreContainerCreation = true
-			testConfig.HorizonIngestParameters = localParams
+			testConfig.OrbitRIngestParameters = localParams
 			test := integration.NewTest(t, *testConfig)
-			err := test.StartHorizon()
+			err := test.StartOrbitR()
 			// Adding sleep as a workaround for the race condition in the ingestion system.
 			// https://github.com/stellar/go/issues/5005
 			time.Sleep(2 * time.Second)
 			assert.NoError(t, err)
-			assert.Equal(t, test.GetHorizonIngestConfig().HistoryArchiveURLs, tt.historyArchiveURLs)
-			assert.Equal(t, test.GetHorizonIngestConfig().NetworkPassphrase, tt.networkPassphrase)
+			assert.Equal(t, test.GetOrbitRIngestConfig().HistoryArchiveURLs, tt.historyArchiveURLs)
+			assert.Equal(t, test.GetOrbitRIngestConfig().NetworkPassphrase, tt.networkPassphrase)
 
 			test.Shutdown()
 		})
 	}
 }
 
-// TestNetworkEnvironmentVariable Ensure that Horizon successfully starts the captive-core
+// TestNetworkEnvironmentVariable Ensure that OrbitR successfully starts the captive-core
 // subprocess using the default configuration when the NETWORK environment variable is set
 // to either pubnet or testnet.
 //
-// In integration tests, we start Horizon and gramr containers in standalone mode
-// simultaneously. We usually wait for Horizon to begin ingesting to verify the test's
-// success. However, for "pubnet" or "testnet," we can not wait for Horizon to catch up,
-// so we skip starting gramr containers.
+// In integration tests, we start OrbitR and gravity containers in standalone mode
+// simultaneously. We usually wait for OrbitR to begin ingesting to verify the test's
+// success. However, for "pubnet" or "testnet," we can not wait for OrbitR to catch up,
+// so we skip starting gravity containers.
 func TestNetworkEnvironmentVariable(t *testing.T) {
 	if !integration.RunWithCaptiveCore {
 		t.Skip()
 	}
 	testCases := []string{
-		horizon.StellarPubnet,
-		horizon.StellarTestnet,
+		orbitr.LantahPubnet,
+		orbitr.LantahTestnet,
 	}
 
 	for _, networkValue := range testCases {
@@ -263,10 +263,10 @@ func TestNetworkEnvironmentVariable(t *testing.T) {
 
 			testConfig := integration.GetTestConfig()
 			testConfig.SkipCoreContainerCreation = true
-			testConfig.HorizonIngestParameters = networkParamArgs
-			testConfig.HorizonEnvironment = map[string]string{"NETWORK": networkValue}
+			testConfig.OrbitRIngestParameters = networkParamArgs
+			testConfig.OrbitREnvironment = map[string]string{"NETWORK": networkValue}
 			test := integration.NewTest(t, *testConfig)
-			err := test.StartHorizon()
+			err := test.StartOrbitR()
 			// Adding sleep here as a workaround for the race condition in the ingestion system.
 			// More details can be found at https://github.com/stellar/go/issues/5005
 			time.Sleep(2 * time.Second)
@@ -287,15 +287,15 @@ func TestCaptiveCoreConfigFilesystemState(t *testing.T) {
 
 	localParams := integration.MergeMaps(defaultCaptiveCoreParameters, map[string]string{
 		"captive-core-storage-path":       storagePath,
-		horizon.CaptiveCoreConfigPathName: confName,
+		orbitr.CaptiveCoreConfigPathName: confName,
 	})
 	testConfig := integration.GetTestConfig()
-	testConfig.HorizonIngestParameters = localParams
+	testConfig.OrbitRIngestParameters = localParams
 	test := integration.NewTest(t, *testConfig)
 
-	err := test.StartHorizon()
+	err := test.StartOrbitR()
 	assert.NoError(t, err)
-	test.WaitForHorizon()
+	test.WaitForOrbitR()
 
 	t.Run("disk state", func(t *testing.T) {
 		validateCaptiveCoreDiskState(test, storagePath)
@@ -309,20 +309,20 @@ func TestCaptiveCoreConfigFilesystemState(t *testing.T) {
 func TestMaxAssetsForPathRequests(t *testing.T) {
 	t.Run("default", func(t *testing.T) {
 		test := integration.NewTest(t, *integration.GetTestConfig())
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
-		test.WaitForHorizon()
-		assert.Equal(t, test.HorizonIngest().Config().MaxAssetsPerPathRequest, 15)
+		test.WaitForOrbitR()
+		assert.Equal(t, test.OrbitRIngest().Config().MaxAssetsPerPathRequest, 15)
 		test.Shutdown()
 	})
 	t.Run("set to 2", func(t *testing.T) {
 		testConfig := integration.GetTestConfig()
-		testConfig.HorizonIngestParameters = map[string]string{"max-assets-per-path-request": "2"}
+		testConfig.OrbitRIngestParameters = map[string]string{"max-assets-per-path-request": "2"}
 		test := integration.NewTest(t, *testConfig)
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
-		test.WaitForHorizon()
-		assert.Equal(t, test.HorizonIngest().Config().MaxAssetsPerPathRequest, 2)
+		test.WaitForOrbitR()
+		assert.Equal(t, test.OrbitRIngest().Config().MaxAssetsPerPathRequest, 2)
 		test.Shutdown()
 	})
 }
@@ -330,23 +330,23 @@ func TestMaxAssetsForPathRequests(t *testing.T) {
 func TestMaxPathFindingRequests(t *testing.T) {
 	t.Run("default", func(t *testing.T) {
 		test := integration.NewTest(t, *integration.GetTestConfig())
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
-		test.WaitForHorizon()
-		assert.Equal(t, test.HorizonIngest().Config().MaxPathFindingRequests, uint(0))
-		_, ok := test.HorizonIngest().Paths().(simplepath.InMemoryFinder)
+		test.WaitForOrbitR()
+		assert.Equal(t, test.OrbitRIngest().Config().MaxPathFindingRequests, uint(0))
+		_, ok := test.OrbitRIngest().Paths().(simplepath.InMemoryFinder)
 		assert.True(t, ok)
 		test.Shutdown()
 	})
 	t.Run("set to 5", func(t *testing.T) {
 		testConfig := integration.GetTestConfig()
-		testConfig.HorizonIngestParameters = map[string]string{"max-path-finding-requests": "5"}
+		testConfig.OrbitRIngestParameters = map[string]string{"max-path-finding-requests": "5"}
 		test := integration.NewTest(t, *testConfig)
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
-		test.WaitForHorizon()
-		assert.Equal(t, test.HorizonIngest().Config().MaxPathFindingRequests, uint(5))
-		finder, ok := test.HorizonIngest().Paths().(*paths.RateLimitedFinder)
+		test.WaitForOrbitR()
+		assert.Equal(t, test.OrbitRIngest().Config().MaxPathFindingRequests, uint(5))
+		finder, ok := test.OrbitRIngest().Paths().(*paths.RateLimitedFinder)
 		assert.True(t, ok)
 		assert.Equal(t, finder.Limit(), 5)
 		test.Shutdown()
@@ -356,22 +356,22 @@ func TestMaxPathFindingRequests(t *testing.T) {
 func TestDisablePathFinding(t *testing.T) {
 	t.Run("default", func(t *testing.T) {
 		test := integration.NewTest(t, *integration.GetTestConfig())
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
-		test.WaitForHorizon()
-		assert.Equal(t, test.HorizonIngest().Config().MaxPathFindingRequests, uint(0))
-		_, ok := test.HorizonIngest().Paths().(simplepath.InMemoryFinder)
+		test.WaitForOrbitR()
+		assert.Equal(t, test.OrbitRIngest().Config().MaxPathFindingRequests, uint(0))
+		_, ok := test.OrbitRIngest().Paths().(simplepath.InMemoryFinder)
 		assert.True(t, ok)
 		test.Shutdown()
 	})
 	t.Run("set to true", func(t *testing.T) {
 		testConfig := integration.GetTestConfig()
-		testConfig.HorizonIngestParameters = map[string]string{"disable-path-finding": "true"}
+		testConfig.OrbitRIngestParameters = map[string]string{"disable-path-finding": "true"}
 		test := integration.NewTest(t, *testConfig)
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
-		test.WaitForHorizon()
-		assert.Nil(t, test.HorizonIngest().Paths())
+		test.WaitForOrbitR()
+		assert.Nil(t, test.OrbitRIngest().Paths())
 		test.Shutdown()
 	})
 }
@@ -379,73 +379,73 @@ func TestDisablePathFinding(t *testing.T) {
 func TestIngestionFilteringAlwaysDefaultingToTrue(t *testing.T) {
 	t.Run("ingestion filtering flag set to default value", func(t *testing.T) {
 		test := integration.NewTest(t, *integration.GetTestConfig())
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
-		test.WaitForHorizon()
-		assert.Equal(t, test.HorizonIngest().Config().EnableIngestionFiltering, true)
+		test.WaitForOrbitR()
+		assert.Equal(t, test.OrbitRIngest().Config().EnableIngestionFiltering, true)
 		test.Shutdown()
 	})
 	t.Run("ingestion filtering flag set to false", func(t *testing.T) {
 		testConfig := integration.GetTestConfig()
-		testConfig.HorizonIngestParameters = map[string]string{"exp-enable-ingestion-filtering": "false"}
+		testConfig.OrbitRIngestParameters = map[string]string{"exp-enable-ingestion-filtering": "false"}
 		test := integration.NewTest(t, *testConfig)
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
-		test.WaitForHorizon()
-		assert.Equal(t, test.HorizonIngest().Config().EnableIngestionFiltering, true)
+		test.WaitForOrbitR()
+		assert.Equal(t, test.OrbitRIngest().Config().EnableIngestionFiltering, true)
 		test.Shutdown()
 	})
 }
 
 func TestDisableTxSub(t *testing.T) {
-	t.Run("require gramr-url when both DISABLE_TX_SUB=false and INGEST=false", func(t *testing.T) {
+	t.Run("require gravity-url when both DISABLE_TX_SUB=false and INGEST=false", func(t *testing.T) {
 		localParams := integration.MergeMaps(networkParamArgs, map[string]string{
-			horizon.NetworkFlagName:          "testnet",
-			horizon.IngestFlagName:           "false",
-			horizon.DisableTxSubFlagName:     "false",
-			horizon.GramrDBURLFlagName: "",
+			orbitr.NetworkFlagName:          "testnet",
+			orbitr.IngestFlagName:           "false",
+			orbitr.DisableTxSubFlagName:     "false",
+			orbitr.GravityDBURLFlagName: "",
 		})
 		testConfig := integration.GetTestConfig()
-		testConfig.HorizonIngestParameters = localParams
+		testConfig.OrbitRIngestParameters = localParams
 		testConfig.SkipCoreContainerCreation = true
 		test := integration.NewTest(t, *testConfig)
-		err := test.StartHorizon()
-		assert.ErrorContains(t, err, "cannot initialize Horizon: flag --gramr-url cannot be empty")
+		err := test.StartOrbitR()
+		assert.ErrorContains(t, err, "cannot initialize OrbitR: flag --gravity-url cannot be empty")
 		test.Shutdown()
 	})
-	t.Run("horizon starts successfully when DISABLE_TX_SUB=false, INGEST=false and gramr-url is provided", func(t *testing.T) {
-		// TODO: Remove explicit mention of gramr-db-url once this issue is done: https://github.com/stellar/go/issues/4855
+	t.Run("orbitr starts successfully when DISABLE_TX_SUB=false, INGEST=false and gravity-url is provided", func(t *testing.T) {
+		// TODO: Remove explicit mention of gravity-db-url once this issue is done: https://github.com/stellar/go/issues/4855
 		localParams := integration.MergeMaps(networkParamArgs, map[string]string{
-			horizon.NetworkFlagName:          "testnet",
-			horizon.IngestFlagName:           "false",
-			horizon.DisableTxSubFlagName:     "false",
-			horizon.GramrDBURLFlagName: "",
-			horizon.GramrURLFlagName:   "http://localhost:11626",
+			orbitr.NetworkFlagName:          "testnet",
+			orbitr.IngestFlagName:           "false",
+			orbitr.DisableTxSubFlagName:     "false",
+			orbitr.GravityDBURLFlagName: "",
+			orbitr.GravityURLFlagName:   "http://localhost:11626",
 		})
 		testConfig := integration.GetTestConfig()
-		testConfig.HorizonIngestParameters = localParams
+		testConfig.OrbitRIngestParameters = localParams
 		testConfig.SkipCoreContainerCreation = true
 		test := integration.NewTest(t, *testConfig)
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
 		test.Shutdown()
 	})
-	t.Run("horizon starts successfully when DISABLE_TX_SUB=true and INGEST=true", func(t *testing.T) {
+	t.Run("orbitr starts successfully when DISABLE_TX_SUB=true and INGEST=true", func(t *testing.T) {
 		//localParams := integration.MergeMaps(networkParamArgs, map[string]string{
-		//	//horizon.NetworkFlagName:           "testnet",
-		//	horizon.IngestFlagName:            "true",
-		//	horizon.DisableTxSubFlagName:      "true",
-		//	horizon.GramrBinaryPathName: "/usr/bin/gramr",
+		//	//orbitr.NetworkFlagName:           "testnet",
+		//	orbitr.IngestFlagName:            "true",
+		//	orbitr.DisableTxSubFlagName:      "true",
+		//	orbitr.GravityBinaryPathName: "/usr/bin/gravity",
 		//})
 		testConfig := integration.GetTestConfig()
-		testConfig.HorizonIngestParameters = map[string]string{
+		testConfig.OrbitRIngestParameters = map[string]string{
 			"disable-tx-sub": "true",
 			"ingest":         "true",
 		}
 		test := integration.NewTest(t, *testConfig)
-		err := test.StartHorizon()
+		err := test.StartOrbitR()
 		assert.NoError(t, err)
-		test.WaitForHorizon()
+		test.WaitForOrbitR()
 		test.Shutdown()
 	})
 }
@@ -457,11 +457,11 @@ func TestDeprecatedOutputForIngestionFilteringFlag(t *testing.T) {
 	stdLog.SetOutput(os.Stderr)
 
 	testConfig := integration.GetTestConfig()
-	testConfig.HorizonIngestParameters = map[string]string{"exp-enable-ingestion-filtering": "false"}
+	testConfig.OrbitRIngestParameters = map[string]string{"exp-enable-ingestion-filtering": "false"}
 	test := integration.NewTest(t, *testConfig)
-	err := test.StartHorizon()
+	err := test.StartOrbitR()
 	assert.NoError(t, err)
-	test.WaitForHorizon()
+	test.WaitForOrbitR()
 
 	// Use a wait group to wait for the goroutine to finish before proceeding
 	var wg sync.WaitGroup
@@ -482,21 +482,21 @@ func TestDeprecatedOutputForIngestionFilteringFlag(t *testing.T) {
 	assert.Contains(t, string(outputBytes), "DEPRECATED - No ingestion filter rules are defined by default, which equates to "+
 		"no filtering of historical data. If you have never added filter rules to this deployment, then nothing further needed. "+
 		"If you have defined ingestion filter rules prior but disabled filtering overall by setting this flag disabled with "+
-		"--exp-enable-ingestion-filtering=false, then you should now delete the filter rules using the Horizon Admin API to achieve "+
+		"--exp-enable-ingestion-filtering=false, then you should now delete the filter rules using the OrbitR Admin API to achieve "+
 		"the same no-filtering result. Remove usage of this flag in all cases.")
 }
 
 func TestHelpOutput(t *testing.T) {
-	config, flags := horizon.Flags()
+	config, flags := orbitr.Flags()
 
-	horizonCmd := &cobra.Command{
-		Use:           "horizon",
-		Short:         "Client-facing api server for the Stellar network",
+	orbitrCmd := &cobra.Command{
+		Use:           "orbitr",
+		Short:         "Client-facing api server for the Lantah Network",
 		SilenceErrors: true,
 		SilenceUsage:  true,
-		Long:          "Client-facing API server for the Stellar network.",
+		Long:          "Client-facing API server for the Lantah Network.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			_, err := horizon.NewAppFromFlags(config, flags)
+			_, err := orbitr.NewAppFromFlags(config, flags)
 			if err != nil {
 				return err
 			}
@@ -505,20 +505,20 @@ func TestHelpOutput(t *testing.T) {
 	}
 
 	var writer io.Writer = &bytes.Buffer{}
-	horizonCmd.SetOutput(writer)
+	orbitrCmd.SetOutput(writer)
 
-	horizonCmd.SetArgs([]string{"-h"})
-	if err := flags.Init(horizonCmd); err != nil {
+	orbitrCmd.SetArgs([]string{"-h"})
+	if err := flags.Init(orbitrCmd); err != nil {
 		fmt.Println(err)
 	}
-	if err := horizonCmd.Execute(); err != nil {
+	if err := orbitrCmd.Execute(); err != nil {
 		fmt.Println(err)
 	}
 	output := writer.(*bytes.Buffer).String()
 	assert.NotContains(t, output, "--exp-enable-ingestion-filtering")
 }
 
-// validateNoBucketDirPath ensures the Gramr auto-generated configuration
+// validateNoBucketDirPath ensures the Gravity auto-generated configuration
 // file doesn't contain the BUCKET_DIR_PATH entry, which is forbidden when using
 // Captive Core.
 //
@@ -527,7 +527,7 @@ func TestHelpOutput(t *testing.T) {
 func validateNoBucketDirPath(itest *integration.Test, rootDir string) {
 	tt := assert.New(itest.CurrentTest())
 
-	coreConf := path.Join(rootDir, "captive-core", "gramr.conf")
+	coreConf := path.Join(rootDir, "captive-core", "gravity.conf")
 	tt.FileExists(coreConf)
 
 	result, err := ioutil.ReadFile(coreConf)
@@ -546,7 +546,7 @@ func validateCaptiveCoreDiskState(itest *integration.Test, rootDir string) {
 	tt := assert.New(itest.CurrentTest())
 
 	storageDir := path.Join(rootDir, "captive-core")
-	coreConf := path.Join(storageDir, "gramr.conf")
+	coreConf := path.Join(storageDir, "gravity.conf")
 
 	tt.DirExists(rootDir)
 	tt.DirExists(storageDir)

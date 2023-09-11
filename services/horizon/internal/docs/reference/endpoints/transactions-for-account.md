@@ -8,7 +8,7 @@ replacement: https://developers.stellar.org/api/resources/accounts/transactions/
 This endpoint represents successful [transactions](../resources/transaction.md) that affected a
 given [account](../resources/account.md).  This endpoint can also be used in
 [streaming](../streaming.md) mode so it is possible to use it to listen for new transactions that
-affect a given account as they get made in the Stellar network.
+affect a given account as they get made in the Lantah Network.
 
 If called in streaming mode Horizon will start at the earliest known transaction unless a `cursor`
 is set. In that case it will start from the `cursor`. You can also set `cursor` value to `now` to

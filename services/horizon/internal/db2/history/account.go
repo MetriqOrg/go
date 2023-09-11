@@ -6,8 +6,8 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
 )
 
 // AccountByAddress loads a row from `history_accounts`, by address

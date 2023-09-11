@@ -11,7 +11,7 @@ import (
 // of line asserts, changes * into any characters except when in used for lists
 // (like /accounts/*) - in such case it ensures there is no more `/` characters.
 // This is not ideal and requires checking routes in correct order but is enough
-// for horizon-cmp.
+// for orbitr-cmp.
 // More here: https://regex101.com/r/EhBRtS/1
 func MakeRoute(route string) *Route {
 	name := route

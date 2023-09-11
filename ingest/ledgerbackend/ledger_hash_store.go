@@ -10,7 +10,7 @@ import (
 )
 
 // TrustedLedgerHashStore is used to query ledger data from a trusted source.
-// The store should contain ledgers verified by Gramr, do not use untrusted
+// The store should contain ledgers verified by Gravity, do not use untrusted
 // source like history archives.
 type TrustedLedgerHashStore interface {
 	// GetLedgerHash returns the ledger hash for the given sequence number

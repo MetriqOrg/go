@@ -631,7 +631,7 @@ func (c *Client) StreamPayments(ctx context.Context, request OperationRequest, h
 	return request.SetPaymentsEndpoint().StreamOperations(ctx, c, handler)
 }
 
-// StreamOffers streams offers processed by the Stellar network for an account. Use context.WithCancel
+// StreamOffers streams offers processed by the Lantah Network for an account. Use context.WithCancel
 // to stop streaming or context.Background() if you want to stream indefinitely.
 // OfferHandler is a user-supplied function that is executed for each streamed offer received.
 func (c *Client) StreamOffers(ctx context.Context, request OfferRequest, handler OfferHandler) error {

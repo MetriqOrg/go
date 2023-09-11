@@ -7,15 +7,15 @@ import (
 	"sync"
 	"time"
 
-	horizonclient "github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/services/ticker/internal/scraper"
-	"github.com/stellar/go/services/ticker/internal/tickerdb"
-	"github.com/stellar/go/services/ticker/internal/utils"
-	hlog "github.com/stellar/go/support/log"
+	orbitrclient "github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/services/ticker/internal/scraper"
+	"github.com/lantah/go/services/ticker/internal/tickerdb"
+	"github.com/lantah/go/services/ticker/internal/utils"
+	hlog "github.com/lantah/go/support/log"
 )
 
 // RefreshAssets scrapes the most recent asset list and ingests then into the db.
-func RefreshAssets(ctx context.Context, s *tickerdb.TickerSession, c *horizonclient.Client, l *hlog.Entry) (err error) {
+func RefreshAssets(ctx context.Context, s *tickerdb.TickerSession, c *orbitrclient.Client, l *hlog.Entry) (err error) {
 	sc := scraper.ScraperConfig{
 		Client: c,
 		Logger: l,

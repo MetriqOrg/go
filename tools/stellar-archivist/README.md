@@ -1,9 +1,9 @@
 # stellar-archivist
 
-This is a small tool, written in Go, for working with `gramr` history archives directly.
-It is a standalone tool that does not require `gramr`, or any other programs.
+This is a small tool, written in Go, for working with `gravity` history archives directly.
+It is a standalone tool that does not require `gravity`, or any other programs.
 
-It is much smaller and simpler than `gramr`, and is intended only for archive-maintenance tasks.
+It is much smaller and simpler than `gravity`, and is intended only for archive-maintenance tasks.
 
   - reporting the current state of an archive
   - mirroring archives, or portions of archives
@@ -14,7 +14,7 @@ It is much smaller and simpler than `gramr`, and is intended only for archive-ma
 ## Installation
 
 ```
-$ go install github.com/stellar/go/tools/stellar-archivist
+$ go install github.com/lantah/go/tools/stellar-archivist
 ```
 
 ## Usage
@@ -54,7 +54,7 @@ Use "stellar-archivist [command] --help" for more information about a command.
 
 ## Specifying history archives
 
-Unlike `gramr`, `stellar-archivist` does not run subprocesses to access history archives;
+Unlike `gravity`, `stellar-archivist` does not run subprocesses to access history archives;
 instead it operates directly on history archives given by URLs. Currently it understands URLs
 of the following schemes:
 

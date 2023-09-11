@@ -6,15 +6,15 @@ import (
 	"mime"
 	"net/http"
 
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/protocols/horizon"
-	hProblem "github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
-	"github.com/stellar/go/services/horizon/internal/txsub"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/protocols/orbitr"
+	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
+	"github.com/lantah/go/services/orbitr/internal/txsub"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 )
 
 type NetworkSubmitter interface {
@@ -77,7 +77,7 @@ func (handler SubmitTransactionHandler) validateBodyType(r *http.Request) error 
 
 func (handler SubmitTransactionHandler) response(r *http.Request, info envelopeInfo, result txsub.Result) (hal.Pageable, error) {
 	if result.Err == nil {
-		var resource horizon.Transaction
+		var resource orbitr.Transaction
 		err := resourceadapter.PopulateTransaction(
 			r.Context(),
 			info.hash,
@@ -97,7 +97,7 @@ func (handler SubmitTransactionHandler) response(r *http.Request, info envelopeI
 
 	switch err := result.Err.(type) {
 	case *txsub.FailedTransactionError:
-		rcr := horizon.TransactionResultCodes{}
+		rcr := orbitr.TransactionResultCodes{}
 		resourceadapter.PopulateTransactionResultCodes(
 			r.Context(),
 			info.hash,
@@ -109,7 +109,7 @@ func (handler SubmitTransactionHandler) response(r *http.Request, info envelopeI
 			Type:   "transaction_failed",
 			Title:  "Transaction Failed",
 			Status: http.StatusBadRequest,
-			Detail: "The transaction failed when submitted to the stellar network. " +
+			Detail: "The transaction failed when submitted to the lantah network. " +
 				"The `extras.result_codes` field on this response contains further " +
 				"details.  Descriptions of each code can be found at: " +
 				"https://developers.stellar.org/api/errors/http-status-codes/horizon-specific/transaction-failed/",
@@ -134,7 +134,7 @@ func (handler SubmitTransactionHandler) GetResource(w HeaderWriter, r *http.Requ
 			Type:   "transaction_submission_disabled",
 			Title:  "Transaction Submission Disabled",
 			Status: http.StatusMethodNotAllowed,
-			Detail: "Transaction submission has been disabled for Horizon. " +
+			Detail: "Transaction submission has been disabled for OrbitR. " +
 				"To enable it again, remove env variable DISABLE_TX_SUB.",
 			Extras: map[string]interface{}{},
 		}
@@ -151,7 +151,7 @@ func (handler SubmitTransactionHandler) GetResource(w HeaderWriter, r *http.Requ
 			Type:   "transaction_malformed",
 			Title:  "Transaction Malformed",
 			Status: http.StatusBadRequest,
-			Detail: "Horizon could not decode the transaction envelope in this " +
+			Detail: "OrbitR could not decode the transaction envelope in this " +
 				"request. A transaction should be an XDR TransactionEnvelope struct " +
 				"encoded using base64.  The envelope read from this request is " +
 				"echoed in the `extras.envelope_xdr` field of this response for your " +

@@ -8,19 +8,19 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/guregu/null"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/toid"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/toid"
 )
 
 func TestTransactionQueries(t *testing.T) {
 	tt := test.Start(t)
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	// Test TransactionByHash
 	var tx Transaction
@@ -36,8 +36,8 @@ func TestTransactionQueries(t *testing.T) {
 func TestTransactionByLiquidityPool(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	txIndex := int32(1)
 	sequence := int32(56)
@@ -96,13 +96,13 @@ func TestTransactionByLiquidityPool(t *testing.T) {
 // with `ForAccount` or `ForLedger` filters.
 func TestTransactionSuccessfulOnly(t *testing.T) {
 	tt := test.Start(t)
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 	tt.Scenario("failed_transactions")
 	defer tt.Finish()
 
 	var transactions []Transaction
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Transactions().
 		ForAccount(tt.Ctx, "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2")
 
@@ -129,7 +129,7 @@ func TestTransactionIncludeFailed(t *testing.T) {
 
 	var transactions []Transaction
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Transactions().
 		ForAccount(tt.Ctx, "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2").
 		IncludeFailed()
@@ -160,14 +160,14 @@ func TestExtraChecksTransactionSuccessfulTrueResultFalse(t *testing.T) {
 	defer tt.Finish()
 
 	// successful `true` but tx result `false`
-	_, err := tt.HorizonDB.Exec(
+	_, err := tt.OrbitRDB.Exec(
 		`UPDATE history_transactions SET successful = true WHERE transaction_hash = 'aa168f12124b7c196c0adaee7c73a64d37f99428cacb59a91ff389626845e7cf'`,
 	)
 	tt.Require.NoError(err)
 
 	var transactions []Transaction
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Transactions().
 		ForAccount(tt.Ctx, "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2").
 		IncludeFailed()
@@ -183,14 +183,14 @@ func TestExtraChecksTransactionSuccessfulFalseResultTrue(t *testing.T) {
 	defer tt.Finish()
 
 	// successful `false` but tx result `true`
-	_, err := tt.HorizonDB.Exec(
+	_, err := tt.OrbitRDB.Exec(
 		`UPDATE history_transactions SET successful = false WHERE transaction_hash = 'a2dabf4e9d1642722602272e178a37c973c9177b957da86192a99b3e9f3a9aa4'`,
 	)
 	tt.Require.NoError(err)
 
 	var transactions []Transaction
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Transactions().
 		ForAccount(tt.Ctx, "GBXGQJWVLWOYHFLVTKWV5FGHA3LNYY2JQKM7OAJAUEQFU6LPCSEFVXON").
 		IncludeFailed()
@@ -203,8 +203,8 @@ func TestExtraChecksTransactionSuccessfulFalseResultTrue(t *testing.T) {
 func TestInsertTransactionDoesNotAllowDuplicateIndex(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	sequence := uint32(123)
 	insertBuilder := q.NewTransactionBatchInsertBuilder(0)
@@ -273,8 +273,8 @@ func TestInsertTransactionDoesNotAllowDuplicateIndex(t *testing.T) {
 func TestInsertTransaction(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	sequence := uint32(123)
 	ledger := Ledger{
@@ -851,8 +851,8 @@ func TestInsertTransaction(t *testing.T) {
 func TestFetchFeeBumpTransaction(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	fixture := FeeBumpScenario(tt, q, true)
 
@@ -896,8 +896,8 @@ func TestFetchFeeBumpTransaction(t *testing.T) {
 func TestHistoryTransactionSchemasMatch(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	db := tt.HorizonSession()
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	db := tt.OrbitRSession()
 	type column struct {
 		Name     string `db:"column_name"`
 		DataType string `db:"data_type"`

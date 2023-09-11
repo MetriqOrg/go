@@ -14,7 +14,7 @@ services:
 
   core:
     platform: linux/amd64
-    image: ${CORE_IMAGE:-stellar/gramr:19.11.0-1323.7fb6d5e88.focal}
+    image: ${CORE_IMAGE:-stellar/gravity:19.11.0-1323.7fb6d5e88.focal}
     depends_on:
       - core-postgres
       - core-upgrade
@@ -27,21 +27,21 @@ services:
     entrypoint: /usr/bin/env
     command: /start standalone
     volumes:
-      - ./gramr-standalone.cfg:/gramr.cfg
+      - ./gravity-standalone.cfg:/gravity.cfg
       - ./core-start.sh:/start
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  horizon:
+  orbitr:
     environment:
       - HISTORY_ARCHIVE_URLS=http://host.docker.internal:1570
       - NETWORK_PASSPHRASE=Standalone Network ; February 2017
       - CAPTIVE_CORE_CONFIG_APPEND_PATH=/captive-core-standalone.cfg
-      - GRAMR_URL=http://host.docker.internal:11626
+      - GRAVITY_URL=http://host.docker.internal:11626
     volumes:
       - ./captive-core-standalone.cfg:/captive-core-standalone.cfg
 
-  # this container will invoke a request to upgrade gramr to protocol 17 (by default)
+  # this container will invoke a request to upgrade gravity to protocol 17 (by default)
   core-upgrade:
     restart: on-failure
     image: curlimages/curl:7.69.1

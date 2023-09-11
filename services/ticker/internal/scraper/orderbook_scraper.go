@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	horizonclient "github.com/stellar/go/clients/horizonclient"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/ticker/internal/utils"
+	orbitrclient "github.com/lantah/go/clients/orbitrclient"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/ticker/internal/utils"
 )
 
 // fetchOrderbook fetches the orderbook stats for the base and counter assets provided in the parameters
@@ -33,7 +33,7 @@ func (c *ScraperConfig) fetchOrderbook(bType, bCode, bIssuer, cType, cCode, cIss
 	err = utils.Retry(5, 5*time.Second, c.Logger, func() error {
 		summary, err = c.Client.OrderBook(r)
 		if err != nil {
-			c.Logger.Info("Horizon rate limit reached!")
+			c.Logger.Info("OrbitR rate limit reached!")
 		}
 		return err
 	})
@@ -81,7 +81,7 @@ func calcOrderbookStats(obStats *OrderbookStats, summary hProtocol.OrderBookSumm
 			return errors.Wrap(err, "invalid ask amount")
 		}
 
-		// On Horizon, Ask prices are in units of counter, but
+		// On OrbitR, Ask prices are in units of counter, but
 		// amount is in units of base. Therefore, real amount = amount * price
 		// See: https://github.com/stellar/go/issues/612
 		obStats.AskVolume += pricef * amountf
@@ -104,29 +104,29 @@ func calcOrderbookStats(obStats *OrderbookStats, summary hProtocol.OrderBookSumm
 	return nil
 }
 
-// createOrderbookRequest generates a horizonclient.OrderBookRequest based on the base
+// createOrderbookRequest generates a orbitrclient.OrderBookRequest based on the base
 // and counter asset parameters provided
-func createOrderbookRequest(bType, bCode, bIssuer, cType, cCode, cIssuer string) horizonclient.OrderBookRequest {
-	r := horizonclient.OrderBookRequest{
-		SellingAssetType: horizonclient.AssetType(bType),
-		BuyingAssetType:  horizonclient.AssetType(cType),
+func createOrderbookRequest(bType, bCode, bIssuer, cType, cCode, cIssuer string) orbitrclient.OrderBookRequest {
+	r := orbitrclient.OrderBookRequest{
+		SellingAssetType: orbitrclient.AssetType(bType),
+		BuyingAssetType:  orbitrclient.AssetType(cType),
 		// NOTE (Alex C, 2019-05-02):
-		// Orderbook requests are currently not paginated on Horizon.
+		// Orderbook requests are currently not paginated on OrbitR.
 		// This limit has been added to ensure we capture at least 200
 		// orderbook entries once pagination is added.
 		Limit: 200,
 	}
 
-	// The Horizon API requires *AssetCode and *AssetIssuer fields to be empty
+	// The OrbitR API requires *AssetCode and *AssetIssuer fields to be empty
 	// when an Asset is native. As we store "GRAM" as the asset code for native,
 	// we should only add Code and Issuer info in case we're dealing with
 	// non-native assets.
 	// See: https://developers.stellar.org/api/aggregations/order-books/single/
-	if bType != string(horizonclient.AssetTypeNative) {
+	if bType != string(orbitrclient.AssetTypeNative) {
 		r.SellingAssetCode = bCode
 		r.SellingAssetIssuer = bIssuer
 	}
-	if cType != string(horizonclient.AssetTypeNative) {
+	if cType != string(orbitrclient.AssetTypeNative) {
 		r.BuyingAssetCode = cCode
 		r.BuyingAssetIssuer = cIssuer
 	}

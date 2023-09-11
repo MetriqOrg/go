@@ -4,21 +4,21 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stellar/go/clients/horizonclient"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/problem"
+	"github.com/lantah/go/clients/orbitrclient"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/problem"
 	"github.com/stretchr/testify/require"
 )
 
-func TestParseHorizonError(t *testing.T) {
-	err := ParseHorizonError(nil)
+func TestParseOrbitRError(t *testing.T) {
+	err := ParseOrbitRError(nil)
 	require.Nil(t, err)
 
-	err = ParseHorizonError(errors.New("some error"))
+	err = ParseOrbitRError(errors.New("some error"))
 	require.EqualError(t, err, "error submitting transaction: some error")
 
-	horizonError := horizonclient.Error{
+	orbitrError := orbitrclient.Error{
 		Problem: problem.P{
 			Type:   "bad_request",
 			Title:  "Bad Request",
@@ -35,6 +35,6 @@ func TestParseHorizonError(t *testing.T) {
 			},
 		},
 	}
-	err = ParseHorizonError(horizonError)
-	require.EqualError(t, err, "error submitting transaction: problem: bad_request. full details: , &{TransactionCode:tx_code_here InnerTransactionCode: OperationCodes:[op_success op_bad_auth]}\n: horizon error: \"Bad Request\" (tx_code_here, op_success, op_bad_auth) - check horizon.Error.Problem for more information")
+	err = ParseOrbitRError(orbitrError)
+	require.EqualError(t, err, "error submitting transaction: problem: bad_request. full details: , &{TransactionCode:tx_code_here InnerTransactionCode: OperationCodes:[op_success op_bad_auth]}\n: orbitr error: \"Bad Request\" (tx_code_here, op_success, op_bad_auth) - check orbitr.Error.Problem for more information")
 }

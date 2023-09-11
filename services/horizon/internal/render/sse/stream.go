@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/pkg/errors"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/render/problem"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/render/problem"
 )
 
 var (

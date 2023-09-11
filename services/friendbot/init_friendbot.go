@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/keypair"
 	"github.com/lantah/go/services/friendbot/internal"
 	"github.com/lantah/go/strkey"
@@ -16,22 +16,22 @@ import (
 func initFriendbot(
 	friendbotSecret string,
 	networkPassphrase string,
-	horizonURL string,
+	orbitrURL string,
 	startingBalance string,
 	numMinions int,
 	baseFee int64,
 	minionBatchSize int,
 	submitTxRetriesAllowed int,
 ) (*internal.Bot, error) {
-	if friendbotSecret == "" || networkPassphrase == "" || horizonURL == "" || startingBalance == "" || numMinions < 0 {
+	if friendbotSecret == "" || networkPassphrase == "" || orbitrURL == "" || startingBalance == "" || numMinions < 0 {
 		return nil, errors.New("invalid input param(s)")
 	}
 
 	// Guarantee that friendbotSecret is a seed, if not blank.
 	strkey.MustDecode(strkey.VersionByteSeed, friendbotSecret)
 
-	hclient := &horizonclient.Client{
-		HorizonURL: horizonURL,
+	hclient := &orbitrclient.Client{
+		OrbitRURL: orbitrURL,
 		HTTP:       http.DefaultClient,
 		AppName:    "friendbot",
 	}
@@ -66,7 +66,7 @@ func initFriendbot(
 }
 
 func createMinionAccounts(botAccount internal.Account, botKeypair *keypair.Full, networkPassphrase, newAccountBalance, minionBalance string,
-	numMinions, minionBatchSize, submitTxRetriesAllowed int, baseFee int64, hclient horizonclient.ClientInterface) ([]internal.Minion, error) {
+	numMinions, minionBatchSize, submitTxRetriesAllowed int, baseFee int64, hclient orbitrclient.ClientInterface) ([]internal.Minion, error) {
 
 	var minions []internal.Minion
 	numRemainingMinions := numMinions
@@ -99,7 +99,7 @@ func createMinionAccounts(botAccount internal.Account, botKeypair *keypair.Full,
 				Keypair:              minionKeypair,
 				BotAccount:           botAccount,
 				BotKeypair:           botKeypair,
-				Horizon:              hclient,
+				OrbitR:              hclient,
 				Network:              networkPassphrase,
 				StartingBalance:      newAccountBalance,
 				SubmitTransaction:    internal.SubmitTransaction,
@@ -141,7 +141,7 @@ func createMinionAccounts(botAccount internal.Account, botKeypair *keypair.Full,
 		if err != nil {
 			log.Printf("%+v\n", resp)
 			switch e := err.(type) {
-			case *horizonclient.Error:
+			case *orbitrclient.Error:
 				problemString := fmt.Sprintf("Problem[Type=%s, Title=%s, Status=%d, Detail=%s, Extras=%v]", e.Problem.Type, e.Problem.Title, e.Problem.Status, e.Problem.Detail, e.Problem.Extras)
 				// If we hit an error here due to network congestion, try again until we hit max # of retries allowed
 				if e.Problem.Status == http.StatusGatewayTimeout {

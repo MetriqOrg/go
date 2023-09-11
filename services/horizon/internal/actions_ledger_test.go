@@ -1,10 +1,10 @@
-package horizon
+package orbitr
 
 import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stellar/go/protocols/horizon"
+	"github.com/lantah/go/protocols/orbitr"
 )
 
 func TestLedgerActions_Index(t *testing.T) {
@@ -32,7 +32,7 @@ func TestLedgerActions_Show(t *testing.T) {
 	w := ht.Get("/ledgers/2")
 	ht.Assert.Equal(200, w.Code)
 
-	var result horizon.Ledger
+	var result orbitr.Ledger
 	err := json.Unmarshal(w.Body.Bytes(), &result)
 	if ht.Assert.NoError(err) {
 		ht.Assert.Equal(int32(2), result.Sequence)
@@ -45,7 +45,7 @@ func TestLedgerActions_Show(t *testing.T) {
 	// There's no way to test previous versions of ingestion right now
 	// so let's manually update the state to look like version 14 of ingesiton
 	// only the latest gap is considered for determining the elder ledger
-	_, err = ht.HorizonDB.Exec(`
+	_, err = ht.OrbitRDB.Exec(`
 		UPDATE history_ledgers SET successful_transaction_count = NULL, failed_transaction_count = NULL, tx_set_operation_count = 5 WHERE sequence = 2
 	`)
 	ht.Require.NoError(err, "failed to update history_ledgers")
@@ -53,7 +53,7 @@ func TestLedgerActions_Show(t *testing.T) {
 	w = ht.Get("/ledgers/2")
 	ht.Assert.Equal(200, w.Code)
 
-	result = horizon.Ledger{}
+	result = orbitr.Ledger{}
 	err = json.Unmarshal(w.Body.Bytes(), &result)
 	if ht.Assert.NoError(err) {
 		ht.Assert.Equal(int32(2), result.Sequence)

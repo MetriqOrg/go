@@ -18,7 +18,7 @@ func TestStrictSendPathsRequestBuildUrl(t *testing.T) {
 	assert.Equal(t, "paths/strict-send", endpoint)
 
 	pr = StrictSendPathsRequest{
-		SourceAmount:       "100",
+		SourceAmount:       "1000",
 		SourceAssetCode:    "NGN",
 		SourceAssetIssuer:  "GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
 		SourceAssetType:    AssetType4,
@@ -36,7 +36,7 @@ func TestStrictSendPathsRequestBuildUrl(t *testing.T) {
 	)
 
 	pr = StrictSendPathsRequest{
-		SourceAmount:      "100",
+		SourceAmount:      "1000",
 		SourceAssetCode:   "USD",
 		SourceAssetIssuer: "GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX",
 		SourceAssetType:   AssetType4,
@@ -60,7 +60,7 @@ func TestStrictSendPathsRequest(t *testing.T) {
 	}
 
 	pr := StrictSendPathsRequest{
-		SourceAmount:       "20",
+		SourceAmount:       "200",
 		SourceAssetCode:    "USD",
 		SourceAssetIssuer:  "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
 		SourceAssetType:    AssetType4,
@@ -77,7 +77,7 @@ func TestStrictSendPathsRequest(t *testing.T) {
 	assert.Len(t, paths.Embedded.Records, 3)
 
 	pr = StrictSendPathsRequest{
-		SourceAmount:      "20",
+		SourceAmount:      "200",
 		SourceAssetCode:   "USD",
 		SourceAssetIssuer: "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
 		SourceAssetType:   AssetType4,
@@ -94,7 +94,7 @@ func TestStrictSendPathsRequest(t *testing.T) {
 	assert.Len(t, paths.Embedded.Records, 3)
 
 	pr = StrictSendPathsRequest{
-		SourceAmount:       "20",
+		SourceAmount:       "200",
 		SourceAssetCode:    "USD",
 		SourceAssetIssuer:  "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
 		SourceAssetType:    AssetType4,

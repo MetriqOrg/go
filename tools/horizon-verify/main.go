@@ -7,32 +7,32 @@ import (
 	"sync"
 
 	"github.com/spf13/cobra"
-	"github.com/stellar/go/clients/horizonclient"
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/clients/orbitrclient"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/xdr"
 )
 
-var horizonURL string
+var orbitrURL string
 var startSequence uint32
 var count uint
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&horizonURL, "url", "u", "", "Horizon server URL")
+	rootCmd.PersistentFlags().StringVarP(&orbitrURL, "url", "u", "", "OrbitR server URL")
 	rootCmd.PersistentFlags().Uint32VarP(&startSequence, "start", "s", 0, "Sequence number of the ledger to start with (follows descending order, defaults to the latest ledger)")
 	rootCmd.PersistentFlags().UintVarP(&count, "count", "c", 10000, "Number of ledgers to check")
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "horizon-verify",
-	Short: "tool to check horizon data consistency",
+	Use:   "orbitr-verify",
+	Short: "tool to check orbitr data consistency",
 	Run: func(cmd *cobra.Command, args []string) {
-		if horizonURL == "" {
+		if orbitrURL == "" {
 			cmd.Help()
 			return
 		}
 
-		client := horizonclient.Client{
-			HorizonURL: horizonURL,
+		client := orbitrclient.Client{
+			OrbitRURL: orbitrURL,
 			HTTP:       http.DefaultClient,
 		}
 
@@ -49,12 +49,12 @@ var rootCmd = &cobra.Command{
 			ledgerCursor = ledger.PagingToken()
 		}
 
-		fmt.Printf("%s: Checking %d ledgers starting from cursor \"%s\"\n\n", horizonURL, count, ledgerCursor)
+		fmt.Printf("%s: Checking %d ledgers starting from cursor \"%s\"\n\n", orbitrURL, count, ledgerCursor)
 
 		for {
-			ledgersPage, err := client.Ledgers(horizonclient.LedgerRequest{
+			ledgersPage, err := client.Ledgers(orbitrclient.LedgerRequest{
 				Limit:  200,
-				Order:  horizonclient.OrderDesc,
+				Order:  orbitrclient.OrderDesc,
 				Cursor: ledgerCursor,
 			})
 
@@ -72,7 +72,7 @@ var rootCmd = &cobra.Command{
 
 				ledgerCursor = ledger.PagingToken()
 
-				transactionsPage, err := client.Transactions(horizonclient.TransactionRequest{
+				transactionsPage, err := client.Transactions(orbitrclient.TransactionRequest{
 					ForLedger:     uint(ledger.Sequence),
 					Limit:         200,
 					IncludeFailed: true,
@@ -110,7 +110,7 @@ var rootCmd = &cobra.Command{
 							panic(fmt.Sprintf("Corrupted data! %s %s", transaction.Hash, transaction.ResultXdr))
 						}
 
-						operationsPage, err := client.Operations(horizonclient.OperationRequest{
+						operationsPage, err := client.Operations(orbitrclient.OperationRequest{
 							ForTransaction: transaction.Hash,
 							Limit:          200,
 						})

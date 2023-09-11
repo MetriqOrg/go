@@ -3,8 +3,8 @@ package processors
 import (
 	"math/big"
 
-	"github.com/stellar/go/strkey"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/strkey"
+	"github.com/lantah/go/xdr"
 )
 
 const (

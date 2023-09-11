@@ -4,22 +4,22 @@ import (
 	"testing"
 	"time"
 
-	horizonclient "github.com/stellar/go/clients/horizonclient"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
+	orbitrclient "github.com/lantah/go/clients/orbitrclient"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_ScraperConfig_FetchAllTrades_doesntCrashWhenReceivesAnError(t *testing.T) {
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("Trades", horizonclient.TradeRequest{Limit: 200, Order: horizonclient.OrderDesc}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("Trades", orbitrclient.TradeRequest{Limit: 200, Order: orbitrclient.OrderDesc}).
 		Return(hProtocol.TradesPage{}, errors.New("something went wrong"))
 
 	sc := ScraperConfig{
 		Logger: log.DefaultLogger,
-		Client: horizonClient,
+		Client: orbitrClient,
 	}
 
 	trades, err := sc.FetchAllTrades(time.Now(), 0)
@@ -28,14 +28,14 @@ func Test_ScraperConfig_FetchAllTrades_doesntCrashWhenReceivesAnError(t *testing
 }
 
 func Test_ScraperConfig_FetchAllTrades_doesntCrashWhenReceivesEmptyList(t *testing.T) {
-	horizonClient := &horizonclient.MockClient{}
-	horizonClient.
-		On("Trades", horizonclient.TradeRequest{Limit: 200, Order: horizonclient.OrderDesc}).
+	orbitrClient := &orbitrclient.MockClient{}
+	orbitrClient.
+		On("Trades", orbitrclient.TradeRequest{Limit: 200, Order: orbitrclient.OrderDesc}).
 		Return(hProtocol.TradesPage{}, nil)
 
 	sc := ScraperConfig{
 		Logger: log.DefaultLogger,
-		Client: horizonClient,
+		Client: orbitrClient,
 	}
 
 	trades, err := sc.FetchAllTrades(time.Now(), 0)

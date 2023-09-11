@@ -9,23 +9,23 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	"github.com/stellar/go/services/horizon/internal/db2/schema"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/operationfeestats"
-	tdb "github.com/stellar/go/services/horizon/internal/test/db"
-	"github.com/stellar/go/services/horizon/internal/test/scenarios"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/render/hal"
+	"github.com/lantah/go/services/orbitr/internal/db2/schema"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/operationfeestats"
+	tdb "github.com/lantah/go/services/orbitr/internal/test/db"
+	"github.com/lantah/go/services/orbitr/internal/test/scenarios"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/render/hal"
 )
 
-// CoreSession returns a db.Session instance pointing at the gramr test database
+// CoreSession returns a db.Session instance pointing at the gravity test database
 func (t *T) CoreSession() *db.Session {
 	return &db.Session{
 		DB: t.CoreDB,
 	}
 }
 
-// Finish finishes the test, logging any accumulated horizon logs to the logs
+// Finish finishes the test, logging any accumulated orbitr logs to the logs
 // output
 func (t *T) Finish() {
 	logEntries := t.testLogs()
@@ -41,49 +41,49 @@ func (t *T) Finish() {
 	}
 }
 
-// HorizonSession returns a db.Session instance pointing at the horizon test
+// OrbitRSession returns a db.Session instance pointing at the orbitr test
 // database
-func (t *T) HorizonSession() *db.Session {
+func (t *T) OrbitRSession() *db.Session {
 	return &db.Session{
-		DB: t.HorizonDB,
+		DB: t.OrbitRDB,
 	}
 }
 
-func (t *T) loadScenario(scenarioName string, includeHorizon bool) {
-	gramrPath := scenarioName + "-core.sql"
+func (t *T) loadScenario(scenarioName string, includeOrbitR bool) {
+	gravityPath := scenarioName + "-core.sql"
 
-	scenarios.Load(tdb.GramrURL(), gramrPath)
+	scenarios.Load(tdb.GravityURL(), gravityPath)
 
-	if includeHorizon {
-		horizonPath := scenarioName + "-horizon.sql"
-		scenarios.Load(tdb.HorizonURL(), horizonPath)
+	if includeOrbitR {
+		orbitrPath := scenarioName + "-orbitr.sql"
+		scenarios.Load(tdb.OrbitRURL(), orbitrPath)
 	}
 }
 
 // Scenario loads the named sql scenario into the database
 func (t *T) Scenario(name string) ledger.Status {
-	clearHorizonDB(t.T, t.HorizonDB)
+	clearOrbitRDB(t.T, t.OrbitRDB)
 	t.loadScenario(name, true)
 	return t.LoadLedgerStatus()
 }
 
-// ScenarioWithoutHorizon loads the named sql scenario into the database
-func (t *T) ScenarioWithoutHorizon(name string) ledger.Status {
+// ScenarioWithoutOrbitR loads the named sql scenario into the database
+func (t *T) ScenarioWithoutOrbitR(name string) ledger.Status {
 	t.loadScenario(name, false)
-	ResetHorizonDB(t.T, t.HorizonDB)
+	ResetOrbitRDB(t.T, t.OrbitRDB)
 	return t.LoadLedgerStatus()
 }
 
-// ResetHorizonDB sets up a new horizon database with empty tables
-func ResetHorizonDB(t *testing.T, db *sqlx.DB) {
-	clearHorizonDB(t, db)
+// ResetOrbitRDB sets up a new orbitr database with empty tables
+func ResetOrbitRDB(t *testing.T, db *sqlx.DB) {
+	clearOrbitRDB(t, db)
 	_, err := schema.Migrate(db.DB, schema.MigrateUp, 0)
 	if err != nil {
 		t.Fatalf("could not run migrations up on test db: %v", err)
 	}
 }
 
-func clearHorizonDB(t *testing.T, db *sqlx.DB) {
+func clearOrbitRDB(t *testing.T, db *sqlx.DB) {
 	_, err := schema.Migrate(db.DB, schema.MigrateDown, 0)
 	if err != nil {
 		t.Fatalf("could not run migrations down on test db: %v", err)
@@ -153,7 +153,7 @@ func (t *T) LoadLedgerStatus() ledger.Status {
 		panic(err)
 	}
 
-	err = t.HorizonSession().GetRaw(t.Ctx, &next, `
+	err = t.OrbitRSession().GetRaw(t.Ctx, &next, `
 			SELECT
 				COALESCE(MIN(sequence), 0) as history_elder,
 				COALESCE(MAX(sequence), 0) as history_latest

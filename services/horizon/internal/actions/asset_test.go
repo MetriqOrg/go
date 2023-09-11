@@ -7,13 +7,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/protocols/horizon/base"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/base"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 )
 
 func TestAssetStatsValidation(t *testing.T) {
@@ -101,8 +101,8 @@ func TestAssetStatsValidation(t *testing.T) {
 func TestAssetStats(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 	handler := AssetStatsHandler{}
 
 	issuer := history.AccountEntry{
@@ -111,7 +111,7 @@ func TestAssetStats(t *testing.T) {
 			uint32(xdr.AccountFlagsAuthImmutableFlag) |
 			uint32(xdr.AccountFlagsAuthClawbackEnabledFlag),
 	}
-	issuerFlags := horizon.AccountFlags{
+	issuerFlags := orbitr.AccountFlags{
 		AuthRequired:        true,
 		AuthImmutable:       true,
 		AuthClawbackEnabled: true,
@@ -142,15 +142,15 @@ func TestAssetStats(t *testing.T) {
 		Amount:      "1",
 		NumAccounts: 2,
 	}
-	usdAssetStatResponse := horizon.AssetStat{
-		Accounts: horizon.AssetStatAccounts{
+	usdAssetStatResponse := orbitr.AssetStat{
+		Accounts: orbitr.AssetStatAccounts{
 			Authorized:                      usdAssetStat.Accounts.Authorized,
 			AuthorizedToMaintainLiabilities: usdAssetStat.Accounts.AuthorizedToMaintainLiabilities,
 			Unauthorized:                    usdAssetStat.Accounts.Unauthorized,
 		},
 		NumClaimableBalances: usdAssetStat.Accounts.ClaimableBalances,
 		NumLiquidityPools:    usdAssetStat.Accounts.LiquidityPools,
-		Balances: horizon.AssetStatBalances{
+		Balances: orbitr.AssetStatBalances{
 			Authorized:                      "0.0000001",
 			AuthorizedToMaintainLiabilities: "0.0000002",
 			Unauthorized:                    "0.0000003",
@@ -189,14 +189,14 @@ func TestAssetStats(t *testing.T) {
 		Amount:      "23",
 		NumAccounts: 1,
 	}
-	etherAssetStatResponse := horizon.AssetStat{
-		Accounts: horizon.AssetStatAccounts{
+	etherAssetStatResponse := orbitr.AssetStat{
+		Accounts: orbitr.AssetStatAccounts{
 			Authorized:                      etherAssetStat.Accounts.Authorized,
 			AuthorizedToMaintainLiabilities: etherAssetStat.Accounts.AuthorizedToMaintainLiabilities,
 			Unauthorized:                    etherAssetStat.Accounts.Unauthorized,
 		},
 		NumClaimableBalances: etherAssetStat.Accounts.ClaimableBalances,
-		Balances: horizon.AssetStatBalances{
+		Balances: orbitr.AssetStatBalances{
 			Authorized:                      "0.0000023",
 			AuthorizedToMaintainLiabilities: "0.0000046",
 			Unauthorized:                    "0.0000092",
@@ -235,14 +235,14 @@ func TestAssetStats(t *testing.T) {
 		Amount:      "1",
 		NumAccounts: 2,
 	}
-	otherUSDAssetStatResponse := horizon.AssetStat{
-		Accounts: horizon.AssetStatAccounts{
+	otherUSDAssetStatResponse := orbitr.AssetStat{
+		Accounts: orbitr.AssetStatAccounts{
 			Authorized:                      otherUSDAssetStat.Accounts.Authorized,
 			AuthorizedToMaintainLiabilities: otherUSDAssetStat.Accounts.AuthorizedToMaintainLiabilities,
 			Unauthorized:                    otherUSDAssetStat.Accounts.Unauthorized,
 		},
 		NumClaimableBalances: otherUSDAssetStat.Accounts.ClaimableBalances,
-		Balances: horizon.AssetStatBalances{
+		Balances: orbitr.AssetStatBalances{
 			Authorized:                      "0.0000001",
 			AuthorizedToMaintainLiabilities: "0.0000002",
 			Unauthorized:                    "0.0000003",
@@ -283,14 +283,14 @@ func TestAssetStats(t *testing.T) {
 		Amount:      "111",
 		NumAccounts: 3,
 	}
-	eurAssetStatResponse := horizon.AssetStat{
-		Accounts: horizon.AssetStatAccounts{
+	eurAssetStatResponse := orbitr.AssetStat{
+		Accounts: orbitr.AssetStatAccounts{
 			Authorized:                      eurAssetStat.Accounts.Authorized,
 			AuthorizedToMaintainLiabilities: eurAssetStat.Accounts.AuthorizedToMaintainLiabilities,
 			Unauthorized:                    eurAssetStat.Accounts.Unauthorized,
 		},
 		NumClaimableBalances: eurAssetStat.Accounts.ClaimableBalances,
-		Balances: horizon.AssetStatBalances{
+		Balances: orbitr.AssetStatBalances{
 			Authorized:                      "0.0000111",
 			AuthorizedToMaintainLiabilities: "0.0000222",
 			Unauthorized:                    "0.0000333",
@@ -340,12 +340,12 @@ func TestAssetStats(t *testing.T) {
 	for _, testCase := range []struct {
 		name        string
 		queryParams map[string]string
-		expected    []horizon.AssetStat
+		expected    []orbitr.AssetStat
 	}{
 		{
 			"default parameters",
 			map[string]string{},
-			[]horizon.AssetStat{
+			[]orbitr.AssetStat{
 				etherAssetStatResponse,
 				eurAssetStatResponse,
 				otherUSDAssetStatResponse,
@@ -357,7 +357,7 @@ func TestAssetStats(t *testing.T) {
 			map[string]string{
 				"cursor": etherAssetStatResponse.PagingToken(),
 			},
-			[]horizon.AssetStat{
+			[]orbitr.AssetStat{
 				eurAssetStatResponse,
 				otherUSDAssetStatResponse,
 				usdAssetStatResponse,
@@ -366,7 +366,7 @@ func TestAssetStats(t *testing.T) {
 		{
 			"descending order",
 			map[string]string{"order": "desc"},
-			[]horizon.AssetStat{
+			[]orbitr.AssetStat{
 				usdAssetStatResponse,
 				otherUSDAssetStatResponse,
 				eurAssetStatResponse,
@@ -378,7 +378,7 @@ func TestAssetStats(t *testing.T) {
 			map[string]string{
 				"asset_code": "USD",
 			},
-			[]horizon.AssetStat{
+			[]orbitr.AssetStat{
 				otherUSDAssetStatResponse,
 				usdAssetStatResponse,
 			},
@@ -388,7 +388,7 @@ func TestAssetStats(t *testing.T) {
 			map[string]string{
 				"asset_issuer": issuer.AccountID,
 			},
-			[]horizon.AssetStat{
+			[]orbitr.AssetStat{
 				etherAssetStatResponse,
 				usdAssetStatResponse,
 			},
@@ -399,7 +399,7 @@ func TestAssetStats(t *testing.T) {
 				"asset_code":   "USD",
 				"asset_issuer": issuer.AccountID,
 			},
-			[]horizon.AssetStat{
+			[]orbitr.AssetStat{
 				usdAssetStatResponse,
 			},
 		},
@@ -409,7 +409,7 @@ func TestAssetStats(t *testing.T) {
 				"asset_code":   "XYZ",
 				"asset_issuer": issuer.AccountID,
 			},
-			[]horizon.AssetStat{},
+			[]orbitr.AssetStat{},
 		},
 	} {
 		t.Run(testCase.name, func(t *testing.T) {
@@ -419,7 +419,7 @@ func TestAssetStats(t *testing.T) {
 
 			assert.Len(t, results, len(testCase.expected))
 			for i, item := range results {
-				assetStat := item.(horizon.AssetStat)
+				assetStat := item.(orbitr.AssetStat)
 				assert.Equal(t, testCase.expected[i], assetStat)
 			}
 		})
@@ -429,8 +429,8 @@ func TestAssetStats(t *testing.T) {
 func TestAssetStatsIssuerDoesNotExist(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 	handler := AssetStatsHandler{}
 
 	usdAssetStat := history.ExpAssetStat{
@@ -460,14 +460,14 @@ func TestAssetStatsIssuerDoesNotExist(t *testing.T) {
 	results, err := handler.GetResourcePage(httptest.NewRecorder(), r)
 	tt.Assert.NoError(err)
 
-	expectedAssetStatResponse := horizon.AssetStat{
-		Accounts: horizon.AssetStatAccounts{
+	expectedAssetStatResponse := orbitr.AssetStat{
+		Accounts: orbitr.AssetStatAccounts{
 			Authorized:                      2,
 			AuthorizedToMaintainLiabilities: 3,
 			Unauthorized:                    4,
 		},
 		NumClaimableBalances: 0,
-		Balances: horizon.AssetStatBalances{
+		Balances: orbitr.AssetStatBalances{
 			Authorized:                      "0.0000001",
 			AuthorizedToMaintainLiabilities: "0.0000002",
 			Unauthorized:                    "0.0000003",
@@ -486,6 +486,6 @@ func TestAssetStatsIssuerDoesNotExist(t *testing.T) {
 	}
 
 	tt.Assert.Len(results, 1)
-	assetStat := results[0].(horizon.AssetStat)
+	assetStat := results[0].(orbitr.AssetStat)
 	tt.Assert.Equal(assetStat, expectedAssetStatResponse)
 }

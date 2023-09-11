@@ -4,12 +4,12 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
-func txResultByHash(ctx context.Context, db HorizonDB, hash string) (history.Transaction, error) {
+func txResultByHash(ctx context.Context, db OrbitRDB, hash string) (history.Transaction, error) {
 	// query history database
 	var hr history.Transaction
 	err := db.PreFilteredTransactionByHash(ctx, &hr, hash)
@@ -55,7 +55,7 @@ func txResultFromHistory(tx history.Transaction) (history.Transaction, error) {
 // queries execute on different ledgers. In this case, txsub can mistakenly respond with a bad_seq error
 // because the first query occurs when the tx is not yet ingested and the second query occurs when the tx
 // is ingested.
-func checkTxAlreadyExists(ctx context.Context, db HorizonDB, hash, sourceAddress string) (history.Transaction, uint64, error) {
+func checkTxAlreadyExists(ctx context.Context, db OrbitRDB, hash, sourceAddress string) (history.Transaction, uint64, error) {
 	err := db.BeginTx(ctx, &sql.TxOptions{
 		Isolation: sql.LevelRepeatableRead,
 		ReadOnly:  true,

@@ -3,8 +3,8 @@ package integration
 import (
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -34,7 +34,7 @@ func TestTxSub(t *testing.T) {
 
 	t.Run("transaction submission is not successful when DISABLE_TX_SUB=true", func(t *testing.T) {
 		itest := integration.NewTest(t, integration.Config{
-			HorizonEnvironment: map[string]string{
+			OrbitREnvironment: map[string]string{
 				"DISABLE_TX_SUB": "true",
 			},
 		})

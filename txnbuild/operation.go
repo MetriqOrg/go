@@ -3,10 +3,10 @@ package txnbuild
 import (
 	"fmt"
 
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 )
 
-// Operation represents the operation types of the Stellar network.
+// Operation represents the operation types of the Lantah Network.
 type Operation interface {
 	BuildXDR() (xdr.Operation, error)
 	FromXDR(xdrOp xdr.Operation) error
@@ -97,7 +97,7 @@ func accountFromXDR(account *xdr.MuxedAccount) string {
 	return ""
 }
 
-// SorobanOperation represents a smart contract operation on the Stellar network.
+// SorobanOperation represents a smart contract operation on the Lantah Network.
 type SorobanOperation interface {
 	BuildTransactionExt() (xdr.TransactionExt, error)
 }

@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"context"
@@ -6,16 +6,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/xdr"
 )
 
 func TestOfferActions_Show(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
-	q := &history.Q{ht.HorizonSession()}
+	q := &history.Q{ht.OrbitRSession()}
 	ctx := context.Background()
 
 	err := q.UpdateLastLedgerIngest(ctx, 100)
@@ -78,7 +78,7 @@ func TestOfferActions_Show(t *testing.T) {
 
 	w = ht.Get("/offers/4")
 	if ht.Assert.Equal(200, w.Code) {
-		var response horizon.Offer
+		var response orbitr.Offer
 		err = json.Unmarshal(w.Body.Bytes(), &response)
 		ht.Assert.NoError(err)
 		ht.Assert.Equal(int64(4), response.ID)

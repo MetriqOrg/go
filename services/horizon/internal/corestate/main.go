@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/stellar/go/protocols/gramr"
+	"github.com/lantah/go/protocols/gravity"
 )
 
 type State struct {
@@ -25,7 +25,7 @@ type Store struct {
 	}
 }
 
-func (c *Store) Set(resp *gramr.InfoResponse) {
+func (c *Store) Set(resp *gravity.InfoResponse) {
 	c.Lock()
 	defer c.Unlock()
 	c.state.Synced = resp.IsSynced()
@@ -49,8 +49,8 @@ func (c *Store) Get() State {
 func (c *Store) RegisterMetrics(registry *prometheus.Registry) {
 	c.Metrics.CoreSynced = prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "gramr", Name: "synced",
-			Help: "determines if Gramr defined by --gramr-url is synced with the network",
+			Namespace: "orbitr", Subsystem: "gravity", Name: "synced",
+			Help: "determines if Gravity defined by --gravity-url is synced with the network",
 		},
 		func() float64 {
 			if c.Get().Synced {
@@ -64,8 +64,8 @@ func (c *Store) RegisterMetrics(registry *prometheus.Registry) {
 
 	c.Metrics.CoreSupportedProtocolVersion = prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "gramr", Name: "supported_protocol_version",
-			Help: "determines the supported version of the protocol by Gramr defined by --gramr-url",
+			Namespace: "orbitr", Subsystem: "gravity", Name: "supported_protocol_version",
+			Help: "determines the supported version of the protocol by Gravity defined by --gravity-url",
 		},
 		func() float64 {
 			return float64(c.Get().CoreSupportedProtocolVersion)

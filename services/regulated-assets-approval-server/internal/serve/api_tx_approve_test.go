@@ -10,14 +10,14 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi"
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/regulated-assets-approval-server/internal/db/dbtest"
-	"github.com/stellar/go/services/regulated-assets-approval-server/internal/serve/kycstatus"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/regulated-assets-approval-server/internal/db/dbtest"
+	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/kycstatus"
+	"github.com/lantah/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -36,7 +36,7 @@ func TestAPI_txApprove_rejected(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         "FOO",
-		horizonClient:     &horizonclient.MockClient{},
+		orbitrClient:     &orbitrclient.MockClient{},
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -81,10 +81,10 @@ func TestAPI_txApprove_revised(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  5,
 		}, nil)
@@ -92,7 +92,7 @@ func TestAPI_txApprove_revised(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -101,7 +101,7 @@ func TestAPI_txApprove_revised(t *testing.T) {
 
 	tx, err := txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  5,
 			},
@@ -196,10 +196,10 @@ func TestAPI_txAprove_actionRequired(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  1,
 		}, nil)
@@ -207,7 +207,7 @@ func TestAPI_txAprove_actionRequired(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -221,7 +221,7 @@ func TestAPI_txAprove_actionRequired(t *testing.T) {
 
 	tx, err := txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  1,
 			},
@@ -288,10 +288,10 @@ func TestAPI_txAprove_actionRequiredFlow(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  1,
 		}, nil)
@@ -299,7 +299,7 @@ func TestAPI_txAprove_actionRequiredFlow(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -314,7 +314,7 @@ func TestAPI_txAprove_actionRequiredFlow(t *testing.T) {
 	// Step 1: client sends payment with 500+ GOAT
 	tx, err := txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  1,
 			},
@@ -480,10 +480,10 @@ func TestAPI_txApprove_success(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  5,
 		}, nil)
@@ -491,7 +491,7 @@ func TestAPI_txApprove_success(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -502,7 +502,7 @@ func TestAPI_txApprove_success(t *testing.T) {
 
 	// prepare SEP-8 compliant transaction
 	tx, err := txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  5,
 		},

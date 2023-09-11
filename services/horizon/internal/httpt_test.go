@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"context"
@@ -7,9 +7,9 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
-	tdb "github.com/stellar/go/services/horizon/internal/test/db"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	tdb "github.com/lantah/go/services/orbitr/internal/test/db"
 )
 
 type HTTPT struct {
@@ -23,11 +23,11 @@ type HTTPT struct {
 func startHTTPTest(t *testing.T, scenario string) *HTTPT {
 	ret := &HTTPT{T: test.Start(t)}
 	if scenario == "" {
-		test.ResetHorizonDB(t, ret.HorizonDB)
+		test.ResetOrbitRDB(t, ret.OrbitRDB)
 	} else {
 		ret.Scenario(scenario)
 	}
-	ret.App = NewTestApp(tdb.HorizonURL())
+	ret.App = NewTestApp(tdb.OrbitRURL())
 	ret.RH = test.NewRequestHelper(ret.App.webServer.Router.Mux)
 	ret.Assert = &test.Assertions{ret.T.Assert}
 
@@ -40,14 +40,14 @@ func startHTTPTest(t *testing.T, scenario string) *HTTPT {
 				"num": 64
 			},
 			"protocol_version": 18,
-			"network": "Test SDF Network ; September 2015"
+			"network": "Test Lantah Network ; 2023"
 		}
 	}`)
 
-	ret.App.config.GramrURL = ret.coreServer.URL
+	ret.App.config.GravityURL = ret.coreServer.URL
 	ret.App.UpdateCoreLedgerState(context.Background())
-	ret.App.UpdateGramrInfo(context.Background())
-	ret.App.UpdateHorizonLedgerState(context.Background())
+	ret.App.UpdateGravityInfo(context.Background())
+	ret.App.UpdateOrbitRLedgerState(context.Background())
 
 	return ret
 }
@@ -104,9 +104,9 @@ func (ht *HTTPT) Post(
 // setting the retention count to the provided number.
 func (ht *HTTPT) ReapHistory(retention uint) {
 	ht.App.reaper.RetentionCount = retention
-	ht.App.reaper.HistoryQ = &history.Q{ht.HorizonSession()}
+	ht.App.reaper.HistoryQ = &history.Q{ht.OrbitRSession()}
 	err := ht.App.DeleteUnretainedHistory(context.Background())
 	ht.Require.NoError(err)
 	ht.App.UpdateCoreLedgerState(context.Background())
-	ht.App.UpdateHorizonLedgerState(context.Background())
+	ht.App.UpdateOrbitRLedgerState(context.Background())
 }

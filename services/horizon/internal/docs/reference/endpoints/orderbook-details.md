@@ -5,7 +5,7 @@ clientData:
 replacement: https://developers.stellar.org/api/aggregations/order-books/
 ---
 
-People on the Stellar network can make [offers](../resources/offer.md) to buy or sell assets.
+People on the Lantah Network can make [offers](../resources/offer.md) to buy or sell assets.
 These offers are summarized by the assets being bought and sold in
 [orderbooks](../resources/orderbook.md).
 
@@ -13,7 +13,7 @@ Horizon will return, for each orderbook, a summary of the orderbook and the bids
 associated with that orderbook.
 
 This endpoint can also be used in [streaming](../streaming.md) mode so it is possible to use it to
-listen as offers are processed in the Stellar network.  If called in streaming mode Horizon will
+listen as offers are processed in the Lantah Network.  If called in streaming mode Horizon will
 start at the earliest known offer unless a `cursor` is set. In that case it will start from the
 `cursor`. You can also set `cursor` value to `now` to only stream offers created since your request
 time.

@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	horizon "github.com/lantah/go/services/horizon/internal"
+	orbitr "github.com/lantah/go/services/orbitr/internal"
 	"github.com/lantah/go/support/errors"
 	"github.com/lantah/go/support/log"
 )
@@ -19,7 +19,7 @@ var recordMetricsCmd = &cobra.Command{
 	Short: "records `/metrics` on admin port for debuging purposes",
 	Long:  "",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := horizon.ApplyFlags(config, flags, horizon.ApplyOptions{}); err != nil {
+		if err := orbitr.ApplyFlags(config, flags, orbitr.ApplyOptions{}); err != nil {
 			return err
 		}
 

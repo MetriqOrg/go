@@ -9,12 +9,12 @@ import (
 
 	"github.com/guregu/null"
 	"github.com/lib/pq"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 
-	. "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/test"
-	stellarTime "github.com/stellar/go/support/time"
+	. "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/test"
+	stellarTime "github.com/lantah/go/support/time"
 	"github.com/stretchr/testify/assert"
 )
 

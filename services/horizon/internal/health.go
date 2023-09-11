@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"context"
@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stellar/go/protocols/gramr"
-	"github.com/stellar/go/support/clock"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/protocols/gravity"
+	"github.com/lantah/go/support/clock"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/log"
 )
 
 const (
@@ -21,8 +21,8 @@ const (
 
 var healthLogger = log.WithField("service", "healthCheck")
 
-type gramrClient interface {
-	Info(ctx context.Context) (*gramr.InfoResponse, error)
+type gravityClient interface {
+	Info(ctx context.Context) (*gravity.InfoResponse, error)
 }
 
 type healthCache struct {
@@ -52,7 +52,7 @@ func newHealthCache(ttl time.Duration) *healthCache {
 type healthCheck struct {
 	session db.SessionInterface
 	ctx     context.Context
-	core    gramrClient
+	core    gravityClient
 	cache   *healthCache
 }
 
@@ -73,7 +73,7 @@ func (h healthCheck) runCheck() healthResponse {
 		response.DatabaseConnected = false
 	}
 	if resp, err := h.core.Info(h.ctx); err != nil {
-		healthLogger.Warnf("request to gramr failed: %s", err)
+		healthLogger.Warnf("request to gravity failed: %s", err)
 		response.CoreUp = false
 		response.CoreSynced = false
 	} else {

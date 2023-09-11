@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/lantah/go/protocols/gramr"
+	"github.com/lantah/go/protocols/gravity"
 	"github.com/lantah/go/support/errors"
 	"github.com/lantah/go/support/log"
 )
@@ -18,8 +18,8 @@ func TestCloseOffline(t *testing.T) {
 	captiveCoreToml, err := NewCaptiveCoreToml(CaptiveCoreTomlParams{})
 	assert.NoError(t, err)
 
-	runner := newGramrRunner(CaptiveCoreConfig{
-		BinaryPath:         "/usr/bin/gramr",
+	runner := newGravityRunner(CaptiveCoreConfig{
+		BinaryPath:         "/usr/bin/gravity",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),
 		Context:            context.Background(),
@@ -36,7 +36,7 @@ func TestCloseOffline(t *testing.T) {
 	scMock.On("stat", mock.Anything).Return(isDirImpl(true), nil)
 	scMock.On("writeFile", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"--console",
@@ -59,8 +59,8 @@ func TestCloseOnline(t *testing.T) {
 
 	captiveCoreToml.AddExamplePubnetValidators()
 
-	runner := newGramrRunner(CaptiveCoreConfig{
-		BinaryPath:         "/usr/bin/gramr",
+	runner := newGravityRunner(CaptiveCoreConfig{
+		BinaryPath:         "/usr/bin/gravity",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),
 		Context:            context.Background(),
@@ -77,7 +77,7 @@ func TestCloseOnline(t *testing.T) {
 	scMock.On("stat", mock.Anything).Return(isDirImpl(true), nil)
 	scMock.On("writeFile", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"--console",
@@ -102,8 +102,8 @@ func TestCloseOnlineWithError(t *testing.T) {
 
 	captiveCoreToml.AddExamplePubnetValidators()
 
-	runner := newGramrRunner(CaptiveCoreConfig{
-		BinaryPath:         "/usr/bin/gramr",
+	runner := newGravityRunner(CaptiveCoreConfig{
+		BinaryPath:         "/usr/bin/gravity",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),
 		Context:            context.Background(),
@@ -120,7 +120,7 @@ func TestCloseOnlineWithError(t *testing.T) {
 	scMock.On("stat", mock.Anything).Return(isDirImpl(true), nil)
 	scMock.On("writeFile", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"--console",
@@ -155,8 +155,8 @@ func TestRunFromUseDBLedgersMatch(t *testing.T) {
 
 	captiveCoreToml.AddExamplePubnetValidators()
 
-	runner := newGramrRunner(CaptiveCoreConfig{
-		BinaryPath:         "/usr/bin/gramr",
+	runner := newGravityRunner(CaptiveCoreConfig{
+		BinaryPath:         "/usr/bin/gravity",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),
 		Context:            context.Background(),
@@ -169,7 +169,7 @@ func TestRunFromUseDBLedgersMatch(t *testing.T) {
 	cmdMock.On("Wait").Return(nil)
 
 	offlineInfoCmdMock := simpleCommandMock()
-	infoResponse := gramr.InfoResponse{}
+	infoResponse := gravity.InfoResponse{}
 	infoResponse.Info.Ledger.Num = 100
 	infoResponseBytes, err := json.Marshal(infoResponse)
 	assert.NoError(t, err)
@@ -182,13 +182,13 @@ func TestRunFromUseDBLedgersMatch(t *testing.T) {
 	scMock.On("stat", mock.Anything).Return(isDirImpl(true), nil)
 	scMock.On("writeFile", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"offline-info",
 	).Return(offlineInfoCmdMock)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"--console",
@@ -209,8 +209,8 @@ func TestRunFromUseDBLedgersBehind(t *testing.T) {
 
 	captiveCoreToml.AddExamplePubnetValidators()
 
-	runner := newGramrRunner(CaptiveCoreConfig{
-		BinaryPath:         "/usr/bin/gramr",
+	runner := newGravityRunner(CaptiveCoreConfig{
+		BinaryPath:         "/usr/bin/gravity",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),
 		Context:            context.Background(),
@@ -229,7 +229,7 @@ func TestRunFromUseDBLedgersBehind(t *testing.T) {
 	cmdMock.On("Wait").Return(nil)
 
 	offlineInfoCmdMock := simpleCommandMock()
-	infoResponse := gramr.InfoResponse{}
+	infoResponse := gravity.InfoResponse{}
 	infoResponse.Info.Ledger.Num = 90 // runner is 10 ledgers behind
 	infoResponseBytes, err := json.Marshal(infoResponse)
 	assert.NoError(t, err)
@@ -243,13 +243,13 @@ func TestRunFromUseDBLedgersBehind(t *testing.T) {
 	scMock.On("stat", mock.Anything).Return(isDirImpl(true), nil)
 	scMock.On("writeFile", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"offline-info",
 	).Return(offlineInfoCmdMock)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"--console",
@@ -269,8 +269,8 @@ func TestRunFromUseDBLedgersInFront(t *testing.T) {
 
 	captiveCoreToml.AddExamplePubnetValidators()
 
-	runner := newGramrRunner(CaptiveCoreConfig{
-		BinaryPath:         "/usr/bin/gramr",
+	runner := newGravityRunner(CaptiveCoreConfig{
+		BinaryPath:         "/usr/bin/gravity",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),
 		Context:            context.Background(),
@@ -289,7 +289,7 @@ func TestRunFromUseDBLedgersInFront(t *testing.T) {
 	cmdMock.On("Wait").Return(nil)
 
 	offlineInfoCmdMock := simpleCommandMock()
-	infoResponse := gramr.InfoResponse{}
+	infoResponse := gravity.InfoResponse{}
 	infoResponse.Info.Ledger.Num = 110 // runner is 10 ledgers in front
 	infoResponseBytes, err := json.Marshal(infoResponse)
 	assert.NoError(t, err)
@@ -304,20 +304,20 @@ func TestRunFromUseDBLedgersInFront(t *testing.T) {
 	scMock.On("stat", mock.Anything).Return(isDirImpl(true), nil)
 	scMock.On("writeFile", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"offline-info",
 	).Return(offlineInfoCmdMock)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"--console",
 		"new-db",
 	).Return(newDBCmdMock)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"--console",
@@ -325,7 +325,7 @@ func TestRunFromUseDBLedgersInFront(t *testing.T) {
 		"99/0",
 	).Return(catchupCmdMock)
 	scMock.On("command",
-		"/usr/bin/gramr",
+		"/usr/bin/gravity",
 		"--conf",
 		mock.Anything,
 		"--console",

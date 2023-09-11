@@ -9,13 +9,13 @@ import (
 	"github.com/Microsoft/go-winio"
 )
 
-// Windows-specific methods for the gramrRunner type.
+// Windows-specific methods for the gravityRunner type.
 
-func (c *gramrRunner) getPipeName() string {
+func (c *gravityRunner) getPipeName() string {
 	return fmt.Sprintf(`\\.\pipe\%s`, c.nonce)
 }
 
-func (c *gramrRunner) start(cmd cmdI) (pipe, error) {
+func (c *gravityRunner) start(cmd cmdI) (pipe, error) {
 	// First set up the server pipe.
 	listener, err := winio.ListenPipe(c.getPipeName(), nil)
 	if err != nil {

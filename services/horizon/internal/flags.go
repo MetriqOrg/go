@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	_ "embed"
@@ -12,28 +12,28 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/services/horizon/internal/db2/schema"
-	apkg "github.com/stellar/go/support/app"
-	support "github.com/stellar/go/support/config"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/services/orbitr/internal/db2/schema"
+	apkg "github.com/lantah/go/support/app"
+	support "github.com/lantah/go/support/config"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
 	"github.com/stellar/throttled"
 )
 
 const (
-	// DatabaseURLFlagName is the command line flag for configuring the Horizon postgres URL
+	// DatabaseURLFlagName is the command line flag for configuring the OrbitR postgres URL
 	DatabaseURLFlagName = "db-url"
-	// IngestFlagName is the command line flag for enabling ingestion on the Horizon instance
+	// IngestFlagName is the command line flag for enabling ingestion on the OrbitR instance
 	IngestFlagName = "ingest"
-	// GramrDBURLFlagName is the command line flag for configuring the postgres Gramr URL
-	GramrDBURLFlagName = "gramr-db-url"
-	// GramrURLFlagName is the command line flag for configuring the URL fore Gramr HTTP endpoint
-	GramrURLFlagName = "gramr-url"
-	// GramrBinaryPathName is the command line flag for configuring the path to the gramr binary
-	GramrBinaryPathName = "gramr-binary-path"
+	// GravityDBURLFlagName is the command line flag for configuring the postgres Gravity URL
+	GravityDBURLFlagName = "gravity-db-url"
+	// GravityURLFlagName is the command line flag for configuring the URL fore Gravity HTTP endpoint
+	GravityURLFlagName = "gravity-url"
+	// GravityBinaryPathName is the command line flag for configuring the path to the gravity binary
+	GravityBinaryPathName = "gravity-binary-path"
 	// captiveCoreConfigAppendPathName is the command line flag for configuring the path to the captive core additional configuration
 	// Note captiveCoreConfigAppendPathName is deprecated in favor of CaptiveCoreConfigPathName
 	captiveCoreConfigAppendPathName = "captive-core-config-append-path"
@@ -54,14 +54,14 @@ const (
 	NetworkFlagName = "network"
 	// EnableIngestionFilteringFlagName is the command line flag for enabling the experimental ingestion filtering feature (now enabled by default)
 	EnableIngestionFilteringFlagName = "exp-enable-ingestion-filtering"
-	// DisableTxSubFlagName is the command line flag for disabling transaction submission feature of Horizon
+	// DisableTxSubFlagName is the command line flag for disabling transaction submission feature of OrbitR
 	DisableTxSubFlagName = "disable-tx-sub"
 
-	captiveCoreMigrationHint = "If you are migrating from Horizon 1.x.y, start with the Migration Guide here: https://developers.stellar.org/docs/run-api-server/migrating/"
-	// StellarPubnet is a constant representing the Stellar public network
-	StellarPubnet = "pubnet"
-	// StellarTestnet is a constant representing the Stellar test network
-	StellarTestnet = "testnet"
+	captiveCoreMigrationHint = "If you are migrating from OrbitR 1.x.y, start with the Migration Guide here: https://developers.stellar.org/docs/run-api-server/migrating/"
+	// LantahPubnet is a constant representing the Stellar public network
+	LantahPubnet = "pubnet"
+	// LantahTestnet is a constant representing the Stellar test network
+	LantahTestnet = "testnet"
 )
 
 // validateBothOrNeither ensures that both options are provided, if either is provided.
@@ -79,7 +79,7 @@ func validateBothOrNeither(option1, option2 string) error {
 func applyMigrations(config Config) error {
 	dbConn, err := db.Open("postgres", config.DatabaseURL)
 	if err != nil {
-		return fmt.Errorf("could not connect to horizon db: %v", err)
+		return fmt.Errorf("could not connect to orbitr db: %v", err)
 	}
 	defer dbConn.Close()
 
@@ -88,7 +88,7 @@ func applyMigrations(config Config) error {
 		return fmt.Errorf("could not apply migrations: %v", err)
 	}
 	if numMigrations > 0 {
-		stdLog.Printf("successfully applied %v horizon migrations\n", numMigrations)
+		stdLog.Printf("successfully applied %v orbitr migrations\n", numMigrations)
 	}
 	return nil
 }
@@ -100,7 +100,7 @@ func checkMigrations(config Config) error {
 		return fmt.Errorf(
 			`There are %v migrations to apply in the "up" direction.
 The necessary migrations are: %v
-A database migration is required to run this version (%v) of Horizon. Run "horizon db migrate up" to update your DB. Consult the Changelog (https://github.com/stellar/go/blob/master/services/horizon/CHANGELOG.md) for more information.`,
+A database migration is required to run this version (%v) of OrbitR. Run "orbitr db migrate up" to update your DB. Consult the Changelog (https://github.com/lantah/go/blob/master/services/orbitr/CHANGELOG.md) for more information.`,
 			len(migrationsToApplyUp),
 			migrationsToApplyUp,
 			apkg.Version(),
@@ -110,8 +110,8 @@ A database migration is required to run this version (%v) of Horizon. Run "horiz
 	nMigrationsDown := schema.GetNumMigrationsDown(config.DatabaseURL)
 	if nMigrationsDown > 0 {
 		return fmt.Errorf(
-			`A database migration DOWN to an earlier version of the schema is required to run this version (%v) of Horizon. Consult the Changelog (https://github.com/stellar/go/blob/master/services/horizon/CHANGELOG.md) for more information.
-In order to migrate the database DOWN, using the HIGHEST version number of Horizon you have installed (not this binary), run "horizon db migrate down %v".`,
+			`A database migration DOWN to an earlier version of the schema is required to run this version (%v) of OrbitR. Consult the Changelog (https://github.com/lantah/go/blob/master/services/orbitr/CHANGELOG.md) for more information.
+In order to migrate the database DOWN, using the HIGHEST version number of OrbitR you have installed (not this binary), run "orbitr db migrate down %v".`,
 			apkg.Version(),
 			nMigrationsDown,
 		)
@@ -123,8 +123,8 @@ In order to migrate the database DOWN, using the HIGHEST version number of Horiz
 func Flags() (*Config, support.ConfigOptions) {
 	config := &Config{}
 
-	// flags defines the complete flag configuration for horizon.
-	// Add a new entry here to connect a new field in the horizon.Config struct
+	// flags defines the complete flag configuration for orbitr.
+	// Add a new entry here to connect a new field in the orbitr.Config struct
 	var flags = support.ConfigOptions{
 		&support.ConfigOption{
 			Name:      DatabaseURLFlagName,
@@ -132,21 +132,21 @@ func Flags() (*Config, support.ConfigOptions) {
 			ConfigKey: &config.DatabaseURL,
 			OptType:   types.String,
 			Required:  true,
-			Usage:     "horizon postgres database to connect with",
+			Usage:     "orbitr postgres database to connect with",
 		},
 		&support.ConfigOption{
 			Name:      "ro-database-url",
 			ConfigKey: &config.RoDatabaseURL,
 			OptType:   types.String,
 			Required:  false,
-			Usage:     "horizon postgres read-replica to connect with, when set it will return stale history error when replica is behind primary",
+			Usage:     "orbitr postgres read-replica to connect with, when set it will return stale history error when replica is behind primary",
 		},
 		&support.ConfigOption{
-			Name:        GramrBinaryPathName,
+			Name:        GravityBinaryPathName,
 			OptType:     types.String,
 			FlagDefault: "",
 			Required:    false,
-			Usage:       "path to gramr binary, look for the gramr binary in $PATH by default.",
+			Usage:       "path to gravity binary, look for the gravity binary in $PATH by default.",
 			ConfigKey:   &config.CaptiveCoreBinaryPath,
 		},
 		&support.ConfigOption{
@@ -154,7 +154,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:     types.Bool,
 			FlagDefault: false,
 			Required:    false,
-			Usage:       "disables the transaction submission functionality of Horizon.",
+			Usage:       "disables the transaction submission functionality of OrbitR.",
 			ConfigKey:   &config.DisableTxSub,
 			Hidden:      false,
 		},
@@ -200,7 +200,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:     types.Bool,
 			FlagDefault: true,
 			Required:    false,
-			Usage: `when enabled, Horizon ingestion will instruct the captive
+			Usage: `when enabled, OrbitR ingestion will instruct the captive
 			              core invocation to use an external db url for ledger states rather than in memory(RAM).\n 
 						  Will result in several GB of space shifting out of RAM and to the external db persistence.\n
 						  The external db url is determined by the presence of DATABASE parameter in the captive-core-config-path or\n
@@ -219,7 +219,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:     types.Bool,
 			FlagDefault: true,
 			Required:    false,
-			Usage:       "causes Horizon to ingest from a Captive Gramr process instead of a persistent Gramr database",
+			Usage:       "causes OrbitR to ingest from a Captive Gravity process instead of a persistent Gravity database",
 			ConfigKey:   &config.EnableCaptiveCoreIngestion,
 		},
 		&support.ConfigOption{
@@ -239,7 +239,7 @@ func Flags() (*Config, support.ConfigOptions) {
 							"of historical data. If you have never added filter rules to this deployment, then nothing further needed. " +
 							"If you have defined ingestion filter rules prior but disabled filtering overall by setting this flag " +
 							"disabled with --exp-enable-ingestion-filtering=false, then you should now delete the filter rules using " +
-							"the Horizon Admin API to achieve the same no-filtering result. Remove usage of this flag in all cases.",
+							"the OrbitR Admin API to achieve the same no-filtering result. Remove usage of this flag in all cases.",
 					)
 				}
 				return nil
@@ -280,22 +280,22 @@ func Flags() (*Config, support.ConfigOptions) {
 			FlagDefault:    uint(0),
 			CustomSetValue: support.SetOptionalUint,
 			Required:       false,
-			Usage:          "port for Captive Core to bind to for connecting to the Stellar swarm (0 uses Gramr's default)",
+			Usage:          "port for Captive Core to bind to for connecting to the Stellar swarm (0 uses Gravity's default)",
 			ConfigKey:      &config.CaptiveCoreTomlParams.PeerPort,
 		},
 		&support.ConfigOption{
-			Name:      GramrDBURLFlagName,
-			EnvVar:    "GRAMR_DATABASE_URL",
-			ConfigKey: &config.GramrDatabaseURL,
+			Name:      GravityDBURLFlagName,
+			EnvVar:    "GRAVITY_DATABASE_URL",
+			ConfigKey: &config.GravityDatabaseURL,
 			OptType:   types.String,
 			Required:  false,
-			Usage:     "gramr postgres database to connect with",
+			Usage:     "gravity postgres database to connect with",
 		},
 		&support.ConfigOption{
-			Name:      GramrURLFlagName,
-			ConfigKey: &config.GramrURL,
+			Name:      GravityURLFlagName,
+			ConfigKey: &config.GravityURL,
 			OptType:   types.String,
-			Usage:     "gramr to connect with (for http commands). If unset and the local Captive core is enabled, it will use http://localhost:<stellar_captive_core_http_port>",
+			Usage:     "gravity to connect with (for http commands). If unset and the local Captive core is enabled, it will use http://localhost:<stellar_captive_core_http_port>",
 		},
 		&support.ConfigOption{
 			Name:      HistoryArchiveURLsFlagName,
@@ -334,21 +334,21 @@ func Flags() (*Config, support.ConfigOptions) {
 			ConfigKey:   &config.MaxDBConnections,
 			OptType:     types.Int,
 			FlagDefault: 0,
-			Usage:       "when set has a priority over horizon-db-max-open-connections, horizon-db-max-idle-connections. max horizon database open connections may need to be increased when responses are slow but DB CPU is normal",
+			Usage:       "when set has a priority over orbitr-db-max-open-connections, orbitr-db-max-idle-connections. max orbitr database open connections may need to be increased when responses are slow but DB CPU is normal",
 		},
 		&support.ConfigOption{
-			Name:        "horizon-db-max-open-connections",
-			ConfigKey:   &config.HorizonDBMaxOpenConnections,
+			Name:        "orbitr-db-max-open-connections",
+			ConfigKey:   &config.OrbitRDBMaxOpenConnections,
 			OptType:     types.Int,
 			FlagDefault: 20,
-			Usage:       "max horizon database open connections. may need to be increased when responses are slow but DB CPU is normal",
+			Usage:       "max orbitr database open connections. may need to be increased when responses are slow but DB CPU is normal",
 		},
 		&support.ConfigOption{
-			Name:        "horizon-db-max-idle-connections",
-			ConfigKey:   &config.HorizonDBMaxIdleConnections,
+			Name:        "orbitr-db-max-idle-connections",
+			ConfigKey:   &config.OrbitRDBMaxIdleConnections,
 			OptType:     types.Int,
 			FlagDefault: 20,
-			Usage:       "max horizon database idle connections. may need to be set to the same value as horizon-db-max-open-connections when responses are slow and DB CPU is normal, because it may indicate that a lot of time is spent closing/opening idle connections. This can happen in case of high variance in number of requests. must be equal or lower than max open connections",
+			Usage:       "max orbitr database idle connections. may need to be set to the same value as orbitr-db-max-open-connections when responses are slow and DB CPU is normal, because it may indicate that a lot of time is spent closing/opening idle connections. This can happen in case of high variance in number of requests. must be equal or lower than max open connections",
 		},
 		&support.ConfigOption{
 			Name:           "sse-update-frequency",
@@ -364,7 +364,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:        types.Int,
 			FlagDefault:    55,
 			CustomSetValue: support.SetDuration,
-			Usage:          "defines the timeout of connection after which 504 response will be sent or stream will be closed, if Horizon is behind a load balancer with idle connection timeout, this should be set to a few seconds less that idle timeout, does not apply to POST /transactions",
+			Usage:          "defines the timeout of connection after which 504 response will be sent or stream will be closed, if OrbitR is behind a load balancer with idle connection timeout, this should be set to a few seconds less that idle timeout, does not apply to POST /transactions",
 		},
 		&support.ConfigOption{
 			Name:        "per-hour-rate-limit",
@@ -419,7 +419,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:        types.String,
 			CustomSetValue: support.SetOptionalString,
 			Required:       false,
-			Usage:          "name of the path for Core logs (leave empty to log w/ Horizon only)",
+			Usage:          "name of the path for Core logs (leave empty to log w/ OrbitR only)",
 		},
 		&support.ConfigOption{
 			Name:        "max-path-length",
@@ -457,7 +457,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:     types.Uint,
 			FlagDefault: uint(0),
 			Required:    false,
-			Usage: "The maximum number of path finding requests per second horizon will allow." +
+			Usage: "The maximum number of path finding requests per second orbitr will allow." +
 				" A value of zero (the default) disables the limit.",
 		},
 		&support.ConfigOption{
@@ -483,56 +483,56 @@ func Flags() (*Config, support.ConfigOptions) {
 			Name:        "loggly-tag",
 			ConfigKey:   &config.LogglyTag,
 			OptType:     types.String,
-			FlagDefault: "horizon",
+			FlagDefault: "orbitr",
 			Usage:       "Tag to be added to every loggly log event",
 		},
 		&support.ConfigOption{
 			Name:      "tls-cert",
 			ConfigKey: &config.TLSCert,
 			OptType:   types.String,
-			Usage:     "TLS certificate file to use for securing connections to horizon",
+			Usage:     "TLS certificate file to use for securing connections to orbitr",
 		},
 		&support.ConfigOption{
 			Name:      "tls-key",
 			ConfigKey: &config.TLSKey,
 			OptType:   types.String,
-			Usage:     "TLS private key file to use for securing connections to horizon",
+			Usage:     "TLS private key file to use for securing connections to orbitr",
 		},
 		&support.ConfigOption{
 			Name:        IngestFlagName,
 			ConfigKey:   &config.Ingest,
 			OptType:     types.Bool,
 			FlagDefault: true,
-			Usage:       "causes this horizon process to ingest data from gramr into horizon's db",
+			Usage:       "causes this orbitr process to ingest data from gravity into orbitr's db",
 		},
 		&support.ConfigOption{
 			Name:        "cursor-name",
 			EnvVar:      "CURSOR_NAME",
 			ConfigKey:   &config.CursorName,
 			OptType:     types.String,
-			FlagDefault: "HORIZON",
-			Usage:       "ingestor cursor used by horizon to ingest from gramr. must be uppercase and unique for each horizon instance ingesting from that core instance.",
+			FlagDefault: "ORBITR",
+			Usage:       "ingestor cursor used by orbitr to ingest from gravity. must be uppercase and unique for each orbitr instance ingesting from that core instance.",
 		},
 		&support.ConfigOption{
 			Name:        "history-retention-count",
 			ConfigKey:   &config.HistoryRetentionCount,
 			OptType:     types.Uint,
 			FlagDefault: uint(0),
-			Usage:       "the minimum number of ledgers to maintain within horizon's history tables.  0 signifies an unlimited number of ledgers will be retained",
+			Usage:       "the minimum number of ledgers to maintain within orbitr's history tables.  0 signifies an unlimited number of ledgers will be retained",
 		},
 		&support.ConfigOption{
 			Name:        "history-stale-threshold",
 			ConfigKey:   &config.StaleThreshold,
 			OptType:     types.Uint,
 			FlagDefault: uint(0),
-			Usage:       "the maximum number of ledgers the history db is allowed to be out of date from the connected gramr db before horizon considers history stale",
+			Usage:       "the maximum number of ledgers the history db is allowed to be out of date from the connected gravity db before orbitr considers history stale",
 		},
 		&support.ConfigOption{
 			Name:        "skip-cursor-update",
 			ConfigKey:   &config.SkipCursorUpdate,
 			OptType:     types.Bool,
 			FlagDefault: false,
-			Usage:       "causes the ingester to skip reporting the last imported ledger state to gramr",
+			Usage:       "causes the ingester to skip reporting the last imported ledger state to gravity",
 		},
 		&support.ConfigOption{
 			Name:        "ingest-disable-state-verification",
@@ -572,7 +572,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:     types.Bool,
 			FlagDefault: false,
 			Required:    false,
-			Usage:       "applies pending migrations before starting horizon",
+			Usage:       "applies pending migrations before starting orbitr",
 		},
 		&support.ConfigOption{
 			Name:        "checkpoint-frequency",
@@ -588,7 +588,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:     types.Bool,
 			FlagDefault: false,
 			Required:    false,
-			Usage:       "determines if Horizon instance is behind Cloudflare, in such case client IP in the logs will be replaced with Cloudflare header (cannot be used with --behind-aws-load-balancer)",
+			Usage:       "determines if OrbitR instance is behind Cloudflare, in such case client IP in the logs will be replaced with Cloudflare header (cannot be used with --behind-aws-load-balancer)",
 		},
 		&support.ConfigOption{
 			Name:        "behind-aws-load-balancer",
@@ -596,7 +596,7 @@ func Flags() (*Config, support.ConfigOptions) {
 			OptType:     types.Bool,
 			FlagDefault: false,
 			Required:    false,
-			Usage:       "determines if Horizon instance is behind AWS load balances like ELB or ALB, in such case client IP in the logs will be replaced with the last IP in X-Forwarded-For header (cannot be used with --behind-cloudflare)",
+			Usage:       "determines if OrbitR instance is behind AWS load balances like ELB or ALB, in such case client IP in the logs will be replaced with the last IP in X-Forwarded-For header (cannot be used with --behind-cloudflare)",
 		},
 		&support.ConfigOption{
 			Name:        "rounding-slippage-filter",
@@ -613,16 +613,16 @@ func Flags() (*Config, support.ConfigOptions) {
 			Required:  false,
 			CustomSetValue: func(co *support.ConfigOption) error {
 				val := viper.GetString(co.Name)
-				if val != "" && val != StellarPubnet && val != StellarTestnet {
+				if val != "" && val != LantahPubnet && val != LantahTestnet {
 					return fmt.Errorf("invalid network %s. Use '%s' or '%s'",
-						val, StellarPubnet, StellarTestnet)
+						val, LantahPubnet, LantahTestnet)
 				}
 				*co.ConfigKey.(*string) = val
 				return nil
 			},
 			Usage: fmt.Sprintf("stellar public network, either '%s' or '%s'."+
 				" It automatically configures network settings, including %s, %s, and %s.",
-				StellarPubnet, StellarTestnet, NetworkPassphraseFlagName,
+				LantahPubnet, LantahTestnet, NetworkPassphraseFlagName,
 				HistoryArchiveURLsFlagName, CaptiveCoreConfigPathName),
 		},
 	}
@@ -630,21 +630,21 @@ func Flags() (*Config, support.ConfigOptions) {
 	return config, flags
 }
 
-// NewAppFromFlags constructs a new Horizon App from the given command line flags
+// NewAppFromFlags constructs a new OrbitR App from the given command line flags
 func NewAppFromFlags(config *Config, flags support.ConfigOptions) (*App, error) {
 	err := ApplyFlags(config, flags, ApplyOptions{RequireCaptiveCoreConfig: true, AlwaysIngest: false})
 	if err != nil {
 		return nil, err
 	}
 	// Validate app-specific arguments
-	if config.GramrURL == "" {
-		return nil, fmt.Errorf("flag --%s cannot be empty", GramrURLFlagName)
+	if config.GravityURL == "" {
+		return nil, fmt.Errorf("flag --%s cannot be empty", GravityURLFlagName)
 	}
-	if config.Ingest && !config.EnableCaptiveCoreIngestion && config.GramrDatabaseURL == "" {
-		return nil, fmt.Errorf("flag --%s cannot be empty", GramrDBURLFlagName)
+	if config.Ingest && !config.EnableCaptiveCoreIngestion && config.GravityDatabaseURL == "" {
+		return nil, fmt.Errorf("flag --%s cannot be empty", GravityDBURLFlagName)
 	}
 
-	log.Infof("Initializing horizon...")
+	log.Infof("Initializing orbitr...")
 	app, err := NewApp(*config)
 	if err != nil {
 		return nil, fmt.Errorf("cannot initialize app: %s", err)
@@ -686,7 +686,7 @@ var (
 // getCaptiveCoreBinaryPath retrieves the path of the Captive Core binary
 // Returns the path or an error if the binary is not found
 func getCaptiveCoreBinaryPath() (string, error) {
-	result, err := exec.LookPath("gramr")
+	result, err := exec.LookPath("gravity")
 	if err != nil {
 		return "", err
 	}
@@ -737,9 +737,9 @@ func createCaptiveCoreConfigFromNetwork(config *Config) error {
 
 	var defaultNetworkConfig networkConfig
 	switch config.Network {
-	case StellarPubnet:
+	case LantahPubnet:
 		defaultNetworkConfig = PubnetConf
-	case StellarTestnet:
+	case LantahTestnet:
 		defaultNetworkConfig = TestnetConf
 	default:
 		return fmt.Errorf("no default configuration found for network %s", config.Network)
@@ -783,12 +783,12 @@ func createCaptiveCoreConfigFromParameters(config *Config) error {
 func setCaptiveCoreConfiguration(config *Config) error {
 	stdLog.Println("Preparing captive core...")
 
-	// If the user didn't specify a Gramr binary, we can check the
+	// If the user didn't specify a Gravity binary, we can check the
 	// $PATH and possibly fill it in for them.
 	if config.CaptiveCoreBinaryPath == "" {
 		var err error
 		if config.CaptiveCoreBinaryPath, err = getCaptiveCoreBinaryPath(); err != nil {
-			return fmt.Errorf("captive core requires %s", GramrBinaryPathName)
+			return fmt.Errorf("captive core requires %s", GravityBinaryPathName)
 		}
 	}
 
@@ -806,8 +806,8 @@ func setCaptiveCoreConfiguration(config *Config) error {
 
 	// If we don't supply an explicit core URL and running captive core process with the http port enabled,
 	// point to it.
-	if config.GramrURL == "" && config.CaptiveCoreToml.HTTPPort != 0 {
-		config.GramrURL = fmt.Sprintf("http://localhost:%d", config.CaptiveCoreToml.HTTPPort)
+	if config.GravityURL == "" && config.CaptiveCoreToml.HTTPPort != 0 {
+		config.GravityURL = fmt.Sprintf("http://localhost:%d", config.CaptiveCoreToml.HTTPPort)
 	}
 
 	return nil
@@ -860,11 +860,11 @@ func ApplyFlags(config *Config, flags support.ConfigOptions, options ApplyOption
 				captiveCoreConfigFlag = CaptiveCoreConfigPathName
 			}
 			return fmt.Errorf("invalid config: one or more captive core params passed (--%s or --%s) but --ingest not set"+captiveCoreMigrationHint,
-				GramrBinaryPathName, captiveCoreConfigFlag)
+				GravityBinaryPathName, captiveCoreConfigFlag)
 		}
-		if config.GramrDatabaseURL != "" {
+		if config.GravityDatabaseURL != "" {
 			return fmt.Errorf("invalid config: --%s passed but --ingest not set"+
-				"", GramrDBURLFlagName)
+				"", GravityDBURLFlagName)
 		}
 	}
 
@@ -884,13 +884,13 @@ func ApplyFlags(config *Config, flags support.ConfigOptions, options ApplyOption
 	// Configure DB params. When config.MaxDBConnections is set, set other
 	// DB params to that value for backward compatibility.
 	if config.MaxDBConnections != 0 {
-		config.HorizonDBMaxOpenConnections = config.MaxDBConnections
-		config.HorizonDBMaxIdleConnections = config.MaxDBConnections
+		config.OrbitRDBMaxOpenConnections = config.MaxDBConnections
+		config.OrbitRDBMaxIdleConnections = config.MaxDBConnections
 	}
 
 	if config.BehindCloudflare && config.BehindAWSLoadBalancer {
 		return fmt.Errorf("invalid config: Only one option of --behind-cloudflare and --behind-aws-load-balancer is allowed." +
-			" If Horizon is behind both, use --behind-cloudflare only")
+			" If OrbitR is behind both, use --behind-cloudflare only")
 	}
 
 	return nil

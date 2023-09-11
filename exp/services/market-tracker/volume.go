@@ -46,8 +46,8 @@ func trackVolumes(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatche
 }
 
 func initVolumes(cfg Config, c trackerClient, watchedTPs []prometheusWatchedTP) map[string][]volumeHist {
-	gramReq := mustCreateGramPriceRequest()
-	gramPriceHist, err := getGramPriceHistory(gramReq)
+	gravityeq := mustCreateGramPriceRequest()
+	gramPriceHist, err := getGramPriceHistory(gravityeq)
 	if err != nil {
 		fmt.Printf("got error when getting gram price history: %s\n", err)
 	}

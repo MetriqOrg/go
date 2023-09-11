@@ -11,14 +11,14 @@ import (
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	hProblem "github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/render/sse"
-	"github.com/stellar/go/services/horizon/internal/txsub/sequence"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/render/sse"
+	"github.com/lantah/go/services/orbitr/internal/txsub/sequence"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/render/problem"
 )
 
 type ServerMetrics struct {
@@ -35,7 +35,7 @@ type ServerConfig struct {
 	AdminPort uint16
 }
 
-// Server contains the http server related fields for horizon: the Router,
+// Server contains the http server related fields for orbitr: the Router,
 // rate limiter, etc.
 type Server struct {
 	Router         *Router
@@ -67,14 +67,14 @@ func NewServer(serverConfig ServerConfig, routerConfig RouterConfig, ledgerState
 	sm := &ServerMetrics{
 		RequestDurationSummary: prometheus.NewSummaryVec(
 			prometheus.SummaryOpts{
-				Namespace: "horizon", Subsystem: "http", Name: "requests_duration_seconds",
+				Namespace: "orbitr", Subsystem: "http", Name: "requests_duration_seconds",
 				Help: "HTTP requests durations, sliding window = 10m",
 			},
 			[]string{"status", "route", "streaming", "method"},
 		),
 		ReplicaLagErrorsCounter: prometheus.NewCounter(
 			prometheus.CounterOpts{
-				Namespace: "horizon", Subsystem: "http", Name: "replica_lag_errors_count",
+				Namespace: "orbitr", Subsystem: "http", Name: "replica_lag_errors_count",
 				Help: "Count of HTTP errors returned due to replica lag",
 			},
 		),

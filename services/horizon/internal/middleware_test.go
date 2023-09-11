@@ -1,6 +1,6 @@
 //lint:file-ignore U1001 Ignore all unused code, staticcheck doesn't understand testify/suite
 
-package horizon
+package orbitr
 
 import (
 	"context"
@@ -14,18 +14,18 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/stellar/go/services/horizon/internal/actions"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/httpx"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	hProblem "github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/test"
-	tdb "github.com/stellar/go/services/horizon/internal/test/db"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/actions"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/httpx"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	tdb "github.com/lantah/go/services/orbitr/internal/test/db"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/xdr"
 )
 
 func requestHelperRemoteAddr(ip string) func(r *http.Request) {
@@ -53,7 +53,7 @@ func (suite *RateLimitMiddlewareTestSuite) SetupSuite() {
 }
 
 func (suite *RateLimitMiddlewareTestSuite) SetupTest() {
-	suite.c = NewTestConfig(tdb.HorizonURL())
+	suite.c = NewTestConfig(tdb.OrbitRURL())
 	suite.c.RateQuota = &throttled.RateQuota{
 		MaxRate:  throttled.PerHour(10),
 		MaxBurst: 9,
@@ -155,16 +155,16 @@ func TestRateLimitMiddlewareTestSuite(t *testing.T) {
 func TestStateMiddleware(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 
 	request, err := http.NewRequest("GET", "http://localhost/", nil)
 	tt.Assert.NoError(err)
 
 	expectTransaction := true
 	endpoint := func(w http.ResponseWriter, r *http.Request) {
-		session := r.Context().Value(&horizonContext.SessionContextKey).(db.SessionInterface)
+		session := r.Context().Value(&orbitrContext.SessionContextKey).(db.SessionInterface)
 		if (session.GetTx() == nil) == expectTransaction {
 			t.Fatalf("expected transaction to be in session: %v", expectTransaction)
 		}
@@ -172,7 +172,7 @@ func TestStateMiddleware(t *testing.T) {
 	}
 
 	stateMiddleware := &httpx.StateMiddleware{
-		HorizonSession: tt.HorizonSession(),
+		OrbitRSession: tt.OrbitRSession(),
 	}
 	handler := chi.NewRouter()
 	handler.With(stateMiddleware.Wrap).MethodFunc("GET", "/", endpoint)
@@ -319,7 +319,7 @@ func TestStateMiddleware(t *testing.T) {
 func TestClientDisconnect(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
 	request, err := http.NewRequest("GET", "http://localhost/", nil)
 	tt.Assert.NoError(err)
@@ -329,7 +329,7 @@ func TestClientDisconnect(t *testing.T) {
 	}
 
 	stateMiddleware := &httpx.StateMiddleware{
-		HorizonSession:      tt.HorizonSession(),
+		OrbitRSession:      tt.OrbitRSession(),
 		NoStateVerification: true,
 	}
 	handler := chi.NewRouter()
@@ -390,13 +390,13 @@ func TestCheckHistoryStaleMiddleware(t *testing.T) {
 				CoreStatus: ledger.CoreStatus{
 					CoreLatest: testCase.coreLatest,
 				},
-				HorizonStatus: ledger.HorizonStatus{
+				OrbitRStatus: ledger.OrbitRStatus{
 					HistoryLatest: testCase.historyLatest,
 				},
 			}
 			ledgerState := &ledger.State{}
 			ledgerState.SetStatus(state)
-			historyMiddleware := httpx.NewHistoryMiddleware(ledgerState, testCase.staleThreshold, tt.HorizonSession())
+			historyMiddleware := httpx.NewHistoryMiddleware(ledgerState, testCase.staleThreshold, tt.OrbitRSession())
 			handler := chi.NewRouter()
 			handler.With(historyMiddleware).MethodFunc("GET", "/", endpoint)
 			w := httptest.NewRecorder()

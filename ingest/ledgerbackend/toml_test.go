@@ -37,7 +37,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 			peerPort:          newUint(12345),
 			logPath:           nil,
 			expectedError: "invalid captive core toml: NETWORK_PASSPHRASE in captive core config file: " +
-				"Public Global Lantah Network ; 2023 does not match Horizon network-passphrase " +
+				"Public Global Lantah Network ; 2023 does not match OrbitR network-passphrase " +
 				"flag: bogus passphrase",
 		},
 		{
@@ -48,7 +48,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 			peerPort:          newUint(12345),
 			logPath:           nil,
 			expectedError: "invalid captive core toml: HTTP_PORT in captive core config file: 6789 " +
-				"does not match Horizon captive-core-http-port flag: 1161",
+				"does not match OrbitR captive-core-http-port flag: 1161",
 		},
 		{
 			name:              "mismatching PEER_PORT",
@@ -58,7 +58,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 			peerPort:          newUint(2346),
 			logPath:           nil,
 			expectedError: "invalid captive core toml: PEER_PORT in captive core config file: 12345 " +
-				"does not match Horizon captive-core-peer-port flag: 2346",
+				"does not match OrbitR captive-core-peer-port flag: 2346",
 		},
 		{
 			name:              "mismatching LOG_FILE_PATH",
@@ -68,7 +68,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 			peerPort:          newUint(12345),
 			logPath:           newString("/my/test/path"),
 			expectedError: "invalid captive core toml: LOG_FILE_PATH in captive core config file:  " +
-				"does not match Horizon captive-core-log-path flag: /my/test/path",
+				"does not match OrbitR captive-core-log-path flag: /my/test/path",
 		},
 		{
 			name:              "duplicate HOME_DOMAIN entry",
@@ -220,7 +220,7 @@ func TestCaptiveCoreTomlValidation(t *testing.T) {
 }
 
 func checkTestingAboveProtocol19() bool {
-	str := os.Getenv("HORIZON_INTEGRATION_TESTS_CORE_MAX_SUPPORTED_PROTOCOL")
+	str := os.Getenv("ORBITR_INTEGRATION_TESTS_CORE_MAX_SUPPORTED_PROTOCOL")
 	if str == "" {
 		return false
 	}
@@ -235,7 +235,7 @@ func TestGenerateConfig(t *testing.T) {
 	testCases := []struct {
 		name                           string
 		appendPath                     string
-		mode                           gramrRunnerMode
+		mode                           gravityRunnerMode
 		expectedPath                   string
 		httpPort                       *uint
 		peerPort                       *uint
@@ -245,7 +245,7 @@ func TestGenerateConfig(t *testing.T) {
 	}{
 		{
 			name:         "offline config with no appendix",
-			mode:         gramrRunnerModeOffline,
+			mode:         gravityRunnerModeOffline,
 			appendPath:   "",
 			expectedPath: filepath.Join("testdata", "expected-offline-core.cfg"),
 			httpPort:     newUint(6789),
@@ -255,16 +255,16 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "offline config with no peer port",
-			mode:         gramrRunnerModeOffline,
+			mode:         gravityRunnerModeOffline,
 			appendPath:   "",
 			expectedPath: filepath.Join("testdata", "expected-offline-with-no-peer-port.cfg"),
 			httpPort:     newUint(6789),
 			peerPort:     nil,
-			logPath:      newString("/var/gramr/test.log"),
+			logPath:      newString("/var/gravity/test.log"),
 		},
 		{
 			name:         "online config with appendix",
-			mode:         gramrRunnerModeOnline,
+			mode:         gravityRunnerModeOnline,
 			appendPath:   filepath.Join("testdata", "sample-appendix.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-online-core.cfg"),
 			httpPort:     newUint(6789),
@@ -273,7 +273,7 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "online config with unsupported field in appendix",
-			mode:         gramrRunnerModeOnline,
+			mode:         gravityRunnerModeOnline,
 			appendPath:   filepath.Join("testdata", "invalid-captive-core-field.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-online-core.cfg"),
 			httpPort:     newUint(6789),
@@ -282,16 +282,16 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "online config with no peer port",
-			mode:         gramrRunnerModeOnline,
+			mode:         gravityRunnerModeOnline,
 			appendPath:   filepath.Join("testdata", "sample-appendix.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-online-with-no-peer-port.cfg"),
 			httpPort:     newUint(6789),
 			peerPort:     nil,
-			logPath:      newString("/var/gramr/test.log"),
+			logPath:      newString("/var/gravity/test.log"),
 		},
 		{
 			name:         "online config with no http port",
-			mode:         gramrRunnerModeOnline,
+			mode:         gravityRunnerModeOnline,
 			appendPath:   filepath.Join("testdata", "sample-appendix.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-online-with-no-http-port.cfg"),
 			httpPort:     nil,
@@ -300,7 +300,7 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "offline config with appendix",
-			mode:         gramrRunnerModeOffline,
+			mode:         gravityRunnerModeOffline,
 			appendPath:   filepath.Join("testdata", "sample-appendix.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-offline-with-appendix-core.cfg"),
 			httpPort:     newUint(6789),
@@ -309,7 +309,7 @@ func TestGenerateConfig(t *testing.T) {
 		},
 		{
 			name:         "offline config with extra fields in appendix",
-			mode:         gramrRunnerModeOffline,
+			mode:         gravityRunnerModeOffline,
 			appendPath:   filepath.Join("testdata", "appendix-with-fields.cfg"),
 			expectedPath: filepath.Join("testdata", "expected-offline-with-extra-fields.cfg"),
 			httpPort:     newUint(6789),
@@ -320,7 +320,7 @@ func TestGenerateConfig(t *testing.T) {
 		testCases = append(testCases, []struct {
 			name                           string
 			appendPath                     string
-			mode                           gramrRunnerMode
+			mode                           gravityRunnerMode
 			expectedPath                   string
 			httpPort                       *uint
 			peerPort                       *uint
@@ -330,14 +330,14 @@ func TestGenerateConfig(t *testing.T) {
 		}{
 			{
 				name:                           "offline config with enforce diagnostic events",
-				mode:                           gramrRunnerModeOffline,
+				mode:                           gravityRunnerModeOffline,
 				expectedPath:                   filepath.Join("testdata", "expected-offline-enforce-diagnostic-events.cfg"),
 				logPath:                        nil,
 				enforceSorobanDiagnosticEvents: true,
 			},
 			{
 				name:                           "offline config disabling enforced diagnostic events",
-				mode:                           gramrRunnerModeOffline,
+				mode:                           gravityRunnerModeOffline,
 				expectedPath:                   filepath.Join("testdata", "expected-offline-enforce-disabled-diagnostic-events.cfg"),
 				appendPath:                     filepath.Join("testdata", "appendix-disable-diagnostic-events.cfg"),
 				logPath:                        nil,
@@ -345,7 +345,7 @@ func TestGenerateConfig(t *testing.T) {
 			},
 			{
 				name:                           "online config with enforce diagnostic events",
-				mode:                           gramrRunnerModeOnline,
+				mode:                           gravityRunnerModeOnline,
 				appendPath:                     filepath.Join("testdata", "sample-appendix.cfg"),
 				expectedPath:                   filepath.Join("testdata", "expected-online-with-no-http-port-diag-events.cfg"),
 				httpPort:                       nil,
@@ -355,7 +355,7 @@ func TestGenerateConfig(t *testing.T) {
 			},
 			{
 				name:         "offline config with minimum persistent entry in appendix",
-				mode:         gramrRunnerModeOnline,
+				mode:         gravityRunnerModeOnline,
 				appendPath:   filepath.Join("testdata", "appendix-with-minimum-persistent-entry.cfg"),
 				expectedPath: filepath.Join("testdata", "expected-online-with-appendix-minimum-persistent-entry.cfg"),
 				logPath:      nil,
@@ -415,7 +415,7 @@ func TestExternalStorageConfigUsesDatabaseToml(t *testing.T) {
 	assert.NoError(t, err)
 	captiveCoreToml.Database = "sqlite3:///etc/defaults/stellar.db"
 
-	configBytes, err := generateConfig(captiveCoreToml, gramrRunnerModeOffline)
+	configBytes, err := generateConfig(captiveCoreToml, gravityRunnerModeOffline)
 
 	assert.NoError(t, err)
 	toml := CaptiveCoreToml{}
@@ -443,7 +443,7 @@ func TestDBConfigDefaultsToSqlite(t *testing.T) {
 	captiveCoreToml, err = NewCaptiveCoreToml(params)
 	assert.NoError(t, err)
 
-	configBytes, err := generateConfig(captiveCoreToml, gramrRunnerModeOffline)
+	configBytes, err := generateConfig(captiveCoreToml, gravityRunnerModeOffline)
 
 	assert.NoError(t, err)
 	toml := CaptiveCoreToml{}
@@ -471,7 +471,7 @@ func TestNonDBConfigDoesNotUpdateDatabase(t *testing.T) {
 	captiveCoreToml, err = NewCaptiveCoreToml(params)
 	assert.NoError(t, err)
 
-	configBytes, err := generateConfig(captiveCoreToml, gramrRunnerModeOffline)
+	configBytes, err := generateConfig(captiveCoreToml, gravityRunnerModeOffline)
 
 	assert.NoError(t, err)
 	toml := CaptiveCoreToml{}
@@ -480,7 +480,7 @@ func TestNonDBConfigDoesNotUpdateDatabase(t *testing.T) {
 }
 
 func TestCheckCoreVersion(t *testing.T) {
-	coreBin := os.Getenv("HORIZON_INTEGRATION_TESTS_CAPTIVE_CORE_BIN")
+	coreBin := os.Getenv("ORBITR_INTEGRATION_TESTS_CAPTIVE_CORE_BIN")
 	if coreBin == "" {
 		t.SkipNow()
 		return

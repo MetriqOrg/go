@@ -13,19 +13,19 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/services/horizon/internal/actions"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/errors"
-	"github.com/stellar/go/services/horizon/internal/hchi"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/render"
-	hProblem "github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/support/db"
-	supportErrors "github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/actions"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/errors"
+	"github.com/lantah/go/services/orbitr/internal/hchi"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/render"
+	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/support/db"
+	supportErrors "github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/render/problem"
 )
 
 // requestCacheHeadersMiddleware adds caching headers to each response.
@@ -43,7 +43,7 @@ func contextMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		ctx = hchi.WithChiRequestID(ctx)
-		ctx = horizonContext.RequestContext(ctx, w, r)
+		ctx = orbitrContext.RequestContext(ctx, w, r)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -65,7 +65,7 @@ func newWrapResponseWriter(w http.ResponseWriter, r *http.Request) middleware.Wr
 	return mw
 }
 
-// loggerMiddleware logs http requests and resposnes to the logging subsytem of horizon.
+// loggerMiddleware logs http requests and resposnes to the logging subsytem of orbitr.
 func loggerMiddleware(serverMetrics *ServerMetrics) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -212,7 +212,7 @@ func logEndOfRequest(ctx context.Context, r *http.Request, requestDurationSummar
 }
 
 // recoverMiddleware helps the server recover from panics. It ensures that
-// no request can fully bring down the horizon server, and it also logs the
+// no request can fully bring down the orbitr server, and it also logs the
 // panics to the logging subsystem.
 func recoverMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -229,7 +229,7 @@ func recoverMiddleware(h http.Handler) http.Handler {
 	})
 }
 
-// NewHistoryMiddleware adds session to the request context and ensures Horizon
+// NewHistoryMiddleware adds session to the request context and ensures OrbitR
 // is not in a stale state, which is when the difference between latest core
 // ledger and latest history ledger is higher than the given threshold
 func NewHistoryMiddleware(ledgerState *ledger.State, staleThreshold int32, session db.SessionInterface) func(http.Handler) http.Handler {
@@ -259,7 +259,7 @@ func NewHistoryMiddleware(ledgerState *ledger.State, staleThreshold int32, sessi
 			h.ServeHTTP(w, r.WithContext(
 				context.WithValue(
 					ctx,
-					&horizonContext.SessionContextKey,
+					&orbitrContext.SessionContextKey,
 					requestSession,
 				),
 			))
@@ -273,7 +273,7 @@ func NewHistoryMiddleware(ledgerState *ledger.State, staleThreshold int32, sessi
 // has been verified and is correct (Otherwise returns `500 Internal Server Error` to prevent
 // returning invalid data to the user)
 type StateMiddleware struct {
-	HorizonSession      db.SessionInterface
+	OrbitRSession      db.SessionInterface
 	NoStateVerification bool
 }
 
@@ -313,7 +313,7 @@ func (m *StateMiddleware) WrapFunc(h http.HandlerFunc) http.HandlerFunc {
 		if chiRoute != nil {
 			ctx = context.WithValue(ctx, &db.RouteContextKey, sanitizeMetricRoute(chiRoute.RoutePattern()))
 		}
-		session := m.HorizonSession.Clone()
+		session := m.OrbitRSession.Clone()
 		q := &history.Q{session}
 		sseRequest := render.Negotiate(r) == render.MimeEventStream
 
@@ -376,7 +376,7 @@ func (m *StateMiddleware) WrapFunc(h http.HandlerFunc) http.HandlerFunc {
 		}
 
 		h.ServeHTTP(w, r.WithContext(
-			context.WithValue(ctx, &horizonContext.SessionContextKey, session),
+			context.WithValue(ctx, &orbitrContext.SessionContextKey, session),
 		))
 	}
 }

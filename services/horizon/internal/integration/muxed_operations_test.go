@@ -3,12 +3,12 @@ package integration
 import (
 	"testing"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -115,13 +115,13 @@ func TestMuxedOperations(t *testing.T) {
 
 	// Check if no 5xx after processing the tx above
 	// TODO expand it to test actual muxed fields
-	_, err = itest.Client().Operations(horizonclient.OperationRequest{Limit: 200})
+	_, err = itest.Client().Operations(orbitrclient.OperationRequest{Limit: 200})
 	assert.NoError(t, err, "/operations failed")
 
-	_, err = itest.Client().Payments(horizonclient.OperationRequest{Limit: 200})
+	_, err = itest.Client().Payments(orbitrclient.OperationRequest{Limit: 200})
 	assert.NoError(t, err, "/payments failed")
 
-	effectsPage, err := itest.Client().Effects(horizonclient.EffectRequest{Limit: 200})
+	effectsPage, err := itest.Client().Effects(orbitrclient.EffectRequest{Limit: 200})
 	assert.NoError(t, err, "/effects failed")
 
 	for _, effect := range effectsPage.Embedded.Records {

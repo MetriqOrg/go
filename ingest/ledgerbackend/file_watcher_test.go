@@ -44,7 +44,7 @@ func (m *mockHash) hashFile(fp string) (hash, error) {
 	return m.hashResult, m.err
 }
 
-func createFWFixtures(t *testing.T) (*mockHash, *gramrRunner, *fileWatcher) {
+func createFWFixtures(t *testing.T) (*mockHash, *gravityRunner, *fileWatcher) {
 	storagePath, err := os.MkdirTemp("", "captive-core-*")
 	require.NoError(t, err)
 	defer os.RemoveAll(storagePath)
@@ -58,7 +58,7 @@ func createFWFixtures(t *testing.T) (*mockHash, *gramrRunner, *fileWatcher) {
 	captiveCoreToml, err := NewCaptiveCoreToml(CaptiveCoreTomlParams{})
 	assert.NoError(t, err)
 
-	runner := newGramrRunner(CaptiveCoreConfig{
+	runner := newGravityRunner(CaptiveCoreConfig{
 		BinaryPath:         "/some/path",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),
@@ -89,7 +89,7 @@ func TestNewFileWatcherError(t *testing.T) {
 	captiveCoreToml, err := NewCaptiveCoreToml(CaptiveCoreTomlParams{})
 	assert.NoError(t, err)
 
-	runner := newGramrRunner(CaptiveCoreConfig{
+	runner := newGravityRunner(CaptiveCoreConfig{
 		BinaryPath:         "/some/path",
 		HistoryArchiveURLs: []string{"http://localhost"},
 		Log:                log.New(),

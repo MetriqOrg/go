@@ -9,7 +9,7 @@ This endpoint responds with a collection of payment-related operations where the
 [account](../resources/account.md) was either the sender or receiver.
 
 This endpoint can also be used in [streaming](../streaming.md) mode so it is possible to use it to
-listen for new payments to or from an account as they get made in the Stellar network.
+listen for new payments to or from an account as they get made in the Lantah Network.
 If called in streaming mode Horizon will start at the earliest known payment unless a `cursor` is
 set. In that case it will start from the `cursor`. You can also set `cursor` value to `now` to only
 stream payments created since your request time.

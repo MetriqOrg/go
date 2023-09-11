@@ -8,7 +8,7 @@ replacement: https://developers.stellar.org/api/resources/operations/
 This endpoint represents [operations](../resources/operation.md) that are part of successfully validated [transactions](../resources/transaction.md).
 Please note that this endpoint returns operations that are part of failed transactions if `include_failed` parameter is `true`
 and Horizon is ingesting failed transactions.
-This endpoint can also be used in [streaming](../streaming.md) mode so it is possible to use it to listen as operations are processed in the Stellar network.
+This endpoint can also be used in [streaming](../streaming.md) mode so it is possible to use it to listen as operations are processed in the Lantah Network.
 If called in streaming mode Horizon will start at the earliest known operation unless a `cursor` is set. In that case it will start from the `cursor`. You can also set `cursor` value to `now` to only stream operations created since your request time.
 
 ## Request

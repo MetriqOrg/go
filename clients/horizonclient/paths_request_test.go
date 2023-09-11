@@ -49,7 +49,7 @@ func TestPathsRequest(t *testing.T) {
 
 	pr := PathsRequest{
 		DestinationAccount:     "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
-		DestinationAmount:      "100",
+		DestinationAmount:      "1000",
 		DestinationAssetCode:   "NGN",
 		DestinationAssetIssuer: "GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
 		DestinationAssetType:   AssetType4,
@@ -66,9 +66,9 @@ func TestPathsRequest(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.IsType(t, paths, hProtocol.PathsPage{})
 		record := paths.Embedded.Records[0]
-		assert.Equal(t, record.DestinationAmount, "20.0000000")
+		assert.Equal(t, record.DestinationAmount, "200.000000")
 		assert.Equal(t, record.DestinationAssetCode, "EUR")
-		assert.Equal(t, record.SourceAmount, "30.0000000")
+		assert.Equal(t, record.SourceAmount, "300.000000")
 	}
 
 	// failure response
@@ -97,7 +97,7 @@ func TestStrictReceivePathsRequest(t *testing.T) {
 
 	pr := PathsRequest{
 		DestinationAccount:     "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
-		DestinationAmount:      "100",
+		DestinationAmount:      "1000",
 		DestinationAssetCode:   "NGN",
 		DestinationAssetIssuer: "GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
 		DestinationAssetType:   AssetType4,
@@ -114,9 +114,9 @@ func TestStrictReceivePathsRequest(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.IsType(t, paths, hProtocol.PathsPage{})
 		record := paths.Embedded.Records[0]
-		assert.Equal(t, record.DestinationAmount, "20.0000000")
+		assert.Equal(t, record.DestinationAmount, "200.000000")
 		assert.Equal(t, record.DestinationAssetCode, "EUR")
-		assert.Equal(t, record.SourceAmount, "30.0000000")
+		assert.Equal(t, record.SourceAmount, "300.000000")
 	}
 
 	// failure response
@@ -156,13 +156,13 @@ var pathsResponse = `{
         "destination_asset_issuer": "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
         "destination_asset_type": "credit_alphanum4",
         "path": [],
-        "source_amount": "30.0000000",
+        "source_amount": "300.000000",
         "source_asset_code": "USD",
         "source_asset_issuer": "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
         "source_asset_type": "credit_alphanum4"
       },
       {
-        "destination_amount": "20.0000000",
+        "destination_amount": "200.000000",
         "destination_asset_code": "EUR",
         "destination_asset_issuer": "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
         "destination_asset_type": "credit_alphanum4",
@@ -173,13 +173,13 @@ var pathsResponse = `{
             "asset_type": "credit_alphanum4"
           }
         ],
-        "source_amount": "20.0000000",
+        "source_amount": "200.000000",
         "source_asset_code": "USD",
         "source_asset_issuer": "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
         "source_asset_type": "credit_alphanum4"
       },
       {
-        "destination_amount": "20.0000000",
+        "destination_amount": "200.000000",
         "destination_asset_code": "EUR",
         "destination_asset_issuer": "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
         "destination_asset_type": "credit_alphanum4",
@@ -195,7 +195,7 @@ var pathsResponse = `{
             "asset_type": "credit_alphanum4"
           }
         ],
-        "source_amount": "20.0000000",
+        "source_amount": "200.000000",
         "source_asset_code": "USD",
         "source_asset_issuer": "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
         "source_asset_type": "credit_alphanum4"

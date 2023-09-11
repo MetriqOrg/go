@@ -8,18 +8,18 @@ import (
 	"strconv"
 	"time"
 
-	horizonclient "github.com/stellar/go/clients/horizonclient"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/ticker/internal/scraper"
-	"github.com/stellar/go/services/ticker/internal/tickerdb"
-	hlog "github.com/stellar/go/support/log"
+	orbitrclient "github.com/lantah/go/clients/orbitrclient"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/ticker/internal/scraper"
+	"github.com/lantah/go/services/ticker/internal/tickerdb"
+	hlog "github.com/lantah/go/support/log"
 )
 
-// StreamTrades constantly streams and ingests new trades directly from horizon.
+// StreamTrades constantly streams and ingests new trades directly from orbitr.
 func StreamTrades(
 	ctx context.Context,
 	s *tickerdb.TickerSession,
-	c *horizonclient.Client,
+	c *orbitrclient.Client,
 	l *hlog.Entry,
 ) error {
 	sc := scraper.ScraperConfig{
@@ -53,16 +53,16 @@ func StreamTrades(
 		return err
 	}
 
-	cursor := lastTrade.HorizonID
+	cursor := lastTrade.OrbitRID
 	return sc.StreamNewTrades(cursor, handler)
 }
 
-// BackfillTrades ingest the most recent trades (limited to numDays) directly from Horizon
+// BackfillTrades ingest the most recent trades (limited to numDays) directly from OrbitR
 // into the database.
 func BackfillTrades(
 	ctx context.Context,
 	s *tickerdb.TickerSession,
-	c *horizonclient.Client,
+	c *orbitrclient.Client,
 	l *hlog.Entry,
 	numHours int,
 	limit int,
@@ -153,7 +153,7 @@ func hProtocolTradeToDBTrade(
 	fPrice, _ := rPrice.Float64()
 
 	trade = tickerdb.Trade{
-		HorizonID:       hpt.ID,
+		OrbitRID:       hpt.ID,
 		LedgerCloseTime: hpt.LedgerCloseTime,
 		OfferID:         hpt.OfferID,
 		BaseOfferID:     hpt.BaseOfferID,

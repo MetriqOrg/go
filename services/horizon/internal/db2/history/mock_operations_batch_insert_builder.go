@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/mock"
 )
 

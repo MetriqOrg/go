@@ -146,7 +146,7 @@ func (dbb *DatabaseBackend) GetLedger(ctx context.Context, sequence uint32) (xdr
 }
 
 // getLedgerAfterExist returns true (and sequence number) if there's a ledger in
-// the Gramr DB with the sequence number higher than sequence.
+// the Gravity DB with the sequence number higher than sequence.
 func (dbb *DatabaseBackend) getLedgerAfterExist(ctx context.Context, sequence uint32) (bool, uint32, error) {
 	var fetchedSequence uint32
 	err := dbb.session.GetRaw(ctx, &fetchedSequence, ledgerSequenceAfterQuery, sequence)

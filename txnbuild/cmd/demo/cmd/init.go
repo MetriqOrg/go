@@ -5,8 +5,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/stellar/go/clients/horizonclient"
-	demo "github.com/stellar/go/txnbuild/cmd/demo/operations"
+	"github.com/lantah/go/clients/orbitrclient"
+	demo "github.com/lantah/go/txnbuild/cmd/demo/operations"
 )
 
 // initCmd represents the init command
@@ -17,7 +17,7 @@ var initCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Info("Initialising TestNet accounts...")
 		keys := demo.InitKeys(4)
-		client := horizonclient.DefaultTestNetClient
+		client := orbitrclient.DefaultTestNetClient
 
 		demo.Initialise(client, keys)
 		fmt.Println("Initialisation complete.")

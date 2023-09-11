@@ -23,37 +23,37 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/stellar/go/support/config"
+	"github.com/lantah/go/support/config"
 
-	sdk "github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/clients/gramr"
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/keypair"
-	proto "github.com/stellar/go/protocols/horizon"
-	horizon "github.com/stellar/go/services/horizon/internal"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/support/db/dbtest"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	sdk "github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/clients/gravity"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/keypair"
+	proto "github.com/lantah/go/protocols/orbitr"
+	orbitr "github.com/lantah/go/services/orbitr/internal"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/support/db/dbtest"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 )
 
 const (
 	StandaloneNetworkPassphrase = "Standalone Network ; February 2017"
-	gramrPostgresPassword = "mysecretpassword"
-	horizonDefaultPort          = "8000"
+	gravityPostgresPassword = "mysecretpassword"
+	orbitrDefaultPort          = "8000"
 	adminPort                   = 6060
-	gramrPort             = 11626
-	gramrPostgresPort     = 5641
+	gravityPort             = 11626
+	gravityPostgresPort     = 5641
 	historyArchivePort          = 1570
 	sorobanRPCPort              = 8080
 )
 
 var (
-	HorizonInitErrStr       = "cannot initialize Horizon"
-	RunWithCaptiveCore      = os.Getenv("HORIZON_INTEGRATION_TESTS_ENABLE_CAPTIVE_CORE") != ""
-	RunWithSorobanRPC       = os.Getenv("HORIZON_INTEGRATION_TESTS_ENABLE_SOROBAN_RPC") != ""
-	RunWithCaptiveCoreUseDB = os.Getenv("HORIZON_INTEGRATION_TESTS_CAPTIVE_CORE_USE_DB") != ""
+	OrbitRInitErrStr       = "cannot initialize OrbitR"
+	RunWithCaptiveCore      = os.Getenv("ORBITR_INTEGRATION_TESTS_ENABLE_CAPTIVE_CORE") != ""
+	RunWithSorobanRPC       = os.Getenv("ORBITR_INTEGRATION_TESTS_ENABLE_SOROBAN_RPC") != ""
+	RunWithCaptiveCoreUseDB = os.Getenv("ORBITR_INTEGRATION_TESTS_CAPTIVE_CORE_USE_DB") != ""
 )
 
 type Config struct {
@@ -64,10 +64,10 @@ type Config struct {
 	SorobanRPCDockerImage     string
 
 	// Weird naming here because bools default to false, but we want to start
-	// Horizon by default.
-	SkipHorizonStart bool
+	// OrbitR by default.
+	SkipOrbitRStart bool
 
-	// If you want to override the default parameters passed to Horizon, you can
+	// If you want to override the default parameters passed to OrbitR, you can
 	// set this map accordingly. All of them are passed along as --k=v, but if
 	// you pass an empty value, the parameter will be dropped. (Note that you
 	// should exclude the prepending `--` from keys; this is for compatibility
@@ -76,9 +76,9 @@ type Config struct {
 	// You can also control the environmental variables in a similar way, but
 	// note that CLI args take precedence over envvars, so set the corresponding
 	// CLI arg empty.
-	HorizonWebParameters    map[string]string
-	HorizonIngestParameters map[string]string
-	HorizonEnvironment      map[string]string
+	OrbitRWebParameters    map[string]string
+	OrbitRIngestParameters map[string]string
+	OrbitREnvironment      map[string]string
 }
 
 type CaptiveConfig struct {
@@ -95,15 +95,15 @@ type Test struct {
 
 	config              Config
 	coreConfig          CaptiveConfig
-	horizonIngestConfig horizon.Config
+	orbitrIngestConfig orbitr.Config
 	environment         *EnvironmentManager
 
-	horizonClient      *sdk.Client
-	horizonAdminClient *sdk.AdminClient
-	coreClient         *gramr.Client
+	orbitrClient      *sdk.Client
+	orbitrAdminClient *sdk.AdminClient
+	coreClient         *gravity.Client
 
-	webNode       *horizon.App
-	ingestNode    *horizon.App
+	webNode       *orbitr.App
+	ingestNode    *orbitr.App
 	appStopped    *sync.WaitGroup
 	shutdownOnce  sync.Once
 	shutdownCalls []func()
@@ -115,22 +115,22 @@ type Test struct {
 func GetTestConfig() *Config {
 	return &Config{
 		ProtocolVersion:           17,
-		SkipHorizonStart:          true,
+		SkipOrbitRStart:          true,
 		SkipCoreContainerCreation: false,
-		HorizonIngestParameters:   map[string]string{},
-		HorizonEnvironment:        map[string]string{},
+		OrbitRIngestParameters:   map[string]string{},
+		OrbitREnvironment:        map[string]string{},
 	}
 }
 
 // NewTest starts a new environment for integration test at a given
-// protocol version and blocks until Horizon starts ingesting.
+// protocol version and blocks until OrbitR starts ingesting.
 //
-// Skips the test if HORIZON_INTEGRATION_TESTS env variable is not set.
+// Skips the test if ORBITR_INTEGRATION_TESTS env variable is not set.
 //
 // WARNING: This requires Docker Compose installed.
 func NewTest(t *testing.T, config Config) *Test {
-	if os.Getenv("HORIZON_INTEGRATION_TESTS_ENABLED") == "" {
-		t.Skip("skipping integration test: HORIZON_INTEGRATION_TESTS_ENABLED not set")
+	if os.Getenv("ORBITR_INTEGRATION_TESTS_ENABLED") == "" {
+		t.Skip("skipping integration test: ORBITR_INTEGRATION_TESTS_ENABLED not set")
 	}
 
 	if config.ProtocolVersion == 0 {
@@ -154,7 +154,7 @@ func NewTest(t *testing.T, config Config) *Test {
 			environment: NewEnvironmentManager(),
 		}
 		i.configureCaptiveCore()
-		// Only run Gramr container and its dependencies.
+		// Only run Gravity container and its dependencies.
 		i.runComposeCommand("up", "--detach", "--quiet-pull", "--no-color", "core")
 	} else {
 		i = &Test{
@@ -165,7 +165,7 @@ func NewTest(t *testing.T, config Config) *Test {
 	}
 
 	i.prepareShutdownHandlers()
-	i.coreClient = &gramr.Client{URL: "http://localhost:" + strconv.Itoa(gramrPort)}
+	i.coreClient = &gravity.Client{URL: "http://localhost:" + strconv.Itoa(gravityPort)}
 	if !config.SkipCoreContainerCreation {
 		i.waitForCore()
 		if RunWithSorobanRPC && i.config.EnableSorobanRPC {
@@ -174,12 +174,12 @@ func NewTest(t *testing.T, config Config) *Test {
 		}
 	}
 
-	if !config.SkipHorizonStart {
-		if innerErr := i.StartHorizon(); innerErr != nil {
-			t.Fatalf("Failed to start Horizon: %v", innerErr)
+	if !config.SkipOrbitRStart {
+		if innerErr := i.StartOrbitR(); innerErr != nil {
+			t.Fatalf("Failed to start OrbitR: %v", innerErr)
 		}
 
-		i.WaitForHorizon()
+		i.WaitForOrbitR()
 	}
 
 	return i
@@ -187,10 +187,10 @@ func NewTest(t *testing.T, config Config) *Test {
 
 func (i *Test) configureCaptiveCore() {
 	// We either test Captive Core through environment variables or through
-	// custom Horizon parameters.
+	// custom OrbitR parameters.
 	if RunWithCaptiveCore {
 		composePath := findDockerComposePath()
-		i.coreConfig.binaryPath = os.Getenv("HORIZON_INTEGRATION_TESTS_CAPTIVE_CORE_BIN")
+		i.coreConfig.binaryPath = os.Getenv("ORBITR_INTEGRATION_TESTS_CAPTIVE_CORE_BIN")
 		coreConfigFile := "captive-core-classic-integration-tests.cfg"
 		if i.config.ProtocolVersion >= ledgerbackend.MinimalSorobanProtocolSupport {
 			coreConfigFile = "captive-core-integration-tests.cfg"
@@ -203,13 +203,13 @@ func (i *Test) configureCaptiveCore() {
 	}
 
 	if value := i.getIngestParameter(
-		horizon.GramrBinaryPathName,
-		"GRAMR_BINARY_PATH",
+		orbitr.GravityBinaryPathName,
+		"GRAVITY_BINARY_PATH",
 	); value != "" {
 		i.coreConfig.binaryPath = value
 	}
 	if value := i.getIngestParameter(
-		horizon.CaptiveCoreConfigPathName,
+		orbitr.CaptiveCoreConfigPathName,
 		"CAPTIVE_CORE_CONFIG_PATH",
 	); value != "" {
 		i.coreConfig.configPath = value
@@ -217,10 +217,10 @@ func (i *Test) configureCaptiveCore() {
 }
 
 func (i *Test) getIngestParameter(argName, envName string) string {
-	if value, ok := i.config.HorizonEnvironment[envName]; ok {
+	if value, ok := i.config.OrbitREnvironment[envName]; ok {
 		return value
 	}
-	if value, ok := i.config.HorizonIngestParameters[argName]; ok {
+	if value, ok := i.config.OrbitRIngestParameters[argName]; ok {
 		return value
 	}
 	return ""
@@ -240,7 +240,7 @@ func (i *Test) runComposeCommand(args ...string) {
 	coreImageOverride := ""
 	if i.config.CoreDockerImage != "" {
 		coreImageOverride = i.config.CoreDockerImage
-	} else if img := os.Getenv("HORIZON_INTEGRATION_TESTS_DOCKER_IMG"); img != "" {
+	} else if img := os.Getenv("ORBITR_INTEGRATION_TESTS_DOCKER_IMG"); img != "" {
 		coreImageOverride = img
 	}
 
@@ -254,7 +254,7 @@ func (i *Test) runComposeCommand(args ...string) {
 	sorobanRPCOverride := ""
 	if i.config.SorobanRPCDockerImage != "" {
 		sorobanRPCOverride = i.config.CoreDockerImage
-	} else if img := os.Getenv("HORIZON_INTEGRATION_TESTS_SOROBAN_RPC_DOCKER_IMG"); img != "" {
+	} else if img := os.Getenv("ORBITR_INTEGRATION_TESTS_SOROBAN_RPC_DOCKER_IMG"); img != "" {
 		sorobanRPCOverride = img
 	}
 	if sorobanRPCOverride != "" {
@@ -267,7 +267,7 @@ func (i *Test) runComposeCommand(args ...string) {
 	if i.config.ProtocolVersion < ledgerbackend.MinimalSorobanProtocolSupport {
 		cmd.Env = append(
 			cmd.Environ(),
-			"CORE_CONFIG_FILE=gramr-classic-integration-tests.cfg",
+			"CORE_CONFIG_FILE=gravity-classic-integration-tests.cfg",
 		)
 	}
 
@@ -297,7 +297,7 @@ func (i *Test) prepareShutdownHandlers() {
 			if !i.config.SkipCoreContainerCreation {
 				i.runComposeCommand("rm", "-fvs", "core")
 				i.runComposeCommand("rm", "-fvs", "core-postgres")
-				if os.Getenv("HORIZON_INTEGRATION_TESTS_ENABLE_SOROBAN_RPC") != "" {
+				if os.Getenv("ORBITR_INTEGRATION_TESTS_ENABLE_SOROBAN_RPC") != "" {
 					i.runComposeCommand("logs", "soroban-rpc")
 					i.runComposeCommand("rm", "-fvs", "soroban-rpc")
 				}
@@ -319,19 +319,19 @@ func (i *Test) prepareShutdownHandlers() {
 	}()
 }
 
-func (i *Test) RestartHorizon() error {
-	i.StopHorizon()
+func (i *Test) RestartOrbitR() error {
+	i.StopOrbitR()
 
-	if err := i.StartHorizon(); err != nil {
+	if err := i.StartOrbitR(); err != nil {
 		return err
 	}
 
-	i.WaitForHorizon()
+	i.WaitForOrbitR()
 	return nil
 }
 
-func (i *Test) GetHorizonIngestConfig() horizon.Config {
-	return i.horizonIngestConfig
+func (i *Test) GetOrbitRIngestConfig() orbitr.Config {
+	return i.orbitrIngestConfig
 }
 
 // Shutdown stops the integration tests and destroys all its associated
@@ -347,35 +347,35 @@ func (i *Test) Shutdown() {
 	})
 }
 
-// StartHorizon initializes and starts the Horizon client-facing API server and the ingest server.
-func (i *Test) StartHorizon() error {
+// StartOrbitR initializes and starts the OrbitR client-facing API server and the ingest server.
+func (i *Test) StartOrbitR() error {
 	postgres := dbtest.Postgres(i.t)
 	i.shutdownCalls = append(i.shutdownCalls, func() {
-		i.StopHorizon()
+		i.StopOrbitR()
 		postgres.Close()
 	})
 
-	// To facilitate custom runs of Horizon, we merge a default set of
+	// To facilitate custom runs of OrbitR, we merge a default set of
 	// parameters with the tester-supplied ones (if any).
-	mergedWebArgs := MergeMaps(i.getDefaultWebArgs(postgres), i.config.HorizonWebParameters)
+	mergedWebArgs := MergeMaps(i.getDefaultWebArgs(postgres), i.config.OrbitRWebParameters)
 	webArgs := mapToFlags(mergedWebArgs)
-	i.t.Log("Horizon command line webArgs:", webArgs)
+	i.t.Log("OrbitR command line webArgs:", webArgs)
 
-	mergedIngestArgs := MergeMaps(i.getDefaultIngestArgs(postgres), i.config.HorizonIngestParameters)
+	mergedIngestArgs := MergeMaps(i.getDefaultIngestArgs(postgres), i.config.OrbitRIngestParameters)
 	ingestArgs := mapToFlags(mergedIngestArgs)
-	i.t.Log("Horizon command line ingestArgs:", ingestArgs)
+	i.t.Log("OrbitR command line ingestArgs:", ingestArgs)
 
-	// setup Horizon web command
+	// setup OrbitR web command
 	var err error
-	webConfig, webConfigOpts := horizon.Flags()
+	webConfig, webConfigOpts := orbitr.Flags()
 	webCmd := i.createWebCommand(webConfig, webConfigOpts)
 	webCmd.SetArgs(webArgs)
 	if err = webConfigOpts.Init(webCmd); err != nil {
 		return errors.Wrap(err, "cannot initialize params")
 	}
 
-	// setup Horizon ingest command
-	ingestConfig, ingestConfigOpts := horizon.Flags()
+	// setup OrbitR ingest command
+	ingestConfig, ingestConfigOpts := orbitr.Flags()
 	ingestCmd := i.createIngestCommand(ingestConfig, ingestConfigOpts)
 	ingestCmd.SetArgs(ingestArgs)
 	if err = ingestConfigOpts.Init(ingestCmd); err != nil {
@@ -387,20 +387,20 @@ func (i *Test) StartHorizon() error {
 	}
 
 	if err = ingestCmd.Execute(); err != nil {
-		return errors.Wrap(err, HorizonInitErrStr)
+		return errors.Wrap(err, OrbitRInitErrStr)
 	}
 
 	if err = webCmd.Execute(); err != nil {
-		return errors.Wrap(err, HorizonInitErrStr)
+		return errors.Wrap(err, OrbitRInitErrStr)
 	}
 
-	// Set up Horizon clients
-	i.setupHorizonClient(mergedWebArgs)
-	if err = i.setupHorizonAdminClient(mergedIngestArgs); err != nil {
+	// Set up OrbitR clients
+	i.setupOrbitRClient(mergedWebArgs)
+	if err = i.setupOrbitRAdminClient(mergedIngestArgs); err != nil {
 		return err
 	}
 
-	i.horizonIngestConfig = *ingestConfig
+	i.orbitrIngestConfig = *ingestConfig
 
 	i.appStopped = &sync.WaitGroup{}
 	i.appStopped.Add(2)
@@ -423,11 +423,11 @@ func (i *Test) getDefaultArgs(postgres *dbtest.DB) map[string]string {
 		"ingest":                        "false",
 		"history-archive-urls":          fmt.Sprintf("http://%s:%d", "localhost", historyArchivePort),
 		"db-url":                        postgres.RO_DSN,
-		"gramr-url":              i.coreClient.URL,
+		"gravity-url":              i.coreClient.URL,
 		"network-passphrase":            i.passPhrase,
 		"apply-migrations":              "true",
 		"enable-captive-core-ingestion": "false",
-		"port":                          horizonDefaultPort,
+		"port":                          orbitrDefaultPort,
 		// due to ARTIFICIALLY_ACCELERATE_TIME_FOR_TESTING
 		"checkpoint-frequency": "8",
 		"per-hour-rate-limit":  "0",  // disable rate limiting
@@ -445,13 +445,13 @@ func (i *Test) getDefaultIngestArgs(postgres *dbtest.DB) map[string]string {
 		"port":                          "8001",
 		"enable-captive-core-ingestion": strconv.FormatBool(len(i.coreConfig.binaryPath) > 0),
 		"db-url":                        postgres.DSN,
-		"gramr-db-url": fmt.Sprintf(
+		"gravity-db-url": fmt.Sprintf(
 			"postgres://postgres:%s@%s:%d/stellar?sslmode=disable",
-			gramrPostgresPassword,
+			gravityPostgresPassword,
 			"localhost",
-			gramrPostgresPort,
+			gravityPostgresPort,
 		),
-		"gramr-binary-path":  i.coreConfig.binaryPath,
+		"gravity-binary-path":  i.coreConfig.binaryPath,
 		"captive-core-config-path":  i.coreConfig.configPath,
 		"captive-core-http-port":    "21626",
 		"captive-core-use-db":       strconv.FormatBool(i.coreConfig.useDB),
@@ -459,14 +459,14 @@ func (i *Test) getDefaultIngestArgs(postgres *dbtest.DB) map[string]string {
 		"ingest":                    "true"})
 }
 
-func (i *Test) createWebCommand(webConfig *horizon.Config, webConfigOpts config.ConfigOptions) *cobra.Command {
+func (i *Test) createWebCommand(webConfig *orbitr.Config, webConfigOpts config.ConfigOptions) *cobra.Command {
 	webCmd := &cobra.Command{
-		Use:   "horizon",
-		Short: "Client-facing API server for the Stellar network",
-		Long:  "Client-facing API server for the Stellar network.",
+		Use:   "orbitr",
+		Short: "Client-facing API server for the Lantah Network",
+		Long:  "Client-facing API server for the Lantah Network.",
 		Run: func(cmd *cobra.Command, args []string) {
 			var err error
-			i.webNode, err = horizon.NewAppFromFlags(webConfig, webConfigOpts)
+			i.webNode, err = orbitr.NewAppFromFlags(webConfig, webConfigOpts)
 			if err != nil {
 				// Explicitly exit here as that's how these tests are structured for now.
 				fmt.Println(err)
@@ -477,14 +477,14 @@ func (i *Test) createWebCommand(webConfig *horizon.Config, webConfigOpts config.
 	return webCmd
 }
 
-func (i *Test) createIngestCommand(ingestConfig *horizon.Config, ingestConfigOpts config.ConfigOptions) *cobra.Command {
+func (i *Test) createIngestCommand(ingestConfig *orbitr.Config, ingestConfigOpts config.ConfigOptions) *cobra.Command {
 	ingestCmd := &cobra.Command{
-		Use:   "horizon",
-		Short: "Ingest of Stellar network",
-		Long:  "Ingest of Stellar network.",
+		Use:   "orbitr",
+		Short: "Ingest of Lantah Network",
+		Long:  "Ingest of Lantah Network.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
-			i.ingestNode, err = horizon.NewAppFromFlags(ingestConfig, ingestConfigOpts)
+			i.ingestNode, err = orbitr.NewAppFromFlags(ingestConfig, ingestConfigOpts)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -496,13 +496,13 @@ func (i *Test) createIngestCommand(ingestConfig *horizon.Config, ingestConfigOpt
 
 func (i *Test) initializeEnvironmentVariables() error {
 	var env strings.Builder
-	for key, value := range i.config.HorizonEnvironment {
+	for key, value := range i.config.OrbitREnvironment {
 		env.WriteString(fmt.Sprintf("%s=%s ", key, value))
 	}
-	i.t.Logf("Horizon environmental variables: %s\n", env.String())
+	i.t.Logf("OrbitR environmental variables: %s\n", env.String())
 
 	// prepare env
-	for key, value := range i.config.HorizonEnvironment {
+	for key, value := range i.config.OrbitREnvironment {
 		innerErr := i.environment.Add(key, value)
 		if innerErr != nil {
 			return errors.Wrap(innerErr, fmt.Sprintf(
@@ -512,7 +512,7 @@ func (i *Test) initializeEnvironmentVariables() error {
 	return nil
 }
 
-func (i *Test) setupHorizonAdminClient(ingestArgs map[string]string) error {
+func (i *Test) setupOrbitRAdminClient(ingestArgs map[string]string) error {
 	adminPort := uint16(i.AdminPort())
 	if port, ok := ingestArgs["admin-port"]; ok {
 		if cmdAdminPort, parseErr := strconv.ParseInt(port, 0, 16); parseErr == nil {
@@ -521,22 +521,22 @@ func (i *Test) setupHorizonAdminClient(ingestArgs map[string]string) error {
 	}
 
 	var err error
-	i.horizonAdminClient, err = sdk.NewAdminClient(adminPort, "", 0)
+	i.orbitrAdminClient, err = sdk.NewAdminClient(adminPort, "", 0)
 	if err != nil {
-		return errors.Wrap(err, "cannot initialize Horizon admin client")
+		return errors.Wrap(err, "cannot initialize OrbitR admin client")
 	}
 	return nil
 }
 
-func (i *Test) setupHorizonClient(webArgs map[string]string) {
+func (i *Test) setupOrbitRClient(webArgs map[string]string) {
 	hostname := "localhost"
-	horizonPort := horizonDefaultPort
+	orbitrPort := orbitrDefaultPort
 	if port, ok := webArgs["port"]; ok {
-		horizonPort = port
+		orbitrPort = port
 	}
 
-	i.horizonClient = &sdk.Client{
-		HorizonURL: fmt.Sprintf("http://%s:%s", hostname, horizonPort),
+	i.orbitrClient = &sdk.Client{
+		OrbitRURL: fmt.Sprintf("http://%s:%s", hostname, orbitrPort),
 	}
 }
 
@@ -662,10 +662,10 @@ func (i *Test) PreflightHostFunctions(
 func (i *Test) simulateTransaction(
 	sourceAccount txnbuild.Account, op txnbuild.Operation,
 ) (RPCSimulateTxResponse, xdr.SorobanTransactionData) {
-	// Before preflighting, make sure soroban-rpc is in sync with Horizon
-	root, err := i.horizonClient.Root()
+	// Before preflighting, make sure soroban-rpc is in sync with OrbitR
+	root, err := i.orbitrClient.Root()
 	require.NoError(i.t, err)
-	i.syncWithSorobanRPC(uint32(root.HorizonSequence))
+	i.syncWithSorobanRPC(uint32(root.OrbitRSequence))
 
 	// TODO: soroban-tools should be exporting a proper Go client
 	ch := jhttp.NewChannel("http://localhost:"+strconv.Itoa(sorobanRPCPort), nil)
@@ -747,59 +747,59 @@ func (i *Test) UpgradeProtocol(version uint32) {
 	i.t.Fatalf("could not upgrade protocol in 10s")
 }
 
-func (i *Test) WaitForHorizon() {
+func (i *Test) WaitForOrbitR() {
 	for t := 60; t >= 0; t -= 1 {
 		time.Sleep(time.Second)
 
 		i.t.Log("Waiting for ingestion and protocol upgrade...")
-		root, err := i.horizonClient.Root()
+		root, err := i.orbitrClient.Root()
 		if err != nil {
 			i.t.Logf("could not obtain root response %v", err)
 			continue
 		}
 
-		if root.HorizonSequence < 3 ||
-			int(root.HorizonSequence) != int(root.IngestSequence) {
-			i.t.Logf("Horizon ingesting... %v", root)
+		if root.OrbitRSequence < 3 ||
+			int(root.OrbitRSequence) != int(root.IngestSequence) {
+			i.t.Logf("OrbitR ingesting... %v", root)
 			continue
 		}
 
 		if uint32(root.CurrentProtocolVersion) == i.config.ProtocolVersion {
-			i.t.Logf("Horizon protocol version matches %d: %+v",
+			i.t.Logf("OrbitR protocol version matches %d: %+v",
 				root.CurrentProtocolVersion, root)
 			return
 		}
 	}
 
-	i.t.Fatal("Horizon not ingesting...")
+	i.t.Fatal("OrbitR not ingesting...")
 }
 
-// CoreClient returns a gramr client connected to the Gramr instance.
-func (i *Test) CoreClient() *gramr.Client {
+// CoreClient returns a gravity client connected to the Gravity instance.
+func (i *Test) CoreClient() *gravity.Client {
 	return i.coreClient
 }
 
-// Client returns horizon.Client connected to started Horizon instance.
+// Client returns orbitr.Client connected to started OrbitR instance.
 func (i *Test) Client() *sdk.Client {
-	return i.horizonClient
+	return i.orbitrClient
 }
 
-// AdminClient returns horizon.Client connected to started Horizon instance.
+// AdminClient returns orbitr.Client connected to started OrbitR instance.
 func (i *Test) AdminClient() *sdk.AdminClient {
-	return i.horizonAdminClient
+	return i.orbitrAdminClient
 }
 
-// HorizonWeb returns the horizon.App instance for the current integration test
-func (i *Test) HorizonWeb() *horizon.App {
+// OrbitRWeb returns the orbitr.App instance for the current integration test
+func (i *Test) OrbitRWeb() *orbitr.App {
 	return i.webNode
 }
 
-func (i *Test) HorizonIngest() *horizon.App {
+func (i *Test) OrbitRIngest() *orbitr.App {
 	return i.ingestNode
 }
 
-// StopHorizon shuts down the running Horizon process
-func (i *Test) StopHorizon() {
+// StopOrbitR shuts down the running OrbitR process
+func (i *Test) StopOrbitR() {
 	if i.webNode != nil {
 		i.webNode.Close()
 	}
@@ -807,7 +807,7 @@ func (i *Test) StopHorizon() {
 		i.ingestNode.Close()
 	}
 
-	// Wait for Horizon to shut down completely.
+	// Wait for OrbitR to shut down completely.
 	if i.appStopped != nil {
 		i.appStopped.Wait()
 	}
@@ -815,12 +815,12 @@ func (i *Test) StopHorizon() {
 	i.ingestNode = nil
 }
 
-// AdminPort returns Horizon admin port.
+// AdminPort returns OrbitR admin port.
 func (i *Test) AdminPort() int {
 	return adminPort
 }
 
-// Metrics URL returns Horizon metrics URL.
+// Metrics URL returns OrbitR metrics URL.
 func (i *Test) MetricsURL() string {
 	return fmt.Sprintf("http://localhost:%d/metrics", i.AdminPort())
 }
@@ -1127,10 +1127,10 @@ func (i *Test) GetCurrentCoreLedgerSequence() (int, error) {
 
 // LogFailedTx is a convenience function to provide verbose information about a
 // failing transaction to the test output log, if it's expected to succeed.
-func (i *Test) LogFailedTx(txResponse proto.Transaction, horizonResult error) {
+func (i *Test) LogFailedTx(txResponse proto.Transaction, orbitrResult error) {
 	t := i.CurrentTest()
-	assert.NoErrorf(t, horizonResult, "Submitting the transaction failed")
-	if prob := sdk.GetError(horizonResult); prob != nil {
+	assert.NoErrorf(t, orbitrResult, "Submitting the transaction failed")
+	if prob := sdk.GetError(orbitrResult); prob != nil {
 		t.Logf("  problem: %s\n", prob.Problem.Detail)
 		t.Logf("  extras: %s\n", prob.Problem.Extras["result_codes"])
 		return
@@ -1199,7 +1199,7 @@ func findDockerComposePath() string {
 	}
 
 	// Directly jump down to the folder that should contain the configs
-	return filepath.Join(current, "services", "horizon", "docker")
+	return filepath.Join(current, "services", "orbitr", "docker")
 }
 
 // MergeMaps returns a new map which contains the keys and values of *all* input
@@ -1230,7 +1230,7 @@ func mapToFlags(params map[string]string) []string {
 }
 
 func GetCoreMaxSupportedProtocol() uint32 {
-	str := os.Getenv("HORIZON_INTEGRATION_TESTS_CORE_MAX_SUPPORTED_PROTOCOL")
+	str := os.Getenv("ORBITR_INTEGRATION_TESTS_CORE_MAX_SUPPORTED_PROTOCOL")
 	if str == "" {
 		return 0
 	}

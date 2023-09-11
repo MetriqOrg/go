@@ -1,11 +1,11 @@
-package horizon
+package orbitr
 
 import (
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/xdr"
 )
 
 func TestAccountActions_InvalidID(t *testing.T) {
@@ -13,7 +13,7 @@ func TestAccountActions_InvalidID(t *testing.T) {
 	defer ht.Finish()
 
 	// Makes StateMiddleware happy
-	q := history.Q{ht.HorizonSession()}
+	q := history.Q{ht.OrbitRSession()}
 	err := q.UpdateLastLedgerIngest(ht.Ctx, 100)
 	ht.Assert.NoError(err)
 	err = q.UpdateIngestVersion(ht.Ctx, ingest.CurrentVersion)

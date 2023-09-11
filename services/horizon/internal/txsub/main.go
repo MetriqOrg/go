@@ -5,8 +5,8 @@ import (
 
 	"context"
 
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/xdr"
 )
 
 // Listener represents some client who is interested in retrieving the result
@@ -38,10 +38,10 @@ type OpenSubmissionList interface {
 	Pending(context.Context) []string
 }
 
-// Submitter represents the low-level "submit a transaction to gramr"
+// Submitter represents the low-level "submit a transaction to gravity"
 // provider.
 type Submitter interface {
-	// Submit sends the provided transaction envelope to gramr
+	// Submit sends the provided transaction envelope to gravity
 	Submit(context.Context, string) SubmissionResult
 }
 
@@ -52,13 +52,13 @@ type Result struct {
 	Err error
 
 	// The full details of the transaction which was submitted
-	// to Gramr
+	// to Gravity
 	Transaction history.Transaction
 }
 
 // SubmissionResult gets returned in response to a call to Submitter.Submit.
 // It represents a single discrete submission of a transaction envelope to
-// the stellar network.
+// the lantah network.
 type SubmissionResult struct {
 	// Any error that occurred during the attempted submission.  A nil value
 	// indicates that the submission will or already is being considered for
@@ -66,7 +66,7 @@ type SubmissionResult struct {
 	Err error
 
 	// Duration records the time it took to submit a transaction
-	// to gramr
+	// to gravity
 	Duration time.Duration
 }
 

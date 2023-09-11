@@ -4,14 +4,14 @@ import (
 	"context"
 	"time"
 
-	horizonclient "github.com/stellar/go/clients/horizonclient"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/ticker/internal/utils"
-	hlog "github.com/stellar/go/support/log"
+	orbitrclient "github.com/lantah/go/clients/orbitrclient"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/ticker/internal/utils"
+	hlog "github.com/lantah/go/support/log"
 )
 
 type ScraperConfig struct {
-	Client horizonclient.ClientInterface
+	Client orbitrclient.ClientInterface
 	Logger *hlog.Entry
 	Ctx    *context.Context
 }
@@ -110,7 +110,7 @@ type OrderbookStats struct {
 	SpreadMidPoint     float64
 }
 
-// ProcessAllAssets fetches assets from the Horizon public net. If limit = 0, will fetch all assets.
+// ProcessAllAssets fetches assets from the OrbitR public net. If limit = 0, will fetch all assets.
 func (c *ScraperConfig) ProcessAllAssets(limit int, parallelism int, assetQueue chan<- FinalAsset) (numNonTrash int, numTrash int) {
 	dirtyAssets, err := c.retrieveAssets(limit)
 	if err != nil {
@@ -131,7 +131,7 @@ func (c *ScraperConfig) ProcessAllAssets(limit int, parallelism int, assetQueue 
 // FetchAllTrades fetches all trades for a given period, respecting the limit. If limit = 0,
 // will fetch all trades for that given period.
 func (c *ScraperConfig) FetchAllTrades(since time.Time, limit int) (trades []hProtocol.Trade, err error) {
-	c.Logger.Info("Fetching trades from Horizon")
+	c.Logger.Info("Fetching trades from OrbitR")
 
 	trades, err = c.retrieveTrades(since, limit)
 
@@ -142,9 +142,9 @@ func (c *ScraperConfig) FetchAllTrades(since time.Time, limit int) (trades []hPr
 	return
 }
 
-// StreamNewTrades streams trades directly from horizon and calls the handler function
+// StreamNewTrades streams trades directly from orbitr and calls the handler function
 // whenever a new trade appears.
-func (c *ScraperConfig) StreamNewTrades(cursor string, h horizonclient.TradeHandler) error {
+func (c *ScraperConfig) StreamNewTrades(cursor string, h orbitrclient.TradeHandler) error {
 	c.Logger.Info("Starting to stream trades with cursor at:", cursor)
 	return c.streamTrades(h, cursor)
 }

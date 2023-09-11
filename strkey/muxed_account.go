@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
-	xdr "github.com/stellar/go-xdr/xdr3"
-	"github.com/stellar/go/support/errors"
+	xdr "github.com/lantah/go-xdr/xdr3"
+	"github.com/lantah/go/support/errors"
 )
 
 type MuxedAccount struct {

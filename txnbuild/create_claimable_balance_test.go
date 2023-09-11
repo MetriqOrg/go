@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
 	"github.com/stretchr/testify/assert"
 )
 

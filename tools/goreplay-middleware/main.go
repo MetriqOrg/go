@@ -1,5 +1,5 @@
 // The code below is a goreplay middleware used for regression testing current
-// vs next Horizon version. The middleware system of goreplay is rather simple:
+// vs next OrbitR version. The middleware system of goreplay is rather simple:
 // it streams one of 3 message types to stdin: request (HTTP headers),
 // original response and replayed response. On request we can modify the request
 // and send it to stdout but we don't use this feature here: we send request
@@ -21,7 +21,7 @@ import (
 	"time"
 
 	"github.com/buger/goreplay/proto"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/support/log"
 )
 
 // maxPerSecond defines how many requests should be checked at max per second

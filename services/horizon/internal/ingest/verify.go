@@ -10,14 +10,14 @@ import (
 	"github.com/guregu/null"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/ingest/verify"
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest/processors"
-	"github.com/stellar/go/support/errors"
-	logpkg "github.com/stellar/go/support/log"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/ingest/verify"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
+	"github.com/lantah/go/support/errors"
+	logpkg "github.com/lantah/go/support/log"
+	"github.com/lantah/go/xdr"
 )
 
 const verifyBatchSize = 50000
@@ -108,7 +108,7 @@ func (s *system) verifyState(verifyAgainstLatestCheckpoint bool) error {
 		retries := 0
 		for {
 			// Get root HAS to check if we're checking one of the latest ledgers or
-			// Horizon is catching up. It doesn't make sense to verify old ledgers as
+			// OrbitR is catching up. It doesn't make sense to verify old ledgers as
 			// we want to check the latest state.
 			var historyLatestSequence uint32
 			historyLatestSequence, err = s.historyAdapter.GetLatestLedgerSequence()
@@ -125,13 +125,13 @@ func (s *system) verifyState(verifyAgainstLatestCheckpoint bool) error {
 				break
 			}
 
-			localLog.Info("Waiting for gramr to publish HAS...")
+			localLog.Info("Waiting for gravity to publish HAS...")
 			select {
 			case <-ctx.Done():
 				localLog.Info("State verifier shut down...")
 				return nil
 			case <-time.After(5 * time.Second):
-				// Wait for gramr to publish HAS
+				// Wait for gravity to publish HAS
 				retries++
 				if retries == 12 {
 					localLog.Info("Checkpoint not published. Canceling...")

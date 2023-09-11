@@ -20,7 +20,7 @@ const (
 	defaultHTTPPort      = 11626
 	defaultFailureSafety = -1
 
-	// if LOG_FILE_PATH is omitted gramr actually defaults to "gramr.log"
+	// if LOG_FILE_PATH is omitted gravity actually defaults to "gravity.log"
 	// however, we are overriding this default for captive core
 	defaultLogFilePath = "" // by default we disable logging to a file
 )
@@ -65,7 +65,7 @@ type QuorumSet struct {
 type captiveCoreTomlValues struct {
 	Database string `toml:"DATABASE,omitempty"`
 	// we cannot omitempty because the empty string is a valid configuration for LOG_FILE_PATH
-	// and the default is gramr.log
+	// and the default is gravity.log
 	LogFilePath   string `toml:"LOG_FILE_PATH"`
 	BucketDirPath string `toml:"BUCKET_DIR_PATH,omitempty"`
 	// we cannot omitempty because 0 is a valid configuration for HTTP_PORT
@@ -307,22 +307,22 @@ func (c *CaptiveCoreToml) unmarshal(data []byte, strict bool) error {
 	return nil
 }
 
-// CaptiveCoreTomlParams defines captive core configuration provided by Horizon flags.
+// CaptiveCoreTomlParams defines captive core configuration provided by OrbitR flags.
 type CaptiveCoreTomlParams struct {
-	// NetworkPassphrase is the Stellar network passphrase used by captive core when connecting to the Stellar network.
+	// NetworkPassphrase is the Lantah Network passphrase used by captive core when connecting to the Lantah Network.
 	NetworkPassphrase string
 	// HistoryArchiveURLs are a list of history archive urls.
 	HistoryArchiveURLs []string
 	// HTTPPort is the TCP port to listen for requests (defaults to 0, which disables the HTTP server).
 	HTTPPort *uint
-	// PeerPort is the TCP port to bind to for connecting to the Stellar network
-	// (defaults to 11625). It may be useful for example when there's >1 Gramr
+	// PeerPort is the TCP port to bind to for connecting to the Lantah Network
+	// (defaults to 11625). It may be useful for example when there's >1 Gravity
 	// instance running on a machine.
 	PeerPort *uint
 	// LogPath is the (optional) path in which to store Core logs, passed along
-	// to Gramr's LOG_FILE_PATH.
+	// to Gravity's LOG_FILE_PATH.
 	LogPath *string
-	// Strict is a flag which, if enabled, rejects Gramr toml fields which are not supported by captive core.
+	// Strict is a flag which, if enabled, rejects Gravity toml fields which are not supported by captive core.
 	Strict bool
 	// If true, specifies that captive core should be invoked with on-disk rather than in-memory option for ledger state
 	UseDB bool
@@ -579,7 +579,7 @@ func (c *CaptiveCoreToml) setDefaults(params CaptiveCoreTomlParams) {
 func (c *CaptiveCoreToml) validate(params CaptiveCoreTomlParams) error {
 	if def := c.tree.Has("NETWORK_PASSPHRASE"); def && c.NetworkPassphrase != params.NetworkPassphrase {
 		return fmt.Errorf(
-			"NETWORK_PASSPHRASE in captive core config file: %s does not match Horizon network-passphrase flag: %s",
+			"NETWORK_PASSPHRASE in captive core config file: %s does not match OrbitR network-passphrase flag: %s",
 			c.NetworkPassphrase,
 			params.NetworkPassphrase,
 		)
@@ -587,7 +587,7 @@ func (c *CaptiveCoreToml) validate(params CaptiveCoreTomlParams) error {
 
 	if def := c.tree.Has("HTTP_PORT"); def && params.HTTPPort != nil && c.HTTPPort != *params.HTTPPort {
 		return fmt.Errorf(
-			"HTTP_PORT in captive core config file: %d does not match Horizon captive-core-http-port flag: %d",
+			"HTTP_PORT in captive core config file: %d does not match OrbitR captive-core-http-port flag: %d",
 			c.HTTPPort,
 			*params.HTTPPort,
 		)
@@ -595,7 +595,7 @@ func (c *CaptiveCoreToml) validate(params CaptiveCoreTomlParams) error {
 
 	if def := c.tree.Has("PEER_PORT"); def && params.PeerPort != nil && c.PeerPort != *params.PeerPort {
 		return fmt.Errorf(
-			"PEER_PORT in captive core config file: %d does not match Horizon captive-core-peer-port flag: %d",
+			"PEER_PORT in captive core config file: %d does not match OrbitR captive-core-peer-port flag: %d",
 			c.PeerPort,
 			*params.PeerPort,
 		)
@@ -603,7 +603,7 @@ func (c *CaptiveCoreToml) validate(params CaptiveCoreTomlParams) error {
 
 	if def := c.tree.Has("LOG_FILE_PATH"); def && params.LogPath != nil && c.LogFilePath != *params.LogPath {
 		return fmt.Errorf(
-			"LOG_FILE_PATH in captive core config file: %s does not match Horizon captive-core-log-path flag: %s",
+			"LOG_FILE_PATH in captive core config file: %s does not match OrbitR captive-core-log-path flag: %s",
 			c.LogFilePath,
 			*params.LogPath,
 		)
@@ -611,7 +611,7 @@ func (c *CaptiveCoreToml) validate(params CaptiveCoreTomlParams) error {
 
 	if def := c.tree.Has("EXPERIMENTAL_BUCKETLIST_DB"); def && !params.UseDB {
 		return fmt.Errorf(
-			"BucketListDB enabled in captive core config file, requires Horizon flag --captive-core-use-db",
+			"BucketListDB enabled in captive core config file, requires OrbitR flag --captive-core-use-db",
 		)
 	}
 

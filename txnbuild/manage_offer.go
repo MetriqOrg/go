@@ -1,9 +1,9 @@
 package txnbuild
 
 import (
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // CreateOfferOp returns a ManageSellOffer operation to create a new offer, by
@@ -50,9 +50,9 @@ func UpdateOfferOp(selling, buying Asset, amount string, price xdr.Price, offerI
 // setting the Amount to "0". The sourceAccount is optional, and if not provided,
 // will be that of the surrounding transaction.
 func DeleteOfferOp(offerID int64, sourceAccount ...string) (ManageSellOffer, error) {
-	// It turns out Gramr doesn't care about any of these fields except the amount.
-	// However, Horizon will reject ManageSellOffer if it is missing fields.
-	// Horizon will also reject if Buying == Selling.
+	// It turns out Gravity doesn't care about any of these fields except the amount.
+	// However, OrbitR will reject ManageSellOffer if it is missing fields.
+	// OrbitR will also reject if Buying == Selling.
 	// Therefore unfortunately we have to make up some dummy values here.
 	if len(sourceAccount) > 1 {
 		return ManageSellOffer{}, errors.New("offer can't have multiple source accounts")

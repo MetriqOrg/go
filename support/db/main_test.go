@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/support/db/dbtest"
+	"github.com/lantah/go/support/db/dbtest"
 	"github.com/stretchr/testify/assert"
 )
 

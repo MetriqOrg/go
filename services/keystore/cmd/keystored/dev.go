@@ -4,8 +4,8 @@
 package main
 
 import (
-	"github.com/stellar/go/services/keystore"
-	"github.com/stellar/go/support/env"
+	"github.com/lantah/go/services/keystore"
+	"github.com/lantah/go/support/env"
 )
 
 func getConfig() *keystore.Config {

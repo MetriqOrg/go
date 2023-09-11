@@ -19,7 +19,7 @@ CREATE INDEX offers_by_buying_asset ON offers USING BTREE(buyingasset);
 CREATE INDEX offers_by_last_modified_ledger ON offers USING BTREE(last_modified_ledger);
 
 -- Distributed ingestion relies on a single value locked for updating
--- in a DB. When Horizon starts clear there is no value so we create it
+-- in a DB. When OrbitR starts clear there is no value so we create it
 -- here. If there's a conflict it means the value is already there so
 -- we do nothing.
 INSERT INTO key_value_store (key, value)

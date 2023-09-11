@@ -5,8 +5,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/stellar/go/clients/horizonclient"
-	demo "github.com/stellar/go/txnbuild/cmd/demo/operations"
+	"github.com/lantah/go/clients/orbitrclient"
+	demo "github.com/lantah/go/txnbuild/cmd/demo/operations"
 )
 
 // resetCmd represents the reset command
@@ -18,7 +18,7 @@ for testing.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Info("Resetting TestNet state...")
 		keys := demo.InitKeys(4)
-		client := horizonclient.DefaultTestNetClient
+		client := orbitrclient.DefaultTestNetClient
 
 		demo.Reset(client, keys)
 		fmt.Println("Reset complete.")

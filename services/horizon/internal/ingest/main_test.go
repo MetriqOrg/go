@@ -12,15 +12,15 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest/processors"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	logpkg "github.com/stellar/go/support/log"
-	strtime "github.com/stellar/go/support/time"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	logpkg "github.com/lantah/go/support/log"
+	strtime "github.com/lantah/go/support/time"
+	"github.com/lantah/go/xdr"
 )
 
 var (
@@ -544,16 +544,16 @@ func (m *mockProcessorsRunner) RunTransactionProcessorsOnLedger(ledger xdr.Ledge
 
 var _ ProcessorRunnerInterface = (*mockProcessorsRunner)(nil)
 
-type mockGramrClient struct {
+type mockGravityClient struct {
 	mock.Mock
 }
 
-func (m *mockGramrClient) SetCursor(ctx context.Context, id string, cursor int32) error {
+func (m *mockGravityClient) SetCursor(ctx context.Context, id string, cursor int32) error {
 	args := m.Called(ctx, id, cursor)
 	return args.Error(0)
 }
 
-var _ gramrClient = (*mockGramrClient)(nil)
+var _ gravityClient = (*mockGravityClient)(nil)
 
 type mockSystem struct {
 	mock.Mock

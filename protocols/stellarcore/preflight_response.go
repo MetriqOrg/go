@@ -1,16 +1,16 @@
-package gramr
+package gravity
 
 const (
-	// PreflightStatusError represents the status value returned by gramr when an error occurred from
+	// PreflightStatusError represents the status value returned by gravity when an error occurred from
 	// processing a preflight request
 	PreflightStatusError = "ERROR"
 
-	// PreflightStatusOk represents the status value returned by gramr when a preflight request
+	// PreflightStatusOk represents the status value returned by gravity when a preflight request
 	// succeeded
 	PreflightStatusOk = "OK"
 )
 
-// PreflightResponse is the response from Gramr for the preflight endpoint
+// PreflightResponse is the response from Gravity for the preflight endpoint
 type PreflightResponse struct {
 	Status          string `json:"status"`
 	Detail          string `json:"detail"`

@@ -11,7 +11,7 @@ do
   sort -S 500M -o ${i}_sorted.csv ${i}.csv
 done
 
-echo "Sorting gramr output files..."
+echo "Sorting gravity output files..."
 for i in "${ENTRIES[@]}"
 do
   if test -f "${i}_core_sorted.csv"; then

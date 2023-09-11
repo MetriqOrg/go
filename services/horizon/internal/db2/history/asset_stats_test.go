@@ -5,16 +5,16 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/xdr"
 )
 
 func TestAssetStatContracts(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	assetStats := []ExpAssetStat{
 		{
@@ -146,8 +146,8 @@ func TestAssetStatContracts(t *testing.T) {
 func TestInsertAssetStats(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 	tt.Assert.NoError(q.InsertAssetStats(tt.Ctx, []ExpAssetStat{}, 1))
 
 	assetStats := []ExpAssetStat{
@@ -206,8 +206,8 @@ func TestInsertAssetStats(t *testing.T) {
 func TestInsertAssetStat(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	assetStats := []ExpAssetStat{
 		{
@@ -268,8 +268,8 @@ func TestInsertAssetStat(t *testing.T) {
 func TestInsertAssetStatAlreadyExistsError(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	assetStat := ExpAssetStat{
 		AssetType:   xdr.AssetTypeAssetTypeCreditAlphanum4,
@@ -317,8 +317,8 @@ func TestInsertAssetStatAlreadyExistsError(t *testing.T) {
 func TestUpdateAssetStatDoesNotExistsError(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	assetStat := ExpAssetStat{
 		AssetType:   xdr.AssetTypeAssetTypeCreditAlphanum4,
@@ -353,9 +353,9 @@ func TestUpdateAssetStatDoesNotExistsError(t *testing.T) {
 func TestUpdateStat(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	assetStat := ExpAssetStat{
 		AssetType:   xdr.AssetTypeAssetTypeCreditAlphanum4,
@@ -405,8 +405,8 @@ func TestUpdateStat(t *testing.T) {
 func TestGetAssetStatDoesNotExist(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	assetStat := ExpAssetStat{
 		AssetType:   xdr.AssetTypeAssetTypeCreditAlphanum4,
@@ -437,9 +437,9 @@ func TestGetAssetStatDoesNotExist(t *testing.T) {
 func TestRemoveAssetStat(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	assetStat := ExpAssetStat{
 		AssetType:   xdr.AssetTypeAssetTypeCreditAlphanum4,
@@ -494,9 +494,9 @@ func TestRemoveAssetStat(t *testing.T) {
 func TestGetAssetStatsCursorValidation(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	for _, testCase := range []struct {
 		name          string
@@ -551,9 +551,9 @@ func TestGetAssetStatsCursorValidation(t *testing.T) {
 func TestGetAssetStatsOrderValidation(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	page := db2.PageQuery{
 		Order: "invalid",
@@ -575,9 +575,9 @@ func reverseAssetStats(a []ExpAssetStat) {
 func TestGetAssetStatsFiltersAndCursor(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	usdAssetStat := ExpAssetStat{
 		AssetType:   xdr.AssetTypeAssetTypeCreditAlphanum4,

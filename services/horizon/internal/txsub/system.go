@@ -8,13 +8,13 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/txsub/sequence"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/txsub/sequence"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/xdr"
 )
 
-type HorizonDB interface {
+type OrbitRDB interface {
 	GetLatestHistoryLedger(ctx context.Context) (uint32, error)
 	PreFilteredTransactionByHash(ctx context.Context, dest interface{}, hash string) error
 	TransactionByHash(ctx context.Context, dest interface{}, hash string) error
@@ -27,7 +27,7 @@ type HorizonDB interface {
 
 // System represents a completely configured transaction submission system.
 // Its methods tie together the various pieces used to reliably submit transactions
-// to a gramr instance.
+// to a gravity instance.
 type System struct {
 	initializer sync.Once
 
@@ -36,7 +36,7 @@ type System struct {
 
 	accountSeqPollInterval time.Duration
 
-	DB                func(context.Context) HorizonDB
+	DB                func(context.Context) OrbitRDB
 	Pending           OpenSubmissionList
 	Submitter         Submitter
 	SubmissionQueue   *sequence.Manager
@@ -45,7 +45,7 @@ type System struct {
 
 	Metrics struct {
 		// SubmissionDuration exposes timing metrics about the rate and latency of
-		// submissions to gramr
+		// submissions to gravity
 		SubmissionDuration prometheus.Summary
 
 		// BufferedSubmissionGauge tracks the count of submissions buffered
@@ -208,7 +208,7 @@ func (sys *System) Submit(
 
 // waitUntilAccountSequence blocks until either the context times out or the sequence number of the
 // given source account is greater than or equal to `seq`
-func (sys *System) waitUntilAccountSequence(ctx context.Context, db HorizonDB, sourceAddress string, seq uint64) error {
+func (sys *System) waitUntilAccountSequence(ctx context.Context, db OrbitRDB, sourceAddress string, seq uint64) error {
 	timer := time.NewTimer(sys.accountSeqPollInterval)
 	defer timer.Stop()
 
@@ -251,7 +251,7 @@ func (sys *System) deriveTxSubError(ctx context.Context) error {
 // Submit submits the provided base64 encoded transaction envelope to the
 // network using this submission system.
 func (sys *System) submitOnce(ctx context.Context, env string) SubmissionResult {
-	// submit to gramr
+	// submit to gravity
 	sr := sys.Submitter.Submit(ctx, env)
 	sys.Metrics.SubmissionDuration.Observe(float64(sr.Duration.Seconds()))
 
@@ -408,29 +408,29 @@ func (sys *System) Init() {
 		sys.Log = log.DefaultLogger.WithField("service", "txsub.System")
 
 		sys.Metrics.SubmissionDuration = prometheus.NewSummary(prometheus.SummaryOpts{
-			Namespace: "horizon", Subsystem: "txsub", Name: "submission_duration_seconds",
-			Help: "submission durations to Gramr, sliding window = 10m",
+			Namespace: "orbitr", Subsystem: "txsub", Name: "submission_duration_seconds",
+			Help: "submission durations to Gravity, sliding window = 10m",
 		})
 		sys.Metrics.FailedSubmissionsCounter = prometheus.NewCounter(prometheus.CounterOpts{
-			Namespace: "horizon", Subsystem: "txsub", Name: "failed",
+			Namespace: "orbitr", Subsystem: "txsub", Name: "failed",
 		})
 		sys.Metrics.SuccessfulSubmissionsCounter = prometheus.NewCounter(prometheus.CounterOpts{
-			Namespace: "horizon", Subsystem: "txsub", Name: "succeeded",
+			Namespace: "orbitr", Subsystem: "txsub", Name: "succeeded",
 		})
 		sys.Metrics.OpenSubmissionsGauge = prometheus.NewGauge(prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "txsub", Name: "open",
+			Namespace: "orbitr", Subsystem: "txsub", Name: "open",
 		})
 		sys.Metrics.BufferedSubmissionsGauge = prometheus.NewGauge(prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "txsub", Name: "buffered",
+			Namespace: "orbitr", Subsystem: "txsub", Name: "buffered",
 		})
 		sys.Metrics.V0TransactionsCounter = prometheus.NewCounter(prometheus.CounterOpts{
-			Namespace: "horizon", Subsystem: "txsub", Name: "v0",
+			Namespace: "orbitr", Subsystem: "txsub", Name: "v0",
 		})
 		sys.Metrics.V1TransactionsCounter = prometheus.NewCounter(prometheus.CounterOpts{
-			Namespace: "horizon", Subsystem: "txsub", Name: "v1",
+			Namespace: "orbitr", Subsystem: "txsub", Name: "v1",
 		})
 		sys.Metrics.FeeBumpTransactionsCounter = prometheus.NewCounter(prometheus.CounterOpts{
-			Namespace: "horizon", Subsystem: "txsub", Name: "feebump",
+			Namespace: "orbitr", Subsystem: "txsub", Name: "feebump",
 		})
 
 		sys.accountSeqPollInterval = time.Second
@@ -439,7 +439,7 @@ func (sys *System) Init() {
 			// HTTP clients in SDKs usually timeout in 60 seconds. We want SubmissionTimeout
 			// to be lower than that to make sure that they read the response before the client
 			// timeout.
-			// 30 seconds is 6 ledgers (with avg. close time = 5 sec), enough for gramr
+			// 30 seconds is 6 ledgers (with avg. close time = 5 sec), enough for gravity
 			// to drop the transaction if not added to the ledger and ask client to try again
 			// by sending a Timeout response.
 			sys.SubmissionTimeout = 30 * time.Second

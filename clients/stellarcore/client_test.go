@@ -1,11 +1,11 @@
-package gramr
+package gravity
 
 import (
 	"context"
 	"net/http"
 	"testing"
 
-	proto "github.com/lantah/go/protocols/gramr"
+	proto "github.com/lantah/go/protocols/gravity"
 	"github.com/lantah/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 )

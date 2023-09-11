@@ -1,4 +1,4 @@
-package gramr
+package gravity
 
 import "testing"
 import "encoding/json"
@@ -23,7 +23,7 @@ func TestInfoResponse_IsSynced(t *testing.T) {
 								"hash": "a0035988ef68f225df4fb37b4639b8648c2d77dc4b3b1b0f5cd3bfa385fb4cc3",
 								"num": 5787995
 						},
-						"network": "Test SDF Network ; September 2015",
+						"network": "Test Lantah Network ; 2023",
 						"numPeers": 6,
 						"protocol_version": 8,
 						"quorum": {
@@ -53,7 +53,7 @@ func TestInfoResponse_IsSynced(t *testing.T) {
 								"hash": "263c1e575422e960cb1b51a38feac8f54947d1cd6ba8c7f1da5302b063ad7045",
 								"num": 5789919
 						},
-						"network": "Test SDF Network ; September 2015",
+						"network": "Test Lantah Network ; 2023",
 						"numPeers": 0,
 						"protocol_version": 8,
 						"state": "Joining SCP"

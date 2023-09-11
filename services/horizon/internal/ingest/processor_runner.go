@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest/filters"
-	"github.com/stellar/go/services/horizon/internal/ingest/processors"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest/filters"
+	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 type ingestionSource int
@@ -24,12 +24,12 @@ const (
 	transactionsFilteredTmpGCPeriod = 5 * time.Minute
 )
 
-type horizonChangeProcessor interface {
+type orbitrChangeProcessor interface {
 	processors.ChangeProcessor
 	Commit(context.Context) error
 }
 
-type horizonTransactionProcessor interface {
+type orbitrTransactionProcessor interface {
 	processors.LedgerTransactionProcessor
 	Commit(context.Context) error
 }
@@ -118,7 +118,7 @@ func buildChangeProcessor(
 	}
 
 	useLedgerCache := source == ledgerSource
-	return newGroupChangeProcessors([]horizonChangeProcessor{
+	return newGroupChangeProcessors([]orbitrChangeProcessor{
 		statsChangeProcessor,
 		processors.NewAccountDataProcessor(historyQ),
 		processors.NewAccountsProcessor(historyQ),
@@ -141,7 +141,7 @@ func (s *ProcessorRunner) buildTransactionProcessor(
 	}
 	*tradeProcessor = *processors.NewTradeProcessor(s.historyQ, ledger)
 	sequence := uint32(ledger.Header.LedgerSeq)
-	return newGroupTransactionProcessors([]horizonTransactionProcessor{
+	return newGroupTransactionProcessors([]orbitrTransactionProcessor{
 		statsLedgerTransactionProcessor,
 		processors.NewEffectProcessor(s.historyQ, sequence, s.config.NetworkPassphrase),
 		processors.NewLedgerProcessor(s.historyQ, ledger, CurrentVersion),
@@ -165,7 +165,7 @@ func (s *ProcessorRunner) buildTransactionFilterer() *groupTransactionFilterers 
 
 func (s *ProcessorRunner) buildFilteredOutProcessor(ledger xdr.LedgerHeaderHistoryEntry) *groupTransactionProcessors {
 	// when in online mode, the submission result processor must always run (regardless of filtering)
-	var p []horizonTransactionProcessor
+	var p []orbitrTransactionProcessor
 	if s.config.EnableIngestionFiltering {
 		txSubProc := processors.NewTransactionFilteredTmpProcessor(s.historyQ, uint32(ledger.Header.LedgerSeq))
 		p = append(p, txSubProc)
@@ -174,13 +174,13 @@ func (s *ProcessorRunner) buildFilteredOutProcessor(ledger xdr.LedgerHeaderHisto
 	return newGroupTransactionProcessors(p)
 }
 
-// checkIfProtocolVersionSupported checks if this Horizon version supports the
+// checkIfProtocolVersionSupported checks if this OrbitR version supports the
 // protocol version of a ledger with the given sequence number.
 func (s *ProcessorRunner) checkIfProtocolVersionSupported(ledgerProtocolVersion uint32) error {
 	if ledgerProtocolVersion > MaxSupportedProtocolVersion {
 		return fmt.Errorf(
-			"This Horizon version does not support protocol version %d. "+
-				"The latest supported protocol version is %d. Please upgrade to the latest Horizon version.",
+			"This OrbitR version does not support protocol version %d. "+
+				"The latest supported protocol version is %d. Please upgrade to the latest OrbitR version.",
 			ledgerProtocolVersion,
 			MaxSupportedProtocolVersion,
 		)
@@ -190,8 +190,8 @@ func (s *ProcessorRunner) checkIfProtocolVersionSupported(ledgerProtocolVersion 
 }
 
 // validateBucketList validates if the bucket list hash in history archive
-// matches the one in corresponding ledger header in gramr backend.
-// This gives you full security if data in gramr backend can be trusted
+// matches the one in corresponding ledger header in gravity backend.
+// This gives you full security if data in gravity backend can be trusted
 // (ex. you run it in your infrastructure).
 // The hashes of actual buckets of this HAS file are checked using
 // historyarchive.XdrStream.SetExpectedHash (this is done in
@@ -277,7 +277,7 @@ func (s *ProcessorRunner) RunHistoryArchiveIngestion(
 }
 
 func (s *ProcessorRunner) runChangeProcessorOnLedger(
-	changeProcessor horizonChangeProcessor, ledger xdr.LedgerCloseMeta,
+	changeProcessor orbitrChangeProcessor, ledger xdr.LedgerCloseMeta,
 ) error {
 	var changeReader ingest.ChangeReader
 	var err error

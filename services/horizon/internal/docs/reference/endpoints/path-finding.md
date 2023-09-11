@@ -8,7 +8,7 @@ replacement: https://developers.stellar.org/api/aggregations/paths/
 **Note**: This endpoint will be deprecated, use [/path/strict-receive](./path-finding-strict-receive.md) instead. There are no differences between both endpoints, `/paths` is an alias for `/path/strict-receive`.
 
 
-The Stellar Network allows payments to be made across assets through _path payments_.  A path
+The Lantah Network allows payments to be made across assets through _path payments_.  A path
 payment specifies a series of assets to route a payment through, from source asset (the asset
 debited from the payer) to destination asset (the asset credited to the payee).
 

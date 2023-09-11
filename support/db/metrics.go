@@ -108,7 +108,7 @@ func RegisterMetrics(base *Session, namespace string, sub Subservice, registry *
 			ConstLabels: prometheus.Labels{"subservice": string(sub)},
 		},
 		func() float64 {
-			// Right now MaxOpenConnections in Horizon is static however it's possible that
+			// Right now MaxOpenConnections in OrbitR is static however it's possible that
 			// it will change one day. In such case, using GaugeFunc is very cheap and will
 			// prevent issues with this metric in the future.
 			return float64(base.DB.Stats().MaxOpenConnections)

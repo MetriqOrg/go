@@ -3,8 +3,8 @@ package resourceadapter
 import (
 	"context"
 
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/txsub"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/txsub"
 )
 
 // Populate fills out the details

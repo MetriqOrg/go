@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"context"
@@ -10,37 +10,37 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/protocols/gramr"
-	"github.com/stellar/go/support/clock"
-	"github.com/stellar/go/support/clock/clocktest"
-	"github.com/stellar/go/support/db"
+	"github.com/lantah/go/protocols/gravity"
+	"github.com/lantah/go/support/clock"
+	"github.com/lantah/go/support/clock/clocktest"
+	"github.com/lantah/go/support/db"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-var _ gramrClient = (*mockGramr)(nil)
+var _ gravityClient = (*mockGravity)(nil)
 
-type mockGramr struct {
+type mockGravity struct {
 	mock.Mock
 }
 
-func (m *mockGramr) Info(ctx context.Context) (*gramr.InfoResponse, error) {
+func (m *mockGravity) Info(ctx context.Context) (*gravity.InfoResponse, error) {
 	args := m.Called(ctx)
-	return args.Get(0).(*gramr.InfoResponse), args.Error(1)
+	return args.Get(0).(*gravity.InfoResponse), args.Error(1)
 }
 
 func TestHealthCheck(t *testing.T) {
-	synced := &gramr.InfoResponse{}
+	synced := &gravity.InfoResponse{}
 	synced.Info.State = "Synced!"
-	notSynced := &gramr.InfoResponse{}
+	notSynced := &gravity.InfoResponse{}
 	notSynced.Info.State = "Catching up"
 
 	for _, tc := range []struct {
 		name             string
 		pingErr          error
 		coreErr          error
-		coreResponse     *gramr.InfoResponse
+		coreResponse     *gravity.InfoResponse
 		expectedStatus   int
 		expectedResponse healthResponse
 	}{
@@ -69,7 +69,7 @@ func TestHealthCheck(t *testing.T) {
 			},
 		},
 		{
-			"gramr not synced",
+			"gravity not synced",
 			nil,
 			nil,
 			notSynced,
@@ -81,9 +81,9 @@ func TestHealthCheck(t *testing.T) {
 			},
 		},
 		{
-			"gramr down",
+			"gravity down",
 			nil,
-			fmt.Errorf("gramr is down"),
+			fmt.Errorf("gravity is down"),
 			nil,
 			http.StatusServiceUnavailable,
 			healthResponse{
@@ -93,9 +93,9 @@ func TestHealthCheck(t *testing.T) {
 			},
 		},
 		{
-			"gramr and db down",
+			"gravity and db down",
 			fmt.Errorf("database is down"),
-			fmt.Errorf("gramr is down"),
+			fmt.Errorf("gravity is down"),
 			nil,
 			http.StatusServiceUnavailable,
 			healthResponse{
@@ -105,7 +105,7 @@ func TestHealthCheck(t *testing.T) {
 			},
 		},
 		{
-			"gramr not synced and db down",
+			"gravity not synced and db down",
 			fmt.Errorf("database is down"),
 			nil,
 			notSynced,
@@ -121,7 +121,7 @@ func TestHealthCheck(t *testing.T) {
 			ctx := context.Background()
 			session := &db.MockSession{}
 			session.On("Ping", ctx, dbPingTimeout).Return(tc.pingErr).Once()
-			core := &mockGramr{}
+			core := &mockGravity{}
 			core.On("Info", ctx).Return(tc.coreResponse, tc.coreErr).Once()
 
 			h := healthCheck{
@@ -183,8 +183,8 @@ func TestHealthCheckCache(t *testing.T) {
 	ctx := context.Background()
 	session := &db.MockSession{}
 	session.On("Ping", ctx, dbPingTimeout).Return(nil).Once()
-	core := &mockGramr{}
-	core.On("Info", h.ctx).Return(&gramr.InfoResponse{}, fmt.Errorf("core err")).Once()
+	core := &mockGravity{}
+	core.On("Info", h.ctx).Return(&gravity.InfoResponse{}, fmt.Errorf("core err")).Once()
 	h.session = session
 	h.core = core
 	updatedResponse := healthResponse{

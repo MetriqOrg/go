@@ -10,13 +10,13 @@ import (
 	"github.com/guregu/null"
 	"github.com/guregu/null/zero"
 
-	"github.com/stellar/go/amount"
-	. "github.com/stellar/go/protocols/horizon"
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/assets"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/test"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	. "github.com/lantah/go/protocols/orbitr"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/assets"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/test"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 

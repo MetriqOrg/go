@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -13,7 +13,7 @@ func TestLatestLedger(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	var seq int
 	err := q.LatestLedger(tt.Ctx, &seq)
@@ -27,7 +27,7 @@ func TestLatestLedgerSequenceClosedAt(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	sequence, closedAt, err := q.LatestLedgerSequenceClosedAt(tt.Ctx)
 	if tt.Assert.NoError(err) {
@@ -35,7 +35,7 @@ func TestLatestLedgerSequenceClosedAt(t *testing.T) {
 		tt.Assert.Equal("2019-10-31T13:19:46Z", closedAt.Format(time.RFC3339))
 	}
 
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
 	sequence, closedAt, err = q.LatestLedgerSequenceClosedAt(tt.Ctx)
 	if tt.Assert.NoError(err) {
@@ -47,8 +47,8 @@ func TestLatestLedgerSequenceClosedAt(t *testing.T) {
 func TestGetLatestHistoryLedgerEmptyDB(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	value, err := q.GetLatestHistoryLedger(tt.Ctx)
 	tt.Assert.NoError(err)
@@ -59,7 +59,7 @@ func TestElderLedger(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	var seq int
 	err := q.ElderLedger(tt.Ctx, &seq)

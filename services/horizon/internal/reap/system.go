@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	herrors "github.com/stellar/go/services/horizon/internal/errors"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/toid"
+	herrors "github.com/lantah/go/services/orbitr/internal/errors"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/toid"
 )
 
 // DeleteUnretainedHistory removes all data associated with unretained ledgers.

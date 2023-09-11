@@ -5,14 +5,14 @@ package processors
 import (
 	"testing"
 
-	"github.com/stellar/go/protocols/horizon/base"
+	"github.com/lantah/go/protocols/orbitr/base"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	. "github.com/stellar/go/services/horizon/internal/test/transactions"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	. "github.com/lantah/go/services/orbitr/internal/test/transactions"
+	"github.com/lantah/go/xdr"
 )
 
 func TestTransactionOperationID(t *testing.T) {

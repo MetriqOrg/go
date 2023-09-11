@@ -3,8 +3,8 @@ package history
 import (
 	"context"
 
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/xdr"
 )
 
 // ClaimableBalanceClaimantBatchInsertBuilder is used to insert transactions into the

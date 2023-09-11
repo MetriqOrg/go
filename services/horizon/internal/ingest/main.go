@@ -1,4 +1,4 @@
-// Package ingest contains the new ingestion system for horizon.
+// Package ingest contains the new ingestion system for orbitr.
 // It currently runs completely independent of the old one, that means
 // that the new system can be ledgers behind/ahead the old system.
 package ingest
@@ -12,16 +12,16 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/clients/gramr"
-	"github.com/stellar/go/historyarchive"
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest/filters"
-	apkg "github.com/stellar/go/support/app"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	logpkg "github.com/stellar/go/support/log"
+	"github.com/lantah/go/clients/gravity"
+	"github.com/lantah/go/historyarchive"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest/filters"
+	apkg "github.com/lantah/go/support/app"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	logpkg "github.com/lantah/go/support/log"
 )
 
 const (
@@ -60,13 +60,13 @@ const (
 	//       contract data ledger entries.
 	CurrentVersion = 17
 
-	// MaxDBConnections is the size of the postgres connection pool dedicated to Horizon ingestion:
+	// MaxDBConnections is the size of the postgres connection pool dedicated to OrbitR ingestion:
 	//  * Ledger ingestion,
 	//  * State verifications,
 	//  * Metrics updates.
 	MaxDBConnections = 3
 
-	defaultCoreCursorName           = "HORIZON"
+	defaultCoreCursorName           = "ORBITR"
 	stateVerificationErrorThreshold = 3
 )
 
@@ -74,8 +74,8 @@ var log = logpkg.DefaultLogger.WithField("service", "ingest")
 
 type Config struct {
 	CoreSession            db.SessionInterface
-	GramrURL         string
-	GramrCursor      string
+	GravityURL         string
+	GravityCursor      string
 	EnableCaptiveCore      bool
 	CaptiveCoreBinaryPath  string
 	CaptiveCoreStoragePath string
@@ -128,7 +128,7 @@ const (
 	updateExpStateInvalidErrMsg  string = "Error updating state invalid value"
 )
 
-type gramrClient interface {
+type gravityClient interface {
 	SetCursor(ctx context.Context, id string, cursor int32) error
 }
 
@@ -201,7 +201,7 @@ type system struct {
 	ledgerBackend  ledgerbackend.LedgerBackend
 	historyAdapter historyArchiveAdapterInterface
 
-	gramrClient gramrClient
+	gravityClient gravityClient
 
 	maxReingestRetries          int
 	reingestRetryBackoffSeconds int
@@ -232,7 +232,7 @@ func NewSystem(config Config) (System, error) {
 			Context:             ctx,
 			NetworkPassphrase:   config.NetworkPassphrase,
 			CheckpointFrequency: config.CheckpointFrequency,
-			UserAgent:           fmt.Sprintf("horizon/%s golang/%s", apkg.Version(), runtime.Version()),
+			UserAgent:           fmt.Sprintf("orbitr/%s golang/%s", apkg.Version(), runtime.Version()),
 		},
 	)
 	if err != nil {
@@ -248,7 +248,7 @@ func NewSystem(config Config) (System, error) {
 			return nil, errors.Wrap(err, "error creating captive core backend")
 		}
 	} else if config.LocalCaptiveCoreEnabled() {
-		logger := log.WithField("subservice", "gramr")
+		logger := log.WithField("subservice", "gravity")
 		ledgerBackend, err = ledgerbackend.NewCaptive(
 			ledgerbackend.CaptiveCoreConfig{
 				BinaryPath:          config.CaptiveCoreBinaryPath,
@@ -258,10 +258,10 @@ func NewSystem(config Config) (System, error) {
 				NetworkPassphrase:   config.NetworkPassphrase,
 				HistoryArchiveURLs:  config.HistoryArchiveURLs,
 				CheckpointFrequency: config.CheckpointFrequency,
-				LedgerHashStore:     ledgerbackend.NewHorizonDBLedgerHashStore(config.HistorySession),
+				LedgerHashStore:     ledgerbackend.NewOrbitRDBLedgerHashStore(config.HistorySession),
 				Log:                 logger,
 				Context:             ctx,
-				UserAgent:           fmt.Sprintf("captivecore horizon/%s golang/%s", apkg.Version(), runtime.Version()),
+				UserAgent:           fmt.Sprintf("captivecore orbitr/%s golang/%s", apkg.Version(), runtime.Version()),
 			},
 		)
 		if err != nil {
@@ -292,8 +292,8 @@ func NewSystem(config Config) (System, error) {
 		ledgerBackend:               ledgerBackend,
 		maxReingestRetries:          config.MaxReingestRetries,
 		reingestRetryBackoffSeconds: config.ReingestRetryBackoffSeconds,
-		gramrClient: &gramr.Client{
-			URL: config.GramrURL,
+		gravityClient: &gravity.Client{
+			URL: config.GravityURL,
 		},
 		runner: &ProcessorRunner{
 			ctx:            ctx,
@@ -323,40 +323,40 @@ func ledgerEligibleForStateVerification(checkpointFrequency, stateVerificationFr
 
 func (s *system) initMetrics() {
 	s.metrics.MaxSupportedProtocolVersion = prometheus.NewGauge(prometheus.GaugeOpts{
-		Namespace: "horizon", Subsystem: "ingest", Name: "max_supported_protocol_version",
+		Namespace: "orbitr", Subsystem: "ingest", Name: "max_supported_protocol_version",
 		Help: "the maximum protocol version supported by this version.",
 	})
 
 	s.metrics.MaxSupportedProtocolVersion.Set(float64(MaxSupportedProtocolVersion))
 
 	s.metrics.LocalLatestLedger = prometheus.NewGauge(prometheus.GaugeOpts{
-		Namespace: "horizon", Subsystem: "ingest", Name: "local_latest_ledger",
+		Namespace: "orbitr", Subsystem: "ingest", Name: "local_latest_ledger",
 		Help: "sequence number of the latest ledger ingested by this ingesting instance",
 	})
 
 	s.metrics.LedgerIngestionDuration = prometheus.NewSummary(prometheus.SummaryOpts{
-		Namespace: "horizon", Subsystem: "ingest", Name: "ledger_ingestion_duration_seconds",
+		Namespace: "orbitr", Subsystem: "ingest", Name: "ledger_ingestion_duration_seconds",
 		Help: "ledger ingestion durations, sliding window = 10m",
 	})
 
 	s.metrics.LedgerIngestionTradeAggregationDuration = prometheus.NewSummary(prometheus.SummaryOpts{
-		Namespace: "horizon", Subsystem: "ingest", Name: "ledger_ingestion_trade_aggregation_duration_seconds",
+		Namespace: "orbitr", Subsystem: "ingest", Name: "ledger_ingestion_trade_aggregation_duration_seconds",
 		Help: "ledger ingestion trade aggregation rebuild durations, sliding window = 10m",
 	})
 
 	s.metrics.LedgerIngestionReapLookupTablesDuration = prometheus.NewSummary(prometheus.SummaryOpts{
-		Namespace: "horizon", Subsystem: "ingest", Name: "ledger_ingestion_reap_lookup_tables_duration_seconds",
+		Namespace: "orbitr", Subsystem: "ingest", Name: "ledger_ingestion_reap_lookup_tables_duration_seconds",
 		Help: "ledger ingestion reap lookup tables durations, sliding window = 10m",
 	})
 
 	s.metrics.StateVerifyDuration = prometheus.NewSummary(prometheus.SummaryOpts{
-		Namespace: "horizon", Subsystem: "ingest", Name: "state_verify_duration_seconds",
+		Namespace: "orbitr", Subsystem: "ingest", Name: "state_verify_duration_seconds",
 		Help: "state verification durations, sliding window = 10m",
 	})
 
 	s.metrics.StateInvalidGauge = prometheus.NewGaugeFunc(
 		prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "ingest", Name: "state_invalid",
+			Namespace: "orbitr", Subsystem: "ingest", Name: "state_invalid",
 			Help: "equals 1 if state invalid, 0 otherwise",
 		},
 		func() float64 {
@@ -375,7 +375,7 @@ func (s *system) initMetrics() {
 
 	s.metrics.StateVerifyLedgerEntriesCount = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "ingest", Name: "state_verify_ledger_entries",
+			Namespace: "orbitr", Subsystem: "ingest", Name: "state_verify_ledger_entries",
 			Help: "number of ledger entries downloaded from buckets in a single state verifier run",
 		},
 		[]string{"type"},
@@ -383,7 +383,7 @@ func (s *system) initMetrics() {
 
 	s.metrics.LedgerStatsCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Namespace: "horizon", Subsystem: "ingest", Name: "ledger_stats_total",
+			Namespace: "orbitr", Subsystem: "ingest", Name: "ledger_stats_total",
 			Help: "counters of different ledger stats",
 		},
 		[]string{"type"},
@@ -391,7 +391,7 @@ func (s *system) initMetrics() {
 
 	s.metrics.ProcessorsRunDuration = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Namespace: "horizon", Subsystem: "ingest", Name: "processor_run_duration_seconds_total",
+			Namespace: "orbitr", Subsystem: "ingest", Name: "processor_run_duration_seconds_total",
 			Help: "run durations of ingestion processors",
 		},
 		[]string{"name"},
@@ -399,7 +399,7 @@ func (s *system) initMetrics() {
 
 	s.metrics.ProcessorsRunDurationSummary = prometheus.NewSummaryVec(
 		prometheus.SummaryOpts{
-			Namespace: "horizon", Subsystem: "ingest", Name: "processor_run_duration_seconds",
+			Namespace: "orbitr", Subsystem: "ingest", Name: "processor_run_duration_seconds",
 			Help: "run durations of ingestion processors, sliding window = 10m",
 		},
 		[]string{"name"},
@@ -429,11 +429,11 @@ func (s *system) RegisterMetrics(registry *prometheus.Registry) {
 	registry.MustRegister(s.metrics.ProcessorsRunDuration)
 	registry.MustRegister(s.metrics.ProcessorsRunDurationSummary)
 	registry.MustRegister(s.metrics.StateVerifyLedgerEntriesCount)
-	s.ledgerBackend = ledgerbackend.WithMetrics(s.ledgerBackend, registry, "horizon")
+	s.ledgerBackend = ledgerbackend.WithMetrics(s.ledgerBackend, registry, "orbitr")
 }
 
 // Run starts ingestion system. Ingestion system supports distributed ingestion
-// that means that Horizon ingestion can be running on multiple machines and
+// that means that OrbitR ingestion can be running on multiple machines and
 // only one, random node will lead the ingestion.
 //
 // It needs to support cartesian product of the following run scenarios cases:
@@ -450,7 +450,7 @@ func (s *system) RegisterMetrics(registry *prometheus.Registry) {
 // and ledger processing. So this solves 3a and 3b in both 1a and 1b.
 //
 // Finally, 1a and 1b are tricky because we need to keep the latest version
-// of order book graph in memory of each Horizon instance. To solve this:
+// of order book graph in memory of each OrbitR instance. To solve this:
 // * For state init:
 //   - If instance is a leader, we update the order book graph by running state
 //     pipeline normally.
@@ -587,7 +587,7 @@ func (s *system) runStateMachine(cur stateMachineNode) error {
 				"next_state":    next.node,
 			})
 			if isCancelledError(s.ctx, err) {
-				// We only expect context.Canceled errors to occur when horizon is shutting down
+				// We only expect context.Canceled errors to occur when orbitr is shutting down
 				// so we log these errors using the info log level
 				logger.Info("Error in ingestion state machine")
 			} else {
@@ -736,20 +736,20 @@ func (s *system) resetStateVerificationErrors() {
 }
 
 func (s *system) updateCursor(ledgerSequence uint32) error {
-	if s.gramrClient == nil || s.config.EnableCaptiveCore {
+	if s.gravityClient == nil || s.config.EnableCaptiveCore {
 		return nil
 	}
 
 	cursor := defaultCoreCursorName
-	if s.config.GramrCursor != "" {
-		cursor = s.config.GramrCursor
+	if s.config.GravityCursor != "" {
+		cursor = s.config.GravityCursor
 	}
 
 	ctx, cancel := context.WithTimeout(s.ctx, time.Second)
 	defer cancel()
-	err := s.gramrClient.SetCursor(ctx, cursor, int32(ledgerSequence))
+	err := s.gravityClient.SetCursor(ctx, cursor, int32(ledgerSequence))
 	if err != nil {
-		return errors.Wrap(err, "Setting gramr cursor failed")
+		return errors.Wrap(err, "Setting gravity cursor failed")
 	}
 
 	return nil

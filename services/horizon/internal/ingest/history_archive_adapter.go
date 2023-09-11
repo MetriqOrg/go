@@ -3,10 +3,10 @@ package ingest
 import (
 	"context"
 
-	"github.com/stellar/go/historyarchive"
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/historyarchive"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // historyArchiveAdapter is an adapter for the historyarchive package to read from history archives
@@ -36,7 +36,7 @@ func (haa *historyArchiveAdapter) GetLatestLedgerSequence() (uint32, error) {
 }
 
 // BucketListHash returns the bucket list hash to compare with hash in the
-// ledger header fetched from Gramr.
+// ledger header fetched from Gravity.
 func (haa *historyArchiveAdapter) BucketListHash(sequence uint32) (xdr.Hash, error) {
 	exists, err := haa.archive.CategoryCheckpointExists("history", sequence)
 	if err != nil {

@@ -9,12 +9,12 @@ import (
 
 	"github.com/guregu/null"
 
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/xdr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/xdr"
 
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/render/hal"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/render/hal"
 )
 
 // Populate fills out the details
@@ -61,7 +61,7 @@ func PopulateTransaction(
 	dest.Preconditions = &protocol.TransactionPreconditions{}
 
 	if !row.TimeBounds.Null {
-		// Action needed in release: horizon-v3.0.0: remove ValidBefore and ValidAfter
+		// Action needed in release: orbitr-v3.0.0: remove ValidBefore and ValidAfter
 		dest.ValidBefore = timeString(row.TimeBounds.Upper)
 		dest.ValidAfter = timeString(row.TimeBounds.Lower)
 
@@ -124,7 +124,7 @@ func PopulateTransaction(
 		dest.MaxFee = row.MaxFee
 	}
 
-	lb := hal.LinkBuilder{Base: horizonContext.BaseURL(ctx)}
+	lb := hal.LinkBuilder{Base: orbitrContext.BaseURL(ctx)}
 	dest.Links.Account = lb.Link("/accounts", dest.Account)
 	dest.Links.Ledger = lb.Link("/ledgers", fmt.Sprintf("%d", dest.Ledger))
 	dest.Links.Operations = lb.PagedLink("/transactions", dest.ID, "operations")

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	migrate "github.com/rubenv/sql-migrate"
-	"github.com/stellar/go/services/ticker/internal/tickerdb"
+	"github.com/lantah/go/services/ticker/internal/tickerdb"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -129,7 +129,7 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 	// Now let's create the trades:
 	trades := []tickerdb.Trade{
 		{ // BTC_ETH  trade (ETH is from issuer 1)
-			HorizonID:       "hrzid1",
+			OrbitRID:       "hrzid1",
 			BaseAssetID:     btcAsset.ID,
 			BaseAmount:      100.0,
 			CounterAssetID:  ethAsset1.ID,
@@ -138,7 +138,7 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 			LedgerCloseTime: tenMinutesAgo,
 		},
 		{ // BTC_ETH trade (ETH is from issuer 2)
-			HorizonID:       "hrzid3",
+			OrbitRID:       "hrzid3",
 			BaseAssetID:     btcAsset.ID,
 			BaseAmount:      24.0,
 			CounterAssetID:  ethAsset2.ID,
@@ -147,7 +147,7 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 			LedgerCloseTime: now,
 		},
 		{ // BTC_ETH  trade (ETH is from issuer 1)
-			HorizonID:       "hrzid2",
+			OrbitRID:       "hrzid2",
 			BaseAssetID:     btcAsset.ID,
 			BaseAmount:      50.0,
 			CounterAssetID:  ethAsset1.ID,
@@ -156,7 +156,7 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 			LedgerCloseTime: oneHourAgo,
 		},
 		{ // BTC_ETH  trade (ETH is from issuer 1)
-			HorizonID:       "hrzid4",
+			OrbitRID:       "hrzid4",
 			BaseAssetID:     btcAsset.ID,
 			BaseAmount:      50.0,
 			CounterAssetID:  ethAsset1.ID,
@@ -304,7 +304,7 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 	// Add GRAM/BTC trades.
 	trades = []tickerdb.Trade{
 		{
-			HorizonID:       "hrzid5",
+			OrbitRID:       "hrzid5",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      10.0,
 			CounterAssetID:  btcAsset.ID,
@@ -313,7 +313,7 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 			LedgerCloseTime: tenMinutesAgo,
 		},
 		{
-			HorizonID:       "hrzid6",
+			OrbitRID:       "hrzid6",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      10.0,
 			CounterAssetID:  btcAsset.ID,

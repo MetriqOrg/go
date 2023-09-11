@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	slog "github.com/stellar/go/support/log"
-	cmp "github.com/stellar/go/tools/horizon-cmp/internal"
+	slog "github.com/lantah/go/support/log"
+	cmp "github.com/lantah/go/tools/orbitr-cmp/internal"
 )
 
 var (
@@ -38,7 +38,7 @@ func runHistoryCmp(cmd *cobra.Command) {
 	}
 
 	if count != 0 {
-		ledger := getLatestLedger(horizonBase)
+		ledger := getLatestLedger(orbitrBase)
 		to = uint32(ledger.Sequence)
 		from = uint32(ledger.Sequence) - count + 1
 	}
@@ -59,8 +59,8 @@ func runHistoryCmp(cmd *cobra.Command) {
 
 func checkPaths(paths []string) {
 	for _, path := range paths {
-		a := cmp.NewResponse(horizonBase, path, false)
-		b := cmp.NewResponse(horizonTest, path, false)
+		a := cmp.NewResponse(orbitrBase, path, false)
+		b := cmp.NewResponse(orbitrTest, path, false)
 
 		log = log.WithFields(slog.F{
 			"status_code": a.StatusCode,
@@ -106,7 +106,7 @@ func getAllPagesPaths(page string) []string {
 	var paths []string
 
 	for {
-		resp, err := http.Get(horizonBase + page)
+		resp, err := http.Get(orbitrBase + page)
 		if err != nil {
 			panic(err)
 		}
@@ -122,15 +122,15 @@ func getAllPagesPaths(page string) []string {
 
 		// Add current page
 		page = pageBody.Links.Self.Href
-		page = strings.Replace(page, horizonBase, "", -1)
+		page = strings.Replace(page, orbitrBase, "", -1)
 		paths = append(paths, page)
 
 		// Check next page
 		page = pageBody.Links.Next.Href
-		page = strings.Replace(page, horizonBase, "", -1)
+		page = strings.Replace(page, orbitrBase, "", -1)
 
 		// We always add the last empty page (above) to check if there are
-		// no extra objects in the Horizon we are testing.
+		// no extra objects in the OrbitR we are testing.
 		if len(pageBody.Embedded.Records) == 0 {
 			break
 		}

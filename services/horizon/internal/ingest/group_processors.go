@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/services/horizon/internal/ingest/processors"
-	"github.com/stellar/go/support/errors"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
+	"github.com/lantah/go/support/errors"
 )
 
 type processorsRunDurations map[string]time.Duration
@@ -17,11 +17,11 @@ func (d processorsRunDurations) AddRunDuration(name string, startTime time.Time)
 }
 
 type groupChangeProcessors struct {
-	processors []horizonChangeProcessor
+	processors []orbitrChangeProcessor
 	processorsRunDurations
 }
 
-func newGroupChangeProcessors(processors []horizonChangeProcessor) *groupChangeProcessors {
+func newGroupChangeProcessors(processors []orbitrChangeProcessor) *groupChangeProcessors {
 	return &groupChangeProcessors{
 		processors:             processors,
 		processorsRunDurations: make(map[string]time.Duration),
@@ -51,11 +51,11 @@ func (g groupChangeProcessors) Commit(ctx context.Context) error {
 }
 
 type groupTransactionProcessors struct {
-	processors []horizonTransactionProcessor
+	processors []orbitrTransactionProcessor
 	processorsRunDurations
 }
 
-func newGroupTransactionProcessors(processors []horizonTransactionProcessor) *groupTransactionProcessors {
+func newGroupTransactionProcessors(processors []orbitrTransactionProcessor) *groupTransactionProcessors {
 	return &groupTransactionProcessors{
 		processors:             processors,
 		processorsRunDurations: make(map[string]time.Duration),

@@ -10,9 +10,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/lantah/go/historyarchive"
-	horizon "github.com/lantah/go/services/horizon/internal"
-	"github.com/lantah/go/services/horizon/internal/db2/history"
-	"github.com/lantah/go/services/horizon/internal/ingest"
+	orbitr "github.com/lantah/go/services/orbitr/internal"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
 	support "github.com/lantah/go/support/config"
 	"github.com/lantah/go/support/db"
 	"github.com/lantah/go/support/log"
@@ -43,7 +43,7 @@ var ingestBuildStateCmdOpts = []*support.ConfigOption{
 		OptType:     types.Bool,
 		Required:    false,
 		FlagDefault: false,
-		Usage:       "[optional] set to skip protocol version and bucket list hash verification, can speed up the process because does not require a running Gramr",
+		Usage:       "[optional] set to skip protocol version and bucket list hash verification, can speed up the process because does not require a running Gravity",
 	},
 }
 
@@ -94,7 +94,7 @@ var ingestVerifyRangeCmd = &cobra.Command{
 			co.SetValue()
 		}
 
-		if err := horizon.ApplyFlags(config, flags, horizon.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
+		if err := orbitr.ApplyFlags(config, flags, orbitr.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
 			return err
 		}
 
@@ -111,9 +111,9 @@ var ingestVerifyRangeCmd = &cobra.Command{
 			}()
 		}
 
-		horizonSession, err := db.Open("postgres", config.DatabaseURL)
+		orbitrSession, err := db.Open("postgres", config.DatabaseURL)
 		if err != nil {
-			return fmt.Errorf("cannot open Horizon DB: %v", err)
+			return fmt.Errorf("cannot open OrbitR DB: %v", err)
 		}
 		mngr := historyarchive.NewCheckpointManager(config.CheckpointFrequency)
 		if !mngr.IsCheckpoint(ingestVerifyFrom) && ingestVerifyFrom != 1 {
@@ -126,7 +126,7 @@ var ingestVerifyRangeCmd = &cobra.Command{
 
 		ingestConfig := ingest.Config{
 			NetworkPassphrase:        config.NetworkPassphrase,
-			HistorySession:           horizonSession,
+			HistorySession:           orbitrSession,
 			HistoryArchiveURLs:       config.HistoryArchiveURLs,
 			EnableCaptiveCore:        config.EnableCaptiveCoreIngestion,
 			CaptiveCoreBinaryPath:    config.CaptiveCoreBinaryPath,
@@ -140,11 +140,11 @@ var ingestVerifyRangeCmd = &cobra.Command{
 		}
 
 		if !ingestConfig.EnableCaptiveCore {
-			if config.GramrDatabaseURL == "" {
-				return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
+			if config.GravityDatabaseURL == "" {
+				return fmt.Errorf("flag --%s cannot be empty", orbitr.GravityDBURLFlagName)
 			}
 
-			coreSession, dbErr := db.Open("postgres", config.GramrDatabaseURL)
+			coreSession, dbErr := db.Open("postgres", config.GravityDatabaseURL)
 			if dbErr != nil {
 				return fmt.Errorf("cannot open Core DB: %v", dbErr)
 			}
@@ -203,13 +203,13 @@ var ingestStressTestCmd = &cobra.Command{
 			co.SetValue()
 		}
 
-		if err := horizon.ApplyFlags(config, flags, horizon.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
+		if err := orbitr.ApplyFlags(config, flags, orbitr.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
 			return err
 		}
 
-		horizonSession, err := db.Open("postgres", config.DatabaseURL)
+		orbitrSession, err := db.Open("postgres", config.DatabaseURL)
 		if err != nil {
-			return fmt.Errorf("cannot open Horizon DB: %v", err)
+			return fmt.Errorf("cannot open OrbitR DB: %v", err)
 		}
 
 		if stressTestNumTransactions <= 0 {
@@ -222,7 +222,7 @@ var ingestStressTestCmd = &cobra.Command{
 
 		ingestConfig := ingest.Config{
 			NetworkPassphrase:      config.NetworkPassphrase,
-			HistorySession:         horizonSession,
+			HistorySession:         orbitrSession,
 			HistoryArchiveURLs:     config.HistoryArchiveURLs,
 			EnableCaptiveCore:      config.EnableCaptiveCoreIngestion,
 			RoundingSlippageFilter: config.RoundingSlippageFilter,
@@ -233,11 +233,11 @@ var ingestStressTestCmd = &cobra.Command{
 			ingestConfig.RemoteCaptiveCoreURL = config.RemoteCaptiveCoreURL
 			ingestConfig.CaptiveCoreConfigUseDB = config.CaptiveCoreConfigUseDB
 		} else {
-			if config.GramrDatabaseURL == "" {
-				return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
+			if config.GravityDatabaseURL == "" {
+				return fmt.Errorf("flag --%s cannot be empty", orbitr.GravityDBURLFlagName)
 			}
 
-			coreSession, dbErr := db.Open("postgres", config.GramrDatabaseURL)
+			coreSession, dbErr := db.Open("postgres", config.GravityDatabaseURL)
 			if dbErr != nil {
 				return fmt.Errorf("cannot open Core DB: %v", dbErr)
 			}
@@ -264,19 +264,19 @@ var ingestStressTestCmd = &cobra.Command{
 
 var ingestTriggerStateRebuildCmd = &cobra.Command{
 	Use:   "trigger-state-rebuild",
-	Short: "updates a database to trigger state rebuild, state will be rebuilt by a running Horizon instance, DO NOT RUN production DB, some endpoints will be unavailable until state is rebuilt",
+	Short: "updates a database to trigger state rebuild, state will be rebuilt by a running OrbitR instance, DO NOT RUN production DB, some endpoints will be unavailable until state is rebuilt",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := context.Background()
-		if err := horizon.ApplyFlags(config, flags, horizon.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
+		if err := orbitr.ApplyFlags(config, flags, orbitr.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
 			return err
 		}
 
-		horizonSession, err := db.Open("postgres", config.DatabaseURL)
+		orbitrSession, err := db.Open("postgres", config.DatabaseURL)
 		if err != nil {
-			return fmt.Errorf("cannot open Horizon DB: %v", err)
+			return fmt.Errorf("cannot open OrbitR DB: %v", err)
 		}
 
-		historyQ := &history.Q{SessionInterface: horizonSession}
+		historyQ := &history.Q{SessionInterface: orbitrSession}
 		if err := historyQ.UpdateIngestVersion(ctx, 0); err != nil {
 			return fmt.Errorf("cannot trigger state rebuild: %v", err)
 		}
@@ -291,16 +291,16 @@ var ingestInitGenesisStateCmd = &cobra.Command{
 	Short: "ingests genesis state (ledger 1)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := context.Background()
-		if err := horizon.ApplyFlags(config, flags, horizon.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
+		if err := orbitr.ApplyFlags(config, flags, orbitr.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
 			return err
 		}
 
-		horizonSession, err := db.Open("postgres", config.DatabaseURL)
+		orbitrSession, err := db.Open("postgres", config.DatabaseURL)
 		if err != nil {
-			return fmt.Errorf("cannot open Horizon DB: %v", err)
+			return fmt.Errorf("cannot open OrbitR DB: %v", err)
 		}
 
-		historyQ := &history.Q{SessionInterface: horizonSession}
+		historyQ := &history.Q{SessionInterface: orbitrSession}
 
 		lastIngestedLedger, err := historyQ.GetLastLedgerIngestNonBlocking(ctx)
 		if err != nil {
@@ -313,7 +313,7 @@ var ingestInitGenesisStateCmd = &cobra.Command{
 
 		ingestConfig := ingest.Config{
 			NetworkPassphrase:        config.NetworkPassphrase,
-			HistorySession:           horizonSession,
+			HistorySession:           orbitrSession,
 			HistoryArchiveURLs:       config.HistoryArchiveURLs,
 			EnableCaptiveCore:        config.EnableCaptiveCoreIngestion,
 			CheckpointFrequency:      config.CheckpointFrequency,
@@ -325,11 +325,11 @@ var ingestInitGenesisStateCmd = &cobra.Command{
 			ingestConfig.CaptiveCoreBinaryPath = config.CaptiveCoreBinaryPath
 			ingestConfig.CaptiveCoreConfigUseDB = config.CaptiveCoreConfigUseDB
 		} else {
-			if config.GramrDatabaseURL == "" {
-				return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
+			if config.GravityDatabaseURL == "" {
+				return fmt.Errorf("flag --%s cannot be empty", orbitr.GravityDBURLFlagName)
 			}
 
-			coreSession, dbErr := db.Open("postgres", config.GramrDatabaseURL)
+			coreSession, dbErr := db.Open("postgres", config.GravityDatabaseURL)
 			if dbErr != nil {
 				return fmt.Errorf("cannot open Core DB: %v", dbErr)
 			}
@@ -354,7 +354,7 @@ var ingestInitGenesisStateCmd = &cobra.Command{
 var ingestBuildStateCmd = &cobra.Command{
 	Use:   "build-state",
 	Short: "builds state at a given checkpoint. warning! requires clean DB.",
-	Long:  "useful for debugging or starting Horizon at specific checkpoint.",
+	Long:  "useful for debugging or starting OrbitR at specific checkpoint.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		for _, co := range ingestBuildStateCmdOpts {
 			if err := co.RequireE(); err != nil {
@@ -363,16 +363,16 @@ var ingestBuildStateCmd = &cobra.Command{
 			co.SetValue()
 		}
 
-		if err := horizon.ApplyFlags(config, flags, horizon.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
+		if err := orbitr.ApplyFlags(config, flags, orbitr.ApplyOptions{RequireCaptiveCoreConfig: false, AlwaysIngest: true}); err != nil {
 			return err
 		}
 
-		horizonSession, err := db.Open("postgres", config.DatabaseURL)
+		orbitrSession, err := db.Open("postgres", config.DatabaseURL)
 		if err != nil {
-			return fmt.Errorf("cannot open Horizon DB: %v", err)
+			return fmt.Errorf("cannot open OrbitR DB: %v", err)
 		}
 
-		historyQ := &history.Q{SessionInterface: horizonSession}
+		historyQ := &history.Q{SessionInterface: orbitrSession}
 
 		lastIngestedLedger, err := historyQ.GetLastLedgerIngestNonBlocking(context.Background())
 		if err != nil {
@@ -390,7 +390,7 @@ var ingestBuildStateCmd = &cobra.Command{
 
 		ingestConfig := ingest.Config{
 			NetworkPassphrase:        config.NetworkPassphrase,
-			HistorySession:           horizonSession,
+			HistorySession:           orbitrSession,
 			HistoryArchiveURLs:       config.HistoryArchiveURLs,
 			EnableCaptiveCore:        config.EnableCaptiveCoreIngestion,
 			CaptiveCoreBinaryPath:    config.CaptiveCoreBinaryPath,
@@ -405,11 +405,11 @@ var ingestBuildStateCmd = &cobra.Command{
 
 		if !ingestBuildStateSkipChecks {
 			if !ingestConfig.EnableCaptiveCore {
-				if config.GramrDatabaseURL == "" {
-					return fmt.Errorf("flag --%s cannot be empty", horizon.GramrDBURLFlagName)
+				if config.GravityDatabaseURL == "" {
+					return fmt.Errorf("flag --%s cannot be empty", orbitr.GravityDBURLFlagName)
 				}
 
-				coreSession, dbErr := db.Open("postgres", config.GramrDatabaseURL)
+				coreSession, dbErr := db.Open("postgres", config.GravityDatabaseURL)
 				if dbErr != nil {
 					return fmt.Errorf("cannot open Core DB: %v", dbErr)
 				}

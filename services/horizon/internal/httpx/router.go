@@ -15,16 +15,16 @@ import (
 	"github.com/rs/cors"
 	"github.com/stellar/throttled"
 
-	"github.com/stellar/go/services/horizon/internal/actions"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/paths"
-	"github.com/stellar/go/services/horizon/internal/render"
-	"github.com/stellar/go/services/horizon/internal/render/sse"
-	"github.com/stellar/go/services/horizon/internal/txsub"
-	"github.com/stellar/go/support/db"
-	supporthttp "github.com/stellar/go/support/http"
-	"github.com/stellar/go/support/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/actions"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/paths"
+	"github.com/lantah/go/services/orbitr/internal/render"
+	"github.com/lantah/go/services/orbitr/internal/render/sse"
+	"github.com/lantah/go/services/orbitr/internal/txsub"
+	"github.com/lantah/go/support/db"
+	supporthttp "github.com/lantah/go/support/http"
+	"github.com/lantah/go/support/render/problem"
 )
 
 type RouterConfig struct {
@@ -44,7 +44,7 @@ type RouterConfig struct {
 	PathFinder               paths.Finder
 	PrometheusRegistry       *prometheus.Registry
 	CoreGetter               actions.CoreStateGetter
-	HorizonVersion           string
+	OrbitRVersion           string
 	FriendbotURL             *url.URL
 	HealthCheck              http.Handler
 	EnableIngestionFiltering bool
@@ -131,7 +131,7 @@ func (r *Router) addMiddleware(config *RouterConfig,
 
 func (r *Router) addRoutes(config *RouterConfig, rateLimiter *throttled.HTTPRateLimiter, ledgerState *ledger.State) {
 	stateMiddleware := StateMiddleware{
-		HorizonSession: config.DBSession,
+		OrbitRSession: config.DBSession,
 	}
 
 	r.Method(http.MethodGet, "/health", config.HealthCheck)
@@ -141,7 +141,7 @@ func (r *Router) addRoutes(config *RouterConfig, rateLimiter *throttled.HTTPRate
 		CoreStateGetter:   config.CoreGetter,
 		NetworkPassphrase: config.NetworkPassphrase,
 		FriendbotURL:      config.FriendbotURL,
-		HorizonVersion:    config.HorizonVersion,
+		OrbitRVersion:    config.OrbitRVersion,
 	}})
 
 	streamHandler := sse.StreamHandler{

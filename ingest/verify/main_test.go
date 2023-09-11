@@ -240,7 +240,7 @@ func (s *StateVerifierTestSuite) TestActualExpectedEntryNotEqualWrite() {
 	s.Assert().NoError(err)
 
 	errorMsg := fmt.Sprintf(
-		"Entry does not match the fetched entry. Expected (history archive): %s (pretransform = %s), actual (horizon): %s",
+		"Entry does not match the fetched entry. Expected (history archive): %s (pretransform = %s), actual (orbitr): %s",
 		expectedEntryBase64,
 		expectedEntryBase64,
 		actualEntryBase64,

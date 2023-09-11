@@ -8,17 +8,17 @@ import (
 	"strings"
 	"testing"
 
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 func TestGetAssetFilterConfig(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{SessionInterface: tt.HorizonSession()}
+	q := &history.Q{SessionInterface: tt.OrbitRSession()}
 
 	// put some more values into the config for resource validation after retrieval
 	fc1 := history.AssetFilterConfig{
@@ -58,9 +58,9 @@ func TestGetAssetFilterConfig(t *testing.T) {
 func TestGetAccountFilterConfig(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{SessionInterface: tt.HorizonSession()}
+	q := &history.Q{SessionInterface: tt.OrbitRSession()}
 
 	// put some more values into the config for resource validation after retrieval
 	fc1 := history.AccountFilterConfig{
@@ -100,9 +100,9 @@ func TestGetAccountFilterConfig(t *testing.T) {
 func TestMalFormedUpdateAssetFilterConfig(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{SessionInterface: tt.HorizonSession()}
+	q := &history.Q{SessionInterface: tt.OrbitRSession()}
 
 	handler := &FilterConfigHandler{}
 	recorder := httptest.NewRecorder()
@@ -132,9 +132,9 @@ func TestMalFormedUpdateAssetFilterConfig(t *testing.T) {
 func TestMalFormedUpdateAccountFilterConfig(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{SessionInterface: tt.HorizonSession()}
+	q := &history.Q{SessionInterface: tt.OrbitRSession()}
 
 	handler := &FilterConfigHandler{}
 	recorder := httptest.NewRecorder()
@@ -164,9 +164,9 @@ func TestMalFormedUpdateAccountFilterConfig(t *testing.T) {
 func TestUpdateAssetFilterConfig(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{SessionInterface: tt.HorizonSession()}
+	q := &history.Q{SessionInterface: tt.OrbitRSession()}
 
 	handler := &FilterConfigHandler{}
 	recorder := httptest.NewRecorder()
@@ -206,9 +206,9 @@ func TestUpdateAssetFilterConfig(t *testing.T) {
 func TestUpdateAccountFilterConfig(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{SessionInterface: tt.HorizonSession()}
+	q := &history.Q{SessionInterface: tt.OrbitRSession()}
 
 	handler := &FilterConfigHandler{}
 	recorder := httptest.NewRecorder()

@@ -12,8 +12,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
 )
 
 var extractBinName = regexp.MustCompile(`^(?P<bin>[a-z0-9-]+)-(?P<tag>.+)$`)
@@ -99,11 +99,11 @@ func binNamesForDir(dir string) []string {
 
 func build(pkg, dest, version, buildOS, buildArch string) {
 	// Note: verison string should match other build pipelines to create
-	// reproducible builds for Horizon (and other projects in the future).
+	// reproducible builds for OrbitR (and other projects in the future).
 	rev := runOutput("git", "rev-parse", "HEAD")
 	versionString := version[1:] // Remove letter `v`
 	versionFlag := fmt.Sprintf(
-		"-X=github.com/stellar/go/support/app.version=%s-%s",
+		"-X=github.com/lantah/go/support/app.version=%s-%s",
 		versionString, rev,
 	)
 
@@ -225,7 +225,7 @@ func buildSnapshots() {
 // extractFromTag extracts the name of the binary that should be packaged in the
 // course of execution this script as well as the version it should be packaged
 // as, based on the name of the tag.
-// Tags must be of the form `NAME-vSEMVER`, such as `horizon-v1.0.0` to be
+// Tags must be of the form `NAME-vSEMVER`, such as `orbitr-v1.0.0` to be
 // matched by this function.
 //
 // In the event the match fails, an empty string will be returned.
@@ -350,7 +350,7 @@ func repoName() string {
 	if os.Getenv("REPO") != "" {
 		return os.Getenv("REPO")
 	}
-	return "github.com/stellar/go"
+	return "github.com/lantah/go"
 
 }
 

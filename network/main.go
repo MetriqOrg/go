@@ -1,4 +1,4 @@
-// Package network contains functions that deal with stellar network passphrases
+// Package network contains functions that deal with lantah network passphrases
 // and IDs.
 package network
 
@@ -13,10 +13,10 @@ import (
 )
 
 const (
-	// PublicNetworkPassphrase is the pass phrase used for every transaction intended for the public stellar network
+	// PublicNetworkPassphrase is the pass phrase used for every transaction intended for the public lantah network
 	PublicNetworkPassphrase = "Public Global Lantah Network ; 2023"
 	// TestNetworkPassphrase is the pass phrase used for every transaction intended for the SDF-run test network
-	TestNetworkPassphrase = "Test SDF Network ; September 2015"
+	TestNetworkPassphrase = "Test Lantah Network ; 2023"
 	// FutureNetworkPassphrase is the pass phrase used for every transaction intended for the SDF-run future network
 	FutureNetworkPassphrase = "Test SDF Future Network ; October 2022"
 )

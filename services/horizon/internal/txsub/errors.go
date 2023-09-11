@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/stellar/go/services/horizon/internal/codes"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/codes"
+	"github.com/lantah/go/xdr"
 )
 
 var (
@@ -23,7 +23,7 @@ var (
 )
 
 // FailedTransactionError represent an error that occurred because
-// gramr rejected the transaction.  ResultXDR is a base64
+// gravity rejected the transaction.  ResultXDR is a base64
 // encoded TransactionResult struct
 type FailedTransactionError struct {
 	ResultXDR string

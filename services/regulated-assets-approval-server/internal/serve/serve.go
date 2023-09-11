@@ -9,15 +9,15 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/services/regulated-assets-approval-server/internal/db"
-	"github.com/stellar/go/services/regulated-assets-approval-server/internal/serve/kycstatus"
-	"github.com/stellar/go/support/errors"
-	supporthttp "github.com/stellar/go/support/http"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/render/health"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/services/regulated-assets-approval-server/internal/db"
+	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/kycstatus"
+	"github.com/lantah/go/support/errors"
+	supporthttp "github.com/lantah/go/support/http"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/render/health"
 )
 
 type Options struct {
@@ -25,7 +25,7 @@ type Options struct {
 	BaseURL                           string
 	DatabaseURL                       string
 	FriendbotPaymentAmount            int
-	HorizonURL                        string
+	OrbitRURL                        string
 	IssuerAccountSecret               string
 	KYCRequiredPaymentAmountThreshold string
 	NetworkPassphrase                 string
@@ -89,15 +89,15 @@ func handleHTTP(opts Options) http.Handler {
 	mux.Get("/friendbot", friendbotHandler{
 		assetCode:           opts.AssetCode,
 		issuerAccountSecret: opts.IssuerAccountSecret,
-		horizonClient:       opts.horizonClient(),
-		horizonURL:          opts.HorizonURL,
+		orbitrClient:       opts.orbitrClient(),
+		orbitrURL:          opts.OrbitRURL,
 		networkPassphrase:   opts.NetworkPassphrase,
 		paymentAmount:       opts.FriendbotPaymentAmount,
 	}.ServeHTTP)
 	mux.Post("/tx-approve", txApproveHandler{
 		assetCode:         opts.AssetCode,
 		issuerKP:          issuerKP,
-		horizonClient:     opts.horizonClient(),
+		orbitrClient:     opts.orbitrClient(),
 		networkPassphrase: opts.NetworkPassphrase,
 		db:                db,
 		kycThreshold:      parsedKYCRequiredPaymentThreshold,
@@ -118,9 +118,9 @@ func handleHTTP(opts Options) http.Handler {
 	return mux
 }
 
-func (opts Options) horizonClient() horizonclient.ClientInterface {
-	return &horizonclient.Client{
-		HorizonURL: opts.HorizonURL,
+func (opts Options) orbitrClient() orbitrclient.ClientInterface {
+	return &orbitrclient.Client{
+		OrbitRURL: opts.OrbitRURL,
 		HTTP:       &http.Client{Timeout: 30 * time.Second},
 	}
 }

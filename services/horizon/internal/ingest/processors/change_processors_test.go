@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/support/errors"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/support/errors"
 )
 
 func TestStreamReaderError(t *testing.T) {

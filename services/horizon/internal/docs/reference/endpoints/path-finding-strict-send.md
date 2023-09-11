@@ -5,7 +5,7 @@ clientData:
 replacement: https://developers.stellar.org/api/aggregations/paths/strict-send/
 ---
 
-The Stellar Network allows payments to be made across assets through _path payments_.  A path
+The Lantah Network allows payments to be made across assets through _path payments_.  A path
 payment specifies a series of assets to route a payment through, from source asset (the asset
 debited from the payer) to destination asset (the asset credited to the payee).
 

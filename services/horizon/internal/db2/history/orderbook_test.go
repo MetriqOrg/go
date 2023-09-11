@@ -5,15 +5,15 @@ import (
 	"math"
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/test"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetOrderBookSummaryRequiresTransaction(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	_, err := q.GetOrderBookSummary(tt.Ctx, nativeAsset, eurAsset, 10)
 	assert.EqualError(t, err, "cannot be called outside of a transaction")
@@ -28,8 +28,8 @@ func TestGetOrderBookSummaryRequiresTransaction(t *testing.T) {
 func TestGetOrderBookSummary(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	asksButNoBids := []Offer{twoEurOffer}
 	asksButNoBidsResponse := OrderBookSummary{
@@ -231,8 +231,8 @@ func TestGetOrderBookSummary(t *testing.T) {
 func TestGetOrderBookSummaryExcludesRemovedOffers(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	sellEurOffer := Offer{
 		SellerID: twoEurOfferSeller.Address(),

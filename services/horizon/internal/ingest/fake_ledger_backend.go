@@ -3,10 +3,10 @@ package ingest
 import (
 	"context"
 
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/keypair"
-	logpkg "github.com/stellar/go/support/log"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/keypair"
+	logpkg "github.com/lantah/go/support/log"
+	"github.com/lantah/go/xdr"
 )
 
 type fakeLedgerBackend struct {

@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV GRAMR_VERSION=19.12.0-1378.2109a168a.focal
+ENV GRAVITY_VERSION=19.12.0-1378.2109a168a.focal
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl wget gnupg apt-utils
@@ -9,7 +9,7 @@ RUN echo "deb https://apt.stellar.org focal stable" >/etc/apt/sources.list.d/SDF
 # RUN echo "deb https://apt.stellar.org focal unstable" >/etc/apt/sources.list.d/SDF-unstable.list
 RUN apt-get update -y
 
-RUN apt-get install -y gramr=${GRAMR_VERSION} jq
+RUN apt-get install -y gravity=${GRAVITY_VERSION} jq
 RUN apt-get clean
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ $(env -i bash -c '. /etc/os-release; echo $VERSION_CODENAME')-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \

@@ -135,7 +135,7 @@ func (a *Archive) GetPathHAS(path string) (HistoryArchiveState, error) {
 	}
 
 	// Compare network passphrase only when non empty. The field was added in
-	// Gramr 14.1.0.
+	// Gravity 14.1.0.
 	if has.NetworkPassphrase != "" && a.networkPassphrase != "" &&
 		has.NetworkPassphrase != a.networkPassphrase {
 		return has, errors.Errorf(

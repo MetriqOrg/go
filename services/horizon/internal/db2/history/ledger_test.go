@@ -10,16 +10,16 @@ import (
 	"time"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/toid"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/toid"
+	"github.com/lantah/go/xdr"
 )
 
 func TestLedgerQueries(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	// Test LedgerBySequence
 	var l Ledger
@@ -57,8 +57,8 @@ func TestLedgerQueries(t *testing.T) {
 func TestInsertLedger(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	var ledgerFromDB Ledger
 	var ledgerHeaderBase64 string
@@ -219,9 +219,9 @@ func insertLedgerWithSequence(tt *test.T, q *Q, seq uint32) {
 func TestGetLedgerGaps(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	// The DB is empty, so there shouldn't be any gaps
 	gaps, err := q.GetLedgerGaps(context.Background())

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/protocols/horizon"
+	"github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/services/friendbot/internal"
 	"github.com/lantah/go/support/render/problem"
 	"github.com/stretchr/testify/assert"
@@ -21,26 +21,26 @@ func TestInitFriendbot_createMinionAccounts_success(t *testing.T) {
 
 	botKeypair := botKP.(*keypair.Full)
 	botAccountID := botKeypair.Address()
-	botAccountMock := horizon.Account{
+	botAccountMock := orbitr.Account{
 		AccountID: botAccountID,
 		Sequence:  1,
 	}
 	botAccount := internal.Account{AccountID: botAccountID, Sequence: 1}
 
-	horizonClientMock := horizonclient.MockClient{}
-	horizonClientMock.
-		On("AccountDetail", horizonclient.AccountRequest{
+	orbitrClientMock := orbitrclient.MockClient{}
+	orbitrClientMock.
+		On("AccountDetail", orbitrclient.AccountRequest{
 			AccountID: botAccountID,
 		}).
 		Return(botAccountMock, nil)
-	horizonClientMock.
+	orbitrClientMock.
 		On("SubmitTransactionXDR", mock.Anything).
-		Return(horizon.Transaction{}, nil)
+		Return(orbitr.Transaction{}, nil)
 
 	numMinion := 1000
 	minionBatchSize := 50
 	submitTxRetriesAllowed := 5
-	createdMinions, err := createMinionAccounts(botAccount, botKeypair, "Test SDF Network ; September 2015", "10000", "101", numMinion, minionBatchSize, submitTxRetriesAllowed, 1000, &horizonClientMock)
+	createdMinions, err := createMinionAccounts(botAccount, botKeypair, "Test Lantah Network ; 2023", "10000", "101", numMinion, minionBatchSize, submitTxRetriesAllowed, 1000, &orbitrClientMock)
 	assert.NoError(t, err)
 
 	assert.Equal(t, 1000, len(createdMinions))
@@ -53,38 +53,38 @@ func TestInitFriendbot_createMinionAccounts_timeoutError(t *testing.T) {
 
 	botKeypair := botKP.(*keypair.Full)
 	botAccountID := botKeypair.Address()
-	botAccountMock := horizon.Account{
+	botAccountMock := orbitr.Account{
 		AccountID: botAccountID,
 		Sequence:  1,
 	}
 	botAccount := internal.Account{AccountID: botAccountID, Sequence: 1}
 
-	horizonClientMock := horizonclient.MockClient{}
-	horizonClientMock.
-		On("AccountDetail", horizonclient.AccountRequest{
+	orbitrClientMock := orbitrclient.MockClient{}
+	orbitrClientMock.
+		On("AccountDetail", orbitrclient.AccountRequest{
 			AccountID: botAccountID,
 		}).
 		Return(botAccountMock, nil)
 
 	// Successful on first 3 calls only, and then a timeout error occurs
-	horizonClientMock.
+	orbitrClientMock.
 		On("SubmitTransactionXDR", mock.Anything).
-		Return(horizon.Transaction{}, nil).Times(3)
-	hError := &horizonclient.Error{
+		Return(orbitr.Transaction{}, nil).Times(3)
+	hError := &orbitrclient.Error{
 		Problem: problem.P{
 			Type:   "timeout",
 			Title:  "Timeout",
 			Status: http.StatusGatewayTimeout,
 		},
 	}
-	horizonClientMock.
+	orbitrClientMock.
 		On("SubmitTransactionXDR", mock.Anything).
-		Return(horizon.Transaction{}, hError)
+		Return(orbitr.Transaction{}, hError)
 
 	numMinion := 1000
 	minionBatchSize := 50
 	submitTxRetriesAllowed := 5
-	createdMinions, err := createMinionAccounts(botAccount, botKeypair, "Test SDF Network ; September 2015", "10000", "101", numMinion, minionBatchSize, submitTxRetriesAllowed, 1000, &horizonClientMock)
+	createdMinions, err := createMinionAccounts(botAccount, botKeypair, "Test Lantah Network ; 2023", "10000", "101", numMinion, minionBatchSize, submitTxRetriesAllowed, 1000, &orbitrClientMock)
 	assert.Equal(t, 150, len(createdMinions))
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "after retrying 5 times: submitting create accounts tx:")

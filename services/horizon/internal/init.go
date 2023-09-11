@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"context"
@@ -8,15 +8,15 @@ import (
 	"github.com/getsentry/raven-go"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/exp/orderbook"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/services/horizon/internal/paths"
-	"github.com/stellar/go/services/horizon/internal/simplepath"
-	"github.com/stellar/go/services/horizon/internal/txsub"
-	"github.com/stellar/go/services/horizon/internal/txsub/sequence"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/exp/orderbook"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/services/orbitr/internal/paths"
+	"github.com/lantah/go/services/orbitr/internal/simplepath"
+	"github.com/lantah/go/services/orbitr/internal/txsub"
+	"github.com/lantah/go/services/orbitr/internal/txsub/sequence"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/log"
 )
 
 func mustNewDBSession(subservice db.Subservice, databaseURL string, maxIdle, maxOpen int, registry *prometheus.Registry, clientConfigs ...db.ClientConfig) db.SessionInterface {
@@ -28,22 +28,22 @@ func mustNewDBSession(subservice db.Subservice, databaseURL string, maxIdle, max
 
 	session.DB.SetMaxIdleConns(maxIdle)
 	session.DB.SetMaxOpenConns(maxOpen)
-	return db.RegisterMetrics(session, "horizon", subservice, registry)
+	return db.RegisterMetrics(session, "orbitr", subservice, registry)
 }
 
-func mustInitHorizonDB(app *App) {
+func mustInitOrbitRDB(app *App) {
 	log.Infof("Initializing database...")
 
-	maxIdle := app.config.HorizonDBMaxIdleConnections
-	maxOpen := app.config.HorizonDBMaxOpenConnections
+	maxIdle := app.config.OrbitRDBMaxIdleConnections
+	maxOpen := app.config.OrbitRDBMaxOpenConnections
 	if app.config.Ingest {
 		maxIdle -= ingest.MaxDBConnections
 		maxOpen -= ingest.MaxDBConnections
 		if maxIdle <= 0 {
-			log.Fatalf("max idle connections to horizon db must be greater than %d", ingest.MaxDBConnections)
+			log.Fatalf("max idle connections to orbitr db must be greater than %d", ingest.MaxDBConnections)
 		}
 		if maxOpen <= 0 {
-			log.Fatalf("max open connections to horizon db must be greater than %d", ingest.MaxDBConnections)
+			log.Fatalf("max open connections to orbitr db must be greater than %d", ingest.MaxDBConnections)
 		}
 	}
 
@@ -95,7 +95,7 @@ func initIngester(app *App) {
 	var coreSession db.SessionInterface
 	if !app.config.EnableCaptiveCoreIngestion {
 		coreSession = mustNewDBSession(
-			db.CoreSubservice, app.config.GramrDatabaseURL, ingest.MaxDBConnections, ingest.MaxDBConnections, app.prometheusRegistry)
+			db.CoreSubservice, app.config.GravityDatabaseURL, ingest.MaxDBConnections, ingest.MaxDBConnections, app.prometheusRegistry)
 	}
 	app.ingester, err = ingest.NewSystem(ingest.Config{
 		CoreSession: coreSession,
@@ -105,8 +105,8 @@ func initIngester(app *App) {
 		NetworkPassphrase:                    app.config.NetworkPassphrase,
 		HistoryArchiveURLs:                   app.config.HistoryArchiveURLs,
 		CheckpointFrequency:                  app.config.CheckpointFrequency,
-		GramrURL:                       app.config.GramrURL,
-		GramrCursor:                    app.config.CursorName,
+		GravityURL:                       app.config.GravityURL,
+		GravityCursor:                    app.config.CursorName,
 		CaptiveCoreBinaryPath:                app.config.CaptiveCoreBinaryPath,
 		CaptiveCoreStoragePath:               app.config.CaptiveCoreStoragePath,
 		CaptiveCoreConfigUseDB:               app.config.CaptiveCoreConfigUseDB,
@@ -133,7 +133,7 @@ func initPathFinder(app *App) {
 	}
 	orderBookGraph := orderbook.NewOrderBookGraph()
 	app.orderBookStream = ingest.NewOrderBookStream(
-		&history.Q{app.HorizonSession()},
+		&history.Q{app.OrbitRSession()},
 		orderBookGraph,
 	)
 
@@ -179,17 +179,17 @@ func initLogglyLog(app *App) {
 
 func initDbMetrics(app *App) {
 	app.buildInfoGauge = prometheus.NewGaugeVec(
-		prometheus.GaugeOpts{Namespace: "horizon", Subsystem: "build", Name: "info"},
+		prometheus.GaugeOpts{Namespace: "orbitr", Subsystem: "build", Name: "info"},
 		[]string{"version", "goversion"},
 	)
 	app.prometheusRegistry.MustRegister(app.buildInfoGauge)
 	app.buildInfoGauge.With(prometheus.Labels{
-		"version":   app.horizonVersion,
+		"version":   app.orbitrVersion,
 		"goversion": runtime.Version(),
 	}).Inc()
 
 	app.ingestingGauge = prometheus.NewGauge(
-		prometheus.GaugeOpts{Namespace: "horizon", Subsystem: "ingest", Name: "enabled"},
+		prometheus.GaugeOpts{Namespace: "orbitr", Subsystem: "ingest", Name: "enabled"},
 	)
 	app.prometheusRegistry.MustRegister(app.ingestingGauge)
 
@@ -240,10 +240,10 @@ func initWebMetrics(app *App) {
 func initSubmissionSystem(app *App) {
 	app.submitter = &txsub.System{
 		Pending:         txsub.NewDefaultSubmissionList(),
-		Submitter:       txsub.NewDefaultSubmitter(http.DefaultClient, app.config.GramrURL),
+		Submitter:       txsub.NewDefaultSubmitter(http.DefaultClient, app.config.GravityURL),
 		SubmissionQueue: sequence.NewManager(),
-		DB: func(ctx context.Context) txsub.HorizonDB {
-			return &history.Q{SessionInterface: app.HorizonSession()}
+		DB: func(ctx context.Context) txsub.OrbitRDB {
+			return &history.Q{SessionInterface: app.OrbitRSession()}
 		},
 	}
 }

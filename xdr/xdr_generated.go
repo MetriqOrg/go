@@ -25,7 +25,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/stellar/go-xdr/xdr3"
+	"github.com/lantah/go-xdr/xdr3"
 )
 
 // XdrFilesSHA256 is the SHA256 hashes of source files.

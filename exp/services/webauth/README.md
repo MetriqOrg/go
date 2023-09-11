@@ -49,7 +49,7 @@ Flags:
       --jwk string                         JSON Web Key (JWK) used for signing JWTs (if the key is an asymmetric key that has separate public and private key, the JWK must contain the private key) (JWK)
       --jwt-expires-in int                 The time period in seconds after which the JWT expires (JWT_EXPIRES_IN) (default 300)
       --jwt-issuer string                  The issuer to set in the JWT iss claim (JWT_ISSUER)
-      --network-passphrase string          Network passphrase of the Stellar network transactions should be signed for (NETWORK_PASSPHRASE) (default "Test SDF Network ; September 2015")
+      --network-passphrase string          Network passphrase of the Lantah Network transactions should be signed for (NETWORK_PASSPHRASE) (default "Test Lantah Network ; 2023")
       --port int                           Port to listen and serve on (PORT) (default 8000)
       --signing-key string                 Stellar signing key(s) used for signing transactions comma separated (first key is used for signing, others used for verifying challenges) (SIGNING_KEY)
 ```

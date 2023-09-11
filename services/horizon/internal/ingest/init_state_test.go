@@ -6,7 +6,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stellar/go/support/errors"
+	"github.com/lantah/go/support/errors"
 	"github.com/stretchr/testify/suite"
 )
 

@@ -129,7 +129,7 @@ type HTTP interface {
 // transaction timebounds.
 type UniversalTimeHandler func() int64
 
-// Client struct contains data for creating a orbitr client that connects to the stellar network.
+// Client struct contains data for creating a orbitr client that connects to the lantah network.
 type Client struct {
 	// URL of OrbitR server to connect
 	OrbitRURL        string

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stellar/go/keypair"
+	"github.com/lantah/go/keypair"
 	"github.com/stretchr/testify/assert"
 )
 

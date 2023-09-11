@@ -4,9 +4,9 @@ import (
 	"math"
 	"testing"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -64,7 +64,7 @@ func TestNegativeSequenceTxSubmission(t *testing.T) {
 	tt.NoError(err)
 	txResp, err = itest.Client().SubmitTransaction(tx)
 	tt.Error(err)
-	clientErr, ok := err.(*horizonclient.Error)
+	clientErr, ok := err.(*orbitrclient.Error)
 	tt.True(ok)
 	codes, err := clientErr.ResultCodes()
 	tt.NoError(err)

@@ -5,15 +5,15 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/services/horizon/internal/codes"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/protocols/orbitr/operations"
+	"github.com/lantah/go/services/orbitr/internal/codes"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 )
 
 func TestHappyClawbackAccount(t *testing.T) {
@@ -33,7 +33,7 @@ func TestHappyClawbackAccount(t *testing.T) {
 	assertClawbackAccountSuccess(tt, itest, master, fromKey, "0.0000000", submissionResp)
 
 	// Check the operation details
-	opDetailsResponse, err := itest.Client().Operations(horizonclient.OperationRequest{
+	opDetailsResponse, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: submissionResp.Hash,
 	})
 	tt.NoError(err)
@@ -45,7 +45,7 @@ func TestHappyClawbackAccount(t *testing.T) {
 	}
 
 	// Check the operation effects
-	effectsResponse, err := itest.Client().Effects(horizonclient.EffectRequest{
+	effectsResponse, err := itest.Client().Effects(orbitrclient.EffectRequest{
 		ForTransaction: submissionResp.Hash,
 	})
 	tt.NoError(err)
@@ -283,7 +283,7 @@ func TestHappyClawbackClaimableBalance(t *testing.T) {
 	itest.MustSubmitOperations(itest.MasterAccount(), master, &pesetasCreateCB)
 
 	// Check that the claimable balance was created, clawback is enabled and obtain the id to claw it back later on
-	listCBResp, err := itest.Client().ClaimableBalances(horizonclient.ClaimableBalanceRequest{
+	listCBResp, err := itest.Client().ClaimableBalances(orbitrclient.ClaimableBalanceRequest{
 		Claimant: accountKeyPair.Address(),
 	})
 	tt.NoError(err)
@@ -296,13 +296,13 @@ func TestHappyClawbackClaimableBalance(t *testing.T) {
 	}
 
 	// check that its operations and transactions can be obtained
-	transactionsResp, err := itest.Client().Transactions(horizonclient.TransactionRequest{
+	transactionsResp, err := itest.Client().Transactions(orbitrclient.TransactionRequest{
 		ForClaimableBalance: cbID,
 	})
 	assert.NoError(t, err)
 	assert.Len(t, transactionsResp.Embedded.Records, 1)
 
-	operationsResp, err := itest.Client().Operations(horizonclient.OperationRequest{
+	operationsResp, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForClaimableBalance: cbID,
 	})
 	assert.NoError(t, err)
@@ -322,13 +322,13 @@ func TestHappyClawbackClaimableBalance(t *testing.T) {
 	tt.Error(err)
 
 	// check that its operations and transactions can still be obtained
-	transactionsResp, err = itest.Client().Transactions(horizonclient.TransactionRequest{
+	transactionsResp, err = itest.Client().Transactions(orbitrclient.TransactionRequest{
 		ForClaimableBalance: cbID,
 	})
 	assert.NoError(t, err)
 	assert.Len(t, transactionsResp.Embedded.Records, 2)
 
-	operationsResp, err = itest.Client().Operations(horizonclient.OperationRequest{
+	operationsResp, err = itest.Client().Operations(orbitrclient.OperationRequest{
 		ForClaimableBalance: cbID,
 	})
 	assert.NoError(t, err)
@@ -338,7 +338,7 @@ func TestHappyClawbackClaimableBalance(t *testing.T) {
 	}
 
 	// Check the operation details
-	opDetailsResponse, err := itest.Client().Operations(horizonclient.OperationRequest{
+	opDetailsResponse, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: clawbackCBResp.Hash,
 	})
 	tt.NoError(err)
@@ -348,7 +348,7 @@ func TestHappyClawbackClaimableBalance(t *testing.T) {
 	}
 
 	// Check the operation effects
-	effectsResponse, err := itest.Client().Effects(horizonclient.EffectRequest{
+	effectsResponse, err := itest.Client().Effects(orbitrclient.EffectRequest{
 		ForTransaction: clawbackCBResp.Hash,
 	})
 	tt.NoError(err)
@@ -432,7 +432,7 @@ func TestHappySetTrustLineFlags(t *testing.T) {
 	}
 
 	// Check the operation details
-	opDetailsResponse, err := itest.Client().Operations(horizonclient.OperationRequest{
+	opDetailsResponse, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: submissionResp.Hash,
 	})
 	tt.NoError(err)
@@ -452,7 +452,7 @@ func TestHappySetTrustLineFlags(t *testing.T) {
 	}
 
 	// Check the operation effects
-	effectsResponse, err := itest.Client().Effects(horizonclient.EffectRequest{
+	effectsResponse, err := itest.Client().Effects(orbitrclient.EffectRequest{
 		ForTransaction: submissionResp.Hash,
 	})
 	tt.NoError(err)
@@ -479,7 +479,7 @@ func TestHappySetTrustLineFlags(t *testing.T) {
 	}
 	_, err = itest.SubmitOperations(itest.MasterAccount(), master, &setTrustlineFlags)
 	if tt.Error(err) {
-		clientErr, ok := err.(*horizonclient.Error)
+		clientErr, ok := err.(*orbitrclient.Error)
 		if tt.True(ok) {
 			tt.Equal(400, clientErr.Problem.Status)
 			resCodes, err := clientErr.ResultCodes()

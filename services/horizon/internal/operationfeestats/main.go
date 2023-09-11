@@ -1,15 +1,15 @@
 // Package operationfeestats provides useful utilities concerning operation fee
 // stats within stellar,specifically as a central location to store a cached snapshot
 // of the state of network per operation fees and surge pricing. This package is
-// intended to be at the lowest levels of horizon's dependency tree, please keep
-// it free of dependencies to other horizon packages.
+// intended to be at the lowest levels of orbitr's dependency tree, please keep
+// it free of dependencies to other orbitr packages.
 package operationfeestats
 
 import (
 	"sync"
 )
 
-// State represents a snapshot of horizon's view of the state of operation fee's
+// State represents a snapshot of orbitr's view of the state of operation fee's
 // on the network.
 type State struct {
 	FeeChargedMax  int64

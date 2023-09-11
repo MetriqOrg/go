@@ -10,14 +10,14 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
-	"github.com/stellar/go/gxdr"
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/randxdr"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest/processors"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/gxdr"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/randxdr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/xdr"
 )
 
 func genAccount(tt *test.T, gen randxdr.Generator) xdr.LedgerEntryChange {
@@ -268,8 +268,8 @@ func balanceContractDataFromTrustline(tt *test.T, trustline xdr.LedgerEntryChang
 func TestStateVerifierLockBusy(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{&db.Session{DB: tt.HorizonDB}}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{&db.Session{DB: tt.OrbitRDB}}
 
 	checkpointLedger := uint32(63)
 	changeProcessor := buildChangeProcessor(q, &ingest.StatsChangeProcessor{}, ledgerSource, checkpointLedger, "")
@@ -321,8 +321,8 @@ func TestStateVerifierLockBusy(t *testing.T) {
 func TestStateVerifier(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{&db.Session{DB: tt.HorizonDB}}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{&db.Session{DB: tt.OrbitRDB}}
 
 	checkpointLedger := uint32(63)
 	changeProcessor := buildChangeProcessor(q, &ingest.StatsChangeProcessor{}, ledgerSource, checkpointLedger, "")

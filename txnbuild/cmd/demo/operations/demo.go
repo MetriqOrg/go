@@ -9,15 +9,15 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/network"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/strkey"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/network"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/strkey"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 
-	"github.com/stellar/go/keypair"
+	"github.com/lantah/go/keypair"
 )
 
 // The account address of the TestNet "friendbot"
@@ -77,7 +77,7 @@ func InitKeys(n int) []Account {
 
 // Reset is a command that removes all test accounts created by this demo. All funds are
 // transferred back to Friendbot using the account merge operation.
-func Reset(client *horizonclient.Client, keys []Account) {
+func Reset(client *orbitrclient.Client, keys []Account) {
 	keys = loadAccounts(client, keys)
 	for _, k := range keys {
 		if !k.Exists {
@@ -90,9 +90,9 @@ func Reset(client *horizonclient.Client, keys []Account) {
 		log.Info("Found testnet account with ID:", k.HAccount.ID)
 
 		// Find any offers that need deleting...
-		offerRequest := horizonclient.OfferRequest{
+		offerRequest := orbitrclient.OfferRequest{
 			ForAccount: k.Address,
-			Order:      horizonclient.OrderDesc,
+			Order:      orbitrclient.OrderDesc,
 		}
 		offers, err := client.Offers(offerRequest)
 		dieIfError("error while getting offers", err)
@@ -167,7 +167,7 @@ func Reset(client *horizonclient.Client, keys []Account) {
 // Initialise is a command that funds an initial set of accounts for use with other demo operations.
 // The first account is funded from Friendbot; subseqeuent accounts are created and funded from this
 // first account.
-func Initialise(client *horizonclient.Client, keys []Account) {
+func Initialise(client *orbitrclient.Client, keys []Account) {
 	// Fund the first account from friendbot
 	log.Infof("Funding account %s from friendbot...", keys[0].Address)
 	_, err := client.Fund(keys[0].Address)
@@ -186,8 +186,8 @@ func Initialise(client *horizonclient.Client, keys []Account) {
 }
 
 // TXError is a command that deliberately creates a bad transaction to trigger an error response
-// from Horizon. This code demonstrates how to retrieve and inspect the error.
-func TXError(client *horizonclient.Client, keys []Account) {
+// from OrbitR. This code demonstrates how to retrieve and inspect the error.
+func TXError(client *orbitrclient.Client, keys []Account) {
 	keys = loadAccounts(client, keys)
 	// Create a bump seq operation
 	// Set the seq number to -1 (invalid)
@@ -426,7 +426,7 @@ func createKeypair() Account {
 }
 
 // loadAccounts looks up each account in the provided list and stores the returned information.
-func loadAccounts(client *horizonclient.Client, accounts []Account) []Account {
+func loadAccounts(client *orbitrclient.Client, accounts []Account) []Account {
 	for i, a := range accounts {
 		accounts[i].HAccount = loadAccount(client, a.Address)
 		accounts[i].Exists = true
@@ -435,23 +435,23 @@ func loadAccounts(client *horizonclient.Client, accounts []Account) []Account {
 	return accounts
 }
 
-// loadAccount is an example of how to get an account's details from Horizon.
-func loadAccount(client *horizonclient.Client, address string) *hProtocol.Account {
-	accountRequest := horizonclient.AccountRequest{AccountID: address}
-	horizonSourceAccount, err := client.AccountDetail(accountRequest)
+// loadAccount is an example of how to get an account's details from OrbitR.
+func loadAccount(client *orbitrclient.Client, address string) *hProtocol.Account {
+	accountRequest := orbitrclient.AccountRequest{AccountID: address}
+	orbitrSourceAccount, err := client.AccountDetail(accountRequest)
 	if err != nil {
 		dieIfError(fmt.Sprintf("couldn't get account detail for %s", address), err)
 	}
 
-	return &horizonSourceAccount
+	return &orbitrSourceAccount
 }
 
-func submit(client *horizonclient.Client, txeBase64 string) (resp hProtocol.Transaction) {
+func submit(client *orbitrclient.Client, txeBase64 string) (resp hProtocol.Transaction) {
 	resp, err := client.SubmitTransactionXDR(txeBase64)
 	if err != nil {
-		hError := err.(*horizonclient.Error)
-		err = printHorizonError(hError)
-		dieIfError("couldn't print Horizon eror", err)
+		hError := err.(*orbitrclient.Error)
+		err = printOrbitRError(hError)
+		dieIfError("couldn't print OrbitR eror", err)
 		os.Exit(1)
 	}
 
@@ -464,8 +464,8 @@ func dieIfError(desc string, err error) {
 	}
 }
 
-// printHorizonError is an example of how to inspect the error returned from Horizon.
-func printHorizonError(hError *horizonclient.Error) error {
+// printOrbitRError is an example of how to inspect the error returned from OrbitR.
+func printOrbitRError(hError *orbitrclient.Error) error {
 	problem := hError.Problem
 	log.Println("Error type:", problem.Type)
 	log.Println("Error title:", problem.Title)

@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"encoding/json"
@@ -7,12 +7,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/corestate"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/corestate"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/xdr"
 )
 
 func TestTransactionActions_Show(t *testing.T) {
@@ -22,7 +22,7 @@ func TestTransactionActions_Show(t *testing.T) {
 	w := ht.Get("/transactions/2374e99349b9ef7dba9a5db3339b78fda8f34777b1af33ba468ad5c0df946d4d")
 
 	if ht.Assert.Equal(200, w.Code) {
-		var actual horizon.Transaction
+		var actual orbitr.Transaction
 		err := json.Unmarshal(w.Body.Bytes(), &actual)
 		ht.Require.NoError(err)
 
@@ -53,7 +53,7 @@ func TestTransactionActions_Show_Failed(t *testing.T) {
 	w := ht.Get("/transactions/aa168f12124b7c196c0adaee7c73a64d37f99428cacb59a91ff389626845e7cf")
 
 	if ht.Assert.Equal(200, w.Code) {
-		var actual horizon.Transaction
+		var actual orbitr.Transaction
 		err := json.Unmarshal(w.Body.Bytes(), &actual)
 		ht.Require.NoError(err)
 
@@ -69,7 +69,7 @@ func TestTransactionActions_Show_Failed(t *testing.T) {
 	w = ht.Get("/transactions/56e3216045d579bea40f2d35a09406de3a894ecb5be70dbda5ec9c0427a0d5a1")
 
 	if ht.Assert.Equal(200, w.Code) {
-		var actual horizon.Transaction
+		var actual orbitr.Transaction
 		err := json.Unmarshal(w.Body.Bytes(), &actual)
 		ht.Require.NoError(err)
 
@@ -85,7 +85,7 @@ func TestTransactionActions_Show_Failed(t *testing.T) {
 	w = ht.Get("/transactions?limit=200")
 
 	if ht.Assert.Equal(200, w.Code) {
-		records := []horizon.Transaction{}
+		records := []orbitr.Transaction{}
 		ht.UnmarshalPage(w.Body, &records)
 
 		successful := 0
@@ -107,7 +107,7 @@ func TestTransactionActions_Show_Failed(t *testing.T) {
 	w = ht.Get("/transactions?limit=200&include_failed=true")
 
 	if ht.Assert.Equal(200, w.Code) {
-		records := []horizon.Transaction{}
+		records := []orbitr.Transaction{}
 		ht.UnmarshalPage(w.Body, &records)
 
 		successful := 0
@@ -128,7 +128,7 @@ func TestTransactionActions_Show_Failed(t *testing.T) {
 	w = ht.Get("/transactions/aa168f12124b7c196c0adaee7c73a64d37f99428cacb59a91ff389626845e7cf")
 
 	if ht.Assert.Equal(200, w.Code) {
-		var actual horizon.Transaction
+		var actual orbitr.Transaction
 		err := json.Unmarshal(w.Body.Bytes(), &actual)
 		ht.Require.NoError(err)
 
@@ -138,7 +138,7 @@ func TestTransactionActions_Show_Failed(t *testing.T) {
 	w = ht.Get("/transactions/56e3216045d579bea40f2d35a09406de3a894ecb5be70dbda5ec9c0427a0d5a1")
 
 	if ht.Assert.Equal(200, w.Code) {
-		var actual horizon.Transaction
+		var actual orbitr.Transaction
 		err := json.Unmarshal(w.Body.Bytes(), &actual)
 		ht.Require.NoError(err)
 
@@ -146,7 +146,7 @@ func TestTransactionActions_Show_Failed(t *testing.T) {
 	}
 
 	// NULL value
-	_, err := ht.HorizonSession().ExecRaw(ht.Ctx,
+	_, err := ht.OrbitRSession().ExecRaw(ht.Ctx,
 		`UPDATE history_transactions SET successful = NULL WHERE transaction_hash = ?`,
 		"56e3216045d579bea40f2d35a09406de3a894ecb5be70dbda5ec9c0427a0d5a1",
 	)
@@ -155,7 +155,7 @@ func TestTransactionActions_Show_Failed(t *testing.T) {
 	w = ht.Get("/transactions/56e3216045d579bea40f2d35a09406de3a894ecb5be70dbda5ec9c0427a0d5a1")
 
 	if ht.Assert.Equal(200, w.Code) {
-		var actual horizon.Transaction
+		var actual orbitr.Transaction
 		err := json.Unmarshal(w.Body.Bytes(), &actual)
 		ht.Require.NoError(err)
 
@@ -193,7 +193,7 @@ func TestTransactionActions_Index(t *testing.T) {
 	ht.Assert.Equal(404, w.Code)
 
 	// Makes StateMiddleware happy
-	q := history.Q{ht.HorizonSession()}
+	q := history.Q{ht.OrbitRSession()}
 	err := q.UpdateLastLedgerIngest(ht.Ctx, 100)
 	ht.Assert.NoError(err)
 	err = q.UpdateIngestVersion(ht.Ctx, ingest.CurrentVersion)
@@ -235,7 +235,7 @@ func TestTransactionActions_Index(t *testing.T) {
 	w = ht.Get("/accounts/GCXKG6RN4ONIEPCMNFB732A436Z5PNDSRLGWK7GBLCMQLIFO4S7EYWVU/transactions?cursor=limit=order=")
 	ht.Assert.Equal(400, w.Code)
 
-	// regression: https://github.com/stellar/go/services/horizon/internal/issues/365
+	// regression: https://github.com/lantah/go/services/orbitr/internal/issues/365
 	w = ht.Get("/transactions?limit=200")
 	ht.Require.Equal(200, w.Code)
 	w = ht.Get("/transactions?limit=201")
@@ -366,14 +366,14 @@ func TestPostFeeBumpTransaction(t *testing.T) {
 	// Pass Synced check
 	ht.App.coreState.SetState(corestate.State{Synced: true})
 
-	test.ResetHorizonDB(t, ht.HorizonDB)
-	q := &history.Q{ht.HorizonSession()}
+	test.ResetOrbitRDB(t, ht.OrbitRDB)
+	q := &history.Q{ht.OrbitRSession()}
 	fixture := history.FeeBumpScenario(ht.T, q, true)
 
 	form := url.Values{"tx": []string{fixture.Transaction.TxEnvelope}}
 	w := ht.Post("/transactions", form)
 	ht.Assert.Equal(200, w.Code)
-	var response horizon.Transaction
+	var response orbitr.Transaction
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 	ht.Assert.NoError(err)
 
@@ -405,8 +405,8 @@ func TestPostFailedFeeBumpTransaction(t *testing.T) {
 	// Pass Synced check
 	ht.App.coreState.SetState(corestate.State{Synced: true})
 
-	test.ResetHorizonDB(t, ht.HorizonDB)
-	q := &history.Q{ht.HorizonSession()}
+	test.ResetOrbitRDB(t, ht.OrbitRDB)
+	q := &history.Q{ht.OrbitRSession()}
 	fixture := history.FeeBumpScenario(ht.T, q, false)
 
 	form := url.Values{"tx": []string{fixture.Transaction.TxEnvelope}}

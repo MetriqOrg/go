@@ -4,10 +4,10 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -51,7 +51,7 @@ func TestProtocol19Upgrade(t *testing.T) {
 		_, err := itest.SubmitTransaction(master, txParams)
 
 		tt.Error(err)
-		if prob := horizonclient.GetError(err); prob != nil {
+		if prob := orbitrclient.GetError(err); prob != nil {
 			if results, ok := prob.Problem.Extras["result_codes"].(map[string]interface{}); ok {
 				tt.Equal("tx_not_supported", results["transaction"])
 			} else {
@@ -65,7 +65,7 @@ func TestProtocol19Upgrade(t *testing.T) {
 	// TestTransactionAccountV3Upgrade ensures that upgrading over the
 	// Protocol 19 boundary correctly adds the V3 fields.
 	t.Run("TestTransactionAccountV3Upgrade", func(t *testing.T) {
-		var account horizon.Account
+		var account orbitr.Account
 		tt := assert.New(t)
 
 		// Submit phony operation which should bump the sequence number but not
@@ -90,7 +90,7 @@ func TestProtocol19Upgrade(t *testing.T) {
 	})
 }
 
-func submitPhonyOp(itest *integration.Test) horizon.Transaction {
+func submitPhonyOp(itest *integration.Test) orbitr.Transaction {
 	master := itest.Master()
 	account := itest.MasterAccount()
 

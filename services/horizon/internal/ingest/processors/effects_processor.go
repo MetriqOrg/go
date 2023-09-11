@@ -10,15 +10,15 @@ import (
 	"strconv"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/protocols/horizon/base"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/strkey"
-	"github.com/stellar/go/support/contractevents"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/protocols/orbitr/base"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/strkey"
+	"github.com/lantah/go/support/contractevents"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // EffectProcessor process effects
@@ -245,7 +245,7 @@ func (operation *transactionOperationWrapper) effects() ([]effect, error) {
 		// Possible add'l work: https://github.com/stellar/go/issues/4585
 		err = wrapper.addInvokeHostFunctionEffects(filterEvents(diagnosticEvents))
 	case xdr.OperationTypeBumpFootprintExpiration, xdr.OperationTypeRestoreFootprint:
-		// do not produce effects for these operations as horizon only provides
+		// do not produce effects for these operations as orbitr only provides
 		// limited visibility into soroban operations
 	default:
 		return nil, fmt.Errorf("unknown operation type: %s", op.Body.Type)
@@ -628,7 +628,7 @@ func (e *effectsWrapper) addCreatePassiveSellOfferEffect() error {
 
 	var claims []xdr.ClaimAtom
 
-	// KNOWN ISSUE:  gramr creates results for CreatePassiveOffer operations
+	// KNOWN ISSUE:  gravity creates results for CreatePassiveOffer operations
 	// with the wrong result arm set.
 	if result.Type == xdr.OperationTypeManageSellOffer {
 		claims = result.MustManageSellOfferResult().MustSuccess().OffersClaimed
@@ -1000,7 +1000,7 @@ func (e *effectsWrapper) addClaimableBalanceEntryCreatedEffects(source *xdr.Muxe
 	// `create_claimable_balance` operation but also by `liquidity_pool_withdraw`
 	// operation causing a revocation.
 	// In case of `create_claimable_balance` we use `op.Claimants` to make
-	// effects backward compatible. The reason for this is that Gramr
+	// effects backward compatible. The reason for this is that Gravity
 	// changes all `rel_before` predicated to `abs_before` when tx is included
 	// in the ledger.
 	var claimants []xdr.Claimant

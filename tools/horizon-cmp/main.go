@@ -13,11 +13,11 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	client "github.com/stellar/go/clients/horizonclient"
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/support/errors"
-	slog "github.com/stellar/go/support/log"
-	cmp "github.com/stellar/go/tools/horizon-cmp/internal"
+	client "github.com/lantah/go/clients/orbitrclient"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/support/errors"
+	slog "github.com/lantah/go/support/log"
+	cmp "github.com/lantah/go/tools/orbitr-cmp/internal"
 )
 
 // maxLevels defines the maximum number of levels deep the crawler
@@ -43,8 +43,8 @@ var (
 
 // CLI params
 var (
-	horizonBase           string
-	horizonTest           string
+	orbitrBase           string
+	orbitrTest           string
 	elbAccessLogFile      string
 	elbAccessLogStartLine int
 	requestsPerSecond     int
@@ -53,8 +53,8 @@ var (
 var log *slog.Entry
 
 var rootCmd = &cobra.Command{
-	Use:   "horizon-cmp",
-	Short: "horizon-cmp compares two horizon servers' responses",
+	Use:   "orbitr-cmp",
+	Short: "orbitr-cmp compares two orbitr servers' responses",
 	Run: func(cmd *cobra.Command, args []string) {
 		run(cmd)
 	},
@@ -79,8 +79,8 @@ func init() {
 
 	visitedPaths = make(map[string]bool)
 
-	rootCmd.PersistentFlags().StringVarP(&horizonBase, "base", "b", "", "URL of the base/old version Horizon server")
-	rootCmd.PersistentFlags().StringVarP(&horizonTest, "test", "t", "", "URL of the test/new version Horizon server")
+	rootCmd.PersistentFlags().StringVarP(&orbitrBase, "base", "b", "", "URL of the base/old version OrbitR server")
+	rootCmd.PersistentFlags().StringVarP(&orbitrTest, "test", "t", "", "URL of the test/new version OrbitR server")
 	rootCmd.Flags().StringVarP(&elbAccessLogFile, "elb-access-log-file", "a", "", "ELB access log file to replay")
 	rootCmd.Flags().IntVarP(&elbAccessLogStartLine, "elb-access-log-start-line", "s", 1, "Start line of ELB access log (useful to continue from a given point)")
 	rootCmd.Flags().IntVar(&requestsPerSecond, "rps", 1, "Requests per second")
@@ -93,7 +93,7 @@ func main() {
 }
 
 func run(cmd *cobra.Command) {
-	if horizonBase == "" || horizonTest == "" {
+	if orbitrBase == "" || orbitrTest == "" {
 		log.Error("--base and --test params are required")
 		cmd.Help()
 		os.Exit(1)
@@ -108,7 +108,7 @@ func run(cmd *cobra.Command) {
 	}()
 
 	// Get latest ledger and operate on it's cursor to get responses at a given ledger.
-	ledger := getLatestLedger(horizonBase)
+	ledger := getLatestLedger(orbitrBase)
 	cursor := ledger.PagingToken()
 
 	var accessLog *cmp.Scanner
@@ -141,11 +141,11 @@ func run(cmd *cobra.Command) {
 	if err != nil {
 		panic(err)
 	}
-	outputDir := fmt.Sprintf("%s/horizon-cmp-diff/%s", pwd, time.Now().Format(timeFormat))
+	outputDir := fmt.Sprintf("%s/orbitr-cmp-diff/%s", pwd, time.Now().Format(timeFormat))
 
 	log.WithFields(slog.F{
-		"base":       horizonBase,
-		"test":       horizonTest,
+		"base":       orbitrBase,
+		"test":       orbitrTest,
 		"access_log": elbAccessLogFile,
 		"ledger":     ledger.Sequence,
 		"cursor":     cursor,
@@ -186,18 +186,18 @@ func run(cmd *cobra.Command) {
 
 			var a, b *cmp.Response
 			go func() {
-				a = cmp.NewResponse(horizonBase, pl.Path, pl.Stream)
+				a = cmp.NewResponse(orbitrBase, pl.Path, pl.Stream)
 				requestWg.Done()
 			}()
 			go func() {
-				b = cmp.NewResponse(horizonTest, pl.Path, pl.Stream)
+				b = cmp.NewResponse(orbitrTest, pl.Path, pl.Stream)
 				requestWg.Done()
 			}()
 
 			requestWg.Wait()
 
 			// Retry when LatestLedger not equal but only if not empty because
-			// older Horizon versions don't send this header.
+			// older OrbitR versions don't send this header.
 			if a.LatestLedger != "" && b.LatestLedger != "" &&
 				a.LatestLedger != b.LatestLedger {
 				visitedPathsMutex.Lock()
@@ -255,12 +255,12 @@ func run(cmd *cobra.Command) {
 }
 
 func getLatestLedger(url string) protocol.Ledger {
-	horizon := client.Client{
-		HorizonURL: url,
+	orbitr := client.Client{
+		OrbitRURL: url,
 		HTTP:       http.DefaultClient,
 	}
 
-	ledgers, err := horizon.Ledgers(client.LedgerRequest{
+	ledgers, err := orbitr.Ledgers(client.LedgerRequest{
 		Order: client.OrderDesc,
 		Limit: 1,
 	})
@@ -331,7 +331,7 @@ func addPathsFromResponse(a *cmp.Response, level int) {
 	newPaths := a.GetPaths()
 	for _, newPath := range newPaths {
 		// For all indexes with chronological sort ignore order=asc
-		// without cursor. There will always be a diff if Horizon started
+		// without cursor. There will always be a diff if OrbitR started
 		// at a different ledger.
 		if strings.Contains(newPath, "/ledgers") ||
 			strings.Contains(newPath, "/transactions") ||

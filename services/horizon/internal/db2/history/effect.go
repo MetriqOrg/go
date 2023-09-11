@@ -8,10 +8,10 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/toid"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/toid"
 )
 
 // UnmarshalDetails unmarshals the details of this effect into `dest`

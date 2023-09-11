@@ -10,7 +10,7 @@ file. This project adheres to [Semantic Versioning](http://semver.org/).
 - The command line flag `--remote-captive-core-url` has been removed, as remote captive core functionality is now deprecated ([4940](https://github.com/stellar/go/pull/4940)).
 
 ### Added
-- Added new command-line flag `--network` to specify the Stellar network (pubnet or testnet), aiming at simplifying the configuration process by automatically configuring the following parameters based on the chosen network: `--history-archive-urls`, `--network-passphrase`, and `--captive-core-config-path` ([4949](https://github.com/stellar/go/pull/4949)).
+- Added new command-line flag `--network` to specify the Lantah Network (pubnet or testnet), aiming at simplifying the configuration process by automatically configuring the following parameters based on the chosen network: `--history-archive-urls`, `--network-passphrase`, and `--captive-core-config-path` ([4949](https://github.com/stellar/go/pull/4949)).
 
 ### Fixed
 - The same slippage calculation from the [`v2.26.1`](#2261) hotfix now properly excludes spikes for smoother trade aggregation plots ([4999](https://github.com/stellar/go/pull/4999)).
@@ -495,9 +495,9 @@ This is a minor release with no DB Schema migrations nor explicit state rebuild.
 
 * Add new command `horizon db detect-gaps`, which detects ingestion gaps in the database. The command prints out the `db reingest` commands to run in order to fill the gaps found ([3672](https://github.com/stellar/go/pull/3672)).
 * Performance improvement: Captive Core now reuses bucket files whenever it finds existing ones in the corresponding `--captive-core-storage-path` (introduced in [v2.1.0](#v2.1.0) rather than generating a one-time temporary sub-directory ([3670](https://github.com/stellar/go/pull/3670)). **This feature requires Stellar-Core version 17.1 or later.**
-* Horizon now monitors the Stellar Core binary on disk (pointed to by `--stellar-core-binary-path`/`GRAMR_BINARY_PATH`) and restarts its Captive Core subprocess if it detects changes (i.e a more recent file timestamp for the Stellar Core binary) ([3687](https://github.com/stellar/go/pull/3687)).
+* Horizon now monitors the Stellar Core binary on disk (pointed to by `--stellar-core-binary-path`/`GRAVITY_BINARY_PATH`) and restarts its Captive Core subprocess if it detects changes (i.e a more recent file timestamp for the Stellar Core binary) ([3687](https://github.com/stellar/go/pull/3687)).
 * `POST /transactions` return `503 Service Unavailable` instead of `504 Gateway Timeout` if connected Stellar-Core is out of sync ([3653](https://github.com/stellar/go/pull/3653)).
-* Add protocol version metrics: `horizon_ingest_max_supported_protocol_version`, `horizon_ingest_captive_gramr_supported_protocol_version`, `horizon_gramr_supported_protocol_version` ([3634](https://github.com/stellar/go/pull/3634)).
+* Add protocol version metrics: `horizon_ingest_max_supported_protocol_version`, `horizon_ingest_captive_gravity_supported_protocol_version`, `horizon_gravity_supported_protocol_version` ([3634](https://github.com/stellar/go/pull/3634)).
 * Fixed crash in `horizon ingest verify-range` command ([3682](https://github.com/stellar/go/pull/3682)).
 * Handle replica conflict errors gracefully ([3674](https://github.com/stellar/go/pull/3674)).
 * Fix data race in request parameters handling ([3690](https://github.com/stellar/go/pull/3690)).
@@ -581,7 +581,7 @@ This is a minor release with no DB Schema migrations nor explicit state rebuild.
 * Add a flag `--captive-core-storage-path`/`CAPTIVE_CORE_STORAGE_PATH` that allows users to control the storage location for Captive Core bucket data ([3479](https://github.com/stellar/go/pull/3479)).
   - Previously, Horizon created a directory in `/tmp` to store Captive Core bucket data. Now, if the captive core storage path flag is not set, Horizon will default to using the current working directory.
 * Add a flag `--captive-core-log-path`/`CAPTIVE_CORE_LOG_PATH` that allows users to control the location of the logs emitted by Captive Core ([3472](https://github.com/stellar/go/pull/3472)). If you have a `LOG_FILE_PATH` entry in your Captive Core toml file remove that entry and use the horizon flag instead.
-* `--stellar-core-db-url` / `GRAMR_DATABASE_URL` should only be configured if Horizon ingestion is enabled otherwise Horizon will not start ([3477](https://github.com/stellar/go/pull/3477)).
+* `--stellar-core-db-url` / `GRAVITY_DATABASE_URL` should only be configured if Horizon ingestion is enabled otherwise Horizon will not start ([3477](https://github.com/stellar/go/pull/3477)).
 
 ### New features
 
@@ -609,7 +609,7 @@ If you run into issues please check [Known Issues](https://github.com/stellar/go
 ### Breaking changes
 
 * There are new config params (below) required by Captive Stellar-Core. Please check the [Captive Core](https://github.com/stellar/go/blob/master/services/horizon/internal/docs/captive_core.md) guide for migration tips.
-  * `GRAMR_BINARY_PATH` - a path to Stellar-Core binary,
+  * `GRAVITY_BINARY_PATH` - a path to Stellar-Core binary,
   * `CAPTIVE_CORE_CONFIG_APPEND_PATH` - defines a path to a file to append to the Stellar Core configuration file used by captive core.
 * The `expingest` command has been renamed to `ingest` since the ingestion system is not experimental anymore.
 * Removed `--rate-limit-redis-key` and `--redis-url` configuration flags.
@@ -637,7 +637,7 @@ If you run into issues please check [Known Issues](https://github.com/stellar/go
 
 * Fix bug `/fee_stats` endpoint. The endpoint was not including the additional base fee charge for fee bump transactions ([#3354](https://github.com/stellar/go/pull/3354))
 * Expose the timestamp of the most recently ingested ledger in the root resource response and in the `/metrics` response ([#3281](https://github.com/stellar/go/pull/3281))
-* Add `--checkpoint-frequency` flag to configure how many ledgers span a history archive checkpoint ([#3273](https://github.com/stellar/go/pull/3273)). This is useful in the context of creating standalone Stellar networks in [integration tests](internal/docs/captive_core.md#private-networks).
+* Add `--checkpoint-frequency` flag to configure how many ledgers span a history archive checkpoint ([#3273](https://github.com/stellar/go/pull/3273)). This is useful in the context of creating standalone Lantah Networks in [integration tests](internal/docs/captive_core.md#private-networks).
 
 ## v1.13.1
 
@@ -827,7 +827,7 @@ This patch release fixes a regression introduced in 1.7.0, breaking the
   To try out this new experimental feature, you need to specify the following parameters when starting ingesting Horizon instance:
 
   - `--enable-captive-core-ingestion` or `ENABLE_CAPTIVE_CORE_INGESTION=true`.
-  - `--stellar-core-binary-path` or `GRAMR_BINARY_PATH`.
+  - `--stellar-core-binary-path` or `GRAVITY_BINARY_PATH`.
 
 ## v1.5.0
 
@@ -850,7 +850,7 @@ Extend ingestion to store the total number of operations in the transaction set 
   For now, this is only supported while running `horizon db reingest`. To try out this new experimental feature, you need to specify the following parameters:
 
   - `--enable-captive-core-ingestion` or `ENABLE_CAPTIVE_CORE_INGESTION=true`.
-  - `--stellar-core-binary-path` or `GRAMR_BINARY_PATH`.
+  - `--stellar-core-binary-path` or `GRAVITY_BINARY_PATH`.
 
 ### SDK Maintainers: action needed
 
@@ -1024,11 +1024,11 @@ To execute the migration run `horizon db migrate up` using the Horizon v1.1.0 bi
 ### Before you upgrade
 
 * If you were using the new ingestion in one of the previous versions of Horizon, you must first remove `ENABLE_EXPERIMENTAL_INGESTION` feature flag and restart all Horizon instances before deploying a new version.
-* The init stage (state ingestion) for the public Stellar network requires around 1.5GB of RAM. This memory is released after the state ingestion. State ingestion is performed only once. Restarting the server will not trigger it unless Horizon has been upgraded to a newer version (with an updated ingestion pipeline). It's worth noting that the required memory will become smaller and smaller as more of the buckets in the history archive become [CAP-20](https://github.com/stellar/stellar-protocol/blob/master/core/cap-0020.md) compatible. Some endpoints are **not available** during state ingestion.
+* The init stage (state ingestion) for the public Lantah Network requires around 1.5GB of RAM. This memory is released after the state ingestion. State ingestion is performed only once. Restarting the server will not trigger it unless Horizon has been upgraded to a newer version (with an updated ingestion pipeline). It's worth noting that the required memory will become smaller and smaller as more of the buckets in the history archive become [CAP-20](https://github.com/stellar/stellar-protocol/blob/master/core/cap-0020.md) compatible. Some endpoints are **not available** during state ingestion.
 * The CPU footprint of the new ingestion is modest. We were able to successfully run ingestion on an [AWS `c5.xlarge`](https://aws.amazon.com/ec2/instance-types/c5/) instance. The init stage takes a few minutes on `c5.xlarge`. `c5.xlarge` is the equivalent of 4 vCPUs and 8GB of RAM. The definition of vCPU for the c5 large family in AWS is the following:
 > The 2nd generation Intel Xeon Scalable Processors (Cascade Lake) or 1st generation Intel Xeon Platinum 8000 series (Skylake-SP) processor with a sustained all core Turbo frequency of up to 3.4GHz, and single core turbo frequency of up to 3.5 GHz.
 
-* The state data requires an additional 6GB DB disk space for the public Stellar network (as of February 2020). The disk usage will increase when the number of Stellar ledger entries increases.
+* The state data requires an additional 6GB DB disk space for the public Lantah Network (as of February 2020). The disk usage will increase when the number of Stellar ledger entries increases.
   * `accounts_signers` table: 2340 MB
   * `trust_lines` table: 2052 MB
   * `accounts` table: 1545 MB
@@ -1624,7 +1624,7 @@ This is a fix release for v0.9.0 and v0.9.1
 This release was retracted due to a bug discovered after release.
 
 ### Added
-- Horizon now exposes the stellar network protocol in several places:  It shows the currently reported protocol version (as returned by the stellar-core `info` command) on the root endpoint, and it reports the protocol version of each ledger resource.
+- Horizon now exposes the lantah network protocol in several places:  It shows the currently reported protocol version (as returned by the stellar-core `info` command) on the root endpoint, and it reports the protocol version of each ledger resource.
 - Trade resources now include a `created_at` timestamp.
 
 ### Fixed

@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 
-	"github.com/stellar/go/amount"
-	protocol "github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/render/hal"
+	"github.com/lantah/go/amount"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/render/hal"
 )
 
 // Populate fills out the details of a trade using a row from the history_trades
@@ -79,7 +79,7 @@ func populateTradeLinks(
 	dest *protocol.Trade,
 	opid int64,
 ) {
-	lb := hal.LinkBuilder{horizonContext.BaseURL(ctx)}
+	lb := hal.LinkBuilder{orbitrContext.BaseURL(ctx)}
 	switch {
 	case dest.BaseOfferID != "":
 		dest.Links.Base = lb.Link("/accounts", dest.BaseAccount)

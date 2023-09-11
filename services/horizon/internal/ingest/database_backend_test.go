@@ -3,14 +3,14 @@ package ingest
 import (
 	"testing"
 
-	"github.com/stellar/go/ingest/ledgerbackend"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 func TestGetLatestLedger(t *testing.T) {
 	tt := test.Start(t)
-	tt.ScenarioWithoutHorizon("base")
+	tt.ScenarioWithoutOrbitR("base")
 	defer tt.Finish()
 
 	backend, err := ledgerbackend.NewDatabaseBackendFromSession(tt.CoreSession(), network.TestNetworkPassphrase)
@@ -22,7 +22,7 @@ func TestGetLatestLedger(t *testing.T) {
 
 func TestGetLatestLedgerNotFound(t *testing.T) {
 	tt := test.Start(t)
-	tt.ScenarioWithoutHorizon("base")
+	tt.ScenarioWithoutOrbitR("base")
 	defer tt.Finish()
 
 	_, err := tt.CoreDB.Exec(`DELETE FROM ledgerheaders`)

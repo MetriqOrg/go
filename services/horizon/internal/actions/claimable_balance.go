@@ -5,16 +5,16 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/stellar/go/protocols/horizon"
-	protocol "github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 )
 
 // GetClaimableBalanceByIDHandler is the action handler for all end-points returning a claimable balance.
@@ -34,7 +34,7 @@ func (handler GetClaimableBalanceByIDHandler) GetResource(w HeaderWriter, r *htt
 		return nil, err
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +139,7 @@ func (handler GetClaimableBalancesHandler) GetResourcePage(
 		)
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
@@ -168,7 +168,7 @@ func getClaimableBalancesPage(ctx context.Context, historyQ *history.Q, query hi
 
 	var claimableBalances []hal.Pageable
 	for _, record := range records {
-		var response horizon.ClaimableBalance
+		var response orbitr.ClaimableBalance
 
 		var ledger *history.Ledger
 		if l, ok := ledgerCache.Records[int32(record.LastModifiedLedger)]; ok {

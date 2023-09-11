@@ -10,7 +10,7 @@ import (
 	"time"
 
 	migrate "github.com/rubenv/sql-migrate"
-	"github.com/stellar/go/support/errors"
+	"github.com/lantah/go/support/errors"
 )
 
 //go:generate go run github.com/kevinburke/go-bindata/go-bindata@v3.18.0+incompatible -nometadata -pkg schema -o bindata.go migrations/
@@ -27,7 +27,7 @@ const (
 	MigrateRedo MigrateDir = "redo"
 )
 
-// Migrations represents all of the schema migration for horizon
+// Migrations represents all of the schema migration for orbitr
 var Migrations migrate.MigrationSource = &migrate.AssetMigrationSource{
 	Asset:    Asset,
 	AssetDir: AssetDir,
@@ -140,7 +140,7 @@ func GetMigrationsUp(dbUrl string) (migrationIds []string) {
 
 // GetNumMigrationsDown returns the number of migrations to apply in the
 // "down" direction to return to the older schema version expected by this
-// version of Horizon. To keep the code simple, it does not provide a list of
+// version of OrbitR. To keep the code simple, it does not provide a list of
 // migration names.
 func GetNumMigrationsDown(dbUrl string) (nMigrations int) {
 	// Get a DB handle
@@ -156,7 +156,7 @@ func GetNumMigrationsDown(dbUrl string) (nMigrations int) {
 		stdLog.Fatal(recordErr)
 	}
 
-	// Get the list of migrations needed by this version of Horizon
+	// Get the list of migrations needed by this version of OrbitR
 	allNeededMigrations, _, migrateErr := migrate.PlanMigration(db, "postgres", Migrations, migrate.Down, 0)
 	if migrateErr != nil {
 		stdLog.Fatal(migrateErr)

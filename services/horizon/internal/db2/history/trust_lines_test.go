@@ -6,8 +6,8 @@ import (
 	"github.com/guregu/null"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/xdr"
 )
 
 var (
@@ -89,8 +89,8 @@ func TestIsAuthorized(t *testing.T) {
 func TestInsertTrustLine(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	tt.Assert.NoError(q.UpsertTrustLines(tt.Ctx, []TrustLine{eurTrustLine, usdTrustLine}))
 
@@ -105,8 +105,8 @@ func TestInsertTrustLine(t *testing.T) {
 func TestUpdateTrustLine(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	tt.Assert.NoError(q.UpsertTrustLines(tt.Ctx, []TrustLine{eurTrustLine}))
 
@@ -129,8 +129,8 @@ func TestUpdateTrustLine(t *testing.T) {
 func TestUpsertTrustLines(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	// Upserting nothing is no op
 	err := q.UpsertTrustLines(tt.Ctx, []TrustLine{})
@@ -171,8 +171,8 @@ func TestUpsertTrustLines(t *testing.T) {
 func TestRemoveTrustLine(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertTrustLines(tt.Ctx, []TrustLine{eurTrustLine})
 	assert.NoError(t, err)
@@ -194,8 +194,8 @@ func TestRemoveTrustLine(t *testing.T) {
 func TestGetSortedTrustLinesByAccountsID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertTrustLines(tt.Ctx, []TrustLine{eurTrustLine, usdTrustLine, usdTrustLine2, poolShareTrustLine})
 	assert.NoError(t, err)
@@ -238,8 +238,8 @@ func TestGetSortedTrustLinesByAccountsID(t *testing.T) {
 func TestGetTrustLinesByAccountID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	records, err := q.GetSortedTrustLinesByAccountID(tt.Ctx, eurTrustLine.AccountID)
 	tt.Assert.NoError(err)
@@ -258,8 +258,8 @@ func TestGetTrustLinesByAccountID(t *testing.T) {
 func TestAssetsForAddress(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	ledgerEntries := []AccountEntry{account1}
 

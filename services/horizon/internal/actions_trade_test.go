@@ -1,5 +1,5 @@
 //lint:file-ignore U1001 Ignore all unused code, thinks the code is unused because of the test skips
-package horizon
+package orbitr
 
 import (
 	"context"
@@ -12,24 +12,24 @@ import (
 	"time"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/keypair"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/keypair"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	stellarTime "github.com/stellar/go/support/time"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	stellarTime "github.com/lantah/go/support/time"
+	"github.com/lantah/go/xdr"
 )
 
 func TestLiquidityPoolTrades(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 	fixtures := history.TradeScenario(ht.T, dbQ)
 
 	for _, liquidityPoolID := range fixtures.LiquidityPools {
 		expected := fixtures.TradesByPool[liquidityPoolID]
-		var records []horizon.Trade
+		var records []orbitr.Trade
 		// All trades
 		w := ht.Get("/liquidity_pools/" + liquidityPoolID + "/trades")
 		if ht.Assert.Equal(200, w.Code) {
@@ -67,11 +67,11 @@ func TestLiquidityPoolTrades(t *testing.T) {
 func TestOrderbookTrades(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 	fixtures := history.TradeScenario(ht.T, dbQ)
 
 	for offerID, expected := range fixtures.TradesByOffer {
-		var records []horizon.Trade
+		var records []orbitr.Trade
 		// All trades
 		w := ht.Get("/offers/" + strconv.FormatInt(offerID, 10) + "/trades")
 		if ht.Assert.Equal(200, w.Code) {
@@ -109,7 +109,7 @@ func TestOrderbookTrades(t *testing.T) {
 func TestAccountTrades(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 	fixtures := history.TradeScenario(ht.T, dbQ)
 
 	for _, tradeType := range []string{"", history.AllTrades, history.OrderbookTrades, history.LiquidityPoolTrades} {
@@ -119,7 +119,7 @@ func TestAccountTrades(t *testing.T) {
 				expected = history.FilterTradesByType(expected, tradeType)
 				query = "?trade_type=" + tradeType
 			}
-			var records []horizon.Trade
+			var records []orbitr.Trade
 			// All trades
 			w := ht.Get("/accounts/" + accountAddress + "/trades" + query)
 			if ht.Assert.Equal(200, w.Code) {
@@ -158,7 +158,7 @@ func TestAccountTrades(t *testing.T) {
 func TestTrades(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 	fixtures := history.TradeScenario(ht.T, dbQ)
 
 	for _, tradeType := range []string{"", history.AllTrades, history.OrderbookTrades, history.LiquidityPoolTrades} {
@@ -169,7 +169,7 @@ func TestTrades(t *testing.T) {
 			query = "trade_type=" + tradeType
 		}
 		w := ht.Get("/trades?" + query)
-		var records []horizon.Trade
+		var records []orbitr.Trade
 		if ht.Assert.Equal(200, w.Code) {
 			ht.Assert.PageOf(len(expected), w.Body)
 			ht.UnmarshalPage(w.Body, &records)
@@ -183,7 +183,7 @@ func TestTrades(t *testing.T) {
 		w = ht.Get("/trades?order=desc&" + query)
 		if ht.Assert.Equal(200, w.Code) {
 			ht.Assert.PageOf(len(records), w.Body)
-			var reverseRecords []horizon.Trade
+			var reverseRecords []orbitr.Trade
 			ht.UnmarshalPage(w.Body, &reverseRecords)
 			ht.Assert.Len(reverseRecords, len(records))
 
@@ -205,7 +205,7 @@ func TestTrades(t *testing.T) {
 func TestTradesForAssetPair(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 	fixtures := history.TradeScenario(ht.T, dbQ)
 
 	q := make(url.Values)
@@ -244,7 +244,7 @@ func TestTradesForAssetPair(t *testing.T) {
 		}
 
 		w := ht.GetWithParams("/trades", q)
-		var tradesForPair []horizon.Trade
+		var tradesForPair []orbitr.Trade
 		if ht.Assert.Equal(200, w.Code) {
 			ht.UnmarshalPage(w.Body, &tradesForPair)
 
@@ -256,7 +256,7 @@ func TestTradesForAssetPair(t *testing.T) {
 
 		w = ht.GetWithParams("/trades", reverseQ)
 		if ht.Assert.Equal(200, w.Code) {
-			var trades []horizon.Trade
+			var trades []orbitr.Trade
 			ht.UnmarshalPage(w.Body, &trades)
 			ht.Assert.Equal(len(tradesForPair), len(trades))
 
@@ -267,7 +267,7 @@ func TestTradesForAssetPair(t *testing.T) {
 	}
 }
 
-func reverseTrade(expected horizon.Trade) horizon.Trade {
+func reverseTrade(expected orbitr.Trade) orbitr.Trade {
 	expected.Links.Base, expected.Links.Counter = expected.Links.Counter, expected.Links.Base
 	expected.BaseIsSeller = !expected.BaseIsSeller
 	expected.BaseAssetCode, expected.CounterAssetCode = expected.CounterAssetCode, expected.BaseAssetCode
@@ -281,7 +281,7 @@ func reverseTrade(expected horizon.Trade) horizon.Trade {
 	return expected
 }
 
-func assertResponseTradeEqualsDBTrade(ht *HTTPT, row history.Trade, record horizon.Trade) {
+func assertResponseTradeEqualsDBTrade(ht *HTTPT, row history.Trade, record orbitr.Trade) {
 	ht.Assert.Equal(row.BaseAssetCode, record.BaseAssetCode)
 	ht.Assert.Equal(row.BaseAssetType, record.BaseAssetType)
 	ht.Assert.Equal(row.BaseAssetIssuer, record.BaseAssetIssuer)
@@ -342,14 +342,14 @@ func unsetAssetQuery(q *url.Values, prefix string) {
 }
 
 // testPrice ensures that the price float string is equal to the rational price
-func testPrice(t *HTTPT, priceStr string, priceR horizon.TradePrice) {
+func testPrice(t *HTTPT, priceStr string, priceR orbitr.TradePrice) {
 	price, err := strconv.ParseFloat(priceStr, 64)
 	if t.Assert.NoError(err) {
 		t.Assert.Equal(price, float64(priceR.N)/float64(priceR.D))
 	}
 }
 
-func testTradeAggregationPrices(t *HTTPT, record horizon.TradeAggregation) {
+func testTradeAggregationPrices(t *HTTPT, record orbitr.TradeAggregation) {
 	testPrice(t, record.High, record.HighR)
 	testPrice(t, record.Low, record.LowR)
 	testPrice(t, record.Open, record.OpenR)
@@ -372,7 +372,7 @@ func TestTradeActions_Aggregation(t *testing.T) {
 	//it represents a round hour and is bigger than a max int32
 	const start = int64(1510693200000)
 
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 	ass1, ass2, err := PopulateTestTrades(dbQ, start, numOfTrades, minute, 0)
 	ht.Require.NoError(err)
 
@@ -380,8 +380,8 @@ func TestTradeActions_Aggregation(t *testing.T) {
 	_, _, err = PopulateTestTrades(dbQ, start, numOfTrades, minute, numOfTrades)
 	ht.Require.NoError(err)
 
-	var records []horizon.TradeAggregation
-	var record horizon.TradeAggregation
+	var records []orbitr.TradeAggregation
+	var record orbitr.TradeAggregation
 	var nextLink string
 
 	q := make(url.Values)
@@ -541,7 +541,7 @@ func TestTradeActions_Aggregation(t *testing.T) {
 func TestTradeActions_AmountsExceedInt64(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 
 	const start = int64(1510693200000)
 
@@ -556,7 +556,7 @@ func TestTradeActions_AmountsExceedInt64(t *testing.T) {
 		ht.Require.NoError(err)
 	}
 
-	var records []horizon.TradeAggregation
+	var records []orbitr.TradeAggregation
 
 	q := make(url.Values)
 	setAssetQuery(&q, "base_", ass1)
@@ -592,16 +592,16 @@ func TestTradeActions_IndexRegressions(t *testing.T) {
 		ht.Assert.Equal(404, w.Code) //This used to be 200 with length 0
 	})
 
-	t.Run("Regression for nil prices: https://github.com/stellar/go/issues/357", func(t *testing.T) {
+	t.Run("Regression for nil prices: https://github.com/lantah/go/issues/357", func(t *testing.T) {
 		ht := StartHTTPTestWithoutScenario(t)
-		dbQ := &history.Q{ht.HorizonSession()}
+		dbQ := &history.Q{ht.OrbitRSession()}
 		history.TradeScenario(ht.T, dbQ)
 		defer ht.Finish()
 
 		w := ht.Get("/trades")
 		ht.Require.Equal(200, w.Code)
 
-		_ = ht.HorizonDB.MustExec("UPDATE history_trades SET price_n = NULL, price_d = NULL")
+		_ = ht.OrbitRDB.MustExec("UPDATE history_trades SET price_n = NULL, price_d = NULL")
 		w = ht.Get("/trades")
 		ht.Assert.Equal(200, w.Code, "nil-price trades failed")
 	})
@@ -609,7 +609,7 @@ func TestTradeActions_IndexRegressions(t *testing.T) {
 
 // TestTradeActions_AggregationOrdering checks that open/close aggregation
 // fields are correct for multiple trades that occur in the same ledger
-// https://github.com/stellar/go/issues/215
+// https://github.com/lantah/go/issues/215
 func TestTradeActions_AggregationOrdering(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
@@ -619,7 +619,7 @@ func TestTradeActions_AggregationOrdering(t *testing.T) {
 	ass1 := GetTestAsset("euro")
 	ass2 := GetTestAsset("usd")
 
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 	IngestTestTrade(dbQ, ass1, ass2, seller, buyer, 1, 3, 0, 3)
 	IngestTestTrade(dbQ, ass1, ass2, seller, buyer, 1, 1, 0, 1)
 	IngestTestTrade(dbQ, ass1, ass2, seller, buyer, 1, 2, 0, 2)
@@ -633,7 +633,7 @@ func TestTradeActions_AggregationOrdering(t *testing.T) {
 	q.Add("order", "asc")
 	q.Add("resolution", "60000")
 
-	var records []horizon.TradeAggregation
+	var records []orbitr.TradeAggregation
 	w := ht.GetWithParams("/trade_aggregations", q)
 	if ht.Assert.Equal(200, w.Code) {
 		ht.Assert.PageOf(1, w.Body)
@@ -662,7 +662,7 @@ func TestTradeActions_AggregationInvalidOffset(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
 
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 	ass1, ass2, err := PopulateTestTrades(dbQ, 0, 100, hour, 1)
 	ht.Require.NoError(err)
 
@@ -705,7 +705,7 @@ func TestTradeActions_AggregationOffset(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()
 
-	dbQ := &history.Q{ht.HorizonSession()}
+	dbQ := &history.Q{ht.OrbitRSession()}
 	// One trade every hour
 	ass1, ass2, err := PopulateTestTrades(dbQ, 0, 100, hour, 1)
 	ht.Require.NoError(err)
@@ -745,7 +745,7 @@ func TestTradeActions_AggregationOffset(t *testing.T) {
 			w := ht.GetWithParams(aggregationPath, q)
 			if ht.Assert.Equal(200, w.Code) {
 				ht.Assert.PageOf(len(tc.expectedTimestamps), w.Body)
-				var records []horizon.TradeAggregation
+				var records []orbitr.TradeAggregation
 				ht.UnmarshalPage(w.Body, &records)
 				if len(records) > 0 {
 					for i, record := range records {

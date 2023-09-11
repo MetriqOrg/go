@@ -1,14 +1,14 @@
-package horizon
+package orbitr
 
 import (
 	"encoding/json"
 	"testing"
 	"time"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/operations"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
 )
 
 // Moved to TestGetOperationsOnlyPayments
@@ -34,7 +34,7 @@ func TestPaymentActions(t *testing.T) {
 
 	// Makes StateMiddleware happy
 	initializeStateMiddleware := func() {
-		q := history.Q{ht.HorizonSession()}
+		q := history.Q{ht.OrbitRSession()}
 		err := q.UpdateLastLedgerIngest(ht.Ctx, 3)
 		ht.Assert.NoError(err)
 		err = q.UpdateIngestVersion(ht.Ctx, ingest.CurrentVersion)
@@ -126,7 +126,7 @@ func TestPaymentActions_Includetransactions(t *testing.T) {
 	for i, operation := range withTransactions {
 		getTransaction := ht.Get("/transactions/" + operation.Transaction.ID)
 		ht.Assert.Equal(200, getTransaction.Code)
-		var getTransactionResponse horizon.Transaction
+		var getTransactionResponse orbitr.Transaction
 		err := json.Unmarshal(getTransaction.Body.Bytes(), &getTransactionResponse)
 
 		ht.Require.NoError(err, "failed to parse body")
@@ -212,7 +212,7 @@ func TestPaymentActions_Show_Failed(t *testing.T) {
 	}
 
 	// NULL value
-	_, err := ht.HorizonSession().ExecRaw(ht.Ctx,
+	_, err := ht.OrbitRSession().ExecRaw(ht.Ctx,
 		`UPDATE history_transactions SET successful = NULL WHERE transaction_hash = ?`,
 		"56e3216045d579bea40f2d35a09406de3a894ecb5be70dbda5ec9c0427a0d5a1",
 	)
@@ -240,7 +240,7 @@ func TestPayment_CreatedAt(t *testing.T) {
 	ht.UnmarshalPage(w.Body, &records)
 
 	l := history.Ledger{}
-	hq := history.Q{SessionInterface: ht.HorizonSession()}
+	hq := history.Q{SessionInterface: ht.OrbitRSession()}
 	ht.Require.NoError(hq.LedgerBySequence(ht.Ctx, &l, 3))
 
 	ht.Assert.WithinDuration(l.ClosedAt, records[0].LedgerCloseTime, 1*time.Second)

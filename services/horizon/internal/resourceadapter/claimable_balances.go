@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stellar/go/amount"
-	protocol "github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/xdr"
 )
 
 // PopulateClaimableBalance fills out the resource's fields
@@ -40,7 +40,7 @@ func PopulateClaimableBalance(
 		dest.Flags.ClawbackEnabled = xdr.ClaimableBalanceFlags(claimableBalance.Flags).IsClawbackEnabled()
 	}
 
-	lb := hal.LinkBuilder{Base: horizonContext.BaseURL(ctx)}
+	lb := hal.LinkBuilder{Base: orbitrContext.BaseURL(ctx)}
 	self := fmt.Sprintf("/claimable_balances/%s", dest.BalanceID)
 	dest.Links.Self = lb.Link(self)
 	dest.PT = fmt.Sprintf("%d-%s", claimableBalance.LastModifiedLedger, dest.BalanceID)

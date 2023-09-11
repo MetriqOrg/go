@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -29,8 +29,8 @@ var (
 func TestInsertAccountData(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertAccountData(tt.Ctx, []Data{data1})
 	assert.NoError(t, err)
@@ -59,8 +59,8 @@ func TestInsertAccountData(t *testing.T) {
 func TestUpdateAccountData(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertAccountData(tt.Ctx, []Data{data1})
 	assert.NoError(t, err)
@@ -89,8 +89,8 @@ func TestUpdateAccountData(t *testing.T) {
 func TestRemoveAccountData(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertAccountData(tt.Ctx, []Data{data1})
 	assert.NoError(t, err)
@@ -113,8 +113,8 @@ func TestRemoveAccountData(t *testing.T) {
 func TestGetAccountDataByAccountsID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertAccountData(tt.Ctx, []Data{data1})
 	assert.NoError(t, err)
@@ -139,8 +139,8 @@ func TestGetAccountDataByAccountsID(t *testing.T) {
 func TestGetAccountDataByAccountID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertAccountData(tt.Ctx, []Data{data1})
 	assert.NoError(t, err)
@@ -161,8 +161,8 @@ func TestGetAccountDataByAccountID(t *testing.T) {
 func TestGetAccountDataByName(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertAccountData(tt.Ctx, []Data{data1})
 	assert.NoError(t, err)

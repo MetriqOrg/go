@@ -3,7 +3,7 @@ title: Offers
 replacement: https://developers.stellar.org/api/resources/offers/list/
 ---
 
-People on the Stellar network can make [offers](../resources/offer.md) to buy or sell assets. This
+People on the Lantah Network can make [offers](../resources/offer.md) to buy or sell assets. This
 endpoint represents all the current offers, allowing filtering by `seller`, `selling_asset` or `buying_asset`.
 
 ## Request

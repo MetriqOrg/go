@@ -6,12 +6,12 @@ import (
 	"strconv"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/stellar/go/support/errors"
+	"github.com/lantah/go/support/errors"
 )
 
 const (
 	ingestVersion = "exp_ingest_version"
-	// Distributed ingestion in Horizon relies on this key and it is part
+	// Distributed ingestion in OrbitR relies on this key and it is part
 	// of migration files. If you need to update the key name remember
 	// to upgrade it in migration files too!
 	lastLedgerKey                   = "exp_ingest_last_ledger"
@@ -23,7 +23,7 @@ const (
 // GetLastLedgerIngestNonBlocking works like GetLastLedgerIngest but
 // it does not block the value and does not return error if the value
 // has not been previously set.
-// This is used in status reporting (ex. in root resource of Horizon).
+// This is used in status reporting (ex. in root resource of OrbitR).
 func (q *Q) GetLastLedgerIngestNonBlocking(ctx context.Context) (uint32, error) {
 	lastIngestedLedger, err := q.getValueFromStore(ctx, lastLedgerKey, false)
 	if err != nil {
@@ -43,7 +43,7 @@ func (q *Q) GetLastLedgerIngestNonBlocking(ctx context.Context) (uint32, error) 
 }
 
 // GetLastLedgerIngest returns the last ledger ingested by ingest system
-// in Horizon. Returns ErrKeyNotFound error if no value has been previously set.
+// in OrbitR. Returns ErrKeyNotFound error if no value has been previously set.
 // This is using `SELECT ... FOR UPDATE` what means it's blocking the row for all other
 // transactions.This behavior is critical in distributed ingestion so do not change
 // it unless you know what you are doing.

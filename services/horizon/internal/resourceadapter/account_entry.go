@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	protocol "github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/xdr"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/xdr"
 )
 
 // PopulateAccountEntry fills out the resource's fields
@@ -113,7 +113,7 @@ func PopulateAccountEntry(
 		dest.Sponsor = account.Sponsor.String
 	}
 
-	lb := hal.LinkBuilder{horizonContext.BaseURL(ctx)}
+	lb := hal.LinkBuilder{orbitrContext.BaseURL(ctx)}
 	self := fmt.Sprintf("/accounts/%s", account.AccountID)
 	dest.Links.Self = lb.Link(self)
 	dest.Links.Transactions = lb.PagedLink(self, "transactions")

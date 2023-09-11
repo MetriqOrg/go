@@ -90,7 +90,7 @@ succeeds, you should see a response like:
 }
 ```
 
-After a few seconds, the Stellar network will perform consensus, close the
+After a few seconds, the Lantah Network will perform consensus, close the
 ledger, and your account will have been created.  Next up we will write a command
 that watches for new payments to your account and outputs a message to the
 terminal.
@@ -202,7 +202,7 @@ transaction.sign(keypair);
 console.log(transaction.toEnvelope().toXDR().toString("base64"));
 ```
 
-After running this script you should see a signed transaction blob. To submit this transaction we send it to horizon or gramr. But before we do, let's open a new console and start our previous script by `node stream_payments.js`.
+After running this script you should see a signed transaction blob. To submit this transaction we send it to horizon or gravity. But before we do, let's open a new console and start our previous script by `node stream_payments.js`.
 
 Now to send a transaction just use horizon:
 

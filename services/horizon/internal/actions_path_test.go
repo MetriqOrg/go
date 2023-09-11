@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"context"
@@ -15,18 +15,18 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/actions"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/httpx"
-	"github.com/stellar/go/services/horizon/internal/paths"
-	horizonProblem "github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/simplepath"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/actions"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/httpx"
+	"github.com/lantah/go/services/orbitr/internal/paths"
+	orbitrProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/simplepath"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 )
 
 func mockPathFindingClient(
@@ -60,7 +60,7 @@ func mockPathFindingClient(
 
 			ctx := context.WithValue(
 				r.Context(),
-				&horizonContext.SessionContextKey,
+				&orbitrContext.SessionContextKey,
 				s,
 			)
 			next.ServeHTTP(w, r.WithContext(ctx))
@@ -79,7 +79,7 @@ func mockPathFindingClient(
 func TestPathActionsLimitExceeded(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
 	assertions := &test.Assertions{tt.Assert}
 	finder := paths.MockFinder{}
@@ -92,7 +92,7 @@ func TestPathActionsLimitExceeded(t *testing.T) {
 		tt,
 		&finder,
 		2,
-		tt.HorizonSession(),
+		tt.OrbitRSession(),
 	)
 
 	var q = make(url.Values)
@@ -111,8 +111,8 @@ func TestPathActionsLimitExceeded(t *testing.T) {
 
 	for _, uri := range []string{"/paths", "/paths/strict-receive"} {
 		w := rh.Get(uri + "?" + q.Encode())
-		assertions.Equal(horizonProblem.ServerOverCapacity.Status, w.Code)
-		assertions.Problem(w.Body, horizonProblem.ServerOverCapacity)
+		assertions.Equal(orbitrProblem.ServerOverCapacity.Status, w.Code)
+		assertions.Problem(w.Body, orbitrProblem.ServerOverCapacity)
 		assertions.Equal("", w.Header().Get(actions.LastLedgerHeaderName))
 	}
 
@@ -125,8 +125,8 @@ func TestPathActionsLimitExceeded(t *testing.T) {
 	q.Add("source_amount", "10")
 
 	w := rh.Get("/paths/strict-send" + "?" + q.Encode())
-	assertions.Equal(horizonProblem.ServerOverCapacity.Status, w.Code)
-	assertions.Problem(w.Body, horizonProblem.ServerOverCapacity)
+	assertions.Equal(orbitrProblem.ServerOverCapacity.Status, w.Code)
+	assertions.Problem(w.Body, orbitrProblem.ServerOverCapacity)
 	assertions.Equal("", w.Header().Get(actions.LastLedgerHeaderName))
 
 	finder.AssertExpectations(t)
@@ -135,7 +135,7 @@ func TestPathActionsLimitExceeded(t *testing.T) {
 func TestPathActionsStillIngesting(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
 	assertions := &test.Assertions{tt.Assert}
 	finder := paths.MockFinder{}
@@ -148,7 +148,7 @@ func TestPathActionsStillIngesting(t *testing.T) {
 		tt,
 		&finder,
 		2,
-		tt.HorizonSession(),
+		tt.OrbitRSession(),
 	)
 
 	var q = make(url.Values)
@@ -167,8 +167,8 @@ func TestPathActionsStillIngesting(t *testing.T) {
 
 	for _, uri := range []string{"/paths", "/paths/strict-receive"} {
 		w := rh.Get(uri + "?" + q.Encode())
-		assertions.Equal(horizonProblem.StillIngesting.Status, w.Code)
-		assertions.Problem(w.Body, horizonProblem.StillIngesting)
+		assertions.Equal(orbitrProblem.StillIngesting.Status, w.Code)
+		assertions.Problem(w.Body, orbitrProblem.StillIngesting)
 		assertions.Equal("", w.Header().Get(actions.LastLedgerHeaderName))
 	}
 
@@ -181,8 +181,8 @@ func TestPathActionsStillIngesting(t *testing.T) {
 	q.Add("source_amount", "10")
 
 	w := rh.Get("/paths/strict-send" + "?" + q.Encode())
-	assertions.Equal(horizonProblem.StillIngesting.Status, w.Code)
-	assertions.Problem(w.Body, horizonProblem.StillIngesting)
+	assertions.Equal(orbitrProblem.StillIngesting.Status, w.Code)
+	assertions.Problem(w.Body, orbitrProblem.StillIngesting)
 	assertions.Equal("", w.Header().Get(actions.LastLedgerHeaderName))
 
 	finder.AssertExpectations(t)
@@ -191,7 +191,7 @@ func TestPathActionsStillIngesting(t *testing.T) {
 func TestPathActionsStrictReceive(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 	sourceAssets := []xdr.Asset{
 		xdr.MustNewCreditAsset("AAA", "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN"),
 		xdr.MustNewCreditAsset("USD", "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN"),
@@ -199,7 +199,7 @@ func TestPathActionsStrictReceive(t *testing.T) {
 	}
 	sourceAccount := "GARSFJNXJIHO6ULUBK3DBYKVSIZE7SC72S5DYBCHU7DKL22UXKVD7MXP"
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 
 	account := history.AccountEntry{
 		LastModifiedLedger: 1234,
@@ -303,7 +303,7 @@ func TestPathActionsStrictReceive(t *testing.T) {
 		tt,
 		&finder,
 		len(sourceAssets),
-		tt.HorizonSession(),
+		tt.OrbitRSession(),
 	)
 
 	var withSourceAccount = make(url.Values)
@@ -348,14 +348,14 @@ func TestPathActionsStrictReceive(t *testing.T) {
 func TestPathActionsEmptySourceAcount(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 	assertions := &test.Assertions{tt.Assert}
 	finder := paths.MockFinder{}
 	rh := mockPathFindingClient(
 		tt,
 		&finder,
 		2,
-		tt.HorizonSession(),
+		tt.OrbitRSession(),
 	)
 	var q = make(url.Values)
 
@@ -379,7 +379,7 @@ func TestPathActionsEmptySourceAcount(t *testing.T) {
 	for _, uri := range []string{"/paths", "/paths/strict-receive"} {
 		w := rh.Get(uri + "?" + q.Encode())
 		assertions.Equal(http.StatusOK, w.Code)
-		inMemoryResponse := []horizon.Path{}
+		inMemoryResponse := []orbitr.Path{}
 		tt.UnmarshalPage(w.Body, &inMemoryResponse)
 		assertions.Empty(inMemoryResponse)
 		tt.Assert.Equal("", w.Header().Get(actions.LastLedgerHeaderName))
@@ -389,14 +389,14 @@ func TestPathActionsEmptySourceAcount(t *testing.T) {
 func TestPathActionsSourceAssetsValidation(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 	assertions := &test.Assertions{tt.Assert}
 	finder := paths.MockFinder{}
 	rh := mockPathFindingClient(
 		tt,
 		&finder,
 		2,
-		tt.HorizonSession(),
+		tt.OrbitRSession(),
 	)
 
 	missingSourceAccountAndAssets := make(url.Values)
@@ -469,14 +469,14 @@ func TestPathActionsSourceAssetsValidation(t *testing.T) {
 func TestPathActionsDestinationAssetsValidation(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 	assertions := &test.Assertions{tt.Assert}
 	finder := paths.MockFinder{}
 	rh := mockPathFindingClient(
 		tt,
 		&finder,
 		2,
-		tt.HorizonSession(),
+		tt.OrbitRSession(),
 	)
 	missingDestinationAccountAndAssets := make(url.Values)
 	missingDestinationAccountAndAssets.Add(
@@ -552,9 +552,9 @@ func TestPathActionsDestinationAssetsValidation(t *testing.T) {
 func TestPathActionsStrictSend(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 	assertions := &test.Assertions{tt.Assert}
-	historyQ := &history.Q{tt.HorizonSession()}
+	historyQ := &history.Q{tt.OrbitRSession()}
 	destinationAccount := "GARSFJNXJIHO6ULUBK3DBYKVSIZE7SC72S5DYBCHU7DKL22UXKVD7MXP"
 	destinationAssets := []xdr.Asset{
 		xdr.MustNewCreditAsset("AAA", "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN"),
@@ -654,7 +654,7 @@ func TestPathActionsStrictSend(t *testing.T) {
 		tt,
 		&finder,
 		len(destinationAssets),
-		tt.HorizonSession(),
+		tt.OrbitRSession(),
 	)
 
 	var q = make(url.Values)

@@ -5,9 +5,9 @@ import (
 
 	"github.com/guregu/null"
 	"github.com/guregu/null/zero"
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -78,8 +78,8 @@ var (
 func TestInsertAccount(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertAccounts(tt.Ctx, []AccountEntry{account1, account2})
 	assert.NoError(t, err)
@@ -118,8 +118,8 @@ func TestInsertAccount(t *testing.T) {
 func TestUpsertAccount(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	ledgerEntries := []AccountEntry{account1, account2}
 	err := q.UpsertAccounts(tt.Ctx, ledgerEntries)
@@ -184,8 +184,8 @@ func TestUpsertAccount(t *testing.T) {
 func TestRemoveAccount(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertAccounts(tt.Ctx, []AccountEntry{account1})
 	assert.NoError(t, err)
@@ -208,8 +208,8 @@ func TestRemoveAccount(t *testing.T) {
 func TestAccountsForAsset(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	eurTL := eurTrustLine
 	usdTL := usdTrustLine
@@ -279,8 +279,8 @@ func TestAccountsForAsset(t *testing.T) {
 func TestAccountsForLiquidityPool(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	eurTL := eurTrustLine
 	psTL := poolShareTrustLine
@@ -324,8 +324,8 @@ func TestAccountsForLiquidityPool(t *testing.T) {
 func TestAccountsForSponsor(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	eurTL := eurTrustLine
 	usdTL := usdTrustLine
@@ -365,8 +365,8 @@ func TestAccountsForSponsor(t *testing.T) {
 func TestAccountEntriesForSigner(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	eurTL := eurTrustLine
 	usdTL := usdTrustLine
@@ -447,8 +447,8 @@ func TestAccountEntriesForSigner(t *testing.T) {
 func TestGetAccountByID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	err := q.UpsertAccounts(tt.Ctx, []AccountEntry{account1})
 	assert.NoError(t, err)

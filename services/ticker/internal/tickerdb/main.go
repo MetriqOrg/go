@@ -5,8 +5,8 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	migrate "github.com/rubenv/sql-migrate"
-	bdata "github.com/stellar/go/services/ticker/internal/tickerdb/migrations"
-	"github.com/stellar/go/support/db"
+	bdata "github.com/lantah/go/services/ticker/internal/tickerdb/migrations"
+	"github.com/lantah/go/support/db"
 )
 
 //go:generate go run github.com/kevinburke/go-bindata/go-bindata@v3.18.0+incompatible -nometadata -ignore .+\.go$ -pkg bdata -o migrations/bindata.go ./...
@@ -68,7 +68,7 @@ type Issuer struct {
 // Trade represents an entry on the trades table
 type Trade struct {
 	ID              int64     `db:"id"`
-	HorizonID       string    `db:"horizon_id"`
+	OrbitRID       string    `db:"orbitr_id"`
 	LedgerCloseTime time.Time `db:"ledger_close_time"`
 	OfferID         string    `db:"offer_id"`
 	BaseOfferID     string    `db:"base_offer_id"`

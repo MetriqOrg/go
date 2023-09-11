@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"net/http"
 
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/render/problem"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/render/problem"
 )
 
-// these admin HTTP endpoints are documented in services/horizon/internal/httpx/static/admin_oapi.yml
+// these admin HTTP endpoints are documented in services/orbitr/internal/httpx/static/admin_oapi.yml
 type FilterConfigHandler struct{}
 
 func (handler FilterConfigHandler) GetAssetConfig(w http.ResponseWriter, r *http.Request) {
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		problem.Render(r.Context(), w, err)
 		return
@@ -36,7 +36,7 @@ func (handler FilterConfigHandler) GetAssetConfig(w http.ResponseWriter, r *http
 }
 
 func (handler FilterConfigHandler) GetAccountConfig(w http.ResponseWriter, r *http.Request) {
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		problem.Render(r.Context(), w, err)
 		return
@@ -57,7 +57,7 @@ func (handler FilterConfigHandler) GetAccountConfig(w http.ResponseWriter, r *ht
 }
 
 func (handler FilterConfigHandler) UpdateAccountConfig(w http.ResponseWriter, r *http.Request) {
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		problem.Render(r.Context(), w, err)
 		return
@@ -86,7 +86,7 @@ func (handler FilterConfigHandler) UpdateAccountConfig(w http.ResponseWriter, r 
 }
 
 func (handler FilterConfigHandler) UpdateAssetConfig(w http.ResponseWriter, r *http.Request) {
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		problem.Render(r.Context(), w, err)
 		return

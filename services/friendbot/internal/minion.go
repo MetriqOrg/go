@@ -3,9 +3,9 @@ package internal
 import (
 	"fmt"
 
-	"github.com/lantah/go/clients/horizonclient"
+	"github.com/lantah/go/clients/orbitrclient"
 	"github.com/lantah/go/keypair"
-	hProtocol "github.com/lantah/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/support/errors"
 	"github.com/lantah/go/txnbuild"
 )
@@ -20,14 +20,14 @@ type Minion struct {
 	Keypair         *keypair.Full
 	BotAccount      txnbuild.Account
 	BotKeypair      *keypair.Full
-	Horizon         horizonclient.ClientInterface
+	OrbitR         orbitrclient.ClientInterface
 	Network         string
 	StartingBalance string
 	BaseFee         int64
 
 	// Mockable functions
-	SubmitTransaction    func(minion *Minion, hclient horizonclient.ClientInterface, tx string) (*hProtocol.Transaction, error)
-	CheckSequenceRefresh func(minion *Minion, hclient horizonclient.ClientInterface) error
+	SubmitTransaction    func(minion *Minion, hclient orbitrclient.ClientInterface, tx string) (*hProtocol.Transaction, error)
+	CheckSequenceRefresh func(minion *Minion, hclient orbitrclient.ClientInterface) error
 
 	// Uninitialized.
 	forceRefreshSequence bool
@@ -36,7 +36,7 @@ type Minion struct {
 // Run reads a payment destination address and an output channel. It attempts
 // to pay that address and submits the result to the channel.
 func (minion *Minion) Run(destAddress string, resultChan chan SubmitResult) {
-	err := minion.CheckSequenceRefresh(minion, minion.Horizon)
+	err := minion.CheckSequenceRefresh(minion, minion.OrbitR)
 	if err != nil {
 		resultChan <- SubmitResult{
 			maybeTransactionSuccess: nil,
@@ -52,7 +52,7 @@ func (minion *Minion) Run(destAddress string, resultChan chan SubmitResult) {
 		}
 		return
 	}
-	succ, err := minion.SubmitTransaction(minion, minion.Horizon, txStr)
+	succ, err := minion.SubmitTransaction(minion, minion.OrbitR, txStr)
 	resultChan <- SubmitResult{
 		maybeTransactionSuccess: succ,
 		maybeErr:                errors.Wrapf(err, "submitting tx to minion %x", txHash),
@@ -60,20 +60,20 @@ func (minion *Minion) Run(destAddress string, resultChan chan SubmitResult) {
 }
 
 // SubmitTransaction should be passed to the Minion.
-func SubmitTransaction(minion *Minion, hclient horizonclient.ClientInterface, tx string) (*hProtocol.Transaction, error) {
+func SubmitTransaction(minion *Minion, hclient orbitrclient.ClientInterface, tx string) (*hProtocol.Transaction, error) {
 	result, err := hclient.SubmitTransactionXDR(tx)
 	if err != nil {
-		errStr := "submitting tx to horizon"
+		errStr := "submitting tx to orbitr"
 		switch e := err.(type) {
-		case *horizonclient.Error:
+		case *orbitrclient.Error:
 			minion.checkHandleBadSequence(e)
 			resStr, resErr := e.ResultString()
 			if resErr != nil {
-				errStr += ": error getting horizon error code: " + resErr.Error()
+				errStr += ": error getting orbitr error code: " + resErr.Error()
 			} else if resStr == createAccountAlreadyExistXDR {
 				return nil, errors.Wrap(ErrAccountExists, errStr)
 			} else {
-				errStr += ": horizon error string: " + resStr
+				errStr += ": orbitr error string: " + resStr
 			}
 			return nil, errors.New(errStr)
 		}
@@ -84,7 +84,7 @@ func SubmitTransaction(minion *Minion, hclient horizonclient.ClientInterface, tx
 
 // CheckSequenceRefresh establishes the minion's initial sequence number, if needed.
 // This should also be passed to the minion.
-func CheckSequenceRefresh(minion *Minion, hclient horizonclient.ClientInterface) error {
+func CheckSequenceRefresh(minion *Minion, hclient orbitrclient.ClientInterface) error {
 	if minion.Account.Sequence != 0 && !minion.forceRefreshSequence {
 		return nil
 	}
@@ -96,7 +96,7 @@ func CheckSequenceRefresh(minion *Minion, hclient horizonclient.ClientInterface)
 	return nil
 }
 
-func (minion *Minion) checkHandleBadSequence(err *horizonclient.Error) {
+func (minion *Minion) checkHandleBadSequence(err *orbitrclient.Error) {
 	resCode, e := err.ResultCodes()
 	isTxBadSeqCode := e == nil && resCode.TransactionCode == "tx_bad_seq"
 	if !isTxBadSeqCode {

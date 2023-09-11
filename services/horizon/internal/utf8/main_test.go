@@ -3,7 +3,7 @@ package utf8
 import (
 	"testing"
 
-	"github.com/stellar/go/services/horizon/internal/test"
+	"github.com/lantah/go/services/orbitr/internal/test"
 )
 
 func TestScrub(t *testing.T) {

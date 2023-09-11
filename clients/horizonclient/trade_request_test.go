@@ -96,8 +96,8 @@ func TestTradesRequest(t *testing.T) {
 		trade := trades.Embedded.Records[0]
 		assert.IsType(t, trade, hProtocol.Trade{})
 		assert.Equal(t, trade.ID, "2099319884746791-0")
-		assert.Equal(t, trade.BaseAmount, "2.4104452")
-		assert.Equal(t, trade.CounterAmount, "0.0973412")
+		assert.Equal(t, trade.BaseAmount, "2.410445")
+		assert.Equal(t, trade.CounterAmount, "0.097341")
 		assert.Equal(t, trade.OfferID, "3698823")
 		assert.Equal(t, trade.BaseIsSeller, false)
 	}
@@ -280,20 +280,20 @@ var tradesResponse = `{
         "offer_id": "3698823",
         "base_offer_id": "4613785338312134695",
         "base_account": "GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C",
-        "base_amount": "2.4104452",
+        "base_amount": "2.410445",
         "base_asset_type": "credit_alphanum4",
         "base_asset_code": "DSQ",
         "base_asset_issuer": "GBDQPTQJDATT7Z7EO4COS4IMYXH44RDLLI6N6WIL5BZABGMUOVMLWMQF",
         "counter_offer_id": "3698823",
         "counter_account": "GCYN7MI6VXVRP74KR6MKBAW2ELLCXL6QCY5H4YQ62HVWZWMCE6Y232UC",
-        "counter_amount": "0.0973412",
+        "counter_amount": "0.097341",
         "counter_asset_type": "credit_alphanum4",
         "counter_asset_code": "USD",
         "counter_asset_issuer": "GAA4MFNZGUPJAVLWWG6G5XZJFZDHLKQNG3Q6KB24BAD6JHNNVXDCF4XG",
         "base_is_seller": false,
         "price": {
-          "n": 2000000,
-          "d": 49525693
+          "n": 200000,
+          "d": 4952569
         }
       },
       {
@@ -317,20 +317,20 @@ var tradesResponse = `{
         "offer_id": "3698823",
         "base_offer_id": "4613785316837302311",
         "base_account": "GAQHWQYBBW272OOXNQMMLCA5WY2XAZPODGB7Q3S5OKKIXVESKO55ZQ7C",
-        "base_amount": "89.3535843",
+        "base_amount": "89.353584",
         "base_asset_type": "credit_alphanum4",
         "base_asset_code": "DSQ",
         "base_asset_issuer": "GBDQPTQJDATT7Z7EO4COS4IMYXH44RDLLI6N6WIL5BZABGMUOVMLWMQF",
         "counter_offer_id": "3698823",
         "counter_account": "GCYN7MI6VXVRP74KR6MKBAW2ELLCXL6QCY5H4YQ62HVWZWMCE6Y232UC",
-        "counter_amount": "3.6083729",
+        "counter_amount": "3.608373",
         "counter_asset_type": "credit_alphanum4",
         "counter_asset_code": "USD",
         "counter_asset_issuer": "GAA4MFNZGUPJAVLWWG6G5XZJFZDHLKQNG3Q6KB24BAD6JHNNVXDCF4XG",
         "base_is_seller": false,
         "price": {
-          "n": 2000000,
-          "d": 49525693
+          "n": 200000,
+          "d": 4952569
         }
       }
     ]
@@ -375,20 +375,20 @@ var firstTradesPage = `{
         "offer_id": "1219",
         "base_offer_id": "928",
         "base_account": "GBZ5OD56VRTRQKMNADD6VUZUG3FCILMAMYQY5ZSC3AW3GBXNEPIK76IG",
-        "base_amount": "2.7922715",
+        "base_amount": "2.792272",
         "base_asset_type": "credit_alphanum4",
         "base_asset_code": "HT",
         "base_asset_issuer": "GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P",
         "counter_offer_id": "1219",
         "counter_account": "GBH77NK3ZP7RT52YZWGIU5Y6VTIJ52VXUSXDMQ7Z7VAAQO4U4QGGIROV",
-        "counter_amount": "0.0012000",
+        "counter_amount": "0.001200",
         "counter_asset_type": "credit_alphanum4",
         "counter_asset_code": "BTC",
         "counter_asset_issuer": "GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P",
         "base_is_seller": false,
         "price": {
-          "n": 383,
-          "d": 891200
+          "n": 38,
+          "d": 89120
         }
       },
       {
@@ -412,20 +412,20 @@ var firstTradesPage = `{
         "offer_id": "928",
         "base_offer_id": "928",
         "base_account": "GBZ5OD56VRTRQKMNADD6VUZUG3FCILMAMYQY5ZSC3AW3GBXNEPIK76IG",
-        "base_amount": "2.7956854",
+        "base_amount": "2.795685",
         "base_asset_type": "credit_alphanum4",
         "base_asset_code": "HT",
         "base_asset_issuer": "GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P",
         "counter_offer_id": "4611731141353811969",
         "counter_account": "GBH77NK3ZP7RT52YZWGIU5Y6VTIJ52VXUSXDMQ7Z7VAAQO4U4QGGIROV",
-        "counter_amount": "0.0012000",
+        "counter_amount": "0.001200",
         "counter_asset_type": "credit_alphanum4",
         "counter_asset_code": "BTC",
         "counter_asset_issuer": "GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P",
         "base_is_seller": true,
         "price": {
-          "n": 7973,
-          "d": 18575000
+          "n": 797,
+          "d": 1857500
         }
       }
     ]

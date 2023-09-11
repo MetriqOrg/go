@@ -4,13 +4,13 @@ import (
 	"math"
 	"testing"
 
-	"github.com/stellar/go/clients/horizonclient"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/protocols/horizon/operations"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/clients/orbitrclient"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/protocols/orbitr/operations"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -63,7 +63,7 @@ func TestMuxedAccountDetails(t *testing.T) {
 	tt.Equal(uint64(source.Med25519.Id), txDetails.FeeAccountMuxedID)
 
 	// check the operation details
-	opsResp, err := itest.Client().Operations(horizonclient.OperationRequest{
+	opsResp, err := itest.Client().Operations(orbitrclient.OperationRequest{
 		ForTransaction: txResp.Hash,
 	})
 	tt.NoError(err)
@@ -76,7 +76,7 @@ func TestMuxedAccountDetails(t *testing.T) {
 	tt.Equal(uint64(destination.Med25519.Id), opDetails.ToMuxedID)
 
 	// check the effect details
-	effectsResp, err := itest.Client().Effects(horizonclient.EffectRequest{
+	effectsResp, err := itest.Client().Effects(orbitrclient.EffectRequest{
 		ForTransaction: txResp.Hash,
 	})
 	tt.NoError(err)

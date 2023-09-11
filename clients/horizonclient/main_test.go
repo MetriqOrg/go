@@ -48,20 +48,20 @@ func TestCheckMemoRequired(t *testing.T) {
 
 	paymentMemoRequired := txnbuild.Payment{
 		Destination: "GAYHAAKPAQLMGIJYMIWPDWCGUCQ5LAWY4Q7Q3IKSP57O7GUPD3NEOSEA",
-		Amount:      "10",
+		Amount:      "100",
 		Asset:       txnbuild.NativeAsset{},
 	}
 
 	paymentNoMemo := txnbuild.Payment{
 		Destination: "GDWIRURRED6SQSZVQVVMK46PE2MOZEKHV6ZU54JG3NPVRDIF4XCXYYW4",
-		Amount:      "10",
+		Amount:      "100",
 		Asset:       txnbuild.NativeAsset{},
 	}
 
 	asset := txnbuild.CreditAsset{Code: "ABCD", Issuer: kp.Address()}
 	pathPaymentStrictSend := txnbuild.PathPaymentStrictSend{
 		SendAsset:   asset,
-		SendAmount:  "10",
+		SendAmount:  "100",
 		Destination: "GDYM6SBBGDF6ZDRM2SKGVIWM257Q4V63V3IYNDQQWPKNV4QDERS4YTLX",
 		DestAsset:   txnbuild.NativeAsset{},
 		DestMin:     "1",
@@ -70,7 +70,7 @@ func TestCheckMemoRequired(t *testing.T) {
 
 	pathPaymentStrictReceive := txnbuild.PathPaymentStrictReceive{
 		SendAsset:   asset,
-		SendMax:     "10",
+		SendMax:     "100",
 		Destination: "GD2JTIDP2JJKNIDXW4L6AU2RYFXZIUH3YFIS43PJT2467AP46CWBHSCN",
 		DestAsset:   txnbuild.NativeAsset{},
 		DestAmount:  "1",
@@ -309,7 +309,7 @@ func TestAccountDetail(t *testing.T) {
 		assert.Equal(t, account.Data["test"], "dGVzdA==")
 		balance, balanceErr := account.GetNativeBalance()
 		assert.Nil(t, balanceErr)
-		assert.Equal(t, balance, "9999.9999900")
+		assert.Equal(t, balance, "9999.999990")
 		assert.NotNil(t, account.LastModifiedTime)
 		assert.Equal(t, "2019-03-05 13:23:50 +0000 UTC", account.LastModifiedTime.String())
 		assert.Equal(t, uint32(103307), account.LastModifiedLedger)
@@ -427,7 +427,7 @@ func TestEffectsRequest(t *testing.T) {
 		c, ok := acEffect.(effects.AccountCredited)
 		assert.Equal(t, ok, true)
 		assert.Equal(t, c.ID, "0043989725060534273-0000000002")
-		assert.Equal(t, c.Amount, "9999.9999900")
+		assert.Equal(t, c.Amount, "9999.999990")
 		assert.Equal(t, c.Account, "GBO7LQUWCC7M237TU2PAXVPOLLYNHYCYYFCLVMX3RBJCML4WA742X3UB")
 		assert.Equal(t, c.Asset.Type, "native")
 	}
@@ -480,7 +480,7 @@ func TestAssetsRequest(t *testing.T) {
 		assert.Equal(t, record.Asset.Issuer, "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU")
 		assert.Equal(t, record.PT, "1")
 		assert.Equal(t, record.NumAccounts, int32(3))
-		assert.Equal(t, record.Amount, "105.0000000")
+		assert.Equal(t, record.Amount, "105.000000")
 		assert.Equal(t, record.Flags.AuthRevocable, false)
 		assert.Equal(t, record.Flags.AuthRequired, true)
 		assert.Equal(t, record.Flags.AuthImmutable, false)
@@ -562,7 +562,7 @@ func TestOfferRequest(t *testing.T) {
 		assert.Equal(t, record.Seller, "GDOJCPYIB66RY4XNDLRRHQQXB27YLNNAGAYV5HMHEYNYY4KUNV5FDV2F")
 		assert.Equal(t, record.PT, "432323")
 		assert.Equal(t, record.Selling.Code, "ABC")
-		assert.Equal(t, record.Amount, "1999979.8700000")
+		assert.Equal(t, record.Amount, "1999979.870000")
 		assert.Equal(t, record.LastModifiedLedger, int32(103307))
 	}
 
@@ -663,7 +663,7 @@ func TestOfferDetailsRequest(t *testing.T) {
 		assert.Equal(t, record.Selling.Type, "native")
 		assert.Equal(t, record.Buying.Code, "AstroDollar")
 		assert.Equal(t, record.Buying.Issuer, "GDA2EHKPDEWZTAL6B66FO77HMOZL3RHZTIJO7KJJK5RQYSDUXEYMPJYY")
-		assert.Equal(t, record.Amount, "100.0000000")
+		assert.Equal(t, record.Amount, "100.000000")
 		assert.Equal(t, record.LastModifiedLedger, int32(356183))
 	}
 
@@ -711,7 +711,7 @@ func TestOperationsRequest(t *testing.T) {
 		c, ok := createAccountOp.(operations.CreateAccount)
 		assert.Equal(t, ok, true)
 		assert.Equal(t, c.ID, "98455906148208641")
-		assert.Equal(t, c.StartingBalance, "2.0000000")
+		assert.Equal(t, c.StartingBalance, "2.000000")
 		assert.Equal(t, c.TransactionHash, "ade3c60f1b581e8744596673d95bffbdb8f68f199e0e2f7d63b7c3af9fd8d868")
 	}
 
@@ -740,7 +740,7 @@ func TestOperationsRequest(t *testing.T) {
 		p, ok := paymentOp.(operations.Payment)
 		assert.Equal(t, ok, true)
 		assert.Equal(t, p.ID, "2024660468248577")
-		assert.Equal(t, p.Amount, "177.0000000")
+		assert.Equal(t, p.Amount, "177.000000")
 		assert.Equal(t, p.TransactionHash, "87d7a29539e7902b14a6c720094856f74a77128ab332d8629432c5a176a9fe7b")
 	}
 
@@ -786,7 +786,7 @@ func TestOperationsRequest(t *testing.T) {
 		assert.Equal(t, c.TransactionHash, "93c2755ec61c8b01ac11daa4d8d7a012f56be172bdfcaf77a6efd683319ca96d")
 		assert.Equal(t, c.Asset.Code, "UAHd")
 		assert.Equal(t, c.Asset.Issuer, "GDDETPGV4OJVNBTB6GQICCPGH5DZRYYB7XQCSAZO2ZQH6HO7SWXHKKJN")
-		assert.Equal(t, c.Limit, "922337203685.4775807")
+		assert.Equal(t, c.Limit, "9223372036854.775807")
 		assert.Equal(t, c.Trustee, "GDDETPGV4OJVNBTB6GQICCPGH5DZRYYB7XQCSAZO2ZQH6HO7SWXHKKJN")
 		assert.Equal(t, c.Trustor, "GBMVGXJXJ7ZBHIWMXHKR6IVPDTYKHJPXC2DHZDPJBEZWZYAC7NKII7IB")
 		assert.Equal(t, c.Links.Self.Href, "https://orbitr-testnet.lantah.network/operations/1103965508866049")
@@ -868,7 +868,7 @@ func TestSubmitTransactionRequest(t *testing.T) {
 
 	payment := txnbuild.Payment{
 		Destination: kp.Address(),
-		Amount:      "10",
+		Amount:      "100",
 		Asset:       txnbuild.NativeAsset{},
 	}
 
@@ -936,7 +936,7 @@ func TestSubmitTransactionRequestMuxedAccounts(t *testing.T) {
 
 	payment := txnbuild.Payment{
 		Destination: kp.Address(),
-		Amount:      "10",
+		Amount:      "100",
 		Asset:       txnbuild.NativeAsset{},
 	}
 
@@ -996,7 +996,7 @@ func TestSubmitFeeBumpTransaction(t *testing.T) {
 
 	payment := txnbuild.Payment{
 		Destination: kp.Address(),
-		Amount:      "10",
+		Amount:      "100",
 		Asset:       txnbuild.NativeAsset{},
 	}
 
@@ -1065,7 +1065,7 @@ func TestSubmitTransactionWithOptionsRequest(t *testing.T) {
 
 	payment := txnbuild.Payment{
 		Destination: kp.Address(),
-		Amount:      "10",
+		Amount:      "100",
 		Asset:       txnbuild.NativeAsset{},
 	}
 
@@ -1192,7 +1192,7 @@ func TestSubmitFeeBumpTransactionWithOptions(t *testing.T) {
 
 	payment := txnbuild.Payment{
 		Destination: kp.Address(),
-		Amount:      "10",
+		Amount:      "100",
 		Asset:       txnbuild.NativeAsset{},
 	}
 
@@ -1419,8 +1419,8 @@ func TestOrderBookRequest(t *testing.T) {
 		assert.IsType(t, obs, hProtocol.OrderBookSummary{})
 		bids := obs.Bids
 		asks := obs.Asks
-		assert.Equal(t, bids[0].Price, "0.0000251")
-		assert.Equal(t, asks[0].Price, "0.0000256")
+		assert.Equal(t, bids[0].Price, "0.000025")
+		assert.Equal(t, asks[0].Price, "0.000026")
 		assert.Equal(t, obs.Selling.Type, "native")
 		assert.Equal(t, obs.Buying.Type, "credit_alphanum4")
 	}
@@ -1570,9 +1570,9 @@ var accountsResponse = `{
         },
         "balances": [
           {
-            "balance": "100.8182300",
-            "buying_liabilities": "0.0000000",
-            "selling_liabilities": "0.0000000",
+            "balance": "100.818230",
+            "buying_liabilities": "0.000000",
+            "selling_liabilities": "0.000000",
             "asset_type": "native"
           }
         ],
@@ -1642,9 +1642,9 @@ var accountResponse = `{
   },
   "balances": [
     {
-      "balance": "9999.9999900",
-      "buying_liabilities": "0.0000000",
-      "selling_liabilities": "0.0000000",
+      "balance": "9999.999990",
+      "buying_liabilities": "0.000000",
+      "selling_liabilities": "0.000000",
       "asset_type": "native"
     }
   ],
@@ -1712,7 +1712,7 @@ var effectsResponse = `{
         "type_i": 3,
         "created_at": "2018-07-27T21:00:12Z",
         "asset_type": "native",
-        "amount": "9999.9999900"
+        "amount": "9999.999990"
       },
       {
         "_links": {
@@ -1733,7 +1733,7 @@ var effectsResponse = `{
         "type_i": 2,
         "created_at": "2018-07-27T21:00:12Z",
         "asset_type": "native",
-        "amount": "9999.9999900"
+        "amount": "9999.999990"
       },
       {
         "_links": {
@@ -1782,7 +1782,7 @@ var assetsResponse = `{
                 "asset_code": "ABC",
                 "asset_issuer": "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
                 "paging_token": "1",
-                "amount": "105.0000000",
+                "amount": "105.000000",
                 "num_accounts": 3,
                 "flags": {
                     "auth_required": true,
@@ -1825,10 +1825,10 @@ var ledgerResponse = `{
   "failed_transaction_count": 1,
   "operation_count": 0,
   "closed_at": "2019-03-03T13:38:16Z",
-  "total_coins": "100000000000.0000000",
-  "fee_pool": "10.7338093",
-  "base_fee_in_stroops": 100,
-  "base_reserve_in_stroops": 5000000,
+  "total_coins": "1000000000000.000000",
+  "fee_pool": "10.733809",
+  "base_fee_in_µg": 100,
+  "base_reserve_in_µg": 5000000,
   "max_tx_set_size": 100,
   "protocol_version": 10,
   "header_xdr": "AAAACniXm+0VRjv8OwwZFazGrshmVl02C6ZWXSb/uz3EhPGMLuFhI0sVqAG57WnGMUKmOUk/J8TAktUB97VgrgEsZuEAAAAAXHvYyAAAAAAAAAAAcvWzXsmT72oXZ7QPC1nZLJei+lFwYRXF4FIz/PQguubMDKGRJrT/0ofTHlZjWAMWjABeGgup7zhfZkm0xrthCAABEOMN4Lazp2QAAAAAAAAGZdltAAAAAAAAAAAABOqvAAAAZABMS0AAAABk4Vse3u3dDM9UWfoH9ooQLLSXYEee8xiHu/k9p6YLlWR2KT4hYGehoHGmp04rhMRMAEp+GHE+KXv0UUxAPmmNmwGYK2HFCnl5a931YmTQYrHQzEeCHx+aI4+TLjTlFjMqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
@@ -1965,10 +1965,10 @@ var metricsResponse = `{
     "min": 20411,
     "stddev": 13264750988.737148
   },
-  "gramr.latest_ledger": {
+  "gravity.latest_ledger": {
     "value": 22826156
   },
-  "gramr.open_connections": {
+  "gravity.open_connections": {
     "value": 94
   },
   "txsub.buffered": {
@@ -2081,12 +2081,12 @@ var offersResponse = `{
         "buying": {
           "asset_type": "native"
         },
-        "amount": "1999979.8700000",
+        "amount": "1999979.870000",
         "price_r": {
           "n": 100,
           "d": 1
         },
-        "price": "100.0000000",
+        "price": "100.000000",
         "last_modified_ledger": 103307,
         "last_modified_time": "2019-03-05T13:23:50Z"
       }
@@ -2115,12 +2115,12 @@ var offerResponse = `
     "asset_code": "AstroDollar",
     "asset_issuer": "GDA2EHKPDEWZTAL6B66FO77HMOZL3RHZTIJO7KJJK5RQYSDUXEYMPJYY"
   },
-  "amount": "100.0000000",
+  "amount": "100.000000",
   "price_r": {
     "n": 10,
     "d": 1
   },
-  "price": "10.0000000",
+  "price": "10.000000",
   "last_modified_ledger": 356183,
   "last_modified_time": "2020-02-20T20:44:55Z"
 }
@@ -2171,7 +2171,7 @@ var multipleOpsResponse = `{
         "asset_issuer": "GCJKSAQECBGSLPQWAU7ME4LVQVZ6IDCNUA5NVTPPCUWZWBN5UBFMXZ53",
         "from": "GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
         "to": "GDTCW47BX2ELQ76KAZIA5Z6V4IEHUUD44ABJ66JTRZRMINEJY3OUCNEO",
-        "amount": "1.1200000"
+        "amount": "1.120000"
       },
       {
         "_links": {
@@ -2199,11 +2199,11 @@ var multipleOpsResponse = `{
         "type_i": 3,
         "created_at": "2019-03-14T09:58:33Z",
         "transaction_hash": "af68055329e570bf461f384e2cd40db023be32f1c38a756ba2db08b6baf66148",
-        "amount": "7775.0657728",
-        "price": "3.0058511",
+        "amount": "7775.065773",
+        "price": "3.005851",
         "price_r": {
-          "n": 30058511,
-          "d": 10000000
+          "n": 3005851,
+          "d": 1000000
         },
         "buying_asset_type": "native",
         "selling_asset_type": "credit_alphanum4",
@@ -2237,7 +2237,7 @@ var multipleOpsResponse = `{
         "type_i": 0,
         "created_at": "2019-03-14T12:30:40Z",
         "transaction_hash": "ade3c60f1b581e8744596673d95bffbdb8f68f199e0e2f7d63b7c3af9fd8d868",
-        "starting_balance": "2.0000000",
+        "starting_balance": "2.000000",
         "funder": "GD7C4MQJDM3AHXKO2Z2OF7BK3FYL6QMNBGVEO4H2DHM65B7JMHD2IU2E",
         "account": "GD6LCN37TNJZW3JF2R7N5EYGQGVWRPMSGQHR6RZD4X4NATEQLP7RFAMA"
       }          
@@ -2330,7 +2330,7 @@ var transactionFailure = `{
   "type": "https://lantah.network/orbitr-errors/transaction_failed",
   "title": "Transaction Failed",
   "status": 400,
-  "detail": "The transaction failed when submitted to the stellar network. The extras.result_codes field on this response contains further details.  Descriptions of each code can be found at: https://developers.stellar.org/docs/start/list-of-operations/",
+  "detail": "The transaction failed when submitted to the lantah network. The extras.result_codes field on this response contains further details.  Descriptions of each code can be found at: https://developers.stellar.org/docs/start/list-of-operations/",
   "instance": "horizon-testnet-001.prd.stellar001.internal.stellar-ops.com/4elYz2fHhC-528285",
   "extras": {
     "envelope_xdr": "AAAAAKpmDL6Z4hvZmkTBkYpHftan4ogzTaO4XTB7joLgQnYYAAAAZAAAAAAABeoyAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAABAAAAAD3sEVVGZGi/NoC3ta/8f/YZKMzyi9ZJpOi0H47x7IqYAAAAAAAAAAAF9eEAAAAAAAAAAAA=",
@@ -2507,16 +2507,16 @@ var orderbookResponse = `{
         "n": 48904,
         "d": 1949839975
       },
-      "price": "0.0000251",
-      "amount": "0.0841405"
+      "price": "0.000025",
+      "amount": "0.084141"
     },
     {
       "price_r": {
         "n": 273,
         "d": 10917280
       },
-      "price": "0.0000250",
-      "amount": "0.0005749"
+      "price": "0.000025",
+      "amount": "0.000575"
     }
   ],
   "asks": [
@@ -2525,16 +2525,16 @@ var orderbookResponse = `{
         "n": 2,
         "d": 78125
       },
-      "price": "0.0000256",
-      "amount": "3354.7460938"
+      "price": "0.000026",
+      "amount": "3354.746094"
     },
     {
       "price_r": {
         "n": 10178,
         "d": 394234000
       },
-      "price": "0.0000258",
-      "amount": "1.7314070"
+      "price": "0.000026",
+      "amount": "1.731407"
     }
   ],
   "base": {
@@ -2594,7 +2594,7 @@ var paymentsResponse = `{
         "type_i": 0,
         "created_at": "2019-03-27T09:55:41Z",
         "transaction_hash": "a0207513c372146bae8cdb299975047216cb1ffb393074b2015b39496e8767c2",
-        "starting_balance": "10000.0000000",
+        "starting_balance": "10000.000000",
         "funder": "GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR",
         "account": "GB4OHVQE7OZH4HLCHFNR7OHDMZVNKOJT3RCRAXRNGGCNUHFRVGUGKW36"
       },
@@ -2627,7 +2627,7 @@ var paymentsResponse = `{
         "asset_type": "native",
         "from": "GAL6CXEVI3Y4O4J3FIX3KCRF7HSUG5RW2IRQRUUFC6XHZOLNV3NU35TL",
         "to": "GDGEQS64ISS6Y2KDM5V67B6LXALJX4E7VE4MIA54NANSUX5MKGKBZM5G",
-        "amount": "177.0000000"
+        "amount": "177.000000"
       }
     ]
   }

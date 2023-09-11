@@ -3,9 +3,9 @@ package httperror
 import (
 	"net/http"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/httpjson"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/httpjson"
 )
 
 type Error struct {
@@ -38,13 +38,13 @@ var BadRequest = &Error{
 	Status:       http.StatusBadRequest,
 }
 
-func ParseHorizonError(err error) error {
+func ParseOrbitRError(err error) error {
 	if err == nil {
 		return nil
 	}
 
 	rootErr := errors.Cause(err)
-	if hError := horizonclient.GetError(rootErr); hError != nil {
+	if hError := orbitrclient.GetError(rootErr); hError != nil {
 		resultCode, _ := hError.ResultCodes()
 		err = errors.Wrapf(err, "error submitting transaction: %+v, %+v\n", hError.Problem, resultCode)
 	} else {

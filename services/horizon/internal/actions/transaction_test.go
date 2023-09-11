@@ -4,10 +4,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
-	supportProblem "github.com/stellar/go/support/render/problem"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	supportProblem "github.com/lantah/go/support/render/problem"
 )
 
 func TestGetTransactionsHandler(t *testing.T) {
@@ -15,7 +15,7 @@ func TestGetTransactionsHandler(t *testing.T) {
 	tt.Scenario("base")
 	defer tt.Finish()
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetTransactionsHandler{}
 
 	// filter by account
@@ -115,7 +115,7 @@ func TestGetTransactionsHandler(t *testing.T) {
 func checkOuterHashResponse(
 	tt *test.T,
 	fixture history.FeeBumpFixture,
-	transactionResponse horizon.Transaction,
+	transactionResponse orbitr.Transaction,
 ) {
 	tt.Assert.Equal(fixture.Transaction.Account, transactionResponse.Account)
 	tt.Assert.Equal(fixture.Transaction.AccountSequence, transactionResponse.AccountSequence)
@@ -151,8 +151,8 @@ func checkOuterHashResponse(
 func TestFeeBumpTransactionPage(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 	fixture := history.FeeBumpScenario(tt, q, true)
 	handler := GetTransactionsHandler{}
 
@@ -165,18 +165,18 @@ func TestFeeBumpTransactionPage(t *testing.T) {
 	tt.Assert.NoError(err)
 	tt.Assert.Len(records, 2)
 
-	feeBumpResponse := records[0].(horizon.Transaction)
+	feeBumpResponse := records[0].(orbitr.Transaction)
 	checkOuterHashResponse(tt, fixture, feeBumpResponse)
 
-	normalTxResponse := records[1].(horizon.Transaction)
+	normalTxResponse := records[1].(orbitr.Transaction)
 	tt.Assert.Equal(fixture.NormalTransaction.TransactionHash, normalTxResponse.ID)
 }
 
 func TestFeeBumpTransactionResource(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 	fixture := history.FeeBumpScenario(tt, q, true)
 
 	handler := GetTransactionByHashHandler{}
@@ -189,7 +189,7 @@ func TestFeeBumpTransactionResource(t *testing.T) {
 		),
 	)
 	tt.Assert.NoError(err)
-	byOuterHash := resource.(horizon.Transaction)
+	byOuterHash := resource.(orbitr.Transaction)
 	checkOuterHashResponse(tt, fixture, byOuterHash)
 
 	resource, err = handler.GetResource(
@@ -202,7 +202,7 @@ func TestFeeBumpTransactionResource(t *testing.T) {
 	)
 	tt.Assert.NoError(err)
 
-	byInnerHash := resource.(horizon.Transaction)
+	byInnerHash := resource.(orbitr.Transaction)
 
 	tt.Assert.NotEqual(byOuterHash.Hash, byInnerHash.Hash)
 	tt.Assert.NotEqual(byOuterHash.ID, byInnerHash.ID)

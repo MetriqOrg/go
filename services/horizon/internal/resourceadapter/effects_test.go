@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/protocols/horizon/effects"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/support/test"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/support/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

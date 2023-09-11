@@ -5,17 +5,17 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/guregu/null"
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/toid"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/toid"
+	"github.com/lantah/go/xdr"
 )
 
 func TestOperationQueries(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	// Test OperationByID
 	op, transaction, err := q.OperationByID(tt.Ctx, false, 8589938689)
@@ -68,8 +68,8 @@ func TestOperationQueries(t *testing.T) {
 func TestOperationByLiquidityPool(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &Q{tt.OrbitRSession()}
 
 	txIndex := int32(1)
 	sequence := int32(56)
@@ -164,7 +164,7 @@ func TestOperationQueryBuilder(t *testing.T) {
 	tt := test.Start(t)
 	tt.Scenario("base")
 	defer tt.Finish()
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 
 	opsQ := q.Operations().ForAccount(tt.Ctx, "GBXGQJWVLWOYHFLVTKWV5FGHA3LNYY2JQKM7OAJAUEQFU6LPCSEFVXON").Page(db2.PageQuery{Cursor: "8589938689", Order: "asc", Limit: 10})
 	tt.Assert.NoError(opsQ.Err)
@@ -194,7 +194,7 @@ func TestOperationSuccessfulOnly(t *testing.T) {
 	tt.Scenario("failed_transactions")
 	defer tt.Finish()
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Operations().
 		ForAccount(tt.Ctx, "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2")
 
@@ -220,7 +220,7 @@ func TestOperationIncludeFailed(t *testing.T) {
 	tt.Scenario("failed_transactions")
 	defer tt.Finish()
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Operations().
 		ForAccount(tt.Ctx, "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2").
 		IncludeFailed()
@@ -255,7 +255,7 @@ func TestPaymentsSuccessfulOnly(t *testing.T) {
 	tt.Scenario("failed_transactions")
 	defer tt.Finish()
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Operations().
 		OnlyPayments().
 		ForAccount(tt.Ctx, "GBXGQJWVLWOYHFLVTKWV5FGHA3LNYY2JQKM7OAJAUEQFU6LPCSEFVXON")
@@ -282,7 +282,7 @@ func TestPaymentsIncludeFailed(t *testing.T) {
 	tt.Scenario("failed_transactions")
 	defer tt.Finish()
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Operations().
 		OnlyPayments().
 		ForAccount(tt.Ctx, "GBXGQJWVLWOYHFLVTKWV5FGHA3LNYY2JQKM7OAJAUEQFU6LPCSEFVXON").
@@ -315,12 +315,12 @@ func TestExtraChecksOperationsTransactionSuccessfulTrueResultFalse(t *testing.T)
 	defer tt.Finish()
 
 	// successful `true` but tx result `false`
-	_, err := tt.HorizonDB.Exec(
+	_, err := tt.OrbitRDB.Exec(
 		`UPDATE history_transactions SET successful = true WHERE transaction_hash = 'aa168f12124b7c196c0adaee7c73a64d37f99428cacb59a91ff389626845e7cf'`,
 	)
 	tt.Require.NoError(err)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Operations().
 		ForAccount(tt.Ctx, "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2").
 		IncludeFailed()
@@ -336,12 +336,12 @@ func TestExtraChecksOperationsTransactionSuccessfulFalseResultTrue(t *testing.T)
 	defer tt.Finish()
 
 	// successful `false` but tx result `true`
-	_, err := tt.HorizonDB.Exec(
+	_, err := tt.OrbitRDB.Exec(
 		`UPDATE history_transactions SET successful = false WHERE transaction_hash = 'a2dabf4e9d1642722602272e178a37c973c9177b957da86192a99b3e9f3a9aa4'`,
 	)
 	tt.Require.NoError(err)
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Operations().
 		ForAccount(tt.Ctx, "GBXGQJWVLWOYHFLVTKWV5FGHA3LNYY2JQKM7OAJAUEQFU6LPCSEFVXON").
 		IncludeFailed()
@@ -366,7 +366,7 @@ func TestOperationIncludeTransactions(t *testing.T) {
 
 	accountID := "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2"
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Operations().
 		IncludeTransactions().
 		ForAccount(tt.Ctx, accountID)
@@ -382,11 +382,11 @@ func TestOperationIncludeTransactions(t *testing.T) {
 		assertOperationMatchesTransaction(tt, operation, transaction)
 	}
 
-	withoutTransactionsQuery := (&Q{tt.HorizonSession()}).Operations().
+	withoutTransactionsQuery := (&Q{tt.OrbitRSession()}).Operations().
 		ForAccount(tt.Ctx, accountID)
 
 	var expectedTransactions []Transaction
-	err = (&Q{tt.HorizonSession()}).Transactions().ForAccount(tt.Ctx, accountID).Select(tt.Ctx, &expectedTransactions)
+	err = (&Q{tt.OrbitRSession()}).Transactions().ForAccount(tt.Ctx, accountID).Select(tt.Ctx, &expectedTransactions)
 	tt.Assert.NoError(err)
 
 	expectedOperations, _, err := withoutTransactionsQuery.Fetch(tt.Ctx)
@@ -424,7 +424,7 @@ func TestValidateTransactionForOperation(t *testing.T) {
 
 	accountID := "GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2"
 
-	q := &Q{tt.HorizonSession()}
+	q := &Q{tt.OrbitRSession()}
 	query := q.Operations().
 		IncludeTransactions().
 		ForAccount(tt.Ctx, accountID)

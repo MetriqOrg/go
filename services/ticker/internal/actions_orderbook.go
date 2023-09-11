@@ -4,16 +4,16 @@ import (
 	"context"
 	"time"
 
-	horizonclient "github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/services/ticker/internal/scraper"
-	"github.com/stellar/go/services/ticker/internal/tickerdb"
-	"github.com/stellar/go/support/errors"
-	hlog "github.com/stellar/go/support/log"
+	orbitrclient "github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/services/ticker/internal/scraper"
+	"github.com/lantah/go/services/ticker/internal/tickerdb"
+	"github.com/lantah/go/support/errors"
+	hlog "github.com/lantah/go/support/log"
 )
 
 // RefreshOrderbookEntries updates the orderbook entries for the relevant markets that were active
 // in the past 7-day interval
-func RefreshOrderbookEntries(s *tickerdb.TickerSession, c *horizonclient.Client, l *hlog.Entry) error {
+func RefreshOrderbookEntries(s *tickerdb.TickerSession, c *orbitrclient.Client, l *hlog.Entry) error {
 	sc := scraper.ScraperConfig{
 		Client: c,
 		Logger: l,

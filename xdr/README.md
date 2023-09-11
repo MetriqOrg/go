@@ -18,4 +18,4 @@ To regenerate the code from the local XDR:
 docker run --platform linux/amd64 -it --rm -v $PWD:/wd -w /wd ruby /bin/bash -c 'bundle install && bundle exec rake xdr:generate' && go fmt ./xdr
 ```
 
-To download XDR for a different branch of gramr, modify `Rakefile` in the root.
+To download XDR for a different branch of gravity, modify `Rakefile` in the root.

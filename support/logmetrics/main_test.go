@@ -10,13 +10,13 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stellar/go/support/log"
+	"github.com/lantah/go/support/log"
 )
 
 func TestLogPackageMetrics(t *testing.T) {
 	output := new(bytes.Buffer)
 	l := log.New()
-	m := New("horizon")
+	m := New("orbitr")
 
 	l.DisableColors()
 	l.SetLevel(logrus.DebugLevel)
@@ -41,7 +41,7 @@ func TestLogPackageMetrics(t *testing.T) {
 			levelString = "warn"
 		}
 		expectedDesc := fmt.Sprintf(
-			"Desc{fqName: \"horizon_log_%s_total\", help: \"\", constLabels: {}, variableLabels: []}",
+			"Desc{fqName: \"orbitr_log_%s_total\", help: \"\", constLabels: {}, variableLabels: []}",
 			levelString,
 		)
 		assert.Equal(t, expectedDesc, meter.Desc().String())

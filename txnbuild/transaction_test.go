@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/price"
-	"github.com/stellar/go/strkey"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/price"
+	"github.com/lantah/go/strkey"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -1319,7 +1319,7 @@ func TestPreAuthTransaction(t *testing.T) {
 
 func TestHashXTransaction(t *testing.T) {
 	// 256 bit preimage
-	preimage := "this is a preimage for hashx transactions on the stellar network"
+	preimage := "this is a preimage for hashx transactions on the lantah network"
 
 	preimageHash := sha256.Sum256([]byte(preimage))
 

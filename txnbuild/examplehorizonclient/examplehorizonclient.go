@@ -1,8 +1,8 @@
-// Package examplehorizonclient provides a dummy client for use with the GoDoc examples.
-package examplehorizonclient
+// Package exampleorbitrclient provides a dummy client for use with the GoDoc examples.
+package exampleorbitrclient
 
 import (
-	hProtocol "github.com/stellar/go/protocols/horizon"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
 )
 
 // AccountRequest is a simple mock

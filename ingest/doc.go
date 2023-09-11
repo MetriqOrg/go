@@ -7,9 +7,9 @@ possible features. This is why this package was created.
 
 # Ledger Backend
 
-Ledger backends are sources of information about Stellar network ledgers. This
-can be, for example: a Gramr database, (possibly-remote) Captive
-Gramr instances, or History Archives. Please consult the "ledgerbackend"
+Ledger backends are sources of information about Lantah Network ledgers. This
+can be, for example: a Gravity database, (possibly-remote) Captive
+Gravity instances, or History Archives. Please consult the "ledgerbackend"
 package docs for more information about each backend.
 
 Warning: Ledger backends provide low-level xdr.LedgerCloseMeta that should not

@@ -118,7 +118,7 @@ GET `https://ticker.stellar.org/markets.json`
 }
 ```
 ## Asset (Currency) Data
-Lists all the valid assets within the Stellar network. The provided fields are based on the [Currency Documentation of SEP-0001](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0001.md#currency-documentation) and the [Asset fields from Horizon](https://developers.stellar.org/api/resources/assets/).
+Lists all the valid assets within the Lantah Network. The provided fields are based on the [Currency Documentation of SEP-0001](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0001.md#currency-documentation) and the [Asset fields from Horizon](https://developers.stellar.org/api/resources/assets/).
 ### Response Fields
 
 * `generated_at`: UNIX timestamp of when data was generated
@@ -199,7 +199,7 @@ GET `https://ticker.stellar.org/assets.json`
             "display_decimals": 2,
             "name": "Push",
             "desc": "1 PUSH token entitles you to access the push API.",
-            "conditions": "Token used to access the PUSH api to send a push request to the stellar network.",
+            "conditions": "Token used to access the PUSH api to send a push request to the lantah network.",
             "is_asset_anchored": false,
             "fixed_number": 0,
             "max_number": 0,

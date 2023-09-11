@@ -37,7 +37,7 @@ Horizon utilizes Go's built in concurrency primitives ([goroutines](https://goby
 
 #### History
 
-Horizon maintains its own database (postgres), a verbose and user friendly account of activity on the Stellar network.
+Horizon maintains its own database (postgres), a verbose and user friendly account of activity on the Lantah Network.
 
 |    Metric     |  Description                                                                                                                               |
 | ---------------- |  ------------------------------------------------------------------------------------------------------------------------------ |
@@ -48,7 +48,7 @@ Horizon maintains its own database (postgres), a verbose and user friendly accou
 
 #### Ingester
 
-Ingester represents metrics specific to Horizon's [ingestion](https://github.com/lantah/go/blob/master/services/horizon/internal/docs/reference/admin.md#ingesting-stellar-core-data) process, or the process by which Horizon consumes transaction results from a connected Gramr instance.
+Ingester represents metrics specific to Horizon's [ingestion](https://github.com/lantah/go/blob/master/services/horizon/internal/docs/reference/admin.md#ingesting-stellar-core-data) process, or the process by which Horizon consumes transaction results from a connected Gravity instance.
 
 |    Metric     |  Description                                                                                                                               |
 | ---------------- |  ------------------------------------------------------------------------------------------------------------------------------ |
@@ -82,23 +82,23 @@ These metrics contain useful [sub metrics](#sub-metrics).
 | requests.succeeded | Successful requests are those that return a status code in [200, 400). |
 | requests.total | Total number of received requests.  |
 
-#### Gramr
-As noted above, Horizon relies on Gramr to stay in sync with the Stellar network. These metrics are specific to the underlying Gramr instance.
+#### Gravity
+As noted above, Horizon relies on Gravity to stay in sync with the Lantah Network. These metrics are specific to the underlying Gravity instance.
 
 |    Metric     |  Description                                                                                                                               |
 | ---------------- |  ------------------------------------------------------------------------------------------------------------------------------ |
-| gramr.latest_ledger    | The sequence number of the latest (most recent) ledger recorded in Gramr's database.  |
-| gramr.open_connections | The number of open connections to the Gramr postgres database.  |
+| gravity.latest_ledger    | The sequence number of the latest (most recent) ledger recorded in Gravity's database.  |
+| gravity.open_connections | The number of open connections to the Gravity postgres database.  |
 
 #### Transaction Submission
 
-Horizon does not submit transactions directly to the Stellar network. Instead, it sequences transactions and sends the base64 encoded, XDR serialized blob to its connected Gramr instance. 
+Horizon does not submit transactions directly to the Lantah Network. Instead, it sequences transactions and sends the base64 encoded, XDR serialized blob to its connected Gravity instance. 
 
 ##### Horizon Transaction Sequencing and Submission
 
-The following is a simplified version of the transaction submission process that glosses over the finer details. To dive deeper, check out the [source code](https://github.com/stellar/go/tree/master/services/horizon/internal/txsub).
+The following is a simplified version of the transaction submission process that glosses over the finer details. To dive deeper, check out the [source code](https://github.com/lantah/go/tree/master/services/horizon/internal/txsub).
 
-Horizon's sequencing mechanism consists of a [manager](https://github.com/stellar/go/blob/master/services/horizon/internal/txsub/sequence/manager.go) that keeps track of [submission queues](https://github.com/stellar/go/blob/master/services/horizon/internal/txsub/sequence/queue.go) for a set of addresses. A submission queue is a  priority queue, prioritized by minimum transaction sequence number, that holds a set of pending transactions for an account. A pending transaction is represented as an object with a sequence number and a channel. Periodically, this queue is updated, popping off finished transactions, sending down the transaction's channel a successful/failure response.
+Horizon's sequencing mechanism consists of a [manager](https://github.com/lantah/go/blob/master/services/horizon/internal/txsub/sequence/manager.go) that keeps track of [submission queues](https://github.com/lantah/go/blob/master/services/horizon/internal/txsub/sequence/queue.go) for a set of addresses. A submission queue is a  priority queue, prioritized by minimum transaction sequence number, that holds a set of pending transactions for an account. A pending transaction is represented as an object with a sequence number and a channel. Periodically, this queue is updated, popping off finished transactions, sending down the transaction's channel a successful/failure response.
 
 These metrics contain useful [sub metrics](#sub-metrics).
 

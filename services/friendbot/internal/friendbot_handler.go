@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/lantah/go/protocols/horizon"
+	"github.com/lantah/go/protocols/orbitr"
 	"github.com/lantah/go/strkey"
 	"github.com/lantah/go/support/render/hal"
 	"github.com/lantah/go/support/render/problem"
@@ -27,7 +27,7 @@ func (handler *FriendbotHandler) Handle(w http.ResponseWriter, r *http.Request) 
 }
 
 // doHandle is just a convenience method that returns the object to be rendered
-func (handler *FriendbotHandler) doHandle(r *http.Request) (*horizon.Transaction, error) {
+func (handler *FriendbotHandler) doHandle(r *http.Request) (*orbitr.Transaction, error) {
 	err := r.ParseForm()
 	if err != nil {
 		p := problem.BadRequest

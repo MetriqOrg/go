@@ -3,8 +3,8 @@ package history
 import (
 	"context"
 
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
 )
 
 // stateVerificationLockId is the objid for the advisory lock acquired during

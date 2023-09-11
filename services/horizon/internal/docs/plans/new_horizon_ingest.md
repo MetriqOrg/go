@@ -54,7 +54,7 @@ gunzip results-014df7ff.xdr.gz
 
 #### Full Ledger Reader
 
-The ingestion system needs a way to keep the current ledger state up to date, as well as a way to construct a history of events (typically transactions, operations, and effects) that have occurred over time on the Stellar network. The full ledger reader provides this ability. Specifically, it allows the ingestion system to access a stream of transaction metadata that encode state changes that happen as a result of every transaction. This information is missing from the history archives, and is also updated after every ledger close (vs. after every 64 in the history archives). The full ledger reader also has access to transaction sets for each ledger.
+The ingestion system needs a way to keep the current ledger state up to date, as well as a way to construct a history of events (typically transactions, operations, and effects) that have occurred over time on the Lantah Network. The full ledger reader provides this ability. Specifically, it allows the ingestion system to access a stream of transaction metadata that encode state changes that happen as a result of every transaction. This information is missing from the history archives, and is also updated after every ledger close (vs. after every 64 in the history archives). The full ledger reader also has access to transaction sets for each ledger.
 
 Here's a summary of the features provided by the full ledger reader vs. the history archive reader:
 

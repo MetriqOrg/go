@@ -4,8 +4,8 @@ replacement: https://developers.stellar.org/api/introduction/xdr/
 ---
 
 **XDR**, also known as _External Data Representation_, is used extensively in
-the Stellar Network, especially in the core protocol.  The ledger, transactions, results,
-history, and even the messages passed between computers running gramr
+the Lantah Network, especially in the core protocol.  The ledger, transactions, results,
+history, and even the messages passed between computers running gravity
 are encoded using XDR.
 
 XDR is specified in [RFC 4506](http://tools.ietf.org/html/rfc4506.html).
@@ -23,4 +23,4 @@ into a byte stream, then decode the XDR into an in-memory data structure.
 
 Data structures in XDR are specified in an _interface definition file_ (IDL).
 The IDL files used for the Lantah Network are available
-[on GitHub](https://github.com/lantah/gramr/tree/master/src/xdr).
+[on GitHub](https://github.com/lantah/gravity/tree/master/src/xdr).

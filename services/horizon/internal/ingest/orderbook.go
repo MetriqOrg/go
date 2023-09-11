@@ -9,11 +9,11 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/exp/orderbook"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ingest/processors"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/exp/orderbook"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 const (
@@ -22,8 +22,8 @@ const (
 )
 
 // OrderBookStream updates an in memory graph to be consistent with
-// offers in the Horizon DB. Any offers which are created, modified, or removed
-// from the Horizon DB during ingestion will be applied to the in memory order book
+// offers in the OrbitR DB. Any offers which are created, modified, or removed
+// from the OrbitR DB during ingestion will be applied to the in memory order book
 // graph. OrderBookStream assumes that no other component will update the
 // in memory graph. However, it is safe for other go routines to use the
 // in memory graph for read operations.
@@ -44,7 +44,7 @@ func NewOrderBookStream(historyQ history.IngestionQ, graph orderbook.OBGraph) *O
 		graph:    graph,
 		historyQ: historyQ,
 		LatestLedgerGauge: prometheus.NewGauge(prometheus.GaugeOpts{
-			Namespace: "horizon", Subsystem: "order_book_stream", Name: "latest_ledger",
+			Namespace: "orbitr", Subsystem: "order_book_stream", Name: "latest_ledger",
 		}),
 		lastVerification: time.Now(),
 		encodingBuffer:   xdr.NewEncodingBuffer(),
@@ -88,7 +88,7 @@ func (o *OrderBookStream) getIngestionStatus(ctx context.Context) (ingestionStat
 
 	status.HistoryConsistentWithState = (status.LastIngestedLedger == lastHistoryLedger) ||
 		// Running ingestion on an empty DB is a special case because we first ingest from the history archive.
-		// Then, on the next iteration, we ingest TX Meta from Gramr. So there is a brief
+		// Then, on the next iteration, we ingest TX Meta from Gravity. So there is a brief
 		// period where there will not be any rows in the history_ledgers table but that is ok.
 		(lastHistoryLedger == 0)
 	return status, nil
@@ -125,7 +125,7 @@ func (o *OrderBookStream) update(ctx context.Context, status ingestionStatus) (b
 		o.graph.Clear()
 		o.lastLedger = 0
 
-		// wait until offers in horizon db is valid before populating order book graph
+		// wait until offers in orbitr db is valid before populating order book graph
 		if status.StateInvalid || !status.HistoryConsistentWithState {
 			return true, nil
 		}
@@ -313,10 +313,10 @@ func (o *OrderBookStream) verifyAllLiquidityPools(ctx context.Context, liquidity
 	return true, nil
 }
 
-// Update will query the Horizon DB for offers which have been created, removed, or updated since the
+// Update will query the OrbitR DB for offers which have been created, removed, or updated since the
 // last time Update() was called. Those changes will then be applied to the in memory order book graph.
 // After calling this function, the the in memory order book graph should be consistent with the
-// Horizon DB (assuming no error is returned).
+// OrbitR DB (assuming no error is returned).
 func (o *OrderBookStream) Update(ctx context.Context) error {
 	if err := o.historyQ.BeginTx(ctx, &sql.TxOptions{ReadOnly: true, Isolation: sql.LevelRepeatableRead}); err != nil {
 		return errors.Wrap(err, "Error starting repeatable read transaction")
@@ -334,7 +334,7 @@ func (o *OrderBookStream) Update(ctx context.Context) error {
 		return nil
 	}
 
-	// add 15 minute jitter so that not all horizon nodes are calling
+	// add 15 minute jitter so that not all orbitr nodes are calling
 	// historyQ.StreamAllOffers at the same time
 	jitter := time.Duration(rand.Int63n(int64(15 * time.Minute)))
 	requiresVerification := o.lastLedger > 0 &&

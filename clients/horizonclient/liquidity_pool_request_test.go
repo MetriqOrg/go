@@ -41,7 +41,7 @@ func TestLiquidityPoolDetailRequest(t *testing.T) {
 		assert.Equal(t, "abcdef", response.ID)
 		assert.Equal(t, uint32(30), response.FeeBP)
 		assert.Equal(t, uint64(300), response.TotalTrustlines)
-		assert.Equal(t, "5000.0000000", response.TotalShares)
+		assert.Equal(t, "50000.000000", response.TotalShares)
 	}
 
 	// failure response
@@ -72,14 +72,14 @@ var liquidityPoolResponse = `{
 	"fee_bp": 30,
 	"type": "constant_product",
 	"total_trustlines": "300",
-	"total_shares": "5000.0000000",
+	"total_shares": "50000.000000",
 	"reserves": [
 		{
 			"amount": "1000.0000005",
 			"asset": "EURT:GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S"
 		},
 		{
-			"amount": "2000.0000000",
+			"amount": "20000.000000",
 			"asset": "PHP:GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP"
 		}
 	]

@@ -3,7 +3,7 @@ package problem
 import (
 	"net/http"
 
-	"github.com/stellar/go/support/render/problem"
+	"github.com/lantah/go/support/render/problem"
 )
 
 // Well-known and reused problems below:
@@ -66,7 +66,7 @@ var (
 		Type:   "server_over_capacity",
 		Title:  "Server Over Capacity",
 		Status: http.StatusServiceUnavailable,
-		Detail: "This horizon server is currently overloaded.  Please wait for " +
+		Detail: "This orbitr server is currently overloaded.  Please wait for " +
 			"several minutes before trying your request again.",
 	}
 
@@ -97,10 +97,10 @@ var (
 		Type:   "before_history",
 		Title:  "Data Requested Is Before Recorded History",
 		Status: http.StatusGone,
-		Detail: "This horizon instance is configured to only track a " +
-			"portion of the stellar network's latest history. This request " +
+		Detail: "This orbitr instance is configured to only track a " +
+			"portion of the lantah network's latest history. This request " +
 			"is asking for results prior to the recorded history known to " +
-			"this horizon instance.",
+			"this orbitr instance.",
 	}
 
 	// StaleHistory is a well-known problem type.  Use it as a shortcut
@@ -109,10 +109,10 @@ var (
 		Type:   "stale_history",
 		Title:  "Historical DB Is Too Stale",
 		Status: http.StatusServiceUnavailable,
-		Detail: "This horizon instance is configured to reject client requests " +
+		Detail: "This orbitr instance is configured to reject client requests " +
 			"when it can determine that the history database is lagging too far " +
-			"behind the connected instance of Gramr or read replica. It's " +
-			"also possible that Gramr is out of sync. Please try again later.",
+			"behind the connected instance of Gravity or read replica. It's " +
+			"also possible that Gravity is out of sync. Please try again later.",
 	}
 
 	// StillIngesting is a well-known problem type.  Use it as a shortcut

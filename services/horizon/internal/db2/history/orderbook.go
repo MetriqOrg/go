@@ -5,10 +5,10 @@ import (
 	"database/sql"
 	"math/big"
 
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 type priceLevel struct {

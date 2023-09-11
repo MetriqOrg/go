@@ -5,25 +5,25 @@ import (
 	"sort"
 	"time"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/txnbuild"
 )
 
 var serverAccount, _ = keypair.ParseFull("SCDXPYDGKV5HOAGVZN3FQSS5FKUPP5BAVBWH4FXKTAWAC24AE4757JSI")
 var clientAccount, _ = keypair.ParseFull("SANVNCABRBVISCV7KH4SZVBKPJWWTT4424OVWUHUHPH2MVSF6RC7HPGN")
 var clientSigner1, _ = keypair.ParseFull("SBPQUZ6G4FZNWFHKUWC5BEYWF6R52E3SEP7R3GWYSM2XTKGF5LNTWW4R")
 var clientSigner2, _ = keypair.ParseFull("SBMSVD4KKELKGZXHBUQTIROWUAPQASDX7KEJITARP4VMZ6KLUHOGPTYW")
-var horizonClient = func() horizonclient.ClientInterface {
-	client := &horizonclient.MockClient{}
+var orbitrClient = func() orbitrclient.ClientInterface {
+	client := &orbitrclient.MockClient{}
 	client.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: clientAccount.Address()}).
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: clientAccount.Address()}).
 		Return(
-			horizon.Account{
-				Thresholds: horizon.AccountThresholds{LowThreshold: 1, MedThreshold: 10, HighThreshold: 100},
-				Signers: []horizon.Signer{
+			orbitr.Account{
+				Thresholds: orbitr.AccountThresholds{LowThreshold: 1, MedThreshold: 10, HighThreshold: 100},
+				Signers: []orbitr.Signer{
 					{Key: clientSigner1.Address(), Weight: 40},
 					{Key: clientSigner2.Address(), Weight: 60},
 				},
@@ -86,8 +86,8 @@ func ExampleVerifyChallengeTxThreshold() {
 
 		// Server gets account
 		clientAccountExists := false
-		horizonClientAccount, err := horizonClient.AccountDetail(horizonclient.AccountRequest{AccountID: txClientAccountID})
-		if horizonclient.IsNotFoundError(err) {
+		orbitrClientAccount, err := orbitrClient.AccountDetail(orbitrclient.AccountRequest{AccountID: txClientAccountID})
+		if orbitrclient.IsNotFoundError(err) {
 			clientAccountExists = false
 			fmt.Println("Account does not exist, use master key to verify")
 		} else if err == nil {
@@ -99,10 +99,10 @@ func ExampleVerifyChallengeTxThreshold() {
 
 		if clientAccountExists {
 			// Server gets list of signers from account
-			signerSummary := horizonClientAccount.SignerSummary()
+			signerSummary := orbitrClientAccount.SignerSummary()
 
 			// Server chooses the threshold to require: low, med or high
-			threshold := txnbuild.Threshold(horizonClientAccount.Thresholds.MedThreshold)
+			threshold := txnbuild.Threshold(orbitrClientAccount.Thresholds.MedThreshold)
 
 			// Server verifies threshold is met
 			signers, err := txnbuild.VerifyChallengeTxThreshold(signedChallengeTx, serverAccount.Address(), network.TestNetworkPassphrase, "webauthdomain.stellar.org", []string{"test"}, threshold, signerSummary)

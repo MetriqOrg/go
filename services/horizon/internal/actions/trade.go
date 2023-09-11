@@ -7,17 +7,17 @@ import (
 	"strconv"
 	gTime "time"
 
-	"github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/support/time"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/support/time"
+	"github.com/lantah/go/xdr"
 )
 
 // TradeAssetsQueryParams represents the base and counter assets on trade related end-points.
@@ -177,7 +177,7 @@ func (handler GetTradesHandler) GetResourcePage(w HeaderWriter, r *http.Request)
 		qp.TradeType = history.AllTrades
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
@@ -209,7 +209,7 @@ func (handler GetTradesHandler) GetResourcePage(w HeaderWriter, r *http.Request)
 
 	var response []hal.Pageable
 	for _, record := range records {
-		var res horizon.Trade
+		var res orbitr.Trade
 		resourceadapter.PopulateTrade(ctx, &res, record)
 		response = append(response, res)
 	}
@@ -296,7 +296,7 @@ func (handler GetTradeAggregationsHandler) GetResource(w HeaderWriter, r *http.R
 		return nil, err
 	}
 
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
@@ -307,7 +307,7 @@ func (handler GetTradeAggregationsHandler) GetResource(w HeaderWriter, r *http.R
 	}
 	var aggregations []hal.Pageable
 	for _, record := range records {
-		var res horizon.TradeAggregation
+		var res orbitr.TradeAggregation
 		err = resourceadapter.PopulateTradeAggregation(ctx, &res, record)
 		if err != nil {
 			return nil, err
@@ -438,7 +438,7 @@ func (handler GetTradeAggregationsHandler) buildPage(r *http.Request, records []
 	} else {
 		lastRecord := records[len(records)-1]
 
-		lastRecordTA, ok := lastRecord.(horizon.TradeAggregation)
+		lastRecordTA, ok := lastRecord.(orbitr.TradeAggregation)
 		if !ok {
 			panic(fmt.Sprintf("Unknown type: %T", lastRecord))
 		}

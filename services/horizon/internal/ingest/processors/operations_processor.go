@@ -7,14 +7,14 @@ import (
 	"fmt"
 	"github.com/guregu/null"
 
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/ingest"
-	"github.com/stellar/go/protocols/horizon/base"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/contractevents"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/toid"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/ingest"
+	"github.com/lantah/go/protocols/orbitr/base"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/contractevents"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/toid"
+	"github.com/lantah/go/xdr"
 )
 
 // OperationProcessor operations processor
@@ -254,7 +254,7 @@ func (operation *transactionOperationWrapper) OperationResult() *xdr.OperationRe
 	return &tr
 }
 
-// Determines if an operation is qualified to represent a payment in horizon terms.
+// Determines if an operation is qualified to represent a payment in orbitr terms.
 func (operation *transactionOperationWrapper) IsPayment() bool {
 	switch operation.OperationType() {
 	case xdr.OperationTypeCreateAccount:
@@ -273,7 +273,7 @@ func (operation *transactionOperationWrapper) IsPayment() bool {
 			return false
 		}
 		// scan all the contract events for at least one SAC event, qualified to be a payment
-		// in horizon
+		// in orbitr
 		for _, contractEvent := range filterEvents(diagnosticEvents) {
 			if sacEvent, err := contractevents.NewStellarAssetContractEvent(&contractEvent, operation.network); err == nil {
 				switch sacEvent.GetType() {
@@ -320,7 +320,7 @@ func addAccountAndMuxedAccountDetails(result map[string]interface{}, a xdr.Muxed
 	if a.Type == xdr.CryptoKeyTypeKeyTypeMuxedEd25519 {
 		result[prefix+"_muxed"] = a.Address()
 		// _muxed_id fields should had ideally been stored in the DB as a string instead of uint64
-		// due to Javascript not being able to handle them, see https://github.com/stellar/go/issues/3714
+		// due to Javascript not being able to handle them, see https://github.com/lantah/go/issues/3714
 		// However, we released this code in the wild before correcting it. Thus, what we do is
 		// work around it (by preprocessing it into a string) in Operation.UnmarshalDetails()
 		result[prefix+"_muxed_id"] = uint64(a.Med25519.Id)

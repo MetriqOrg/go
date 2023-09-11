@@ -91,7 +91,7 @@ func (reader *LedgerTransactionReader) storeTransactions(lcm xdr.LedgerCloseMeta
 			len(lcm.FeeProcessing(i)) > 0 {
 			return errors.New(
 				"TransactionMeta.V=2 is required in protocol version older than version 10. " +
-					"Please process ledgers again using the latest gramr version.",
+					"Please process ledgers again using the latest gravity version.",
 			)
 		}
 

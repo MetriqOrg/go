@@ -1,4 +1,4 @@
-package horizon
+package orbitr
 
 import (
 	"context"
@@ -14,24 +14,24 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stellar/go/clients/gramr"
-	"github.com/stellar/go/services/horizon/internal/corestate"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/httpx"
-	"github.com/stellar/go/services/horizon/internal/ingest"
-	"github.com/stellar/go/services/horizon/internal/ledger"
-	"github.com/stellar/go/services/horizon/internal/operationfeestats"
-	"github.com/stellar/go/services/horizon/internal/paths"
-	"github.com/stellar/go/services/horizon/internal/reap"
-	"github.com/stellar/go/services/horizon/internal/txsub"
-	"github.com/stellar/go/support/app"
-	"github.com/stellar/go/support/db"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/logmetrics"
+	"github.com/lantah/go/clients/gravity"
+	"github.com/lantah/go/services/orbitr/internal/corestate"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/httpx"
+	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/lantah/go/services/orbitr/internal/operationfeestats"
+	"github.com/lantah/go/services/orbitr/internal/paths"
+	"github.com/lantah/go/services/orbitr/internal/reap"
+	"github.com/lantah/go/services/orbitr/internal/txsub"
+	"github.com/lantah/go/support/app"
+	"github.com/lantah/go/support/db"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/logmetrics"
 )
 
-// App represents the root of the state of a horizon instance.
+// App represents the root of the state of a orbitr instance.
 type App struct {
 	done            chan struct{}
 	doneOnce        sync.Once
@@ -41,7 +41,7 @@ type App struct {
 	primaryHistoryQ *history.Q
 	ctx             context.Context
 	cancel          func()
-	horizonVersion  string
+	orbitrVersion  string
 	coreState       corestate.Store
 	orderBookStream *ingest.OrderBookStream
 	submitter       *txsub.System
@@ -69,7 +69,7 @@ func NewApp(config Config) (*App, error) {
 	a := &App{
 		config:         config,
 		ledgerState:    &ledger.State{},
-		horizonVersion: app.Version(),
+		orbitrVersion: app.Version(),
 		ticks:          time.NewTicker(tickerMaxFrequency),
 		done:           make(chan struct{}),
 	}
@@ -80,11 +80,11 @@ func NewApp(config Config) (*App, error) {
 	return a, nil
 }
 
-// Serve starts the horizon web server, binding it to a socket, setting up
+// Serve starts the orbitr web server, binding it to a socket, setting up
 // the shutdown signals.
 func (a *App) Serve() error {
 
-	log.Infof("Starting horizon on :%d (ingest: %v)", a.config.Port, a.config.Ingest)
+	log.Infof("Starting orbitr on :%d (ingest: %v)", a.config.Port, a.config.Ingest)
 
 	if a.config.AdminPort != 0 {
 		log.Infof("Starting internal server on :%d", a.config.AdminPort)
@@ -177,14 +177,14 @@ func (a *App) CloseDB() {
 }
 
 // HistoryQ returns a helper object for performing sql queries against the
-// history portion of horizon's database.
+// history portion of orbitr's database.
 func (a *App) HistoryQ() *history.Q {
 	return a.historyQ
 }
 
-// HorizonSession returns a new session that loads data from the horizon
+// OrbitRSession returns a new session that loads data from the orbitr
 // database.
-func (a *App) HorizonSession() db.SessionInterface {
+func (a *App) OrbitRSession() db.SessionInterface {
 	return a.historyQ.SessionInterface.Clone()
 }
 
@@ -192,7 +192,7 @@ func (a *App) Config() Config {
 	return a.config
 }
 
-// Paths returns the paths.Finder instance used by horizon
+// Paths returns the paths.Finder instance used by orbitr
 func (a *App) Paths() paths.Finder {
 	return a.paths
 }
@@ -204,16 +204,16 @@ func isLocalAddress(url string, port uint) bool {
 	return strings.HasPrefix(url, localHostURL) || strings.HasPrefix(url, localIPURL)
 }
 
-// UpdateCoreLedgerState triggers a refresh of Gramr ledger state.
-// This is done separately from Horizon ledger state update to prevent issues
-// in case Gramr query timeout.
+// UpdateCoreLedgerState triggers a refresh of Gravity ledger state.
+// This is done separately from OrbitR ledger state update to prevent issues
+// in case Gravity query timeout.
 func (a *App) UpdateCoreLedgerState(ctx context.Context) {
 	var next ledger.CoreStatus
 
 	// #4446 If the ingestion state machine is in the build state, the query can time out
 	// because the captive-core buffer may be full. In this case, skip the check.
 	if a.config.CaptiveCoreToml != nil &&
-		isLocalAddress(a.config.GramrURL, a.config.CaptiveCoreToml.HTTPPort) &&
+		isLocalAddress(a.config.GravityURL, a.config.CaptiveCoreToml.HTTPPort) &&
 		a.ingester != nil && a.ingester.GetCurrentState() == ingest.Build {
 		return
 	}
@@ -222,25 +222,25 @@ func (a *App) UpdateCoreLedgerState(ctx context.Context) {
 		log.WithStack(err).WithField("err", err.Error()).Error(msg)
 	}
 
-	coreClient := &gramr.Client{
+	coreClient := &gravity.Client{
 		HTTP: http.DefaultClient,
-		URL:  a.config.GramrURL,
+		URL:  a.config.GravityURL,
 	}
 
 	coreInfo, err := coreClient.Info(ctx)
 	if err != nil {
-		logErr(err, "failed to load the gramr info")
+		logErr(err, "failed to load the gravity info")
 		return
 	}
 	next.CoreLatest = int32(coreInfo.Info.Ledger.Num)
 	a.ledgerState.SetCoreStatus(next)
 }
 
-// UpdateHorizonLedgerState triggers a refresh of Horizon ledger state.
+// UpdateOrbitRLedgerState triggers a refresh of OrbitR ledger state.
 // This is done separately from Core ledger state update to prevent issues
-// in case Gramr query timeout.
-func (a *App) UpdateHorizonLedgerState(ctx context.Context) {
-	var next ledger.HorizonStatus
+// in case Gravity query timeout.
+func (a *App) UpdateOrbitRLedgerState(ctx context.Context) {
+	var next ledger.OrbitRStatus
 
 	logErr := func(err error, msg string) {
 		log.WithStack(err).WithField("err", err.Error()).Error(msg)
@@ -266,7 +266,7 @@ func (a *App) UpdateHorizonLedgerState(ctx context.Context) {
 		return
 	}
 
-	a.ledgerState.SetHorizonStatus(next)
+	a.ledgerState.SetOrbitRStatus(next)
 }
 
 // UpdateFeeStatsState triggers a refresh of several operation fee metrics.
@@ -389,32 +389,32 @@ func (a *App) UpdateFeeStatsState(ctx context.Context) {
 	operationfeestats.SetState(next)
 }
 
-// UpdateGramrInfo updates the value of CoreVersion,
+// UpdateGravityInfo updates the value of CoreVersion,
 // CurrentProtocolVersion, and CoreSupportedProtocolVersion from the Stellar
 // core API.
 //
 // Warning: This method should only return an error if it is fatal. See usage
 // in `App.Tick`
-func (a *App) UpdateGramrInfo(ctx context.Context) error {
-	if a.config.GramrURL == "" {
+func (a *App) UpdateGravityInfo(ctx context.Context) error {
+	if a.config.GravityURL == "" {
 		return nil
 	}
 
-	core := &gramr.Client{
-		URL: a.config.GramrURL,
+	core := &gravity.Client{
+		URL: a.config.GravityURL,
 	}
 
 	resp, err := core.Info(ctx)
 	if err != nil {
-		log.Warnf("could not load gramr info: %s", err)
+		log.Warnf("could not load gravity info: %s", err)
 		return nil
 	}
 
-	// Check if NetworkPassphrase is different, if so exit Horizon as it can break the
+	// Check if NetworkPassphrase is different, if so exit OrbitR as it can break the
 	// state of the application.
 	if resp.Info.Network != a.config.NetworkPassphrase {
 		return fmt.Errorf(
-			"Network passphrase of gramr (%s) does not match Horizon configuration (%s). Exiting...",
+			"Network passphrase of gravity (%s) does not match OrbitR configuration (%s). Exiting...",
 			resp.Info.Network,
 			a.config.NetworkPassphrase,
 		)
@@ -430,19 +430,19 @@ func (a *App) DeleteUnretainedHistory(ctx context.Context) error {
 	return a.reaper.DeleteUnretainedHistory(ctx)
 }
 
-// Tick triggers horizon to update all of it's background processes such as
+// Tick triggers orbitr to update all of it's background processes such as
 // transaction submission, metrics, ingestion and reaping.
 func (a *App) Tick(ctx context.Context) error {
 	var wg sync.WaitGroup
 	log.Debug("ticking app")
 
-	// update ledger state, operation fee state, and gramr info in parallel
+	// update ledger state, operation fee state, and gravity info in parallel
 	wg.Add(4)
 	var err error
 	go func() { a.UpdateCoreLedgerState(ctx); wg.Done() }()
-	go func() { a.UpdateHorizonLedgerState(ctx); wg.Done() }()
+	go func() { a.UpdateOrbitRLedgerState(ctx); wg.Done() }()
 	go func() { a.UpdateFeeStatsState(ctx); wg.Done() }()
-	go func() { err = a.UpdateGramrInfo(ctx); wg.Done() }()
+	go func() { err = a.UpdateGravityInfo(ctx); wg.Done() }()
 	wg.Wait()
 	if err != nil {
 		return err
@@ -464,7 +464,7 @@ func (a *App) init() error {
 
 	// log
 	log.DefaultLogger.SetLevel(a.config.LogLevel)
-	logMetrics := logmetrics.New("horizon")
+	logMetrics := logmetrics.New("orbitr")
 	log.DefaultLogger.AddHook(logMetrics)
 
 	// sentry
@@ -479,11 +479,11 @@ func (a *App) init() error {
 		a.prometheusRegistry.MustRegister(counter)
 	}
 
-	// gramrInfo
-	a.UpdateGramrInfo(a.ctx)
+	// gravityInfo
+	a.UpdateGravityInfo(a.ctx)
 
-	// horizon-db and core-db
-	mustInitHorizonDB(a)
+	// orbitr-db and core-db
+	mustInitOrbitRDB(a)
 
 	if a.config.Ingest {
 		// ingester
@@ -495,7 +495,7 @@ func (a *App) init() error {
 	initSubmissionSystem(a)
 
 	// reaper
-	a.reaper = reap.New(a.config.HistoryRetentionCount, a.HorizonSession(), a.ledgerState)
+	a.reaper = reap.New(a.config.HistoryRetentionCount, a.OrbitRSession(), a.ledgerState)
 
 	// go metrics
 	initGoMetrics(a)
@@ -527,16 +527,16 @@ func (a *App) init() error {
 		PathFinder:               a.paths,
 		PrometheusRegistry:       a.prometheusRegistry,
 		CoreGetter:               a,
-		HorizonVersion:           a.horizonVersion,
+		OrbitRVersion:           a.orbitrVersion,
 		FriendbotURL:             a.config.FriendbotURL,
 		EnableIngestionFiltering: a.config.EnableIngestionFiltering,
 		DisableTxSub:             a.config.DisableTxSub,
 		HealthCheck: healthCheck{
 			session: a.historyQ.SessionInterface,
 			ctx:     a.ctx,
-			core: &gramr.Client{
+			core: &gravity.Client{
 				HTTP: &http.Client{Timeout: infoRequestTimeout},
-				URL:  a.config.GramrURL,
+				URL:  a.config.GravityURL,
 			},
 			cache: newHealthCache(healthCacheTTL),
 		},

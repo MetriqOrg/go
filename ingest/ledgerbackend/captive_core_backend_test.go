@@ -21,36 +21,36 @@ import (
 // TODO: test frame decoding
 // TODO: test from static base64-encoded data
 
-type gramrRunnerMock struct {
+type gravityRunnerMock struct {
 	mock.Mock
 }
 
-func (m *gramrRunnerMock) context() context.Context {
+func (m *gravityRunnerMock) context() context.Context {
 	a := m.Called()
 	return a.Get(0).(context.Context)
 }
 
-func (m *gramrRunnerMock) catchup(from, to uint32) error {
+func (m *gravityRunnerMock) catchup(from, to uint32) error {
 	a := m.Called(from, to)
 	return a.Error(0)
 }
 
-func (m *gramrRunnerMock) runFrom(from uint32, hash string) error {
+func (m *gravityRunnerMock) runFrom(from uint32, hash string) error {
 	a := m.Called(from, hash)
 	return a.Error(0)
 }
 
-func (m *gramrRunnerMock) getMetaPipe() <-chan metaResult {
+func (m *gravityRunnerMock) getMetaPipe() <-chan metaResult {
 	a := m.Called()
 	return a.Get(0).(<-chan metaResult)
 }
 
-func (m *gramrRunnerMock) getProcessExitError() (bool, error) {
+func (m *gravityRunnerMock) getProcessExitError() (bool, error) {
 	a := m.Called()
 	return a.Bool(0), a.Error(1)
 }
 
-func (m *gramrRunnerMock) close() error {
+func (m *gravityRunnerMock) close() error {
 	a := m.Called()
 	return a.Error(0)
 }
@@ -138,11 +138,11 @@ func TestCaptiveNew(t *testing.T) {
 	require.NoError(t, err)
 	defer os.RemoveAll(storagePath)
 
-	executablePath := "/etc/gramr"
+	executablePath := "/etc/gravity"
 	networkPassphrase := network.PublicNetworkPassphrase
 	historyURLs := []string{"http://history.stellar.org/prd/core-live/core_live_001"}
 
-	captiveGramr, err := NewCaptive(
+	captiveGravity, err := NewCaptive(
 		CaptiveCoreConfig{
 			BinaryPath:         executablePath,
 			NetworkPassphrase:  networkPassphrase,
@@ -152,8 +152,8 @@ func TestCaptiveNew(t *testing.T) {
 	)
 
 	assert.NoError(t, err)
-	assert.Equal(t, uint32(0), captiveGramr.nextLedger)
-	assert.NotNil(t, captiveGramr.archive)
+	assert.Equal(t, uint32(0), captiveGravity.nextLedger)
+	assert.NotNil(t, captiveGravity.archive)
 }
 
 func TestCaptivePrepareRange(t *testing.T) {
@@ -169,7 +169,7 @@ func TestCaptivePrepareRange(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(100), uint32(200)).Return(nil).Once()
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -182,9 +182,9 @@ func TestCaptivePrepareRange(t *testing.T) {
 		}, nil)
 
 	cancelCalled := false
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -207,7 +207,7 @@ func TestCaptivePrepareRangeCrash(t *testing.T) {
 	metaChan := make(chan metaResult)
 	close(metaChan)
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(100), uint32(200)).Return(nil).Once()
 	mockRunner.On("getProcessExitError").Return(true, errors.New("exit code -1"))
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
@@ -221,16 +221,16 @@ func TestCaptivePrepareRangeCrash(t *testing.T) {
 			CurrentLedger: uint32(200),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
 	}
 
 	err := captiveBackend.PrepareRange(ctx, BoundedRange(100, 200))
-	assert.EqualError(t, err, "Error fast-forwarding to 100: gramr exited unexpectedly: exit code -1")
+	assert.EqualError(t, err, "Error fast-forwarding to 100: gravity exited unexpectedly: exit code -1")
 	mockRunner.AssertExpectations(t)
 	mockArchive.AssertExpectations(t)
 }
@@ -248,7 +248,7 @@ func TestCaptivePrepareRangeTerminated(t *testing.T) {
 	}
 	close(metaChan)
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(100), uint32(200)).Return(nil).Once()
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -260,9 +260,9 @@ func TestCaptivePrepareRangeTerminated(t *testing.T) {
 			CurrentLedger: uint32(200),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -284,7 +284,7 @@ func TestCaptivePrepareRangeCloseNotFullyTerminated(t *testing.T) {
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(100), uint32(200)).Return(nil).Twice()
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -299,9 +299,9 @@ func TestCaptivePrepareRangeCloseNotFullyTerminated(t *testing.T) {
 			CurrentLedger: uint32(200),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -322,14 +322,14 @@ func TestCaptivePrepareRangeCloseNotFullyTerminated(t *testing.T) {
 
 func TestCaptivePrepareRange_ErrClosingSession(t *testing.T) {
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("close").Return(fmt.Errorf("transient error"))
 	mockRunner.On("getProcessExitError").Return(false, nil)
 	mockRunner.On("context").Return(ctx)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		nextLedger:        300,
-		gramrRunner: mockRunner,
+		gravityRunner: mockRunner,
 	}
 
 	err := captiveBackend.PrepareRange(ctx, BoundedRange(100, 200))
@@ -348,7 +348,7 @@ func TestCaptivePrepareRange_ErrGettingRootHAS(t *testing.T) {
 		On("GetRootHAS").
 		Return(historyarchive.HistoryArchiveState{}, errors.New("transient error"))
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
 	}
 
@@ -356,14 +356,14 @@ func TestCaptivePrepareRange_ErrGettingRootHAS(t *testing.T) {
 	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error getting latest checkpoint sequence: error getting root HAS: transient error")
 
 	err = captiveBackend.PrepareRange(ctx, UnboundedRange(100))
-	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error calculating ledger and hash for gramr run: error getting latest checkpoint sequence: error getting root HAS: transient error")
+	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error calculating ledger and hash for gravity run: error getting latest checkpoint sequence: error getting root HAS: transient error")
 
 	mockArchive.AssertExpectations(t)
 }
 
 func TestCaptivePrepareRange_FromIsAheadOfRootHAS(t *testing.T) {
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 
 	mockArchive := &historyarchive.MockArchive{}
 	mockArchive.
@@ -372,9 +372,9 @@ func TestCaptivePrepareRange_FromIsAheadOfRootHAS(t *testing.T) {
 			CurrentLedger: uint32(64),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -384,7 +384,7 @@ func TestCaptivePrepareRange_FromIsAheadOfRootHAS(t *testing.T) {
 	assert.EqualError(t, err, "error starting prepare range: opening subprocess: from sequence: 100 is greater than max available in history archives: 64")
 
 	err = captiveBackend.PrepareRange(ctx, UnboundedRange(193))
-	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error calculating ledger and hash for gramr run: trying to start online mode too far (latest checkpoint=64), only two checkpoints in the future allowed")
+	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error calculating ledger and hash for gravity run: trying to start online mode too far (latest checkpoint=64), only two checkpoints in the future allowed")
 
 	mockArchive.
 		On("GetLedgerHeader", uint32(64)).
@@ -411,7 +411,7 @@ func TestCaptivePrepareRange_FromIsAheadOfRootHAS(t *testing.T) {
 
 func TestCaptivePrepareRangeWithDB_FromIsAheadOfRootHAS(t *testing.T) {
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 
 	mockArchive := &historyarchive.MockArchive{}
 	mockArchive.
@@ -420,10 +420,10 @@ func TestCaptivePrepareRangeWithDB_FromIsAheadOfRootHAS(t *testing.T) {
 			CurrentLedger: uint32(64),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
 		useDB:   true,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -433,7 +433,7 @@ func TestCaptivePrepareRangeWithDB_FromIsAheadOfRootHAS(t *testing.T) {
 	assert.EqualError(t, err, "error starting prepare range: opening subprocess: from sequence: 100 is greater than max available in history archives: 64")
 
 	err = captiveBackend.PrepareRange(ctx, UnboundedRange(193))
-	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error calculating ledger and hash for gramr run: trying to start online mode too far (latest checkpoint=64), only two checkpoints in the future allowed")
+	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error calculating ledger and hash for gravity run: trying to start online mode too far (latest checkpoint=64), only two checkpoints in the future allowed")
 
 	metaChan := make(chan metaResult, 100)
 	meta := buildLedgerCloseMeta(testLedgerHeader{sequence: 100})
@@ -451,7 +451,7 @@ func TestCaptivePrepareRangeWithDB_FromIsAheadOfRootHAS(t *testing.T) {
 }
 
 func TestCaptivePrepareRange_ToIsAheadOfRootHAS(t *testing.T) {
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockArchive := &historyarchive.MockArchive{}
 	mockArchive.
 		On("GetRootHAS").
@@ -459,9 +459,9 @@ func TestCaptivePrepareRange_ToIsAheadOfRootHAS(t *testing.T) {
 			CurrentLedger: uint32(192),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -475,7 +475,7 @@ func TestCaptivePrepareRange_ToIsAheadOfRootHAS(t *testing.T) {
 }
 
 func TestCaptivePrepareRange_ErrCatchup(t *testing.T) {
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(100), uint32(192)).Return(errors.New("transient error")).Once()
 	mockRunner.On("close").Return(nil).Once()
 
@@ -488,9 +488,9 @@ func TestCaptivePrepareRange_ErrCatchup(t *testing.T) {
 
 	ctx := context.Background()
 	cancelCalled := false
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		cancel: context.CancelFunc(func() {
@@ -499,7 +499,7 @@ func TestCaptivePrepareRange_ErrCatchup(t *testing.T) {
 	}
 
 	err := captiveBackend.PrepareRange(ctx, BoundedRange(100, 192))
-	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error running gramr: transient error")
+	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error running gravity: transient error")
 
 	// make sure we can Close without errors
 	assert.NoError(t, captiveBackend.Close())
@@ -510,7 +510,7 @@ func TestCaptivePrepareRange_ErrCatchup(t *testing.T) {
 }
 
 func TestCaptivePrepareRangeUnboundedRange_ErrRunFrom(t *testing.T) {
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("runFrom", uint32(126), "0000000000000000000000000000000000000000000000000000000000000000").Return(errors.New("transient error")).Once()
 	mockRunner.On("close").Return(nil).Once()
 
@@ -527,9 +527,9 @@ func TestCaptivePrepareRangeUnboundedRange_ErrRunFrom(t *testing.T) {
 
 	ctx := context.Background()
 	cancelCalled := false
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -539,7 +539,7 @@ func TestCaptivePrepareRangeUnboundedRange_ErrRunFrom(t *testing.T) {
 	}
 
 	err := captiveBackend.PrepareRange(ctx, UnboundedRange(128))
-	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error running gramr: transient error")
+	assert.EqualError(t, err, "error starting prepare range: opening subprocess: error running gravity: transient error")
 
 	// make sure we can Close without errors
 	assert.NoError(t, captiveBackend.Close())
@@ -562,7 +562,7 @@ func TestCaptivePrepareRangeUnboundedRange_ReuseSession(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("runFrom", uint32(64), "0000000000000000000000000000000000000000000000000000000000000000").Return(nil).Once()
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -579,9 +579,9 @@ func TestCaptivePrepareRangeUnboundedRange_ReuseSession(t *testing.T) {
 		On("GetLedgerHeader", uint32(65)).
 		Return(xdr.LedgerHeaderHistoryEntry{}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -611,7 +611,7 @@ func TestGetLatestLedgerSequence(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("runFrom", uint32(63), "0000000000000000000000000000000000000000000000000000000000000000").Return(nil).Once()
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -627,9 +627,9 @@ func TestGetLatestLedgerSequence(t *testing.T) {
 		On("GetLedgerHeader", uint32(64)).
 		Return(xdr.LedgerHeaderHistoryEntry{}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -658,7 +658,7 @@ func TestGetLatestLedgerSequenceRaceCondition(t *testing.T) {
 		}
 	}
 	ctx, cancel := context.WithCancel(context.Background())
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
 	mockRunner.On("runFrom", mock.Anything, mock.Anything).Return(nil)
@@ -674,9 +674,9 @@ func TestGetLatestLedgerSequenceRaceCondition(t *testing.T) {
 		On("GetLedgerHeader", mock.Anything).
 		Return(xdr.LedgerHeaderHistoryEntry{}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(10),
@@ -724,7 +724,7 @@ func TestCaptiveGetLedger(t *testing.T) {
 
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(65), uint32(66)).Return(nil)
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -737,9 +737,9 @@ func TestCaptiveGetLedger(t *testing.T) {
 			CurrentLedger: uint32(200),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -815,7 +815,7 @@ func TestCaptiveGetLedgerCacheLatestLedger(t *testing.T) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("runFrom", uint32(65), "0101010100000000000000000000000000000000000000000000000000000000").Return(nil).Once()
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -835,9 +835,9 @@ func TestCaptiveGetLedgerCacheLatestLedger(t *testing.T) {
 			},
 		}, nil).Once()
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -877,7 +877,7 @@ func TestCaptiveGetLedger_NextLedgerIsDifferentToLedgerFromBuffer(t *testing.T) 
 	}
 
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(65), uint32(66)).Return(nil)
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -890,9 +890,9 @@ func TestCaptiveGetLedger_NextLedgerIsDifferentToLedgerFromBuffer(t *testing.T) 
 			CurrentLedger: uint32(200),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -923,7 +923,7 @@ func TestCaptiveGetLedger_NextLedger0RangeFromIsSmallerThanLedgerFromBuffer(t *t
 	}
 
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("runFrom", uint32(64), mock.Anything).Return(nil)
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -940,9 +940,9 @@ func TestCaptiveGetLedger_NextLedger0RangeFromIsSmallerThanLedgerFromBuffer(t *t
 		On("GetLedgerHeader", uint32(65)).
 		Return(xdr.LedgerHeaderHistoryEntry{}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -960,20 +960,20 @@ func TestCaptiveGetLedger_NextLedger0RangeFromIsSmallerThanLedgerFromBuffer(t *t
 	mockRunner.AssertExpectations(t)
 }
 
-func TestCaptiveGramr_PrepareRangeAfterClose(t *testing.T) {
+func TestCaptiveGravity_PrepareRangeAfterClose(t *testing.T) {
 	storagePath, err := os.MkdirTemp("", "captive-core-*")
 	require.NoError(t, err)
 	defer os.RemoveAll(storagePath)
 
 	ctx := context.Background()
-	executablePath := "/etc/gramr"
+	executablePath := "/etc/gravity"
 	networkPassphrase := network.PublicNetworkPassphrase
 	historyURLs := []string{"http://localhost"}
 
 	captiveCoreToml, err := NewCaptiveCoreToml(CaptiveCoreTomlParams{})
 	assert.NoError(t, err)
 
-	captiveGramr, err := NewCaptive(
+	captiveGravity, err := NewCaptive(
 		CaptiveCoreConfig{
 			BinaryPath:         executablePath,
 			NetworkPassphrase:  networkPassphrase,
@@ -984,11 +984,11 @@ func TestCaptiveGramr_PrepareRangeAfterClose(t *testing.T) {
 	)
 	assert.NoError(t, err)
 
-	assert.NoError(t, captiveGramr.Close())
+	assert.NoError(t, captiveGravity.Close())
 
 	assert.EqualError(
 		t,
-		captiveGramr.PrepareRange(ctx, BoundedRange(65, 66)),
+		captiveGravity.PrepareRange(ctx, BoundedRange(65, 66)),
 		"error starting prepare range: opening subprocess: error getting latest checkpoint sequence: "+
 			"error getting root HAS: Get \"http://localhost/.well-known/stellar-history.json\": context canceled",
 	)
@@ -1000,11 +1000,11 @@ func TestCaptiveGramr_PrepareRangeAfterClose(t *testing.T) {
 		Return(historyarchive.HistoryArchiveState{
 			CurrentLedger: uint32(200),
 		}, nil)
-	captiveGramr.archive = mockArchive
+	captiveGravity.archive = mockArchive
 	assert.EqualError(
 		t,
-		captiveGramr.PrepareRange(ctx, BoundedRange(65, 66)),
-		"error starting prepare range: opening subprocess: error running gramr: context canceled",
+		captiveGravity.PrepareRange(ctx, BoundedRange(65, 66)),
+		"error starting prepare range: opening subprocess: error running gravity: context canceled",
 	)
 	mockArchive.AssertExpectations(t)
 }
@@ -1024,7 +1024,7 @@ func TestCaptiveGetLedger_ErrReadingMetaResult(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(65), uint32(66)).Return(nil)
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	ctx, cancel := context.WithCancel(ctx)
@@ -1042,9 +1042,9 @@ func TestCaptiveGetLedger_ErrReadingMetaResult(t *testing.T) {
 			CurrentLedger: uint32(200),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -1082,7 +1082,7 @@ func TestCaptiveGetLedger_ErrClosingAfterLastLedger(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(65), uint32(66)).Return(nil)
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -1095,9 +1095,9 @@ func TestCaptiveGetLedger_ErrClosingAfterLastLedger(t *testing.T) {
 			CurrentLedger: uint32(200),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -1123,7 +1123,7 @@ func TestCaptiveAfterClose(t *testing.T) {
 		}
 	}
 
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	ctx, cancel := context.WithCancel(context.Background())
 	mockRunner.On("catchup", uint32(65), uint32(66)).Return(nil)
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
@@ -1137,9 +1137,9 @@ func TestCaptiveAfterClose(t *testing.T) {
 			CurrentLedger: uint32(200),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -1154,7 +1154,7 @@ func TestCaptiveAfterClose(t *testing.T) {
 	assert.True(t, captiveBackend.closed)
 
 	_, err = captiveBackend.GetLedger(ctx, boundedRange.to)
-	assert.EqualError(t, err, "gramr is no longer usable")
+	assert.EqualError(t, err, "gravity is no longer usable")
 
 	var prepared bool
 	prepared, err = captiveBackend.IsPrepared(ctx, boundedRange)
@@ -1162,7 +1162,7 @@ func TestCaptiveAfterClose(t *testing.T) {
 	assert.NoError(t, err)
 
 	_, err = captiveBackend.GetLatestLedgerSequence(ctx)
-	assert.EqualError(t, err, "gramr is no longer usable")
+	assert.EqualError(t, err, "gravity is no longer usable")
 
 	mockArchive.AssertExpectations(t)
 	mockRunner.AssertExpectations(t)
@@ -1179,7 +1179,7 @@ func TestGetLedgerBoundsCheck(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("catchup", uint32(128), uint32(130)).Return(nil).Once()
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -1191,9 +1191,9 @@ func TestGetLedgerBoundsCheck(t *testing.T) {
 			CurrentLedger: uint32(200),
 		}, nil)
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -1232,36 +1232,36 @@ func CaptiveGetLedgerTerminatedUnexpectedlyTestCases() []GetLedgerTerminatedTest
 
 	return []GetLedgerTerminatedTestCase{
 		{
-			"gramr exited unexpectedly without error",
+			"gravity exited unexpectedly without error",
 			context.Background(),
 			[]metaResult{{LedgerCloseMeta: &ledger64}},
 			true,
 			nil,
-			"gramr exited unexpectedly",
+			"gravity exited unexpectedly",
 		},
 		{
-			"gramr exited unexpectedly with an error",
+			"gravity exited unexpectedly with an error",
 			context.Background(),
 			[]metaResult{{LedgerCloseMeta: &ledger64}},
 			true,
 			fmt.Errorf("signal kill"),
-			"gramr exited unexpectedly: signal kill",
+			"gravity exited unexpectedly: signal kill",
 		},
 		{
-			"gramr exited unexpectedly without error and closed channel",
+			"gravity exited unexpectedly without error and closed channel",
 			context.Background(),
 			[]metaResult{{LedgerCloseMeta: &ledger64}},
 			true,
 			nil,
-			"gramr exited unexpectedly",
+			"gravity exited unexpectedly",
 		},
 		{
-			"gramr exited unexpectedly with an error and closed channel",
+			"gravity exited unexpectedly with an error and closed channel",
 			context.Background(),
 			[]metaResult{{LedgerCloseMeta: &ledger64}},
 			true,
 			fmt.Errorf("signal kill"),
-			"gramr exited unexpectedly: signal kill",
+			"gravity exited unexpectedly: signal kill",
 		},
 		{
 			"meta pipe closed unexpectedly",
@@ -1272,7 +1272,7 @@ func CaptiveGetLedgerTerminatedUnexpectedlyTestCases() []GetLedgerTerminatedTest
 			"meta pipe closed unexpectedly",
 		},
 		{
-			"Parser error while reading from the pipe resulting in gramr exit",
+			"Parser error while reading from the pipe resulting in gravity exit",
 			context.Background(),
 			[]metaResult{{LedgerCloseMeta: &ledger64},
 				{LedgerCloseMeta: nil, err: errors.New("Parser error")}},
@@ -1281,13 +1281,13 @@ func CaptiveGetLedgerTerminatedUnexpectedlyTestCases() []GetLedgerTerminatedTest
 			"Parser error",
 		},
 		{
-			"gramr exited unexpectedly with an error resulting in meta pipe closed",
+			"gravity exited unexpectedly with an error resulting in meta pipe closed",
 			context.Background(),
 			[]metaResult{{LedgerCloseMeta: &ledger64},
 				{LedgerCloseMeta: &ledger64, err: errors.New("EOF while decoding")}},
 			true,
 			fmt.Errorf("signal kill"),
-			"gramr exited unexpectedly: signal kill",
+			"gravity exited unexpectedly: signal kill",
 		},
 	}
 }
@@ -1303,7 +1303,7 @@ func TestCaptiveGetLedgerTerminatedUnexpectedly(t *testing.T) {
 			close(metaChan)
 
 			ctx := testCase.ctx
-			mockRunner := &gramrRunnerMock{}
+			mockRunner := &gravityRunnerMock{}
 			mockRunner.On("catchup", uint32(64), uint32(100)).Return(nil).Once()
 			mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 			mockRunner.On("context").Return(ctx)
@@ -1317,9 +1317,9 @@ func TestCaptiveGetLedgerTerminatedUnexpectedly(t *testing.T) {
 					CurrentLedger: uint32(200),
 				}, nil)
 
-			captiveBackend := CaptiveGramr{
+			captiveBackend := CaptiveGravity{
 				archive: mockArchive,
-				gramrRunnerFactory: func() gramrRunnerInterface {
+				gravityRunnerFactory: func() gravityRunnerInterface {
 					return mockRunner
 				},
 				checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -1371,7 +1371,7 @@ func TestCaptiveUseOfLedgerHashStore(t *testing.T) {
 		Return("mnb", true, nil).Once()
 
 	cancelCalled := false
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive:           mockArchive,
 		ledgerHashStore:   mockLedgerHashStore,
 		checkpointManager: historyarchive.NewCheckpointManager(64),
@@ -1454,7 +1454,7 @@ func TestCaptiveRunFromParams(t *testing.T) {
 					CurrentLedger: uint32(255),
 				}, nil)
 
-			captiveBackend := CaptiveGramr{
+			captiveBackend := CaptiveGravity{
 				archive:           mockArchive,
 				checkpointManager: historyarchive.NewCheckpointManager(64),
 			}
@@ -1471,12 +1471,12 @@ func TestCaptiveRunFromParams(t *testing.T) {
 }
 
 func TestCaptiveIsPrepared(t *testing.T) {
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("context").Return(context.Background()).Maybe()
 	mockRunner.On("getProcessExitError").Return(false, nil)
 
 	// c.prepared == nil
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		nextLedger: 0,
 	}
 
@@ -1509,8 +1509,8 @@ func TestCaptiveIsPrepared(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(fmt.Sprintf("next_%d_last_%d_cached_%d_range_%v", tc.nextLedger, tc.lastLedger, tc.cachedLedger, tc.ledgerRange), func(t *testing.T) {
-			captiveBackend := CaptiveGramr{
-				gramrRunner: mockRunner,
+			captiveBackend := CaptiveGravity{
+				gravityRunner: mockRunner,
 				nextLedger:        tc.nextLedger,
 				prepared:          &tc.preparedRange,
 			}
@@ -1531,19 +1531,19 @@ func TestCaptiveIsPrepared(t *testing.T) {
 }
 
 // TestCaptiveIsPreparedCoreContextCancelled checks if IsPrepared returns false
-// if the gramrRunner.context() is canceled. This can happen when
-// gramrRunner was closed, ex. when binary file was updated.
+// if the gravityRunner.context() is canceled. This can happen when
+// gravityRunner was closed, ex. when binary file was updated.
 func TestCaptiveIsPreparedCoreContextCancelled(t *testing.T) {
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	ctx, cancel := context.WithCancel(context.Background())
 	mockRunner.On("context").Return(ctx).Maybe()
 	mockRunner.On("getProcessExitError").Return(false, nil)
 
 	rang := UnboundedRange(100)
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		nextLedger:        100,
 		prepared:          &rang,
-		gramrRunner: mockRunner,
+		gravityRunner: mockRunner,
 	}
 
 	result := captiveBackend.isPrepared(UnboundedRange(100))
@@ -1587,7 +1587,7 @@ func TestCaptivePreviousLedgerCheck(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	mockRunner := &gramrRunnerMock{}
+	mockRunner := &gravityRunnerMock{}
 	mockRunner.On("runFrom", uint32(254), "0101010100000000000000000000000000000000000000000000000000000000").Return(nil).Once()
 	mockRunner.On("getMetaPipe").Return((<-chan metaResult)(metaChan))
 	mockRunner.On("context").Return(ctx)
@@ -1611,9 +1611,9 @@ func TestCaptivePreviousLedgerCheck(t *testing.T) {
 	mockLedgerHashStore.On("GetLedgerHash", ctx, uint32(299)).
 		Return("", false, nil).Once()
 
-	captiveBackend := CaptiveGramr{
+	captiveBackend := CaptiveGravity{
 		archive: mockArchive,
-		gramrRunnerFactory: func() gramrRunnerInterface {
+		gravityRunnerFactory: func() gravityRunnerInterface {
 			return mockRunner
 		},
 		ledgerHashStore:   mockLedgerHashStore,

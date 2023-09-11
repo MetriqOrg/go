@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/regulated-assets-approval-server/internal/db/dbtest"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/regulated-assets-approval-server/internal/db/dbtest"
+	"github.com/lantah/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -30,20 +30,20 @@ func TestTxApproveHandlerValidate(t *testing.T) {
 	err = h.validate()
 	require.EqualError(t, err, "asset code cannot be empty")
 
-	// No Horizon client.
+	// No OrbitR client.
 	h = txApproveHandler{
 		issuerKP:  issuerAccKeyPair,
 		assetCode: "FOOBAR",
 	}
 	err = h.validate()
-	require.EqualError(t, err, "horizon client cannot be nil")
+	require.EqualError(t, err, "orbitr client cannot be nil")
 
 	// No network passphrase.
-	horizonMock := horizonclient.MockClient{}
+	orbitrMock := orbitrclient.MockClient{}
 	h = txApproveHandler{
 		issuerKP:      issuerAccKeyPair,
 		assetCode:     "FOOBAR",
-		horizonClient: &horizonMock,
+		orbitrClient: &orbitrMock,
 	}
 	err = h.validate()
 	require.EqualError(t, err, "network passphrase cannot be empty")
@@ -52,7 +52,7 @@ func TestTxApproveHandlerValidate(t *testing.T) {
 	h = txApproveHandler{
 		issuerKP:          issuerAccKeyPair,
 		assetCode:         "FOOBAR",
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 	}
 	err = h.validate()
@@ -66,7 +66,7 @@ func TestTxApproveHandlerValidate(t *testing.T) {
 	h = txApproveHandler{
 		issuerKP:          issuerAccKeyPair,
 		assetCode:         "FOOBAR",
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 	}
@@ -77,7 +77,7 @@ func TestTxApproveHandlerValidate(t *testing.T) {
 	h = txApproveHandler{
 		issuerKP:          issuerAccKeyPair,
 		assetCode:         "FOOBAR",
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      -1,
@@ -89,7 +89,7 @@ func TestTxApproveHandlerValidate(t *testing.T) {
 	h = txApproveHandler{
 		issuerKP:          issuerAccKeyPair,
 		assetCode:         "FOOBAR",
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      1,
@@ -101,7 +101,7 @@ func TestTxApproveHandlerValidate(t *testing.T) {
 	h = txApproveHandler{
 		issuerKP:          issuerAccKeyPair,
 		assetCode:         "FOOBAR",
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      1,
@@ -138,7 +138,7 @@ func TestTxApproveHandler_validateInput(t *testing.T) {
 	h.issuerKP = keypair.MustRandom()
 
 	tx, err := txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: h.issuerKP.Address(),
 			Sequence:  1,
 		},
@@ -164,7 +164,7 @@ func TestTxApproveHandler_validateInput(t *testing.T) {
 
 	// rejects if there are any operations other than Allowtrust where the source account is the issuer
 	tx, err = txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: clientKP.Address(),
 			Sequence:  1,
 		},
@@ -192,7 +192,7 @@ func TestTxApproveHandler_validateInput(t *testing.T) {
 
 	// validation success
 	tx, err = txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: clientKP.Address(),
 			Sequence:  1,
 		},
@@ -327,10 +327,10 @@ func TestTxApproveHandler_txApprove_rejected(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		}, nil)
@@ -338,7 +338,7 @@ func TestTxApproveHandler_txApprove_rejected(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -358,7 +358,7 @@ func TestTxApproveHandler_txApprove_rejected(t *testing.T) {
 	// rejected if contains more than one operation
 	tx, err := txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  2,
 			},
@@ -386,7 +386,7 @@ func TestTxApproveHandler_txApprove_rejected(t *testing.T) {
 	// rejected if the single operation is not a payment
 	tx, err = txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  2,
 			},
@@ -409,7 +409,7 @@ func TestTxApproveHandler_txApprove_rejected(t *testing.T) {
 	// rejected if attempting to transfer an asset to its own issuer
 	tx, err = txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  2,
 			},
@@ -439,7 +439,7 @@ func TestTxApproveHandler_txApprove_rejected(t *testing.T) {
 	// rejected if payment asset is not supported
 	tx, err = txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  2,
 			},
@@ -469,7 +469,7 @@ func TestTxApproveHandler_txApprove_rejected(t *testing.T) {
 	// rejected if sequence number is not incremental
 	tx, err = txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  20,
 			},
@@ -511,10 +511,10 @@ func TestTxApproveHandler_txApprove_success(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		}, nil)
@@ -522,7 +522,7 @@ func TestTxApproveHandler_txApprove_success(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -531,7 +531,7 @@ func TestTxApproveHandler_txApprove_success(t *testing.T) {
 
 	tx, err := txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  2,
 			},
@@ -598,10 +598,10 @@ func TestTxApproveHandler_txApprove_actionRequired(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		}, nil)
@@ -609,7 +609,7 @@ func TestTxApproveHandler_txApprove_actionRequired(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -618,7 +618,7 @@ func TestTxApproveHandler_txApprove_actionRequired(t *testing.T) {
 
 	tx, err := txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  2,
 			},
@@ -674,10 +674,10 @@ func TestTxApproveHandler_txApprove_revised(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		}, nil)
@@ -685,7 +685,7 @@ func TestTxApproveHandler_txApprove_revised(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -694,7 +694,7 @@ func TestTxApproveHandler_txApprove_revised(t *testing.T) {
 
 	tx, err := txnbuild.NewTransaction(
 		txnbuild.TransactionParams{
-			SourceAccount: &horizon.Account{
+			SourceAccount: &orbitr.Account{
 				AccountID: senderKP.Address(),
 				Sequence:  2,
 			},
@@ -771,7 +771,7 @@ func TestValidateTransactionOperationsForSuccess(t *testing.T) {
 
 	// rejected if number of operations is unsupported
 	tx, err := txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  5,
 		},
@@ -796,7 +796,7 @@ func TestValidateTransactionOperationsForSuccess(t *testing.T) {
 
 	// rejected if operation at index "2" is not a payment
 	tx, err = txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  5,
 		},
@@ -820,7 +820,7 @@ func TestValidateTransactionOperationsForSuccess(t *testing.T) {
 
 	// rejected if the operations list don't match the expected format [AllowTrust, AllowTrust, Payment, AllowTrust, AllowTrust]
 	tx, err = txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  5,
 		},
@@ -849,7 +849,7 @@ func TestValidateTransactionOperationsForSuccess(t *testing.T) {
 
 	// rejected if the values inside the operations list don't match the expected format
 	tx, err = txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  5,
 		},
@@ -898,7 +898,7 @@ func TestValidateTransactionOperationsForSuccess(t *testing.T) {
 
 	// success
 	tx, err = txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  5,
 		},
@@ -969,10 +969,10 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_revisable(t *testing.T) 
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		}, nil)
@@ -980,7 +980,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_revisable(t *testing.T) 
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -988,7 +988,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_revisable(t *testing.T) 
 	}
 
 	revisableTx, err := txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		},
@@ -1028,10 +1028,10 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_rejected(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		}, nil)
@@ -1039,7 +1039,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_rejected(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -1048,7 +1048,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_rejected(t *testing.T) {
 
 	// rejected if operations don't match the expected format
 	tx, err := txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		},
@@ -1076,7 +1076,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_rejected(t *testing.T) {
 
 	// rejected if attempting to transfer an asset to its own issuer
 	tx, err = txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		},
@@ -1156,7 +1156,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_rejected(t *testing.T) {
 		},
 	}
 	tx, err = txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  3,
 		},
@@ -1189,10 +1189,10 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_actionRequired(t *testin
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		}, nil)
@@ -1200,7 +1200,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_actionRequired(t *testin
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -1209,7 +1209,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_actionRequired(t *testin
 
 	// compliant operations with a payment above threshold will return "action_required" if the user hasn't gone through KYC yet
 	tx, err := txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		},
@@ -1329,10 +1329,10 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_success(t *testing.T) {
 	kycThresholdAmount, err := amount.ParseInt64("500")
 	require.NoError(t, err)
 
-	horizonMock := horizonclient.MockClient{}
-	horizonMock.
-		On("AccountDetail", horizonclient.AccountRequest{AccountID: senderKP.Address()}).
-		Return(horizon.Account{
+	orbitrMock := orbitrclient.MockClient{}
+	orbitrMock.
+		On("AccountDetail", orbitrclient.AccountRequest{AccountID: senderKP.Address()}).
+		Return(orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		}, nil)
@@ -1340,7 +1340,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_success(t *testing.T) {
 	handler := txApproveHandler{
 		issuerKP:          issuerKP,
 		assetCode:         assetGOAT.GetCode(),
-		horizonClient:     &horizonMock,
+		orbitrClient:     &orbitrMock,
 		networkPassphrase: network.TestNetworkPassphrase,
 		db:                conn,
 		kycThreshold:      kycThresholdAmount,
@@ -1348,7 +1348,7 @@ func TestTxApproveHandler_handleSuccessResponseIfNeeded_success(t *testing.T) {
 	}
 
 	tx, err := txnbuild.NewTransaction(txnbuild.TransactionParams{
-		SourceAccount: &horizon.Account{
+		SourceAccount: &orbitr.Account{
 			AccountID: senderKP.Address(),
 			Sequence:  2,
 		},

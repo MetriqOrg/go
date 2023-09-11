@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Horizon Admin API
+  title: OrbitR Admin API
   version: 1.0.0
   description: |-
     The Admin API is optionally published on separate local port and provides access to 
@@ -143,7 +143,7 @@ components:
           items:
             type: string
           description: |-
-            a list of canonical asset ids which the asset filter will inspect ledger transactions, if any transaction operations reference the asset id, then the transaction is ingested to local horizon history database, otherwise it will be skipped.
+            a list of canonical asset ids which the asset filter will inspect ledger transactions, if any transaction operations reference the asset id, then the transaction is ingested to local orbitr history database, otherwise it will be skipped.
           example: 
             - 'usdc:1234'
             - 'dotx:1234'
@@ -165,7 +165,7 @@ components:
           items:
             type: string
           description: |-
-            a list of account ids which account filter will inspect ledger transactions, if any transaction operations reference the account, then the transaction is ingested to local horizon history database, otherwise it will be skipped.
+            a list of account ids which account filter will inspect ledger transactions, if any transaction operations reference the account, then the transaction is ingested to local orbitr history database, otherwise it will be skipped.
           example: 
             - 'accountid1'
             - 'accountid2'

@@ -1,11 +1,11 @@
 // Package codes is a helper package to help convert to transaction and operation result codes
-// to strings used in horizon.
+// to strings used in orbitr.
 package codes
 
 import (
 	"github.com/go-errors/errors"
 
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/xdr"
 )
 
 // ErrUnknownCode is returned when an unexepcted value is provided to `String`
@@ -534,7 +534,7 @@ func String(code interface{}) (string, error) {
 	return "", errors.New(ErrUnknownCode)
 }
 
-// ForOperationResult returns the strong representation used by horizon for the
+// ForOperationResult returns the strong representation used by orbitr for the
 // error code `opr`
 func ForOperationResult(opr xdr.OperationResult) (string, error) {
 	if opr.Code != xdr.OperationResultCodeOpInner {

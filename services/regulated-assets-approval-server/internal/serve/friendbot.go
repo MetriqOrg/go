@@ -5,22 +5,22 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/services/regulated-assets-approval-server/internal/serve/httperror"
-	"github.com/stellar/go/strkey"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/http/httpdecode"
-	"github.com/stellar/go/support/log"
-	"github.com/stellar/go/support/render/httpjson"
-	"github.com/stellar/go/txnbuild"
+	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/httperror"
+	"github.com/lantah/go/strkey"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/http/httpdecode"
+	"github.com/lantah/go/support/log"
+	"github.com/lantah/go/support/render/httpjson"
+	"github.com/lantah/go/txnbuild"
 )
 
 type friendbotHandler struct {
 	issuerAccountSecret string
 	assetCode           string
-	horizonClient       horizonclient.ClientInterface
-	horizonURL          string
+	orbitrClient       orbitrclient.ClientInterface
+	orbitrURL          string
 	networkPassphrase   string
 	paymentAmount       int
 }
@@ -38,12 +38,12 @@ func (h friendbotHandler) validate() error {
 		return errors.New("asset code cannot be empty")
 	}
 
-	if h.horizonClient == nil {
-		return errors.New("horizon client cannot be nil")
+	if h.orbitrClient == nil {
+		return errors.New("orbitr client cannot be nil")
 	}
 
-	if h.horizonURL == "" {
-		return errors.New("horizon url cannot be empty")
+	if h.orbitrURL == "" {
+		return errors.New("orbitr url cannot be empty")
 	}
 
 	if h.networkPassphrase == "" {
@@ -102,7 +102,7 @@ func (h friendbotHandler) topUpAccountWithRegulatedAsset(ctx context.Context, in
 		return httperror.NewHTTPError(http.StatusBadRequest, `"addr" is not a valid Stellar address.`)
 	}
 
-	account, err := h.horizonClient.AccountDetail(horizonclient.AccountRequest{AccountID: in.Address})
+	account, err := h.orbitrClient.AccountDetail(orbitrclient.AccountRequest{AccountID: in.Address})
 	if err != nil {
 		log.Ctx(ctx).Error(errors.Wrapf(err, "getting detail for account %s", in.Address))
 		return httperror.NewHTTPError(http.StatusBadRequest, `Please make sure the provided account address already exists in the network.`)
@@ -131,7 +131,7 @@ func (h friendbotHandler) topUpAccountWithRegulatedAsset(ctx context.Context, in
 		return httperror.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Account with address %s doesn't have a trustline for %s:%s", in.Address, asset.Code, asset.Issuer))
 	}
 
-	issuerAcc, err := h.horizonClient.AccountDetail(horizonclient.AccountRequest{AccountID: kp.Address()})
+	issuerAcc, err := h.orbitrClient.AccountDetail(orbitrclient.AccountRequest{AccountID: kp.Address()})
 	if err != nil {
 		log.Ctx(ctx).Error(errors.Wrapf(err, "getting detail for issuer account %s", kp.Address()))
 		return httperror.InternalServer
@@ -173,9 +173,9 @@ func (h friendbotHandler) topUpAccountWithRegulatedAsset(ctx context.Context, in
 		return err
 	}
 
-	_, err = h.horizonClient.SubmitTransaction(tx)
+	_, err = h.orbitrClient.SubmitTransaction(tx)
 	if err != nil {
-		err = httperror.ParseHorizonError(err)
+		err = httperror.ParseOrbitRError(err)
 		log.Ctx(ctx).Error(err)
 		return err
 	}

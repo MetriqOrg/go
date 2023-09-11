@@ -8,12 +8,12 @@ import (
 	"time"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -73,9 +73,9 @@ var (
 func TestGetOfferByIDHandler(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOfferByID{}
 
 	ledgerCloseTime := time.Now().Unix()
@@ -135,7 +135,7 @@ func TestGetOfferByIDHandler(t *testing.T) {
 				tt.Assert.NoError(err)
 			},
 			func(response interface{}) {
-				offer := response.(horizon.Offer)
+				offer := response.(orbitr.Offer)
 				tt.Assert.Equal(int64(eurOffer.OfferID), offer.ID)
 				tt.Assert.Equal("native", offer.Selling.Type)
 				tt.Assert.Equal("credit_alphanum4", offer.Buying.Type)
@@ -155,7 +155,7 @@ func TestGetOfferByIDHandler(t *testing.T) {
 				tt.Assert.NoError(err)
 			},
 			func(response interface{}) {
-				offer := response.(horizon.Offer)
+				offer := response.(orbitr.Offer)
 				tt.Assert.Equal(int64(usdOffer.OfferID), offer.ID)
 				tt.Assert.Equal("credit_alphanum4", offer.Selling.Type)
 				tt.Assert.Equal("EUR", offer.Selling.Code)
@@ -180,9 +180,9 @@ func TestGetOfferByIDHandler(t *testing.T) {
 func TestGetOffersHandler(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
 
-	q := &history.Q{tt.HorizonSession()}
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetOffersHandler{}
 
 	ledgerCloseTime := time.Now().Unix()
@@ -303,7 +303,7 @@ func TestGetOffersHandler(t *testing.T) {
 	})
 
 	t.Run("Filter by selling asset", func(t *testing.T) {
-		asset := horizon.Asset{}
+		asset := orbitr.Asset{}
 		nativeAsset.Extract(&asset.Type, &asset.Code, &asset.Issuer)
 		records, err := handler.GetResourcePage(
 			httptest.NewRecorder(),
@@ -324,7 +324,7 @@ func TestGetOffersHandler(t *testing.T) {
 			tt.Assert.Equal(asset, offer.Selling)
 		}
 
-		asset = horizon.Asset{}
+		asset = orbitr.Asset{}
 		eurAsset.Extract(&asset.Type, &asset.Code, &asset.Issuer)
 
 		records, err = handler.GetResourcePage(
@@ -365,7 +365,7 @@ func TestGetOffersHandler(t *testing.T) {
 	})
 
 	t.Run("Filter by buying asset", func(t *testing.T) {
-		asset := horizon.Asset{}
+		asset := orbitr.Asset{}
 		eurAsset.Extract(&asset.Type, &asset.Code, &asset.Issuer)
 
 		records, err := handler.GetResourcePage(
@@ -389,7 +389,7 @@ func TestGetOffersHandler(t *testing.T) {
 			tt.Assert.Equal(asset, offer.Buying)
 		}
 
-		asset = horizon.Asset{}
+		asset = orbitr.Asset{}
 		usdAsset.Extract(&asset.Type, &asset.Code, &asset.Issuer)
 
 		records, err = handler.GetResourcePage(
@@ -434,7 +434,7 @@ func TestGetOffersHandler(t *testing.T) {
 	})
 
 	t.Run("Wrong buying query parameter", func(t *testing.T) {
-		asset := horizon.Asset{}
+		asset := orbitr.Asset{}
 		eurAsset.Extract(&asset.Type, &asset.Code, &asset.Issuer)
 
 		_, err := handler.GetResourcePage(
@@ -463,8 +463,8 @@ func TestGetAccountOffersHandler(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
 
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 	handler := GetAccountOffersHandler{}
 
 	err := q.UpsertOffers(tt.Ctx, []history.Offer{eurOffer, twoEurOffer, usdOffer})
@@ -500,10 +500,10 @@ func TestGetAccountOffersHandler(t *testing.T) {
 	tt.Assert.Error(err)
 }
 
-func pageableToOffers(t *testing.T, page []hal.Pageable) []horizon.Offer {
-	var offers []horizon.Offer
+func pageableToOffers(t *testing.T, page []hal.Pageable) []orbitr.Offer {
+	var offers []orbitr.Offer
 	for _, entry := range page {
-		offers = append(offers, entry.(horizon.Offer))
+		offers = append(offers, entry.(orbitr.Offer))
 	}
 	return offers
 }

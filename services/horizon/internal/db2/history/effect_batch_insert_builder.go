@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/guregu/null"
-	"github.com/stellar/go/support/db"
+	"github.com/lantah/go/support/db"
 )
 
 // EffectBatchInsertBuilder is used to insert effects into the

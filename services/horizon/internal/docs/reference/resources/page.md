@@ -6,7 +6,7 @@ replacement: https://developers.stellar.org/api/introduction/pagination/page-arg
 Pages represent a subset of a larger collection of objects.
 As an example, it would be unfeasible to provide the
 [All Transactions](../endpoints/transactions-all.md) endpoint without paging.  Over time there
-will be millions of transactions in the Stellar network's ledger and returning
+will be millions of transactions in the Lantah Network's ledger and returning
 them all over a single request would be unfeasible.
 
 ## Attributes

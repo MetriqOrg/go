@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	ge "github.com/go-errors/errors"
-	"github.com/stellar/go/support/test"
+	"github.com/lantah/go/support/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -97,7 +97,7 @@ func TestServerErrorConversion(t *testing.T) {
 	}
 }
 
-// TestInflate test errors that come inflated from horizon
+// TestInflate test errors that come inflated from orbitr
 func TestInflate(t *testing.T) {
 	testCase := struct {
 		name string

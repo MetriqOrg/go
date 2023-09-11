@@ -10,37 +10,37 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/stellar/go/ingest"
+	"github.com/lantah/go/ingest"
 )
 
-var _ horizonChangeProcessor = (*mockHorizonChangeProcessor)(nil)
+var _ orbitrChangeProcessor = (*mockOrbitRChangeProcessor)(nil)
 
-type mockHorizonChangeProcessor struct {
+type mockOrbitRChangeProcessor struct {
 	mock.Mock
 }
 
-func (m *mockHorizonChangeProcessor) ProcessChange(ctx context.Context, change ingest.Change) error {
+func (m *mockOrbitRChangeProcessor) ProcessChange(ctx context.Context, change ingest.Change) error {
 	args := m.Called(ctx, change)
 	return args.Error(0)
 }
 
-func (m *mockHorizonChangeProcessor) Commit(ctx context.Context) error {
+func (m *mockOrbitRChangeProcessor) Commit(ctx context.Context) error {
 	args := m.Called(ctx)
 	return args.Error(0)
 }
 
-var _ horizonTransactionProcessor = (*mockHorizonTransactionProcessor)(nil)
+var _ orbitrTransactionProcessor = (*mockOrbitRTransactionProcessor)(nil)
 
-type mockHorizonTransactionProcessor struct {
+type mockOrbitRTransactionProcessor struct {
 	mock.Mock
 }
 
-func (m *mockHorizonTransactionProcessor) ProcessTransaction(ctx context.Context, transaction ingest.LedgerTransaction) error {
+func (m *mockOrbitRTransactionProcessor) ProcessTransaction(ctx context.Context, transaction ingest.LedgerTransaction) error {
 	args := m.Called(ctx, transaction)
 	return args.Error(0)
 }
 
-func (m *mockHorizonTransactionProcessor) Commit(ctx context.Context) error {
+func (m *mockOrbitRTransactionProcessor) Commit(ctx context.Context) error {
 	args := m.Called(ctx)
 	return args.Error(0)
 }
@@ -49,8 +49,8 @@ type GroupChangeProcessorsTestSuiteLedger struct {
 	suite.Suite
 	ctx        context.Context
 	processors *groupChangeProcessors
-	processorA *mockHorizonChangeProcessor
-	processorB *mockHorizonChangeProcessor
+	processorA *mockOrbitRChangeProcessor
+	processorB *mockOrbitRChangeProcessor
 }
 
 func TestGroupChangeProcessorsTestSuiteLedger(t *testing.T) {
@@ -59,9 +59,9 @@ func TestGroupChangeProcessorsTestSuiteLedger(t *testing.T) {
 
 func (s *GroupChangeProcessorsTestSuiteLedger) SetupTest() {
 	s.ctx = context.Background()
-	s.processorA = &mockHorizonChangeProcessor{}
-	s.processorB = &mockHorizonChangeProcessor{}
-	s.processors = newGroupChangeProcessors([]horizonChangeProcessor{
+	s.processorA = &mockOrbitRChangeProcessor{}
+	s.processorB = &mockOrbitRChangeProcessor{}
+	s.processors = newGroupChangeProcessors([]orbitrChangeProcessor{
 		s.processorA,
 		s.processorB,
 	})
@@ -80,7 +80,7 @@ func (s *GroupChangeProcessorsTestSuiteLedger) TestProcessChangeFails() {
 
 	err := s.processors.ProcessChange(s.ctx, change)
 	s.Assert().Error(err)
-	s.Assert().EqualError(err, "error in *ingest.mockHorizonChangeProcessor.ProcessChange: transient error")
+	s.Assert().EqualError(err, "error in *ingest.mockOrbitRChangeProcessor.ProcessChange: transient error")
 }
 
 func (s *GroupChangeProcessorsTestSuiteLedger) TestProcessChangeSucceeds() {
@@ -103,7 +103,7 @@ func (s *GroupChangeProcessorsTestSuiteLedger) TestCommitFails() {
 
 	err := s.processors.Commit(s.ctx)
 	s.Assert().Error(err)
-	s.Assert().EqualError(err, "error in *ingest.mockHorizonChangeProcessor.Commit: transient error")
+	s.Assert().EqualError(err, "error in *ingest.mockOrbitRChangeProcessor.Commit: transient error")
 }
 
 func (s *GroupChangeProcessorsTestSuiteLedger) TestCommitSucceeds() {
@@ -122,8 +122,8 @@ type GroupTransactionProcessorsTestSuiteLedger struct {
 	suite.Suite
 	ctx        context.Context
 	processors *groupTransactionProcessors
-	processorA *mockHorizonTransactionProcessor
-	processorB *mockHorizonTransactionProcessor
+	processorA *mockOrbitRTransactionProcessor
+	processorB *mockOrbitRTransactionProcessor
 }
 
 func TestGroupTransactionProcessorsTestSuiteLedger(t *testing.T) {
@@ -132,9 +132,9 @@ func TestGroupTransactionProcessorsTestSuiteLedger(t *testing.T) {
 
 func (s *GroupTransactionProcessorsTestSuiteLedger) SetupTest() {
 	s.ctx = context.Background()
-	s.processorA = &mockHorizonTransactionProcessor{}
-	s.processorB = &mockHorizonTransactionProcessor{}
-	s.processors = newGroupTransactionProcessors([]horizonTransactionProcessor{
+	s.processorA = &mockOrbitRTransactionProcessor{}
+	s.processorB = &mockOrbitRTransactionProcessor{}
+	s.processors = newGroupTransactionProcessors([]orbitrTransactionProcessor{
 		s.processorA,
 		s.processorB,
 	})
@@ -153,7 +153,7 @@ func (s *GroupTransactionProcessorsTestSuiteLedger) TestProcessTransactionFails(
 
 	err := s.processors.ProcessTransaction(s.ctx, transaction)
 	s.Assert().Error(err)
-	s.Assert().EqualError(err, "error in *ingest.mockHorizonTransactionProcessor.ProcessTransaction: transient error")
+	s.Assert().EqualError(err, "error in *ingest.mockOrbitRTransactionProcessor.ProcessTransaction: transient error")
 }
 
 func (s *GroupTransactionProcessorsTestSuiteLedger) TestProcessTransactionSucceeds() {
@@ -176,7 +176,7 @@ func (s *GroupTransactionProcessorsTestSuiteLedger) TestCommitFails() {
 
 	err := s.processors.Commit(s.ctx)
 	s.Assert().Error(err)
-	s.Assert().EqualError(err, "error in *ingest.mockHorizonTransactionProcessor.Commit: transient error")
+	s.Assert().EqualError(err, "error in *ingest.mockOrbitRTransactionProcessor.Commit: transient error")
 }
 
 func (s *GroupTransactionProcessorsTestSuiteLedger) TestCommitSucceeds() {

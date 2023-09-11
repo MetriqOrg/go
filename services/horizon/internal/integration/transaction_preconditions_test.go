@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/stellar/go/clients/horizonclient"
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/network"
-	"github.com/stellar/go/services/horizon/internal/test/integration"
-	"github.com/stellar/go/txnbuild"
-	"github.com/stellar/go/xdr"
+	sdk "github.com/lantah/go/clients/orbitrclient"
+	"github.com/lantah/go/keypair"
+	"github.com/lantah/go/network"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
+	"github.com/lantah/go/txnbuild"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -137,7 +137,7 @@ func TestTransactionPreconditionsLedgerBounds(t *testing.T) {
 	tx, err := itest.SubmitMultiSigTransaction([]*keypair.Full{master}, txParams)
 	tt.NoError(err)
 
-	//verify roundtrip to network and back through the horizon api returns same precondition values
+	//verify roundtrip to network and back through the orbitr api returns same precondition values
 	txHistory, err := itest.Client().TransactionDetail(tx.Hash)
 	assert.NoError(t, err)
 	assert.Equal(t, txHistory.Preconditions.LedgerBounds.MaxLedger, txParams.Preconditions.LedgerBounds.MaxLedger)
@@ -189,7 +189,7 @@ func TestTransactionPreconditionsMinSequenceNumberAge(t *testing.T) {
 	tx, err = itest.SubmitMultiSigTransaction([]*keypair.Full{master}, txParams)
 	itest.LogFailedTx(tx, err)
 
-	//verify roundtrip to network and back through the horizon api returns same precondition values
+	//verify roundtrip to network and back through the orbitr api returns same precondition values
 	txHistory, err := itest.Client().TransactionDetail(tx.Hash)
 	tt.NoError(err)
 
@@ -230,13 +230,13 @@ func TestTransactionPreconditionsMinSequenceNumberLedgerGap(t *testing.T) {
 	tx, err := itest.SubmitMultiSigTransaction([]*keypair.Full{master}, txParams)
 	tt.NoError(err)
 
-	//verify roundtrip to network and back through the horizon api returns same precondition values
+	//verify roundtrip to network and back through the orbitr api returns same precondition values
 	txHistory, err := itest.Client().TransactionDetail(tx.Hash)
 	assert.NoError(t, err)
 	assert.Equal(t, txHistory.Preconditions.MinAccountSequenceLedgerGap, txParams.Preconditions.MinSequenceNumberLedgerGap)
 }
 
-// TestTransactionWithoutPreconditions ensures that Horizon doesn't break when
+// TestTransactionWithoutPreconditions ensures that OrbitR doesn't break when
 // we have a PRECOND_NONE type transaction (which is not possible to submit
 // through SDKs, but is absolutely still possible).
 func TestTransactionWithoutPreconditions(t *testing.T) {
@@ -336,7 +336,7 @@ func TestTransactionPreconditionsEdgeCases(t *testing.T) {
 		params.Preconditions = precondition
 
 		// The goal here is not to check for validation or errors or responses,
-		// but rather to just make sure the edge case doesn't crash Horizon.
+		// but rather to just make sure the edge case doesn't crash OrbitR.
 		itest.SubmitTransaction(master, params)
 	}
 }

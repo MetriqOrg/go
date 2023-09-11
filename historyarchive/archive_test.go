@@ -409,13 +409,13 @@ func TestNetworkPassphrase(t *testing.T) {
 
 	// Incorrect network passphrase set in options
 	archive = MustConnect("mock://test", ConnectOptions{
-		NetworkPassphrase:   "Test SDF Network ; September 2015",
+		NetworkPassphrase:   "Test Lantah Network ; 2023",
 		CheckpointFrequency: 64,
 	})
 	err = archive.backend.PutFile("has.json", makeHASReader())
 	assert.NoError(t, err)
 	_, err = archive.GetPathHAS("has.json")
-	assert.EqualError(t, err, "Network passphrase does not match! expected=Test SDF Network ; September 2015 actual=Public Global Lantah Network ; 2023")
+	assert.EqualError(t, err, "Network passphrase does not match! expected=Test Lantah Network ; 2023 actual=Public Global Lantah Network ; 2023")
 }
 
 func TestXdrDecode(t *testing.T) {

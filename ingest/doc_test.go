@@ -61,7 +61,7 @@ func Example_ledgerentrieshistoryarchive() {
 }
 
 // Example_changes demonstrates how to stream ledger entry changes
-// for a specific ledger using captive gramr. Please note that transaction
+// for a specific ledger using captive gravity. Please note that transaction
 // meta IS available when using this backend.
 func Example_changes() {
 	ctx := context.Background()
@@ -76,10 +76,10 @@ func Example_changes() {
 		panic(err)
 	}
 
-	// Requires Gramr 13.2.0+
+	// Requires Gravity 13.2.0+
 	backend, err := ledgerbackend.NewCaptive(
 		ledgerbackend.CaptiveCoreConfig{
-			BinaryPath:         "/bin/gramr",
+			BinaryPath:         "/bin/gravity",
 			NetworkPassphrase:  networkPassphrase,
 			HistoryArchiveURLs: []string{archiveURL},
 			Toml:               captiveCoreToml,

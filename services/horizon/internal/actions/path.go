@@ -6,18 +6,18 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/stellar/go/amount"
-	"github.com/stellar/go/protocols/horizon"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/paths"
-	horizonProblem "github.com/stellar/go/services/horizon/internal/render/problem"
-	"github.com/stellar/go/services/horizon/internal/resourceadapter"
-	"github.com/stellar/go/services/horizon/internal/simplepath"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/amount"
+	"github.com/lantah/go/protocols/orbitr"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/paths"
+	orbitrProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
+	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
+	"github.com/lantah/go/services/orbitr/internal/simplepath"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 )
 
 // FindPathsHandler is the http handler for the find payment paths endpoint
@@ -150,7 +150,7 @@ func (handler FindPathsHandler) GetResource(w HeaderWriter, r *http.Request) (in
 
 	// Rollback REPEATABLE READ transaction so that a DB connection is released
 	// to be used by other http requests.
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not obtain historyQ from request")
 	}
@@ -166,9 +166,9 @@ func (handler FindPathsHandler) GetResource(w HeaderWriter, r *http.Request) (in
 		records, lastIngestedLedger, err = handler.PathFinder.Find(ctx, query, handler.MaxPathLength)
 		switch err {
 		case simplepath.ErrEmptyInMemoryOrderBook:
-			return nil, horizonProblem.StillIngesting
+			return nil, orbitrProblem.StillIngesting
 		case paths.ErrRateLimitExceeded:
-			return nil, horizonProblem.ServerOverCapacity
+			return nil, orbitrProblem.ServerOverCapacity
 		default:
 			if err != nil {
 				return nil, err
@@ -190,7 +190,7 @@ func renderPaths(ctx context.Context, records []paths.Path) (hal.BasePage, error
 	var page hal.BasePage
 	page.Init()
 	for _, p := range records {
-		var res horizon.Path
+		var res orbitr.Path
 		if err := resourceadapter.PopulatePath(ctx, &res, p); err != nil {
 			return hal.BasePage{}, err
 		}
@@ -319,7 +319,7 @@ func (handler FindFixedPathsHandler) GetResource(w HeaderWriter, r *http.Request
 
 	// Rollback REPEATABLE READ transaction so that a DB connection is released
 	// to be used by other http requests.
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not obtain historyQ from request")
 	}
@@ -344,9 +344,9 @@ func (handler FindFixedPathsHandler) GetResource(w HeaderWriter, r *http.Request
 		)
 		switch err {
 		case simplepath.ErrEmptyInMemoryOrderBook:
-			return nil, horizonProblem.StillIngesting
+			return nil, orbitrProblem.StillIngesting
 		case paths.ErrRateLimitExceeded:
-			return nil, horizonProblem.ServerOverCapacity
+			return nil, orbitrProblem.ServerOverCapacity
 		default:
 			if err != nil {
 				return nil, err
@@ -365,7 +365,7 @@ func (handler FindFixedPathsHandler) GetResource(w HeaderWriter, r *http.Request
 }
 
 func assetsForAddress(r *http.Request, addy string) ([]xdr.Asset, []xdr.Int64, error) {
-	historyQ, err := horizonContext.HistoryQFromRequest(r)
+	historyQ, err := orbitrContext.HistoryQFromRequest(r)
 	if err != nil {
 		return nil, nil, errors.Wrap(err, "could not obtain historyQ from request")
 	}

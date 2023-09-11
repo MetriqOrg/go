@@ -2,15 +2,15 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	horizon "github.com/lantah/go/services/horizon/internal"
+	orbitr "github.com/lantah/go/services/orbitr/internal"
 )
 
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "run horizon server",
-	Long:  "serve initializes then starts the horizon HTTP server",
+	Short: "run orbitr server",
+	Long:  "serve initializes then starts the orbitr HTTP server",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		app, err := horizon.NewAppFromFlags(config, flags)
+		app, err := orbitr.NewAppFromFlags(config, flags)
 		if err != nil {
 			return err
 		}

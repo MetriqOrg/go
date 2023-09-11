@@ -8,10 +8,10 @@ HORIZON_INTEGRATION_TESTS_ENABLE_SOROBAN_RPC=true
 The `stellar/soroban-rpc` refers to an image built from soroban-tools/cmd/soroban-rpc/docker/Dockerfile and published on public `docker.io` so it is referrable in any build environment. Images are published to `docker.io/stellar/soroban-rpc` on a release basis, if you need more recent build, can build interim images from soroban-tools/cmd/soroban-rpc/docker/Dockerfile, example:
 
 ```
-docker build --platform linux/amd64 --build-arg GRAMR_VERSION=19.11.1-1373.875f47e24.focal~soroban -t stellar-soroban-rpc:test -f cmd/soroban-rpc/docker/Dockerfile .
+docker build --platform linux/amd64 --build-arg GRAVITY_VERSION=19.11.1-1373.875f47e24.focal~soroban -t stellar-soroban-rpc:test -f cmd/soroban-rpc/docker/Dockerfile .
 ```
 
-`GRAMR_VERSION` should be set to a debian package version for `gramr`.
+`GRAVITY_VERSION` should be set to a debian package version for `gravity`.
 
 ### Contract test fixture source code
 

@@ -5,21 +5,21 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stellar/go/keypair"
-	protocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/services/horizon/internal/test"
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/support/render/problem"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/keypair"
+	protocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/support/render/problem"
+	"github.com/lantah/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetLiquidityPoolByID(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 
 	lp := history.MakeTestPool(xdr.MustNewNativeAsset(), 100, usdAsset, 200)
 	err := q.UpsertLiquidityPools(tt.Ctx, []history.LiquidityPool{lp})
@@ -73,8 +73,8 @@ func TestGetLiquidityPoolByID(t *testing.T) {
 func TestGetLiquidityPools(t *testing.T) {
 	tt := test.Start(t)
 	defer tt.Finish()
-	test.ResetHorizonDB(t, tt.HorizonDB)
-	q := &history.Q{tt.HorizonSession()}
+	test.ResetOrbitRDB(t, tt.OrbitRDB)
+	q := &history.Q{tt.OrbitRSession()}
 
 	lp1 := history.MakeTestPool(nativeAsset, 100, usdAsset, 200)
 	lp2 := history.MakeTestPool(eurAsset, 300, usdAsset, 400)

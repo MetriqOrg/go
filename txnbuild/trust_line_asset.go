@@ -1,8 +1,8 @@
 package txnbuild
 
 import (
-	"github.com/stellar/go/support/errors"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/support/errors"
+	"github.com/lantah/go/xdr"
 )
 
 // TrustLineAsset represents a Stellar trust line asset.
@@ -12,7 +12,7 @@ type TrustLineAsset interface {
 	ToXDR() (xdr.TrustLineAsset, error)
 }
 
-// LiquidityPoolShareTrustLineAsset represents shares in a liquidity pool on the Stellar network.
+// LiquidityPoolShareTrustLineAsset represents shares in a liquidity pool on the Lantah Network.
 type LiquidityPoolShareTrustLineAsset struct {
 	LiquidityPoolID LiquidityPoolId
 }

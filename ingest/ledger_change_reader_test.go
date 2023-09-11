@@ -275,7 +275,7 @@ func TestLedgerChangeReaderOrder(t *testing.T) {
 		t,
 		err,
 		"error extracting transactions from ledger close meta: TransactionMeta.V=2 is required in protocol"+
-			" version older than version 10. Please process ledgers again using the latest gramr version.",
+			" version older than version 10. Please process ledgers again using the latest gravity version.",
 	)
 	mock.AssertExpectations(t)
 

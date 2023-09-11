@@ -34,7 +34,7 @@ type TransformLedgerEntryFunction func(xdr.LedgerEntry) (ignore bool, newEntry x
 //
 // Functions will return StateError type if state is found to be incorrect.
 // It's user responsibility to call `stateReader.Close()` when reading is done.
-// Check Horizon for an example how to use this tool.
+// Check OrbitR for an example how to use this tool.
 type StateVerifier struct {
 	stateReader ingest.ChangeReader
 	// transformFunction transforms (or ignores) ledger entries streamed from
@@ -165,7 +165,7 @@ func (v *StateVerifier) Write(entry xdr.LedgerEntry) error {
 
 	if !bytes.Equal(actualEntryMarshaled, expectedEntryMarshaled) {
 		return ingest.NewStateError(errors.Errorf(
-			"Entry does not match the fetched entry. Expected (history archive): %s (pretransform = %s), actual (horizon): %s",
+			"Entry does not match the fetched entry. Expected (history archive): %s (pretransform = %s), actual (orbitr): %s",
 			base64.StdEncoding.EncodeToString(expectedEntryMarshaled),
 			base64.StdEncoding.EncodeToString(preTransformExpectedEntryMarshaled),
 			base64.StdEncoding.EncodeToString(actualEntryMarshaled),

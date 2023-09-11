@@ -14,11 +14,11 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	horizonclient "github.com/stellar/go/clients/horizonclient"
-	hProtocol "github.com/stellar/go/protocols/horizon"
-	"github.com/stellar/go/services/ticker/internal/utils"
-	"github.com/stellar/go/support/errors"
-	hlog "github.com/stellar/go/support/log"
+	orbitrclient "github.com/lantah/go/clients/orbitrclient"
+	hProtocol "github.com/lantah/go/protocols/orbitr"
+	"github.com/lantah/go/services/ticker/internal/utils"
+	"github.com/lantah/go/support/errors"
+	hlog "github.com/lantah/go/support/log"
 )
 
 // shouldDiscardAsset maps the criteria for discarding an asset from the asset index
@@ -144,7 +144,7 @@ func isDomainVerified(orgURL string, tomlURL string, hasCurrency bool) bool {
 	return true
 }
 
-// makeTomlAsset aggregates Horizon Data with TOML Data
+// makeTomlAsset aggregates OrbitR Data with TOML Data
 func makeFinalAsset(
 	asset hProtocol.AssetStat,
 	issuer TOMLIssuer,
@@ -250,7 +250,7 @@ func processAsset(logger *hlog.Entry, asset hProtocol.AssetStat, tomlCache *TOML
 // non-trash assets are sent to the assetQueue.
 // The TOML validation is performed in parallel to improve performance.
 func (c *ScraperConfig) parallelProcessAssets(assets []hProtocol.AssetStat, parallelism int, assetQueue chan<- FinalAsset) (numNonTrash int, numTrash int) {
-	shouldValidateTOML := c.Client != horizonclient.DefaultTestNetClient // TOMLs shouldn't be validated on TestNet
+	shouldValidateTOML := c.Client != orbitrclient.DefaultTestNetClient // TOMLs shouldn't be validated on TestNet
 	var mutex = &sync.Mutex{}
 	var wg sync.WaitGroup
 	numAssets := len(assets)
@@ -313,22 +313,22 @@ func (c *ScraperConfig) parallelProcessAssets(assets []hProtocol.AssetStat, para
 	return
 }
 
-// retrieveAssets retrieves existing assets from the Horizon API. If limit=0, will fetch all assets.
+// retrieveAssets retrieves existing assets from the OrbitR API. If limit=0, will fetch all assets.
 func (c *ScraperConfig) retrieveAssets(limit int) (assets []hProtocol.AssetStat, err error) {
-	r := horizonclient.AssetRequest{Limit: 200}
+	r := orbitrclient.AssetRequest{Limit: 200}
 
 	assetsPage, err := c.Client.Assets(r)
 	if err != nil {
 		return
 	}
 
-	c.Logger.Info("Fetching assets from Horizon")
+	c.Logger.Info("Fetching assets from OrbitR")
 
 	for assetsPage.Links.Next.Href != assetsPage.Links.Self.Href {
 		err = utils.Retry(5, 5*time.Second, c.Logger, func() error {
 			assetsPage, err = c.Client.Assets(r)
 			if err != nil {
-				c.Logger.Info("Horizon rate limit reached!")
+				c.Logger.Info("OrbitR rate limit reached!")
 			}
 			return err
 		})
@@ -353,7 +353,7 @@ func (c *ScraperConfig) retrieveAssets(limit int) (assets []hProtocol.AssetStat,
 		}
 		c.Logger.Debug("Cursor currently at:", n)
 
-		r = horizonclient.AssetRequest{Limit: 200, Cursor: n}
+		r = orbitrclient.AssetRequest{Limit: 200, Cursor: n}
 	}
 
 	c.Logger.Infof("Fetched: %d assets\n", len(assets))

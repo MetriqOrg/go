@@ -81,13 +81,13 @@ func TestBulkInsertTrades(t *testing.T) {
 	// Now let's create the trades:
 	trades := []Trade{
 		{
-			HorizonID:       "hrzid1",
+			OrbitRID:       "hrzid1",
 			BaseAssetID:     asset1.ID,
 			CounterAssetID:  asset2.ID,
 			LedgerCloseTime: time.Now(),
 		},
 		{
-			HorizonID:       "hrzid2",
+			OrbitRID:       "hrzid2",
 			BaseAssetID:     asset2.ID,
 			CounterAssetID:  asset1.ID,
 			LedgerCloseTime: time.Now(),
@@ -194,19 +194,19 @@ func TestGetLastTrade(t *testing.T) {
 	// Now let's create the trades:
 	trades := []Trade{
 		{
-			HorizonID:       "hrzid2",
+			OrbitRID:       "hrzid2",
 			BaseAssetID:     asset2.ID,
 			CounterAssetID:  asset1.ID,
 			LedgerCloseTime: oneYearBefore,
 		},
 		{
-			HorizonID:       "hrzid1",
+			OrbitRID:       "hrzid1",
 			BaseAssetID:     asset1.ID,
 			CounterAssetID:  asset2.ID,
 			LedgerCloseTime: now,
 		},
 		{
-			HorizonID:       "hrzid2",
+			OrbitRID:       "hrzid2",
 			BaseAssetID:     asset2.ID,
 			CounterAssetID:  asset1.ID,
 			LedgerCloseTime: oneYearBefore,
@@ -297,25 +297,25 @@ func TestDeleteOldTrades(t *testing.T) {
 	// Now let's create the trades:
 	trades := []Trade{
 		{
-			HorizonID:       "hrzid1",
+			OrbitRID:       "hrzid1",
 			BaseAssetID:     asset1.ID,
 			CounterAssetID:  asset2.ID,
 			LedgerCloseTime: now,
 		},
 		{
-			HorizonID:       "hrzid2",
+			OrbitRID:       "hrzid2",
 			BaseAssetID:     asset2.ID,
 			CounterAssetID:  asset1.ID,
 			LedgerCloseTime: oneDayAgo,
 		},
 		{
-			HorizonID:       "hrzid3",
+			OrbitRID:       "hrzid3",
 			BaseAssetID:     asset2.ID,
 			CounterAssetID:  asset1.ID,
 			LedgerCloseTime: oneMonthAgo,
 		},
 		{
-			HorizonID:       "hrzid4",
+			OrbitRID:       "hrzid4",
 			BaseAssetID:     asset2.ID,
 			CounterAssetID:  asset1.ID,
 			LedgerCloseTime: oneYearAgo,
@@ -336,17 +336,17 @@ func TestDeleteOldTrades(t *testing.T) {
 
 	// Make sure we're actually deleting the entries we wanted:
 	for i, trade := range dbTrades {
-		if trade.HorizonID == "hrzid1" {
+		if trade.OrbitRID == "hrzid1" {
 			trade1 = dbTrades[i]
 		}
 
-		if trade.HorizonID == "hrzid2" {
+		if trade.OrbitRID == "hrzid2" {
 			trade2 = dbTrades[i]
 		}
 	}
 
-	assert.NotEqual(t, trade1.HorizonID, "")
-	assert.NotEqual(t, trade2.HorizonID, "")
+	assert.NotEqual(t, trade1.OrbitRID, "")
+	assert.NotEqual(t, trade2.OrbitRID, "")
 	assert.WithinDuration(t, now.Local(), trade1.LedgerCloseTime.Local(), 10*time.Millisecond)
 	assert.WithinDuration(t, oneDayAgo.Local(), trade2.LedgerCloseTime.Local(), 10*time.Millisecond)
 }

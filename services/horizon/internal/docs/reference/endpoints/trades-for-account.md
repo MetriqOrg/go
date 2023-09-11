@@ -7,7 +7,7 @@ replacement: https://developers.stellar.org/api/resources/accounts/trades/
 
 This endpoint represents all [trades](../resources/trade.md) that affect a given [account](../resources/account.md).
 
-This endpoint can also be used in [streaming](../streaming.md) mode, making it possible to listen for new trades that affect the given account as they occur on the Stellar network.
+This endpoint can also be used in [streaming](../streaming.md) mode, making it possible to listen for new trades that affect the given account as they occur on the Lantah Network.
 If called in streaming mode Horizon will start at the earliest known trade unless a `cursor` is set. In that case it will start from the `cursor`. You can also set `cursor` value to `now` to only stream trades created since your request time.
 
 ## Request

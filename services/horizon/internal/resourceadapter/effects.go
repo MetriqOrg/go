@@ -3,12 +3,12 @@ package resourceadapter
 import (
 	"context"
 
-	"github.com/stellar/go/protocols/horizon/base"
-	"github.com/stellar/go/protocols/horizon/effects"
-	horizonContext "github.com/stellar/go/services/horizon/internal/context"
-	"github.com/stellar/go/services/horizon/internal/db2/history"
-	"github.com/stellar/go/support/render/hal"
-	"github.com/stellar/go/xdr"
+	"github.com/lantah/go/protocols/orbitr/base"
+	"github.com/lantah/go/protocols/orbitr/effects"
+	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/lantah/go/support/render/hal"
+	"github.com/lantah/go/xdr"
 )
 
 var EffectTypeNames = map[history.EffectType]string{
@@ -324,7 +324,7 @@ func PopulateBaseEffect(ctx context.Context, this *effects.Base, row history.Eff
 	populateEffectType(this, row)
 	this.LedgerCloseTime = ledger.ClosedAt
 
-	lb := hal.LinkBuilder{horizonContext.BaseURL(ctx)}
+	lb := hal.LinkBuilder{orbitrContext.BaseURL(ctx)}
 	this.Links.Operation = lb.Linkf("/operations/%d", row.HistoryOperationID)
 	this.Links.Succeeds = lb.Linkf("/effects?order=desc&cursor=%s", this.PT)
 	this.Links.Precedes = lb.Linkf("/effects?order=asc&cursor=%s", this.PT)
