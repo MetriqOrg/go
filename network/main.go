@@ -18,19 +18,19 @@ const (
 	// TestNetworkPassphrase is the pass phrase used for every transaction intended for the SDF-run test network
 	TestNetworkPassphrase = "Test Lantah Network ; 2023"
 	// FutureNetworkPassphrase is the pass phrase used for every transaction intended for the SDF-run future network
-	FutureNetworkPassphrase = "Test SDF Future Network ; October 2022"
+	FutureNetworkPassphrase = "Test Lantah Future Network ; 2023"
 )
 
 var (
-	// PublicNetworkhistoryArchiveURLs is a list of history archive URLs for stellar 'pubnet'
-	PublicNetworkhistoryArchiveURLs = []string{"https://history.stellar.org/prd/core-live/core_live_001/",
-		"https://history.stellar.org/prd/core-live/core_live_002/",
-		"https://history.stellar.org/prd/core-live/core_live_003/"}
+	// PublicNetworkhistoryArchiveURLs is a list of history archive URLs for lantah 'pubnet'
+	PublicNetworkhistoryArchiveURLs = []string{"https://gravity1.lantah/network/",
+		"https://gravity2.lantah/network/",
+		"https://gravity3.lantah/network/"}
 
-	// TestNetworkhistoryArchiveURLs is a list of history archive URLs for stellar 'testnet'
-	TestNetworkhistoryArchiveURLs = []string{"https://history.stellar.org/prd/core-testnet/core_testnet_001/",
-		"https://history.stellar.org/prd/core-testnet/core_testnet_002/",
-		"https://history.stellar.org/prd/core-testnet/core_testnet_003"}
+	// TestNetworkhistoryArchiveURLs is a list of history archive URLs for lantah 'testnet'
+	TestNetworkhistoryArchiveURLs = []string{"https://testgravity1.lantah/network/",
+		"http://testgravity2.lantah/network/",
+		"https://testgravity3.lantah/network/"}
 )
 
 // ID returns the network ID derived from the provided passphrase.  This value
