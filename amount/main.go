@@ -32,7 +32,7 @@ var (
 	// What we want to prevent is passing very big numbers like `1e9223372036854775807`
 	// to `big.Rat.SetString` triggering long calculations.
 	// Note: {1,20} because the biggest amount you can use in Stellar is:
-	// len("922337203685.4775807") = 20.
+	// len("9223372036854.775807") = 20.
 	validAmountSimple          = regexp.MustCompile("^-?[.0-9]{1,20}$")
 	negativePositiveNumberOnly = regexp.MustCompile("^-?[0-9]+$")
 )
@@ -47,7 +47,7 @@ func MustParse(v string) xdr.Int64 {
 }
 
 // Parse parses the provided as a stellar "amount", i.e. a 64-bit signed integer
-// that represents a decimal number with 7 digits of significance in the
+// that represents a decimal number with 6 digits of significance in the
 // fractional portion of the number, and returns a xdr.Int64.
 func Parse(v string) (xdr.Int64, error) {
 	i, err := ParseInt64(v)
@@ -58,7 +58,7 @@ func Parse(v string) (xdr.Int64, error) {
 }
 
 // ParseInt64 parses the provided as a stellar "amount", i.e. a 64-bit signed
-// integer that represents a decimal number with 7 digits of significance in
+// integer that represents a decimal number with 6 digits of significance in
 // the fractional portion of the number.
 func ParseInt64(v string) (int64, error) {
 	if !validAmountSimple.MatchString(v) {
@@ -72,7 +72,7 @@ func ParseInt64(v string) (int64, error) {
 
 	r.Mul(r, bigOne)
 	if !r.IsInt() {
-		return 0, errors.Errorf("more than 7 significant digits: %s", v)
+		return 0, errors.Errorf("more than 6 significant digits: %s", v)
 	}
 
 	i, err := strconv.ParseInt(r.FloatString(0), 10, 64)
@@ -83,7 +83,7 @@ func ParseInt64(v string) (int64, error) {
 }
 
 // IntStringToAmount converts string integer value and converts it to stellar
-// "amount". In other words, it divides the given string integer value by 10^7
+// "amount". In other words, it divides the given string integer value by 10^6
 // and returns the string representation of that number.
 // It is safe to use with values exceeding int64 limits.
 func IntStringToAmount(v string) (string, error) {
@@ -99,10 +99,10 @@ func IntStringToAmount(v string) (string, error) {
 
 	l := len(v)
 	var r string
-	if l <= 7 {
-		r = "0." + strings.Repeat("0", 7-l) + v
+	if l <= 6 {
+		r = "0." + strings.Repeat("0", 6-l) + v
 	} else {
-		r = v[0:l-7] + "." + v[l-7:l]
+		r = v[0:l-6] + "." + v[l-6:l]
 	}
 
 	if negative {

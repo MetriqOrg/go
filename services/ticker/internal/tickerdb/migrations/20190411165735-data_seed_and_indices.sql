@@ -69,7 +69,7 @@ INSERT INTO public.assets (
     now(),
     now(),
     7,
-    'Stellar Lumens',
+    'Lantah Grams',
     '',
     '',
     FALSE,
