@@ -399,7 +399,7 @@ type RestoreFootprint struct {
 //
 //		for asset contract event type, it can be absent such as 'burn'
 //
-// Amount - expressed as a signed decimal to 7 digits precision.
+// Amount - expressed as a signed decimal to 6 digits precision.
 // Asset  - the classic asset expressed as issuer and code.
 type AssetContractBalanceChange struct {
 	base.Asset

@@ -123,9 +123,9 @@ func floor(n *big.Rat) *big.Rat {
 	return f
 }
 
-// StringFromFloat64 will format a float64 to decimal representation with 7 digits after the decimal point
+// StringFromFloat64 will format a float64 to decimal representation with 6 digits after the decimal point
 func StringFromFloat64(v float64) string {
-	return strconv.FormatFloat(v, 'f', 7, 64)
+	return strconv.FormatFloat(v, 'f', 6, 64)
 }
 
 // ConvertToBuyingUnits uses special rounding logic to multiply the amount by

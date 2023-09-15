@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	scDecimalPrecision = 7
+	scDecimalPrecision = 6
 )
 
 var (
