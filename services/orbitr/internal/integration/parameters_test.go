@@ -16,11 +16,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/stellar/go/services/orbitr/internal/paths"
-	"github.com/stellar/go/services/orbitr/internal/simplepath"
+	"github.com/lantah/go/services/orbitr/internal/paths"
+	"github.com/lantah/go/services/orbitr/internal/simplepath"
 
-	orbitr "github.com/stellar/go/services/orbitr/internal"
-	"github.com/stellar/go/services/orbitr/internal/test/integration"
+	orbitr "github.com/lantah/go/services/orbitr/internal"
+	"github.com/lantah/go/services/orbitr/internal/test/integration"
 
 	"github.com/stretchr/testify/assert"
 )
