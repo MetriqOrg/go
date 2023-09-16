@@ -217,9 +217,9 @@ func TestPopulateAccountEntry(t *testing.T) {
 	native := hAccount.Balances[len(hAccount.Balances)-1]
 
 	tt.Equal("native", native.Type)
-	tt.Equal("0.0020000", native.Balance)
-	tt.Equal("0.0000003", native.BuyingLiabilities)
-	tt.Equal("0.0000004", native.SellingLiabilities)
+	tt.Equal("0.020000", native.Balance)
+	tt.Equal("0.000003", native.BuyingLiabilities)
+	tt.Equal("0.000004", native.SellingLiabilities)
 	tt.Equal("", native.Limit)
 	tt.Equal("", native.Issuer)
 	tt.Equal("", native.Code)

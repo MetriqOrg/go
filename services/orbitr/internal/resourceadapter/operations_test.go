@@ -154,7 +154,7 @@ func TestPopulateOperation_CreateClaimableBalance(t *testing.T) {
 
 	details := `{
 		"asset":  "COP:GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
-		"amount": "10.0000000",
+		"amount": "100.000000",
 		"claimants": [
 			{
 				"destination": "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
@@ -178,7 +178,7 @@ func TestPopulateOperation_CreateClaimableBalance(t *testing.T) {
 	resp, err := getJSONResponse(xdr.OperationTypeCreateClaimableBalance, details)
 	tt.NoError(err)
 	tt.Equal("COP:GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD", resp["asset"])
-	tt.Equal("10.0000000", resp["amount"])
+	tt.Equal("100.000000", resp["amount"])
 }
 
 func TestPopulateOperation_ClaimClaimableBalance(t *testing.T) {

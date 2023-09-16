@@ -70,7 +70,7 @@ func TestPopulateClaimableBalance(t *testing.T) {
 
 	tt.Equal("000000000102030000000000000000000000000000000000000000000000000000000000", resource.BalanceID)
 	tt.Equal(claimableBalance.Asset.StringCanonical(), resource.Asset)
-	tt.Equal("10.0000000", resource.Amount)
+	tt.Equal("100.000000", resource.Amount)
 	tt.Equal("GC3C4AKRBQLHOJ45U4XG35ESVWRDECWO5XLDGYADO6DPR3L7KIDVUMML", resource.Sponsor)
 	tt.Equal(uint32(123), resource.LastModifiedLedger)
 	tt.Len(resource.Claimants, 1)

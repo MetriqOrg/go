@@ -29,11 +29,11 @@ func TestPopulatePath(t *testing.T) {
 		SourceAssetType:        "native",
 		SourceAssetCode:        "",
 		SourceAssetIssuer:      "",
-		SourceAmount:           "0.0000123",
+		SourceAmount:           "0.000123",
 		DestinationAssetType:   "credit_alphanum4",
 		DestinationAssetCode:   "USDC",
 		DestinationAssetIssuer: "GC3C4AKRBQLHOJ45U4XG35ESVWRDECWO5XLDGYADO6DPR3L7KIDVUMML",
-		DestinationAmount:      "0.0000345",
+		DestinationAmount:      "0.000345",
 		Path: []orbitr.Asset{
 			{
 				Type:   "credit_alphanum12",
