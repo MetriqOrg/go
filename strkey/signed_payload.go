@@ -3,7 +3,7 @@ package strkey
 import (
 	"bytes"
 
-	xdr "github.com/lantah/go-xdr/xdr3"
+	xdr "github.com/stellar/go-xdr/xdr3"
 	"github.com/lantah/go/support/errors"
 )
 

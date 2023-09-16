@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	xdr3 "github.com/lantah/go-xdr/xdr3"
+	xdr3 "github.com/stellar/go-xdr/xdr3"
 
 	"github.com/lantah/go/support/log"
 	"github.com/lantah/go/xdr"
