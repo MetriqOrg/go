@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/services/orbitrinternal/db2/history"
+	"github.com/lantah/go/services/orbitr/internal/db2/history"
 	"github.com/lantah/go/support/errors"
 	"github.com/lantah/go/xdr"
 )
