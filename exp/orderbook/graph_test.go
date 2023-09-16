@@ -2325,7 +2325,7 @@ func TestRepro(t *testing.T) {
 		t.FailNow()
 	}
 
-	// get me 70000.0000000 USDC if I have some ETH
+	// get me 70000.000000 USDC if I have some ETH
 	paths, _, err := graph.FindPaths(context.TODO(), 5,
 		usdc, 700000000000, nil, []xdr.Asset{eth}, []xdr.Int64{0},
 		false, 5, true,

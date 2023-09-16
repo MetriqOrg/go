@@ -637,7 +637,7 @@ func TestGetOperationsOnlyPayments(t *testing.T) {
 	tt.Assert.Len(records, 1)
 
 	record := records[0].(operations.PathPayment)
-	tt.Assert.Equal("10.0000000", record.SourceAmount)
+	tt.Assert.Equal("10.000000", record.SourceAmount)
 }
 
 func TestOperation_CreatedAt(t *testing.T) {

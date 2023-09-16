@@ -23,7 +23,7 @@ func TestAddEffect(t *testing.T) {
 	builder := q.NewEffectBatchInsertBuilder(2)
 	sequence := int32(56)
 	details, err := json.Marshal(map[string]string{
-		"amount":     "1000.0000000",
+		"amount":     "1000.000000",
 		"asset_type": "native",
 	})
 
@@ -50,5 +50,5 @@ func TestAddEffect(t *testing.T) {
 	tt.Assert.Equal(int64(240518172673), effect.HistoryOperationID)
 	tt.Assert.Equal(int32(1), effect.Order)
 	tt.Assert.Equal(EffectType(3), effect.Type)
-	tt.Assert.Equal("{\"amount\": \"1000.0000000\", \"asset_type\": \"native\"}", effect.DetailsString.String)
+	tt.Assert.Equal("{\"amount\": \"1000.000000\", \"asset_type\": \"native\"}", effect.DetailsString.String)
 }

@@ -587,25 +587,25 @@ func TestOrderbookGetResource(t *testing.T) {
 	fullResponse.Asks = []protocol.PriceLevel{
 		{
 			PriceR: protocol.Price{N: int32(twoEurOffer.Pricen), D: int32(twoEurOffer.Priced)},
-			Price:  "2.0000000",
-			Amount: "922337203685.4776807",
+			Price:  "2.000000",
+			Amount: "9223372036854.776807",
 		},
 		{
 			PriceR: protocol.Price{N: int32(threeEurOffer.Pricen), D: int32(threeEurOffer.Priced)},
-			Price:  "3.0000000",
-			Amount: "0.0000500",
+			Price:  "3.000000",
+			Amount: "0.000050",
 		},
 	}
 	fullResponse.Bids = []protocol.PriceLevel{
 		{
 			PriceR: protocol.Price{N: int32(otherSellEurOffer.Priced), D: int32(otherSellEurOffer.Pricen)},
-			Price:  "1.8000000",
-			Amount: "0.0000500",
+			Price:  "1.800000",
+			Amount: "0.000050",
 		},
 		{
 			PriceR: protocol.Price{N: int32(sellEurOffer.Priced), D: int32(sellEurOffer.Pricen)},
-			Price:  "0.5000000",
-			Amount: "0.0000500",
+			Price:  "0.500000",
+			Amount: "0.000050",
 		},
 	}
 
@@ -613,15 +613,15 @@ func TestOrderbookGetResource(t *testing.T) {
 	limitResponse.Asks = []protocol.PriceLevel{
 		{
 			PriceR: protocol.Price{N: int32(twoEurOffer.Pricen), D: int32(twoEurOffer.Priced)},
-			Price:  "2.0000000",
-			Amount: "922337203685.4776807",
+			Price:  "2.000000",
+			Amount: "9223372036854.776807",
 		},
 	}
 	limitResponse.Bids = []protocol.PriceLevel{
 		{
 			PriceR: protocol.Price{N: int32(otherSellEurOffer.Priced), D: int32(otherSellEurOffer.Pricen)},
-			Price:  "1.8000000",
-			Amount: "0.0000500",
+			Price:  "1.800000",
+			Amount: "0.000050",
 		},
 	}
 

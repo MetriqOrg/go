@@ -41,7 +41,7 @@ func TestAddOperation(t *testing.T) {
 	details, err := json.Marshal(map[string]string{
 		"to":         "GANFZDRBCNTUXIODCJEYMACPMCSZEVE4WZGZ3CZDZ3P2SXK4KH75IK6Y",
 		"from":       "GAQAA5L65LSYH7CQ3VTJ7F3HHLGCL3DSLAR2Y47263D56MNNGHSQSTVY",
-		"amount":     "10.0000000",
+		"amount":     "10.000000",
 		"asset_type": "native",
 	})
 	tt.Assert.NoError(err)
@@ -77,7 +77,7 @@ func TestAddOperation(t *testing.T) {
 		tt.Assert.Equal(int32(1), op.ApplicationOrder)
 		tt.Assert.Equal(xdr.OperationTypePayment, op.Type)
 		tt.Assert.Equal(
-			"{\"to\": \"GANFZDRBCNTUXIODCJEYMACPMCSZEVE4WZGZ3CZDZ3P2SXK4KH75IK6Y\", \"from\": \"GAQAA5L65LSYH7CQ3VTJ7F3HHLGCL3DSLAR2Y47263D56MNNGHSQSTVY\", \"amount\": \"10.0000000\", \"asset_type\": \"native\"}",
+			"{\"to\": \"GANFZDRBCNTUXIODCJEYMACPMCSZEVE4WZGZ3CZDZ3P2SXK4KH75IK6Y\", \"from\": \"GAQAA5L65LSYH7CQ3VTJ7F3HHLGCL3DSLAR2Y47263D56MNNGHSQSTVY\", \"amount\": \"10.000000\", \"asset_type\": \"native\"}",
 			op.DetailsString.String,
 		)
 		tt.Assert.Equal(sourceAccount, op.SourceAccount)

@@ -164,7 +164,7 @@ func (s *EffectsProcessorTestSuiteLedger) mockSuccessfulEffectBatchAdds() {
 		toid.New(int32(s.sequence), 2, 1).ToInt64(),
 		uint32(1),
 		history.EffectAccountCreated,
-		[]byte("{\"starting_balance\":\"1000.0000000\"}"),
+		[]byte("{\"starting_balance\":\"1000.000000\"}"),
 	).Return(nil).Once()
 	s.mockBatchInsertBuilder.On(
 		"Add",
@@ -174,7 +174,7 @@ func (s *EffectsProcessorTestSuiteLedger) mockSuccessfulEffectBatchAdds() {
 		toid.New(int32(s.sequence), 2, 1).ToInt64(),
 		uint32(2),
 		history.EffectAccountDebited,
-		[]byte("{\"amount\":\"1000.0000000\",\"asset_type\":\"native\"}"),
+		[]byte("{\"amount\":\"1000.000000\",\"asset_type\":\"native\"}"),
 	).Return(nil).Once()
 	s.mockBatchInsertBuilder.On(
 		"Add",
@@ -195,7 +195,7 @@ func (s *EffectsProcessorTestSuiteLedger) mockSuccessfulEffectBatchAdds() {
 		toid.New(int32(s.sequence), 3, 1).ToInt64(),
 		uint32(1),
 		history.EffectAccountCredited,
-		[]byte("{\"amount\":\"10.0000000\",\"asset_type\":\"native\"}"),
+		[]byte("{\"amount\":\"10.000000\",\"asset_type\":\"native\"}"),
 	).Return(nil).Once()
 
 	s.mockBatchInsertBuilder.On(
@@ -206,7 +206,7 @@ func (s *EffectsProcessorTestSuiteLedger) mockSuccessfulEffectBatchAdds() {
 		toid.New(int32(s.sequence), 3, 1).ToInt64(),
 		uint32(2),
 		history.EffectAccountDebited,
-		[]byte("{\"amount\":\"10.0000000\",\"asset_type\":\"native\"}"),
+		[]byte("{\"amount\":\"10.000000\",\"asset_type\":\"native\"}"),
 	).Return(nil).Once()
 }
 
@@ -746,7 +746,7 @@ func TestOperationEffects(t *testing.T) {
 									Type: xdr.LedgerEntryTypeAccount,
 									Account: &xdr.AccountEntry{
 										AccountId:  created,
-										Balance:    10000000000,
+										Balance:    1000000000,
 										SeqNum:     244813135872,
 										Thresholds: xdr.Thresholds{0x1, 0x0, 0x0, 0x0},
 									},
@@ -796,7 +796,7 @@ func TestOperationEffects(t *testing.T) {
 					address:     "GCQZP3IU7XU6EJ63JZXKCQOYT2RNXN3HB5CNHENNUEUHSMA4VUJJJSEN",
 					operationID: int64(244813139969),
 					details: map[string]interface{}{
-						"starting_balance": "1000.0000000",
+						"starting_balance": "1000.000000",
 					},
 					effectType: history.EffectAccountCreated,
 					order:      uint32(1),
@@ -805,7 +805,7 @@ func TestOperationEffects(t *testing.T) {
 					address:     "GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H",
 					operationID: int64(244813139969),
 					details: map[string]interface{}{
-						"amount":     "1000.0000000",
+						"amount":     "1000.000000",
 						"asset_type": "native",
 					},
 					effectType: history.EffectAccountDebited,
@@ -864,7 +864,7 @@ func TestOperationEffects(t *testing.T) {
 				{
 					address: "GANFZDRBCNTUXIODCJEYMACPMCSZEVE4WZGZ3CZDZ3P2SXK4KH75IK6Y",
 					details: map[string]interface{}{
-						"amount":     "10.0000000",
+						"amount":     "10.000000",
 						"asset_type": "native",
 					},
 					effectType:  history.EffectAccountCredited,
@@ -874,7 +874,7 @@ func TestOperationEffects(t *testing.T) {
 				{
 					address: "GANFZDRBCNTUXIODCJEYMACPMCSZEVE4WZGZ3CZDZ3P2SXK4KH75IK6Y",
 					details: map[string]interface{}{
-						"amount":     "10.0000000",
+						"amount":     "10.000000",
 						"asset_type": "native",
 					},
 					effectType:  history.EffectAccountDebited,
@@ -896,7 +896,7 @@ func TestOperationEffects(t *testing.T) {
 				{
 					address: "GDEOVUDLCYTO46D6GD6WH7BFESPBV5RACC6F6NUFCIRU7PL2XONQHVGJ",
 					details: map[string]interface{}{
-						"amount":       "1.0000000",
+						"amount":       "1.000000",
 						"asset_code":   "ARS",
 						"asset_type":   "credit_alphanum4",
 						"asset_issuer": "GCXI6Q73J7F6EUSBZTPW4G4OUGVDHABPYF2U4KO7MVEX52OH5VMVUCRF",
@@ -908,7 +908,7 @@ func TestOperationEffects(t *testing.T) {
 				{
 					address: "GD3MMHD2YZWL5RAUWG6O3RMA5HTZYM7S3JLSZ2Z35JNJAWTDIKXY737V",
 					details: map[string]interface{}{
-						"amount":       "0.0300000",
+						"amount":       "0.030000",
 						"asset_code":   "BRL",
 						"asset_type":   "credit_alphanum4",
 						"asset_issuer": "GCXI6Q73J7F6EUSBZTPW4G4OUGVDHABPYF2U4KO7MVEX52OH5VMVUCRF",
@@ -922,8 +922,8 @@ func TestOperationEffects(t *testing.T) {
 					details: map[string]interface{}{
 						"seller":              "GDEOVUDLCYTO46D6GD6WH7BFESPBV5RACC6F6NUFCIRU7PL2XONQHVGJ",
 						"offer_id":            xdr.Int64(10072128),
-						"sold_amount":         "0.0300000",
-						"bought_amount":       "1.0000000",
+						"sold_amount":         "0.030000",
+						"bought_amount":       "1.000000",
 						"sold_asset_code":     "BRL",
 						"sold_asset_type":     "credit_alphanum4",
 						"bought_asset_code":   "ARS",
@@ -940,8 +940,8 @@ func TestOperationEffects(t *testing.T) {
 					details: map[string]interface{}{
 						"seller":              "GD3MMHD2YZWL5RAUWG6O3RMA5HTZYM7S3JLSZ2Z35JNJAWTDIKXY737V",
 						"offer_id":            xdr.Int64(10072128),
-						"sold_amount":         "1.0000000",
-						"bought_amount":       "0.0300000",
+						"sold_amount":         "1.000000",
+						"bought_amount":       "0.030000",
 						"sold_asset_code":     "ARS",
 						"sold_asset_type":     "credit_alphanum4",
 						"bought_asset_code":   "BRL",
@@ -969,7 +969,7 @@ func TestOperationEffects(t *testing.T) {
 					address:      "GDEOVUDLCYTO46D6GD6WH7BFESPBV5RACC6F6NUFCIRU7PL2XONQHVGJ",
 					addressMuxed: null.StringFrom("MDEOVUDLCYTO46D6GD6WH7BFESPBV5RACC6F6NUFCIRU7PL2XONQGAAAAAAMV7V2X24II"),
 					details: map[string]interface{}{
-						"amount":       "1.0000000",
+						"amount":       "1.000000",
 						"asset_code":   "ARS",
 						"asset_type":   "credit_alphanum4",
 						"asset_issuer": "GCXI6Q73J7F6EUSBZTPW4G4OUGVDHABPYF2U4KO7MVEX52OH5VMVUCRF",
@@ -982,7 +982,7 @@ func TestOperationEffects(t *testing.T) {
 					address:      "GD3MMHD2YZWL5RAUWG6O3RMA5HTZYM7S3JLSZ2Z35JNJAWTDIKXY737V",
 					addressMuxed: null.StringFrom("MD3MMHD2YZWL5RAUWG6O3RMA5HTZYM7S3JLSZ2Z35JNJAWTDIKXY6AAAAAAMV7V2XZY4C"),
 					details: map[string]interface{}{
-						"amount":       "0.0300000",
+						"amount":       "0.030000",
 						"asset_code":   "BRL",
 						"asset_type":   "credit_alphanum4",
 						"asset_issuer": "GCXI6Q73J7F6EUSBZTPW4G4OUGVDHABPYF2U4KO7MVEX52OH5VMVUCRF",
@@ -998,7 +998,7 @@ func TestOperationEffects(t *testing.T) {
 						"seller":              "GDEOVUDLCYTO46D6GD6WH7BFESPBV5RACC6F6NUFCIRU7PL2XONQHVGJ",
 						"offer_id":            xdr.Int64(10072128),
 						"sold_amount":         "0.0300000",
-						"bought_amount":       "1.0000000",
+						"bought_amount":       "1.000000",
 						"sold_asset_code":     "BRL",
 						"sold_asset_type":     "credit_alphanum4",
 						"bought_asset_code":   "ARS",
@@ -1017,8 +1017,8 @@ func TestOperationEffects(t *testing.T) {
 						"seller_muxed":        "MD3MMHD2YZWL5RAUWG6O3RMA5HTZYM7S3JLSZ2Z35JNJAWTDIKXY6AAAAAAMV7V2XZY4C",
 						"seller_muxed_id":     uint64(0xcafebabe),
 						"offer_id":            xdr.Int64(10072128),
-						"sold_amount":         "1.0000000",
-						"bought_amount":       "0.0300000",
+						"sold_amount":         "1.000000",
+						"bought_amount":       "0.030000",
 						"sold_asset_code":     "ARS",
 						"sold_asset_type":     "credit_alphanum4",
 						"bought_asset_code":   "BRL",
@@ -1058,8 +1058,8 @@ func TestOperationEffects(t *testing.T) {
 					details: map[string]interface{}{
 						"seller":              "GAHEPWQ2B5ZOPI2NB647QCIXFPQR4H56FPYADQY54GNMFG4IYB5ZAJ5H",
 						"offer_id":            xdr.Int64(9248760),
-						"sold_amount":         "999.9999999",
-						"bought_amount":       "505.0505050",
+						"sold_amount":         "999.999999",
+						"bought_amount":       "505.050505",
 						"sold_asset_type":     "native",
 						"bought_asset_code":   "STR",
 						"bought_asset_type":   "credit_alphanum4",
@@ -1074,8 +1074,8 @@ func TestOperationEffects(t *testing.T) {
 					details: map[string]interface{}{
 						"seller":            "GD5OGQTZZ2PYI2RSMOJA6BQ7CDCW2JXAXBKR6XZK6PPRFUZ3BUXNLFKP",
 						"offer_id":          xdr.Int64(9248760),
-						"sold_amount":       "505.0505050",
-						"bought_amount":     "999.9999999",
+						"sold_amount":       "505.050505",
+						"bought_amount":     "999.999999",
 						"sold_asset_code":   "STR",
 						"sold_asset_type":   "credit_alphanum4",
 						"bought_asset_type": "native",
@@ -1102,8 +1102,8 @@ func TestOperationEffects(t *testing.T) {
 					details: map[string]interface{}{
 						"seller":              "GCA3EPMNR26H3BO55PQPAMOGKBAIMARLQHWCRK7KTUPGR62SDVLIL7D6",
 						"offer_id":            xdr.Int64(10104690),
-						"sold_amount":         "200.0000000",
-						"bought_amount":       "200.0000000",
+						"sold_amount":         "200.000000",
+						"bought_amount":       "200.000000",
 						"sold_asset_type":     "native",
 						"bought_asset_code":   "TXTalpha4",
 						"bought_asset_type":   "credit_alphanum12",
@@ -1118,8 +1118,8 @@ func TestOperationEffects(t *testing.T) {
 					details: map[string]interface{}{
 						"seller":            "GBFC3KATHWQOZ3TWJEOLMBBFMPZ4OS2KYVZRKWVRMQKZ2LFNRLQEIRCV",
 						"offer_id":          xdr.Int64(10104690),
-						"sold_amount":       "200.0000000",
-						"bought_amount":     "200.0000000",
+						"sold_amount":       "200.000000",
+						"bought_amount":     "200.000000",
 						"sold_asset_code":   "TXTalpha4",
 						"sold_asset_type":   "credit_alphanum12",
 						"bought_asset_type": "native",
@@ -1144,13 +1144,13 @@ func TestOperationEffects(t *testing.T) {
 				{
 					address: "GAA7AZYCJ65VJSMFAGQLBNCXA43QQ6ZEUR4GL4YSVB2FXUAHLLYUHIO5",
 					details: map[string]interface{}{
-						"bought_amount":       "100000.0000000",
+						"bought_amount":       "100000.000000",
 						"bought_asset_code":   "COP",
 						"bought_asset_issuer": "GC4XF7RE3R4P77GY5XNGICM56IOKUURWAAANPXHFC7G5H6FCNQVVH3OH",
 						"bought_asset_type":   "credit_alphanum4",
 						"offer_id":            xdr.Int64(10694502),
 						"seller":              "GAZAIOXF7GBHGPHOYJSTPIIC4K6AJM55S5Q44OCJHEHIF6YU2IHO6VHU",
-						"sold_amount":         "100.0000000",
+						"sold_amount":         "100.000000",
 						"sold_asset_type":     "native",
 					},
 					effectType:  history.EffectTrade,
@@ -1160,11 +1160,11 @@ func TestOperationEffects(t *testing.T) {
 				{
 					address: "GAZAIOXF7GBHGPHOYJSTPIIC4K6AJM55S5Q44OCJHEHIF6YU2IHO6VHU",
 					details: map[string]interface{}{
-						"bought_amount":     "100.0000000",
+						"bought_amount":     "100.000000",
 						"bought_asset_type": "native",
 						"offer_id":          xdr.Int64(10694502),
 						"seller":            "GAA7AZYCJ65VJSMFAGQLBNCXA43QQ6ZEUR4GL4YSVB2FXUAHLLYUHIO5",
-						"sold_amount":       "100000.0000000",
+						"sold_amount":       "100000.000000",
 						"sold_asset_code":   "COP",
 						"sold_asset_issuer": "GC4XF7RE3R4P77GY5XNGICM56IOKUURWAAANPXHFC7G5H6FCNQVVH3OH",
 						"sold_asset_type":   "credit_alphanum4",
@@ -1262,7 +1262,7 @@ func TestOperationEffects(t *testing.T) {
 					operationID: int64(171798695937),
 					order:       uint32(1),
 					details: map[string]interface{}{
-						"limit":        "922337203685.4775807",
+						"limit":        "9223372036854.775807",
 						"asset_code":   "USD",
 						"asset_type":   "credit_alphanum4",
 						"asset_issuer": "GD4SMOE3VPSF7ZR3CTEQ3P5UNTBMEJDA2GLXTHR7MMARANKKJDZ7RPGF",
@@ -1286,7 +1286,7 @@ func TestOperationEffects(t *testing.T) {
 					operationID: int64(171798695937),
 					order:       uint32(1),
 					details: map[string]interface{}{
-						"limit":        "0.0000000",
+						"limit":        "0.000000",
 						"asset_code":   "OCIToken",
 						"asset_type":   "credit_alphanum12",
 						"asset_issuer": "GBE4L76HUCHCQ2B7IIWBXRAJDBDPIY6MGWX7VZHUZD2N5RO7XI4J6GTJ",
@@ -1310,7 +1310,7 @@ func TestOperationEffects(t *testing.T) {
 					operationID: int64(171798695937),
 					order:       uint32(1),
 					details: map[string]interface{}{
-						"limit":        "100.0000000",
+						"limit":        "100.000000",
 						"asset_code":   "TESTASSET",
 						"asset_type":   "credit_alphanum12",
 						"asset_issuer": "GA5SKSJEB7VWACRNWFGVZBDSZYLGK44A2JPPBWUK3GB7NYEFOOQJAC2B",
@@ -1371,7 +1371,7 @@ func TestOperationEffects(t *testing.T) {
 					operationID: int64(188978565121),
 					order:       uint32(1),
 					details: map[string]interface{}{
-						"amount":     "999.9999900",
+						"amount":     "999.999990",
 						"asset_type": "native",
 					},
 				},
@@ -1381,7 +1381,7 @@ func TestOperationEffects(t *testing.T) {
 					operationID: int64(188978565121),
 					order:       uint32(2),
 					details: map[string]interface{}{
-						"amount":     "999.9999900",
+						"amount":     "999.999990",
 						"asset_type": "native",
 					},
 				},
@@ -1976,7 +1976,7 @@ func TestOperationEffectsClawback(t *testing.T) {
 				"asset_code":   "COP",
 				"asset_issuer": "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
 				"asset_type":   "credit_alphanum4",
-				"amount":       "0.0000034",
+				"amount":       "0.000034",
 			},
 			effectType: history.EffectAccountCredited,
 			order:      uint32(1),
@@ -1988,7 +1988,7 @@ func TestOperationEffectsClawback(t *testing.T) {
 				"asset_code":   "COP",
 				"asset_issuer": "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
 				"asset_type":   "credit_alphanum4",
-				"amount":       "0.0000034",
+				"amount":       "0.000034",
 			},
 			effectType: history.EffectAccountDebited,
 			order:      uint32(2),
@@ -2111,7 +2111,7 @@ func (s *CreateClaimableBalanceEffectsTestSuite) SetupTest() {
 	xdr.SafeUnmarshalBase64("AAAAALHcX0PDa9UefSAzitC6vQOUr802phH8OF2ahLzg6j1D", &balanceIDOp1)
 	cb0 := xdr.ClaimableBalanceEntry{
 		BalanceId: balanceIDOp0,
-		Amount:    xdr.Int64(100000000),
+		Amount:    xdr.Int64(10000000),
 		Asset:     xdr.MustNewNativeAsset(),
 		Claimants: []xdr.Claimant{
 			{
@@ -2135,7 +2135,7 @@ func (s *CreateClaimableBalanceEffectsTestSuite) SetupTest() {
 	relBefore := xdr.Int64(1000)
 	cb1 := xdr.ClaimableBalanceEntry{
 		BalanceId: balanceIDOp1,
-		Amount:    xdr.Int64(200000000),
+		Amount:    xdr.Int64(20000000),
 		Asset:     xdr.MustNewCreditAsset("USD", "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD"),
 		Claimants: []xdr.Claimant{
 			{
@@ -2244,7 +2244,7 @@ func (s *CreateClaimableBalanceEffectsTestSuite) TestEffects() {
 					address: "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
 					details: map[string]interface{}{
 						"asset":      "native",
-						"amount":     "10.0000000",
+						"amount":     "10.000000",
 						"balance_id": "00000000da0d57da7d4850e7fc10d2a9d0ebc731f7afb40574c03395b17d49149b91f5be",
 						"claimable_balance_clawback_enabled_flag": true,
 					},
@@ -2256,7 +2256,7 @@ func (s *CreateClaimableBalanceEffectsTestSuite) TestEffects() {
 					address: "GD5OVB6FKDV7P7SOJ5UB2BPLBL4XGSHPYHINR5355SY3RSXLT2BZWAKY",
 					details: map[string]interface{}{
 						"asset":      "native",
-						"amount":     "10.0000000",
+						"amount":     "10.000000",
 						"balance_id": "00000000da0d57da7d4850e7fc10d2a9d0ebc731f7afb40574c03395b17d49149b91f5be",
 						"predicate":  xdr.ClaimPredicate{Type: xdr.ClaimPredicateTypeClaimPredicateUnconditional},
 					},
@@ -2267,7 +2267,7 @@ func (s *CreateClaimableBalanceEffectsTestSuite) TestEffects() {
 				{
 					address: "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
 					details: map[string]interface{}{
-						"amount":     "10.0000000",
+						"amount":     "10.000000",
 						"asset_type": "native",
 					},
 					effectType:  history.EffectAccountDebited,
@@ -2284,7 +2284,7 @@ func (s *CreateClaimableBalanceEffectsTestSuite) TestEffects() {
 					address: "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
 					details: map[string]interface{}{
 						"asset":      "USD:GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
-						"amount":     "20.0000000",
+						"amount":     "20.000000",
 						"balance_id": "00000000b1dc5f43c36bd51e7d20338ad0babd0394afcd36a611fc385d9a84bce0ea3d43",
 					},
 					effectType:  history.EffectClaimableBalanceCreated,
@@ -2295,7 +2295,7 @@ func (s *CreateClaimableBalanceEffectsTestSuite) TestEffects() {
 					address: "GDMQUXK7ZUCWM5472ZU3YLDP4BMJLQQ76DEMNYDEY2ODEEGGRKLEWGW2",
 					details: map[string]interface{}{
 						"asset":      "USD:GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
-						"amount":     "20.0000000",
+						"amount":     "20.000000",
 						"balance_id": "00000000b1dc5f43c36bd51e7d20338ad0babd0394afcd36a611fc385d9a84bce0ea3d43",
 						// Make sure data ingested from op body (rel_before)
 						"predicate": xdr.ClaimPredicate{
@@ -2311,7 +2311,7 @@ func (s *CreateClaimableBalanceEffectsTestSuite) TestEffects() {
 					address: "GDQNY3PBOJOKYZSRMK2S7LHHGWZIUISD4QORETLMXEWXBI7KFZZMKTL3",
 					details: map[string]interface{}{
 						"asset":      "USD:GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
-						"amount":     "20.0000000",
+						"amount":     "20.000000",
 						"balance_id": "00000000b1dc5f43c36bd51e7d20338ad0babd0394afcd36a611fc385d9a84bce0ea3d43",
 						"predicate":  xdr.ClaimPredicate{Type: xdr.ClaimPredicateTypeClaimPredicateUnconditional},
 					},
@@ -2322,7 +2322,7 @@ func (s *CreateClaimableBalanceEffectsTestSuite) TestEffects() {
 				{
 					address: "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
 					details: map[string]interface{}{
-						"amount":       "20.0000000",
+						"amount":       "20.000000",
 						"asset_code":   "USD",
 						"asset_type":   "credit_alphanum4",
 						"asset_issuer": "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
@@ -2443,7 +2443,7 @@ func (s *ClaimClaimableBalanceEffectsTestSuite) SetupTest() {
 										Type: xdr.LedgerEntryTypeClaimableBalance,
 										ClaimableBalance: &xdr.ClaimableBalanceEntry{
 											BalanceId: balanceIDOp1Meta,
-											Amount:    xdr.Int64(100000000),
+											Amount:    xdr.Int64(10000000),
 											Asset:     xdr.MustNewNativeAsset(),
 											Claimants: []xdr.Claimant{
 												{
@@ -2488,7 +2488,7 @@ func (s *ClaimClaimableBalanceEffectsTestSuite) SetupTest() {
 										Type: xdr.LedgerEntryTypeClaimableBalance,
 										ClaimableBalance: &xdr.ClaimableBalanceEntry{
 											BalanceId: balanceIDOp2Meta,
-											Amount:    xdr.Int64(200000000),
+											Amount:    xdr.Int64(20000000),
 											Asset:     xdr.MustNewCreditAsset("USD", "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD"),
 											Claimants: []xdr.Claimant{
 												{
@@ -2544,7 +2544,7 @@ func (s *ClaimClaimableBalanceEffectsTestSuite) TestEffects() {
 					address: "GD5OVB6FKDV7P7SOJ5UB2BPLBL4XGSHPYHINR5355SY3RSXLT2BZWAKY",
 					details: map[string]interface{}{
 						"asset":      "native",
-						"amount":     "10.0000000",
+						"amount":     "10.000000",
 						"balance_id": "00000000da0d57da7d4850e7fc10d2a9d0ebc731f7afb40574c03395b17d49149b91f5be",
 						"claimable_balance_clawback_enabled_flag": true,
 					},
@@ -2556,7 +2556,7 @@ func (s *ClaimClaimableBalanceEffectsTestSuite) TestEffects() {
 					address: "GD5OVB6FKDV7P7SOJ5UB2BPLBL4XGSHPYHINR5355SY3RSXLT2BZWAKY",
 					details: map[string]interface{}{
 						"asset_type": "native",
-						"amount":     "10.0000000",
+						"amount":     "10.000000",
 					},
 					effectType:  history.EffectAccountCredited,
 					operationID: int64(4294967297),
@@ -2572,7 +2572,7 @@ func (s *ClaimClaimableBalanceEffectsTestSuite) TestEffects() {
 					address: "GDMQUXK7ZUCWM5472ZU3YLDP4BMJLQQ76DEMNYDEY2ODEEGGRKLEWGW2",
 					details: map[string]interface{}{
 						"asset":      "USD:GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
-						"amount":     "20.0000000",
+						"amount":     "20.000000",
 						"balance_id": "00000000b1dc5f43c36bd51e7d20338ad0babd0394afcd36a611fc385d9a84bce0ea3d43",
 					},
 					effectType:  history.EffectClaimableBalanceClaimed,
@@ -2582,7 +2582,7 @@ func (s *ClaimClaimableBalanceEffectsTestSuite) TestEffects() {
 				{
 					address: "GDMQUXK7ZUCWM5472ZU3YLDP4BMJLQQ76DEMNYDEY2ODEEGGRKLEWGW2",
 					details: map[string]interface{}{
-						"amount":       "20.0000000",
+						"amount":       "20.000000",
 						"asset_code":   "USD",
 						"asset_type":   "credit_alphanum4",
 						"asset_issuer": "GDRW375MAYR46ODGF2WGANQC2RRZL7O246DYHHCGWTV2RE7IHE2QUQLD",
@@ -2944,7 +2944,7 @@ func TestLiquidityPoolEffects(t *testing.T) {
 					operationID: 4294967297,
 					details: map[string]interface{}{
 						"asset_type":        "liquidity_pool_shares",
-						"limit":             "0.0001000",
+						"limit":             "0.001000",
 						"liquidity_pool_id": poolIDStr,
 					},
 				},
@@ -2960,14 +2960,14 @@ func TestLiquidityPoolEffects(t *testing.T) {
 							"reserves": []base.AssetAmount{
 								{
 									"native",
-									"0.0000200",
+									"0.000200",
 								},
 								{
 									"USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
-									"0.0000100",
+									"0.000100",
 								},
 							},
-							"total_shares":     "0.0001000",
+							"total_shares":     "0.001000",
 							"total_trustlines": "10",
 							"type":             "constant_product",
 						},
@@ -3017,28 +3017,28 @@ func TestLiquidityPoolEffects(t *testing.T) {
 							"reserves": []base.AssetAmount{
 								{
 									"native",
-									"0.0000250",
+									"0.000250",
 								},
 								{
 									"USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
-									"0.0000160",
+									"0.000160",
 								},
 							},
-							"total_shares":     "0.0001010",
+							"total_shares":     "0.001010",
 							"total_trustlines": "10",
 							"type":             "constant_product",
 						},
 						"reserves_deposited": []base.AssetAmount{
 							{
 								"native",
-								"0.0000050",
+								"0.000050",
 							},
 							{
 								"USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
-								"0.0000060",
+								"0.000060",
 							},
 						},
-						"shares_received": "0.0000010",
+						"shares_received": "0.000010",
 					},
 				},
 			},
@@ -3078,28 +3078,28 @@ func TestLiquidityPoolEffects(t *testing.T) {
 							"reserves": []base.AssetAmount{
 								{
 									"native",
-									"0.0000189",
+									"0.000189",
 								},
 								{
 									"USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
-									"0.0000094",
+									"0.000094",
 								},
 							},
-							"total_shares":     "0.0000990",
+							"total_shares":     "0.000990",
 							"total_trustlines": "10",
 							"type":             "constant_product",
 						},
 						"reserves_received": []base.AssetAmount{
 							{
 								"native",
-								"0.0000011",
+								"0.000011",
 							},
 							{
 								"USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
-								"0.0000006",
+								"0.000006",
 							},
 						},
-						"shares_redeemed": "0.0000010",
+						"shares_redeemed": "0.000010",
 					},
 				},
 			},
@@ -3163,7 +3163,7 @@ func TestLiquidityPoolEffects(t *testing.T) {
 					address:     "GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
 					operationID: 4294967297,
 					details: map[string]interface{}{
-						"amount":       "0.0000005",
+						"amount":       "0.000005",
 						"asset_code":   "USD",
 						"asset_issuer": "GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
 						"asset_type":   "credit_alphanum4",
@@ -3175,7 +3175,7 @@ func TestLiquidityPoolEffects(t *testing.T) {
 					address:     "GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
 					operationID: 4294967297,
 					details: map[string]interface{}{
-						"amount":     "0.0000010",
+						"amount":     "0.000010",
 						"asset_type": "native",
 					},
 				},
@@ -3186,7 +3186,7 @@ func TestLiquidityPoolEffects(t *testing.T) {
 					operationID: 4294967297,
 					details: map[string]interface{}{
 						"bought": map[string]string{
-							"amount": "0.0000005",
+							"amount": "0.000005",
 							"asset":  "USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
 						},
 						"liquidity_pool": map[string]interface{}{
@@ -3195,19 +3195,19 @@ func TestLiquidityPoolEffects(t *testing.T) {
 							"reserves": []base.AssetAmount{
 								{
 									"native",
-									"0.0000189",
+									"0.000189",
 								},
 								{
 									"USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
-									"0.0000094",
+									"0.000094",
 								},
 							},
-							"total_shares":     "0.0000990",
+							"total_shares":     "0.000990",
 							"total_trustlines": "10",
 							"type":             "constant_product",
 						},
 						"sold": map[string]string{
-							"amount": "0.0000010",
+							"amount": "0.000010",
 							"asset":  "native",
 						},
 					},
@@ -3359,7 +3359,7 @@ func TestLiquidityPoolEffects(t *testing.T) {
 					address:     "GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
 					operationID: 4294967297,
 					details: map[string]interface{}{
-						"amount":     "0.0000100",
+						"amount":     "0.000100",
 						"asset":      "USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
 						"balance_id": "000000000a0b000000000000000000000000000000000000000000000000000000000000",
 					},
@@ -3370,7 +3370,7 @@ func TestLiquidityPoolEffects(t *testing.T) {
 					address:     "GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
 					operationID: 4294967297,
 					details: map[string]interface{}{
-						"amount":     "0.0000100",
+						"amount":     "0.000100",
 						"asset":      "USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
 						"balance_id": "000000000a0b000000000000000000000000000000000000000000000000000000000000",
 						"predicate":  xdr.ClaimPredicate{},
@@ -3388,25 +3388,25 @@ func TestLiquidityPoolEffects(t *testing.T) {
 							"reserves": []base.AssetAmount{
 								{
 									"native",
-									"0.0000200",
+									"0.000200",
 								},
 								{
 									"USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
-									"0.0000100",
+									"0.000100",
 								},
 							},
-							"total_shares":     "0.0001000",
+							"total_shares":     "0.001000",
 							"total_trustlines": "10",
 							"type":             "constant_product",
 						},
 						"reserves_revoked": []map[string]string{
 							{
-								"amount":               "0.0000100",
+								"amount":               "0.000100",
 								"asset":                "USD:GAUJETIZVEP2NRYLUESJ3LS66NVCEGMON4UDCBCSBEVPIID773P2W6AY",
 								"claimable_balance_id": "000000000a0b000000000000000000000000000000000000000000000000000000000000",
 							},
 						},
-						"shares_revoked": "0.0001000",
+						"shares_revoked": "0.001000",
 					},
 				},
 				{
@@ -3502,7 +3502,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectAccountDebited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3513,7 +3513,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectAccountCredited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3533,7 +3533,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectContractDebited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3545,7 +3545,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectContractCredited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3564,7 +3564,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectAccountCredited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3582,7 +3582,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectAccountDebited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3601,7 +3601,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectContractDebited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3620,7 +3620,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectAccountDebited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3639,7 +3639,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectContractDebited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3658,7 +3658,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectAccountDebited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":     "0.0012345",
+						"amount":     "0.012345",
 						"asset_type": "native",
 					},
 				}, {
@@ -3667,7 +3667,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectAccountCredited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":     "0.0012345",
+						"amount":     "0.012345",
 						"asset_type": "native",
 					},
 				},
@@ -3684,7 +3684,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectAccountDebited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3695,7 +3695,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectContractCredited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3715,7 +3715,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectContractDebited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",
@@ -3727,7 +3727,7 @@ func TestInvokeHostFunctionEffects(t *testing.T) {
 					effectType:  history.EffectAccountCredited,
 					operationID: toid.New(1, 0, 1).ToInt64(),
 					details: map[string]interface{}{
-						"amount":       "0.0012345",
+						"amount":       "0.012345",
 						"asset_code":   strings.Trim(asset.GetCode(), "\x00"),
 						"asset_issuer": asset.GetIssuer(),
 						"asset_type":   "credit_alphanum12",

@@ -151,7 +151,7 @@ var pathsResponse = `{
   "_embedded": {
     "records": [
       {
-        "destination_amount": "20.0000000",
+        "destination_amount": "20.000000",
         "destination_asset_code": "EUR",
         "destination_asset_issuer": "GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN",
         "destination_asset_type": "credit_alphanum4",

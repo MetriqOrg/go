@@ -354,28 +354,28 @@ func (s *OperationsProcessorTestSuiteLedger) TestOperationTypeInvokeHostFunction
 			if assetBalanceChanged["type"] == "transfer" {
 				s.Assert().Equal(assetBalanceChanged["from"], randomAccount)
 				s.Assert().Equal(assetBalanceChanged["to"], zeroContractStrKey)
-				s.Assert().Equal(assetBalanceChanged["amount"], "1.0000000")
+				s.Assert().Equal(assetBalanceChanged["amount"], "1.000000")
 				found++
 			}
 
 			if assetBalanceChanged["type"] == "burn" {
 				s.Assert().Equal(assetBalanceChanged["from"], zeroContractStrKey)
 				s.Assert().NotContains(assetBalanceChanged, "to")
-				s.Assert().Equal(assetBalanceChanged["amount"], "1.0000000")
+				s.Assert().Equal(assetBalanceChanged["amount"], "1.000000")
 				found++
 			}
 
 			if assetBalanceChanged["type"] == "mint" {
 				s.Assert().NotContains(assetBalanceChanged, "from")
 				s.Assert().Equal(assetBalanceChanged["to"], zeroContractStrKey)
-				s.Assert().Equal(assetBalanceChanged["amount"], "1.0000000")
+				s.Assert().Equal(assetBalanceChanged["amount"], "1.000000")
 				found++
 			}
 
 			if assetBalanceChanged["type"] == "clawback" {
 				s.Assert().Equal(assetBalanceChanged["from"], zeroContractStrKey)
 				s.Assert().NotContains(assetBalanceChanged, "to")
-				s.Assert().Equal(assetBalanceChanged["amount"], "1.0000000")
+				s.Assert().Equal(assetBalanceChanged["amount"], "1.000000")
 				found++
 			}
 		}

@@ -97,7 +97,7 @@ func TestPaymentActions(t *testing.T) {
 		// test for existence of source_amount in path payment details
 		var records []map[string]interface{}
 		ht.UnmarshalPage(w.Body, &records)
-		ht.Assert.Equal("10.0000000", records[0]["source_amount"])
+		ht.Assert.Equal("10.000000", records[0]["source_amount"])
 	}
 
 	initializeStateMiddleware()
@@ -279,8 +279,8 @@ func TestPaymentActionsPathPaymentStrictSend(t *testing.T) {
 		ht.Assert.Equal("15.8400000", records[0]["amount"])
 		ht.Assert.Equal("EUR", records[0]["asset_code"])
 		ht.Assert.Equal("GCQPYGH4K57XBDENKKX55KDTWOTK5WDWRQOH2LHEDX3EKVIQRLMESGBG", records[0]["asset_issuer"])
-		ht.Assert.Equal("2.0000000", records[0]["destination_min"])
-		ht.Assert.Equal("12.0000000", records[0]["source_amount"])
+		ht.Assert.Equal("2.000000", records[0]["destination_min"])
+		ht.Assert.Equal("12.000000", records[0]["source_amount"])
 		ht.Assert.Equal("USD", records[0]["source_asset_code"])
 		ht.Assert.Equal("GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO4", records[0]["source_asset_issuer"])
 		ht.Assert.Equal([]interface{}{map[string]interface{}{"asset_type": "native"}}, records[0]["path"])
@@ -289,11 +289,11 @@ func TestPaymentActionsPathPaymentStrictSend(t *testing.T) {
 		ht.Assert.Equal("path_payment_strict_send", records[1]["type"])
 		ht.Assert.Equal("GCXKG6RN4ONIEPCMNFB732A436Z5PNDSRLGWK7GBLCMQLIFO4S7EYWVU", records[1]["from"])
 		ht.Assert.Equal("GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2", records[1]["to"])
-		ht.Assert.Equal("13.0000000", records[1]["amount"])
+		ht.Assert.Equal("13.000000", records[1]["amount"])
 		ht.Assert.Equal("EUR", records[1]["asset_code"])
 		ht.Assert.Equal("GCQPYGH4K57XBDENKKX55KDTWOTK5WDWRQOH2LHEDX3EKVIQRLMESGBG", records[1]["asset_issuer"])
-		ht.Assert.Equal("1.0000000", records[1]["destination_min"])
-		ht.Assert.Equal("10.0000000", records[1]["source_amount"])
+		ht.Assert.Equal("1.000000", records[1]["destination_min"])
+		ht.Assert.Equal("10.000000", records[1]["source_amount"])
 		ht.Assert.Equal("USD", records[1]["source_asset_code"])
 		ht.Assert.Equal("GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO4", records[1]["source_asset_issuer"])
 		ht.Assert.Equal([]interface{}{}, records[1]["path"])
@@ -310,11 +310,11 @@ func TestPaymentActionsPathPaymentStrictSend(t *testing.T) {
 		ht.Assert.Equal("path_payment_strict_send", records[0]["type"])
 		ht.Assert.Equal("GCXKG6RN4ONIEPCMNFB732A436Z5PNDSRLGWK7GBLCMQLIFO4S7EYWVU", records[0]["from"])
 		ht.Assert.Equal("GA5WBPYA5Y4WAEHXWR2UKO2UO4BUGHUQ74EUPKON2QHV4WRHOIRNKKH2", records[0]["to"])
-		ht.Assert.Equal("0.0000000", records[0]["amount"]) // failed
+		ht.Assert.Equal("0.000000", records[0]["amount"]) // failed
 		ht.Assert.Equal("EUR", records[0]["asset_code"])
 		ht.Assert.Equal("GCQPYGH4K57XBDENKKX55KDTWOTK5WDWRQOH2LHEDX3EKVIQRLMESGBG", records[0]["asset_issuer"])
-		ht.Assert.Equal("100.0000000", records[0]["destination_min"])
-		ht.Assert.Equal("13.0000000", records[0]["source_amount"])
+		ht.Assert.Equal("100.000000", records[0]["destination_min"])
+		ht.Assert.Equal("13.000000", records[0]["source_amount"])
 		ht.Assert.Equal("USD", records[0]["source_asset_code"])
 		ht.Assert.Equal("GC23QF2HUE52AMXUFUH3AYJAXXGXXV2VHXYYR6EYXETPKDXZSAW67XO4", records[0]["source_asset_issuer"])
 	}

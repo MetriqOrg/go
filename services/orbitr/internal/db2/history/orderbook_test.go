@@ -37,8 +37,8 @@ func TestGetOrderBookSummary(t *testing.T) {
 			{
 				Pricen: int32(twoEurOffer.Pricen),
 				Priced: int32(twoEurOffer.Priced),
-				Pricef: "2.0000000",
-				Amount: "0.0000500",
+				Pricef: "2.000000",
+				Amount: "0.000050",
 			},
 		},
 	}
@@ -64,8 +64,8 @@ func TestGetOrderBookSummary(t *testing.T) {
 			{
 				Pricen: int32(sellEurOffer.Priced),
 				Priced: int32(sellEurOffer.Pricen),
-				Pricef: "0.5000000",
-				Amount: "0.0000500",
+				Pricef: "0.500000",
+				Amount: "0.000050",
 			},
 		},
 	}
@@ -129,28 +129,28 @@ func TestGetOrderBookSummary(t *testing.T) {
 			{
 				Pricen: int32(twoEurOffer.Pricen),
 				Priced: int32(twoEurOffer.Priced),
-				Pricef: "2.0000000",
-				Amount: "922337203685.4776807",
+				Pricef: "2.000000",
+				Amount: "9223372036854.776807",
 			},
 			{
 				Pricen: int32(threeEurOffer.Pricen),
 				Priced: int32(threeEurOffer.Priced),
-				Pricef: "3.0000000",
-				Amount: "0.0000500",
+				Pricef: "3.000000",
+				Amount: "0.000050",
 			},
 		},
 		Bids: []PriceLevel{
 			{
 				Pricen: int32(otherSellEurOffer.Priced),
 				Priced: int32(otherSellEurOffer.Pricen),
-				Pricef: "0.5555556",
-				Amount: "0.0000500",
+				Pricef: "0.555556",
+				Amount: "0.000050",
 			},
 			{
 				Pricen: int32(sellEurOffer.Priced),
 				Priced: int32(sellEurOffer.Pricen),
-				Pricef: "0.5000000",
-				Amount: "0.0000500",
+				Pricef: "0.500000",
+				Amount: "0.000050",
 			},
 		},
 	}
@@ -160,16 +160,16 @@ func TestGetOrderBookSummary(t *testing.T) {
 			{
 				Pricen: int32(twoEurOffer.Pricen),
 				Priced: int32(twoEurOffer.Priced),
-				Pricef: "2.0000000",
-				Amount: "922337203685.4776807",
+				Pricef: "2.000000",
+				Amount: "9223372036854.776807",
 			},
 		},
 		Bids: []PriceLevel{
 			{
 				Pricen: int32(otherSellEurOffer.Priced),
 				Priced: int32(otherSellEurOffer.Pricen),
-				Pricef: "0.5555556",
-				Amount: "0.0000500",
+				Pricef: "0.555556",
+				Amount: "0.000050",
 			},
 		},
 	}

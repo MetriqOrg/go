@@ -229,7 +229,7 @@ func TestManageSellManageBuyOfferOfferID(t *testing.T) {
 	}
 }
 
-var operationStreamResponse = `data: {"_links":{"self":{"href":"https://orbitr-testnet.lantah.network/operations/4934917427201"},"transaction":{"href":"https://orbitr-testnet.lantah.network/transactions/1c1449106a54cccd8a2ec2094815ad9db30ae54c69c3309dd08d13fdb8c749de"},"effects":{"href":"https://orbitr-testnet.lantah.network/operations/4934917427201/effects"},"succeeds":{"href":"https://orbitr-testnet.lantah.network/effects?order=desc\u0026cursor=4934917427201"},"precedes":{"href":"https://orbitr-testnet.lantah.network/effects?order=asc\u0026cursor=4934917427201"}},"id":"4934917427201","paging_token":"4934917427201","transaction_successful":true,"source_account":"GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR","type":"create_account","type_i":0,"created_at":"2019-02-27T11:32:39Z","transaction_hash":"1c1449106a54cccd8a2ec2094815ad9db30ae54c69c3309dd08d13fdb8c749de","starting_balance":"10000.0000000","funder":"GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR","account":"GDBLBBDIUULY3HGIKXNK6WVBISY7DCNCDA45EL7NTXWX5R4UZ26HGMGS"}
+var operationStreamResponse = `data: {"_links":{"self":{"href":"https://orbitr-testnet.lantah.network/operations/4934917427201"},"transaction":{"href":"https://orbitr-testnet.lantah.network/transactions/1c1449106a54cccd8a2ec2094815ad9db30ae54c69c3309dd08d13fdb8c749de"},"effects":{"href":"https://orbitr-testnet.lantah.network/operations/4934917427201/effects"},"succeeds":{"href":"https://orbitr-testnet.lantah.network/effects?order=desc\u0026cursor=4934917427201"},"precedes":{"href":"https://orbitr-testnet.lantah.network/effects?order=asc\u0026cursor=4934917427201"}},"id":"4934917427201","paging_token":"4934917427201","transaction_successful":true,"source_account":"GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR","type":"create_account","type_i":0,"created_at":"2019-02-27T11:32:39Z","transaction_hash":"1c1449106a54cccd8a2ec2094815ad9db30ae54c69c3309dd08d13fdb8c749de","starting_balance":"10000.000000","funder":"GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR","account":"GDBLBBDIUULY3HGIKXNK6WVBISY7DCNCDA45EL7NTXWX5R4UZ26HGMGS"}
 `
 
 var firstOperationsPage = `{
@@ -272,7 +272,7 @@ var firstOperationsPage = `{
         "type_i": 0,
         "created_at": "2019-04-24T09:16:14Z",
         "transaction_hash": "749e4f8933221b9942ef38a02856803f379789ec8d971f1f60535db70135673e",
-        "starting_balance": "10000000000.0000000",
+        "starting_balance": "10000000000.000000",
         "funder": "GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H",
         "account": "GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR"
       },
@@ -302,7 +302,7 @@ var firstOperationsPage = `{
         "type_i": 0,
         "created_at": "2019-04-24T09:16:14Z",
         "transaction_hash": "749e4f8933221b9942ef38a02856803f379789ec8d971f1f60535db70135673e",
-        "starting_balance": "10000.0000000",
+        "starting_balance": "10000.000000",
         "funder": "GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H",
         "account": "GDO34SQXVOSNODK7JCTAXLZUPSAF3JIH4ADQELVIKOQJUWQ3U4BMSCSH"
       }
@@ -367,7 +367,7 @@ var numberManageSellBuyOfferOperations = `{
 			"type_i": 3,
 			"created_at": "2019-11-13T16:46:36Z",
 			"transaction_hash": "cfe9eba317025dd0cff111967a3709358153e9ee97472e67c17e42837dd50a52",
-			"amount": "1000.0000000",
+			"amount": "1000.000000",
 			"price": "0.1312531",
 			"price_r": {
 			  "n": 265,
@@ -405,7 +405,7 @@ var numberManageSellBuyOfferOperations = `{
 			"type_i": 12,
 			"created_at": "2019-11-01T17:06:47Z",
 			"transaction_hash": "8a4db87e4749130ba32924943c2f219de497fe2d4f3e074187c5d2159ca2d134",
-			"amount": "1.0000000",
+			"amount": "1.000000",
 			"price": "0.5000000",
 			"price_r": {
 			  "n": 1,
@@ -461,7 +461,7 @@ var manageSellBuyOfferOperationsPage = `{
 			"type_i": 3,
 			"created_at": "2019-11-13T16:46:36Z",
 			"transaction_hash": "cfe9eba317025dd0cff111967a3709358153e9ee97472e67c17e42837dd50a52",
-			"amount": "1000.0000000",
+			"amount": "1000.000000",
 			"price": "0.1312531",
 			"price_r": {
 			  "n": 265,
@@ -499,7 +499,7 @@ var manageSellBuyOfferOperationsPage = `{
 			"type_i": 12,
 			"created_at": "2019-11-01T17:06:47Z",
 			"transaction_hash": "8a4db87e4749130ba32924943c2f219de497fe2d4f3e074187c5d2159ca2d134",
-			"amount": "1.0000000",
+			"amount": "1.000000",
 			"price": "0.5000000",
 			"price_r": {
 			  "n": 1,

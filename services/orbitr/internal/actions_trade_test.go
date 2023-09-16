@@ -432,8 +432,8 @@ func TestTradeActions_Aggregation(t *testing.T) {
 			//test that asset filters work
 			ht.UnmarshalPage(w.Body, &records)
 			ht.Assert.Equal(int64(1), records[0].TradeCount)
-			ht.Assert.Equal("0.0000100", records[0].BaseVolume)
-			ht.Assert.Equal("1.0000000", records[0].Average)
+			ht.Assert.Equal("0.000100", records[0].BaseVolume)
+			ht.Assert.Equal("1.000000", records[0].Average)
 		}
 	}
 
@@ -571,8 +571,8 @@ func TestTradeActions_AmountsExceedInt64(t *testing.T) {
 	if ht.Assert.Equal(200, w.Code) {
 		ht.Assert.PageOf(1, w.Body)
 		ht.UnmarshalPage(w.Body, &records)
-		ht.Assert.Equal("2739506851200.0000000", records[0].BaseVolume)
-		ht.Assert.Equal("2739506851200.0000000", records[0].CounterVolume)
+		ht.Assert.Equal("2739506851200.000000", records[0].BaseVolume)
+		ht.Assert.Equal("2739506851200.000000", records[0].CounterVolume)
 	}
 }
 
@@ -638,8 +638,8 @@ func TestTradeActions_AggregationOrdering(t *testing.T) {
 	if ht.Assert.Equal(200, w.Code) {
 		ht.Assert.PageOf(1, w.Body)
 		ht.UnmarshalPage(w.Body, &records)
-		ht.Assert.Equal("1.0000000", records[0].Open)
-		ht.Assert.Equal("3.0000000", records[0].Close)
+		ht.Assert.Equal("1.000000", records[0].Open)
+		ht.Assert.Equal("3.000000", records[0].Close)
 	}
 }
 

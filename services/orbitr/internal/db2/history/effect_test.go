@@ -27,7 +27,7 @@ func TestEffectsForLiquidityPool(t *testing.T) {
 	builder := q.NewEffectBatchInsertBuilder(2)
 	sequence := int32(56)
 	details, err := json.Marshal(map[string]string{
-		"amount":     "1000.0000000",
+		"amount":     "1000.000000",
 		"asset_type": "native",
 	})
 	opID := toid.New(sequence, 1, 1).ToInt64()
