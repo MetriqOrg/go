@@ -990,7 +990,7 @@ func TestCaptiveGravity_PrepareRangeAfterClose(t *testing.T) {
 		t,
 		captiveGravity.PrepareRange(ctx, BoundedRange(65, 66)),
 		"error starting prepare range: opening subprocess: error getting latest checkpoint sequence: "+
-			"error getting root HAS: Get \"http://localhost/.well-known/stellar-history.json\": context canceled",
+			"error getting root HAS: Get \"http://localhost/.well-known/lantah-history.json\": context canceled",
 	)
 
 	// even if the request to fetch the latest checkpoint succeeds, we should fail at creating the subprocess

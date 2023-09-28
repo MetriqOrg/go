@@ -5,9 +5,9 @@ if [ -z ${LATEST_LEDGER+x} ]; then
     # Get latest ledger
     echo "Getting latest checkpoint ledger..."
     if [ -z ${TESTNET+x} ]; then
-        export LATEST_LEDGER=`curl -s http://gravity8history.lantah.network/.well-known/stellar-history.json | jq -r '.currentLedger'`
+        export LATEST_LEDGER=`curl -s http://gravity8history.lantah.network/.well-known/lantah-history.json | jq -r '.currentLedger'`
     else
-        export LATEST_LEDGER=`curl -s http://testgravity1history.lantah.network/.well-known/stellar-history.json | jq -r '.currentLedger'`
+        export LATEST_LEDGER=`curl -s http://testgravity1history.lantah.network/.well-known/lantah-history.json | jq -r '.currentLedger'`
     fi
     echo "Latest ledger: $LATEST_LEDGER"
 fi
