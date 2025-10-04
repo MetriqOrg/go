@@ -6,10 +6,10 @@ import (
 
 	"github.com/stellar/throttled"
 
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	tdb "github.com/lantah/go/services/orbitr/internal/test/db"
-	supportLog "github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	tdb "github.com/metriqorg/go/services/orbitr/internal/test/db"
+	supportLog "github.com/metriqorg/go/support/log"
 )
 
 func NewTestApp(dsn string) *App {

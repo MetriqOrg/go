@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	"github.com/guregu/null"
-	"github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/services/orbitr/internal/db2"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	"github.com/lantah/go/toid"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/services/orbitr/internal/db2"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/toid"
 )
 
 func TestEffectsForLiquidityPool(t *testing.T) {

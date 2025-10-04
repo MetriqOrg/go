@@ -3,7 +3,7 @@ package federation
 import (
 	"context"
 
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // LookupReverseRecord implements `ReverseDriver` by performing

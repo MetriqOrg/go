@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	supporthttp "github.com/lantah/go/support/http"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/health"
-	"github.com/lantah/go/support/render/httpjson"
+	supporthttp "github.com/metriqorg/go/support/http"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/health"
+	"github.com/metriqorg/go/support/render/httpjson"
 )
 
 func ExampleResponse() {

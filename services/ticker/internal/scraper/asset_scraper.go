@@ -14,11 +14,11 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	orbitrclient "github.com/lantah/go/clients/orbitrclient"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/ticker/internal/utils"
-	"github.com/lantah/go/support/errors"
-	hlog "github.com/lantah/go/support/log"
+	orbitrclient "github.com/metriqorg/go/clients/orbitrclient"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/ticker/internal/utils"
+	"github.com/metriqorg/go/support/errors"
+	hlog "github.com/metriqorg/go/support/log"
 )
 
 // shouldDiscardAsset maps the criteria for discarding an asset from the asset index

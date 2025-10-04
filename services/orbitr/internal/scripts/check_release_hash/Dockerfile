@@ -2,7 +2,7 @@
 ARG GO_IMAGE=golang:1.20-bullseye
 FROM $GO_IMAGE
 
-WORKDIR /go/src/github.com/lantah/go
+WORKDIR /go/src/github.com/metriqorg/go
 
 ENV DEBIAN_FRONTEND=noninteractive
 # ca-certificates are required to make tls connections
@@ -11,7 +11,7 @@ RUN wget -qO - https://apt.stellar.org/SDF.asc | APT_KEY_DONT_WARN_ON_DANGEROUS_
 RUN echo "deb https://apt.stellar.org focal stable" >/etc/apt/sources.list.d/SDF.list
 RUN echo "deb https://apt.stellar.org focal testing" >/etc/apt/sources.list.d/SDF-testing.list
 
-RUN git clone https://github.com/lantah/go.git /go/src/github.com/lantah/go
+RUN git clone https://github.com/metriqorg/go.git /go/src/github.com/metriqorg/go
 # Fetch dependencies and prebuild binaries. Not necessary but will make check faster.
 RUN go run -v ./support/scripts/build_release_artifacts
 

@@ -10,7 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/support/log"
 )
 
 func TestLogPackageMetrics(t *testing.T) {

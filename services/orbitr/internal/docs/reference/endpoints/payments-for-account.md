@@ -41,14 +41,14 @@ GET /accounts/{id}/payments{?cursor,limit,order}
 
 ```bash
 # Retrieve the 25 latest payments for a specific account.
-curl "https://orbitr-testnet.lantah.network/accounts/GCEZWKCA5VLDNRLN3RPRJMRZOX3Z6G5CHCGSNFHEYVXM3XOJMDS674JZ/payments?limit=25&order=desc"
+curl "https://orbitr-testnet.metriq.network/accounts/GCEZWKCA5VLDNRLN3RPRJMRZOX3Z6G5CHCGSNFHEYVXM3XOJMDS674JZ/payments?limit=25&order=desc"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.payments()
   .forAccount("GCEZWKCA5VLDNRLN3RPRJMRZOX3Z6G5CHCGSNFHEYVXM3XOJMDS674JZ")
@@ -65,7 +65,7 @@ server.payments()
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 var paymentHandler = function (paymentResponse) {
   console.log(paymentResponse);
@@ -112,7 +112,7 @@ This endpoint responds with a [page](../resources/page.md) of [payment operation
       "sender": "GCEZWKCA5VLDNRLN3RPRJMRZOX3Z6G5CHCGSNFHEYVXM3XOJMDS674JZ",
       "receiver": "GCXKG6RN4ONIEPCMNFB732A436Z5PNDSRLGWK7GBLCMQLIFO4S7EYWVU",
       "asset": {
-        "code": "GRAM"
+        "code": "MTRQ"
       },
       "amount": 1000000000,
       "amount_f": 100.00

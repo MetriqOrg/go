@@ -4,8 +4,8 @@ import (
 	"math"
 	"time"
 
-	hClient "github.com/lantah/go/clients/orbitrclient"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
+	hClient "github.com/metriqorg/go/clients/orbitrclient"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
 )
 
 type trackerClient struct {

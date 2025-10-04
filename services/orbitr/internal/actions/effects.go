@@ -4,14 +4,14 @@ import (
 	"context"
 	"net/http"
 
-	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
-	"github.com/lantah/go/services/orbitr/internal/db2"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/hal"
-	"github.com/lantah/go/support/render/problem"
+	orbitrContext "github.com/metriqorg/go/services/orbitr/internal/context"
+	"github.com/metriqorg/go/services/orbitr/internal/db2"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	"github.com/metriqorg/go/services/orbitr/internal/resourceadapter"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/hal"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 // EffectsQuery query struct for effects end-points

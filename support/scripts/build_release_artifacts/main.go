@@ -12,8 +12,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 )
 
 var extractBinName = regexp.MustCompile(`^(?P<bin>[a-z0-9-]+)-(?P<tag>.+)$`)
@@ -103,7 +103,7 @@ func build(pkg, dest, version, buildOS, buildArch string) {
 	rev := runOutput("git", "rev-parse", "HEAD")
 	versionString := version[1:] // Remove letter `v`
 	versionFlag := fmt.Sprintf(
-		"-X=github.com/lantah/go/support/app.version=%s-%s",
+		"-X=github.com/metriqorg/go/support/app.version=%s-%s",
 		versionString, rev,
 	)
 
@@ -350,7 +350,7 @@ func repoName() string {
 	if os.Getenv("REPO") != "" {
 		return os.Getenv("REPO")
 	}
-	return "github.com/lantah/go"
+	return "github.com/metriqorg/go"
 
 }
 

@@ -73,7 +73,7 @@ func TestTransactionUnmarshalsFriendbotFund(t *testing.T) {
 	friendbotFundResponse := `{
   "_links": {
     "transaction": {
-      "href": "https://orbitr-testnet.lantah.network/transactions/94e42f65d3ff5f30669b6109c2ce3e82c0e592c52004e3b41bb30e24df33954e"
+      "href": "https://orbitr-testnet.metriq.network/transactions/94e42f65d3ff5f30669b6109c2ce3e82c0e592c52004e3b41bb30e24df33954e"
     }
   },
   "hash": "94e42f65d3ff5f30669b6109c2ce3e82c0e592c52004e3b41bb30e24df33954e",
@@ -122,30 +122,30 @@ func TestTransactionUnmarshalJSON(t *testing.T) {
         "memo": "MzUyODFmNThmZjkxMGNiMTVhYWQ1NjM2ZGIyNzUzZTA=",
         "_links": {
           "self": {
-            "href": "https://orbitr.lantah.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033"
+            "href": "https://orbitr.metriq.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033"
           },
           "account": {
-            "href": "https://orbitr.lantah.network/accounts/GBUYDJH3AOPFFND3L54DUDWIHOMYKUONDV4RAHOHDBNN2D5N4BPPWDQ3"
+            "href": "https://orbitr.metriq.network/accounts/GBUYDJH3AOPFFND3L54DUDWIHOMYKUONDV4RAHOHDBNN2D5N4BPPWDQ3"
           },
           "ledger": {
-            "href": "https://orbitr.lantah.network/ledgers/29113108"
+            "href": "https://orbitr.metriq.network/ledgers/29113108"
           },
           "operations": {
-            "href": "https://orbitr.lantah.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033/operations{?cursor,limit,order}",
+            "href": "https://orbitr.metriq.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033/operations{?cursor,limit,order}",
             "templated": true
           },
           "effects": {
-            "href": "https://orbitr.lantah.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033/effects{?cursor,limit,order}",
+            "href": "https://orbitr.metriq.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033/effects{?cursor,limit,order}",
             "templated": true
           },
           "precedes": {
-            "href": "https://orbitr.lantah.network/transactions?order=asc\u0026cursor=125039846745419776"
+            "href": "https://orbitr.metriq.network/transactions?order=asc\u0026cursor=125039846745419776"
           },
           "succeeds": {
-            "href": "https://orbitr.lantah.network/transactions?order=desc\u0026cursor=125039846745419776"
+            "href": "https://orbitr.metriq.network/transactions?order=desc\u0026cursor=125039846745419776"
           },
           "transaction": {
-            "href": "https://orbitr.lantah.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033"
+            "href": "https://orbitr.metriq.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033"
           }
         },
         "id": "998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033",
@@ -176,30 +176,30 @@ func TestTransactionUnmarshalJSON(t *testing.T) {
         "memo": "MzUyODFmNThmZjkxMGNiMTVhYWQ1NjM2ZGIyNzUzZTA=",
         "_links": {
           "self": {
-            "href": "https://orbitr.lantah.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033"
+            "href": "https://orbitr.metriq.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033"
           },
           "account": {
-            "href": "https://orbitr.lantah.network/accounts/GBUYDJH3AOPFFND3L54DUDWIHOMYKUONDV4RAHOHDBNN2D5N4BPPWDQ3"
+            "href": "https://orbitr.metriq.network/accounts/GBUYDJH3AOPFFND3L54DUDWIHOMYKUONDV4RAHOHDBNN2D5N4BPPWDQ3"
           },
           "ledger": {
-            "href": "https://orbitr.lantah.network/ledgers/29113108"
+            "href": "https://orbitr.metriq.network/ledgers/29113108"
           },
           "operations": {
-            "href": "https://orbitr.lantah.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033/operations{?cursor,limit,order}",
+            "href": "https://orbitr.metriq.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033/operations{?cursor,limit,order}",
             "templated": true
           },
           "effects": {
-            "href": "https://orbitr.lantah.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033/effects{?cursor,limit,order}",
+            "href": "https://orbitr.metriq.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033/effects{?cursor,limit,order}",
             "templated": true
           },
           "precedes": {
-            "href": "https://orbitr.lantah.network/transactions?order=asc\u0026cursor=125039846745419776"
+            "href": "https://orbitr.metriq.network/transactions?order=asc\u0026cursor=125039846745419776"
           },
           "succeeds": {
-            "href": "https://orbitr.lantah.network/transactions?order=desc\u0026cursor=125039846745419776"
+            "href": "https://orbitr.metriq.network/transactions?order=desc\u0026cursor=125039846745419776"
           },
           "transaction": {
-            "href": "https://orbitr.lantah.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033"
+            "href": "https://orbitr.metriq.network/transactions/998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033"
           }
         },
         "id": "998605ace4a0b89293cf729cf216405f29c1ce5d44d6a40232982a4bdccda033",

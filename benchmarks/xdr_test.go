@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	xdr3 "github.com/stellar/go-xdr/xdr3"
-	"github.com/lantah/go/gxdr"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/gxdr"
+	"github.com/metriqorg/go/xdr"
 	goxdr "github.com/xdrpp/goxdr/xdr"
 )
 

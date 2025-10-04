@@ -12,8 +12,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/strutils"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/strutils"
 )
 
 // ConfigOptions is a group of ConfigOptions that can be for convenience

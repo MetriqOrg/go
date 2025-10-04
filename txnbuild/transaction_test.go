@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/price"
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/price"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -662,7 +662,7 @@ func TestChangeTrustNativeAssetNotAllowed(t *testing.T) {
 		},
 	)
 
-	expectedErrMsg := "validation failed for *txnbuild.ChangeTrust operation: Field: Line, Error: native (GRAM) asset type is not allowed"
+	expectedErrMsg := "validation failed for *txnbuild.ChangeTrust operation: Field: Line, Error: native (MTRQ) asset type is not allowed"
 	require.EqualError(t, err, expectedErrMsg, "No trustlines for native assets")
 }
 
@@ -1319,7 +1319,7 @@ func TestPreAuthTransaction(t *testing.T) {
 
 func TestHashXTransaction(t *testing.T) {
 	// 256 bit preimage
-	preimage := "this is a preimage for hashx transactions on the lantah network"
+	preimage := "this is a preimage for hashx transactions on the metriq network"
 
 	preimageHash := sha256.Sum256([]byte(preimage))
 

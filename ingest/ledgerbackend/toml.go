@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/xdr"
 
 	"github.com/pelletier/go-toml"
 )

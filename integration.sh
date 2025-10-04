@@ -20,4 +20,4 @@ if [[ "$(docker inspect integration_postgres -f '{{.State.Running}}')" != "true"
     postgres:12-bullseye
 fi
 
-exec go test -timeout 35m github.com/lantah/go/services/orbitr/internal/integration/... "$@"
+exec go test -timeout 35m github.com/metriqorg/go/services/orbitr/internal/integration/... "$@"

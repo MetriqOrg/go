@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/lantah/go/gxdr"
-	"github.com/lantah/go/randxdr"
+	"github.com/metriqorg/go/gxdr"
+	"github.com/metriqorg/go/randxdr"
 )
 
 func TestScValEqualsCoverage(t *testing.T) {

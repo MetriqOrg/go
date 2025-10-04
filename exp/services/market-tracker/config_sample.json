@@ -9,7 +9,7 @@
                 "currency": "USD"
             },
             "sellingAsset": {
-                "code": "GRAM",
+                "code": "MTRQ",
                 "issuerAddress": "native",
                 "type": "AssetTypeNative"
             }

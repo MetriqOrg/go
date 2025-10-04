@@ -11,7 +11,7 @@ import (
 	"crypto/elliptic"
 	"crypto/rand"
 
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // GenerateKey is a convenience function for generating an ECDSA key for use as

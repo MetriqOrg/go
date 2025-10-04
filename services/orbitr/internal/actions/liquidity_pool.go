@@ -5,15 +5,15 @@ import (
 	"net/http"
 	"strings"
 
-	protocol "github.com/lantah/go/protocols/orbitr"
-	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/hal"
-	"github.com/lantah/go/support/render/problem"
-	"github.com/lantah/go/xdr"
+	protocol "github.com/metriqorg/go/protocols/orbitr"
+	orbitrContext "github.com/metriqorg/go/services/orbitr/internal/context"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	"github.com/metriqorg/go/services/orbitr/internal/resourceadapter"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/hal"
+	"github.com/metriqorg/go/support/render/problem"
+	"github.com/metriqorg/go/xdr"
 )
 
 // GetLiquidityPoolByIDHandler is the action handler for all end-points returning a liquidity pool.

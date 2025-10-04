@@ -5,7 +5,7 @@ import (
 	stdLog "log"
 
 	"github.com/spf13/cobra"
-	orbitr "github.com/lantah/go/services/orbitr/internal"
+	orbitr "github.com/metriqorg/go/services/orbitr/internal"
 )
 
 var (

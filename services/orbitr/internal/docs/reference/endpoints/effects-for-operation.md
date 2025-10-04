@@ -25,14 +25,14 @@ GET /operations/{id}/effects{?cursor,limit,order}
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/operations/1919197546291201/effects"
+curl "https://orbitr-testnet.metriq.network/operations/1919197546291201/effects"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.effects()
   .forOperation("1919197546291201")
@@ -57,13 +57,13 @@ This endpoint responds with a list of effects on the ledger as a result of a giv
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/operations/1919197546291201/effects?cursor=&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/operations/1919197546291201/effects?cursor=&limit=10&order=asc"
     },
     "next": {
-      "href": "https://orbitr-testnet.lantah.network/operations/1919197546291201/effects?cursor=1919197546291201-3&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/operations/1919197546291201/effects?cursor=1919197546291201-3&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://orbitr-testnet.lantah.network/operations/1919197546291201/effects?cursor=1919197546291201-1&limit=10&order=desc"
+      "href": "https://orbitr-testnet.metriq.network/operations/1919197546291201/effects?cursor=1919197546291201-1&limit=10&order=desc"
     }
   },
   "_embedded": {
@@ -71,13 +71,13 @@ This endpoint responds with a list of effects on the ledger as a result of a giv
       {
         "_links": {
           "operation": {
-            "href": "https://orbitr-testnet.lantah.network/operations/1919197546291201"
+            "href": "https://orbitr-testnet.metriq.network/operations/1919197546291201"
           },
           "succeeds": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=1919197546291201-1"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=desc&cursor=1919197546291201-1"
           },
           "precedes": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=1919197546291201-1"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=asc&cursor=1919197546291201-1"
           }
         },
         "id": "0001919197546291201-0000000001",
@@ -91,13 +91,13 @@ This endpoint responds with a list of effects on the ledger as a result of a giv
       {
         "_links": {
           "operation": {
-            "href": "https://orbitr-testnet.lantah.network/operations/1919197546291201"
+            "href": "https://orbitr-testnet.metriq.network/operations/1919197546291201"
           },
           "succeeds": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=1919197546291201-2"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=desc&cursor=1919197546291201-2"
           },
           "precedes": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=1919197546291201-2"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=asc&cursor=1919197546291201-2"
           }
         },
         "id": "0001919197546291201-0000000002",
@@ -112,13 +112,13 @@ This endpoint responds with a list of effects on the ledger as a result of a giv
       {
         "_links": {
           "operation": {
-            "href": "https://orbitr-testnet.lantah.network/operations/1919197546291201"
+            "href": "https://orbitr-testnet.metriq.network/operations/1919197546291201"
           },
           "succeeds": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=1919197546291201-3"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=desc&cursor=1919197546291201-3"
           },
           "precedes": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=1919197546291201-3"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=asc&cursor=1919197546291201-3"
           }
         },
         "id": "0001919197546291201-0000000003",

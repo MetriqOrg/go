@@ -5,10 +5,10 @@ import (
 
 	"github.com/guregu/null"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 type SignersProcessor struct {

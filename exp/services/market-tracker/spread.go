@@ -58,9 +58,9 @@ func trackSpreads(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatche
 
 				watchedTPs[i].Spread.Top.Set(spreadPct)
 
-				// we only compute spreads at various depths for gram-based pairs,
-				// because our usd prices are in terms of gram.
-				if wtp.TradePair.SellingAsset.Code != "GRAM" {
+				// we only compute spreads at various depths for MTRQ-based pairs,
+				// because our usd prices are in terms of MTRQ.
+				if wtp.TradePair.SellingAsset.Code != "MTRQ" {
 					continue
 				}
 

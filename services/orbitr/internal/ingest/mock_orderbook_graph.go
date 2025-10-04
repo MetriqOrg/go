@@ -1,8 +1,8 @@
 package ingest
 
 import (
-	"github.com/lantah/go/exp/orderbook"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/exp/orderbook"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/mock"
 )
 

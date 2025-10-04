@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/BurntSushi/toml"
-	"github.com/lantah/go/address"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/address"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // GetStellarToml returns stellar.toml file for a given domain
@@ -30,7 +30,7 @@ func (c *Client) GetStellarToml(domain string) (resp *Response, err error) {
 
 	// There is one corner case not handled here: response is exactly
 	// StellarTomlMaxSize long and is incorrect toml. Check discussion:
-	// https://github.com/lantah/go/pull/24#discussion_r89909696
+	// https://github.com/metriqorg/go/pull/24#discussion_r89909696
 	if err != nil && limitReader.(*io.LimitedReader).N == 0 {
 		err = errors.Errorf("stellar.toml response exceeds %d bytes limit", StellarTomlMaxSize)
 		return

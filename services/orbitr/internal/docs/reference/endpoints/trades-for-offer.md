@@ -26,14 +26,14 @@ GET /offers/{offer_id}/trades{?cursor,limit,order}
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/offers/323223/trades"
+curl "https://orbitr-testnet.metriq.network/offers/323223/trades"
 ```
 
 ### JavaScript Example Request
 
 ```js
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.trades()
     .forOffer(323223)
@@ -56,13 +56,13 @@ This endpoint responds with a list of trades that consumed a given offer. See th
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/offers/323223/trades?cursor=\u0026limit=10\u0026order=asc"
+      "href": "https://orbitr-testnet.metriq.network/offers/323223/trades?cursor=\u0026limit=10\u0026order=asc"
     },
     "next": {
-      "href": "https://orbitr-testnet.lantah.network/offers/323223/trades?cursor=35789107779080193-0\u0026limit=10\u0026order=asc"
+      "href": "https://orbitr-testnet.metriq.network/offers/323223/trades?cursor=35789107779080193-0\u0026limit=10\u0026order=asc"
     },
     "prev": {
-      "href": "https://orbitr-testnet.lantah.network/offers/323223/trades?cursor=35789107779080193-0\u0026limit=10\u0026order=desc"
+      "href": "https://orbitr-testnet.metriq.network/offers/323223/trades?cursor=35789107779080193-0\u0026limit=10\u0026order=desc"
     }
   },
   "_embedded": {
@@ -73,13 +73,13 @@ This endpoint responds with a list of trades that consumed a given offer. See th
             "href": ""
           },
           "base": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GDRCFIQAUEFUQ6GXF5DPRO2M77E4UB7RW7EWI2FTKOW7CWYKZCHSI75K"
+            "href": "https://orbitr-testnet.metriq.network/accounts/GDRCFIQAUEFUQ6GXF5DPRO2M77E4UB7RW7EWI2FTKOW7CWYKZCHSI75K"
           },
           "counter": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GCUD7CBKTQI4D7ZR7IKHMGXZKKVABML7XFBHV4AIYBOEN5UQFZ5DSPPT"
+            "href": "https://orbitr-testnet.metriq.network/accounts/GCUD7CBKTQI4D7ZR7IKHMGXZKKVABML7XFBHV4AIYBOEN5UQFZ5DSPPT"
           },
           "operation": {
-            "href": "https://orbitr-testnet.lantah.network/operations/35789107779080193"
+            "href": "https://orbitr-testnet.metriq.network/operations/35789107779080193"
           }
         },
         "id": "35789107779080193-0",

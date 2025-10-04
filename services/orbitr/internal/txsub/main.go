@@ -5,8 +5,8 @@ import (
 
 	"context"
 
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/xdr"
 )
 
 // Listener represents some client who is interested in retrieving the result
@@ -58,7 +58,7 @@ type Result struct {
 
 // SubmissionResult gets returned in response to a call to Submitter.Submit.
 // It represents a single discrete submission of a transaction envelope to
-// the lantah network.
+// the metriq network.
 type SubmissionResult struct {
 	// Any error that occurred during the attempted submission.  A nil value
 	// indicates that the submission will or already is being considered for

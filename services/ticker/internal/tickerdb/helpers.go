@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/lantah/go/services/ticker/internal/utils"
-	"github.com/lantah/go/support/db/dbtest"
+	"github.com/metriqorg/go/services/ticker/internal/utils"
+	"github.com/metriqorg/go/support/db/dbtest"
 )
 
 // getDBFieldTags returns all "db" tags for a given struct, optionally excluding the "id".
@@ -103,18 +103,18 @@ func generateWhereClause(optVars []optionalVar) (clause string, args []string) {
 	return
 }
 
-// getBaseAndCounterCodes takes an asset pair name string (e.g: GRAM_BTC)
-// and returns the parsed asset codes (e.g.: GRAM, BTC). It also reverses
+// getBaseAndCounterCodes takes an asset pair name string (e.g: MTRQ_BTC)
+// and returns the parsed asset codes (e.g.: MTRQ, BTC). It also reverses
 // the assets, according to the following rules:
-// 1. GRAM is always the base asset
-// 2. If GRAM is not in the pair, the assets should be ordered alphabetically
+// 1. MTRQ is always the base asset
+// 2. If MTRQ is not in the pair, the assets should be ordered alphabetically
 func getBaseAndCounterCodes(pairName string) (string, string, error) {
 	assets := strings.Split(pairName, "_")
 	if len(assets) != 2 {
 		return "", "", errors.New("invalid asset pair name")
 	}
 
-	if (assets[1] == "GRAM") || (assets[0] != "GRAM" && assets[0] > assets[1]) {
+	if (assets[1] == "MTRQ") || (assets[0] != "MTRQ" && assets[0] > assets[1]) {
 		return assets[1], assets[0], nil
 	}
 

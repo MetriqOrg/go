@@ -14,7 +14,7 @@ It is much smaller and simpler than `gravity`, and is intended only for archive-
 ## Installation
 
 ```
-$ go install github.com/lantah/go/tools/stellar-archivist
+$ go install github.com/metriqorg/go/tools/stellar-archivist
 ```
 
 ## Usage

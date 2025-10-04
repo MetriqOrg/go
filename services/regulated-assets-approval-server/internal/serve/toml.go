@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/httperror"
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/serve/httperror"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 )
 
 type stellarTOMLHandler struct {

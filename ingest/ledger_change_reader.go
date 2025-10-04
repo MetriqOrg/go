@@ -4,8 +4,8 @@ import (
 	"context"
 	"io"
 
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/xdr"
 )
 
 // ChangeReader provides convenient, streaming access to a sequence of Changes.

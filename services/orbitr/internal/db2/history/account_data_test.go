@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/guregu/null"
-	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
 	"github.com/stretchr/testify/assert"
 )
 

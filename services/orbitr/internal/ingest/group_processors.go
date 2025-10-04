@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest/processors"
+	"github.com/metriqorg/go/support/errors"
 )
 
 type processorsRunDurations map[string]time.Duration

@@ -9,9 +9,9 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestResumeTestTestSuite(t *testing.T) {

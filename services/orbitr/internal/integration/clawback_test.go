@@ -5,15 +5,15 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	protocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/protocols/orbitr/operations"
-	"github.com/lantah/go/services/orbitr/internal/codes"
-	"github.com/lantah/go/services/orbitr/internal/test/integration"
-	"github.com/lantah/go/txnbuild"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	protocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/protocols/orbitr/operations"
+	"github.com/metriqorg/go/services/orbitr/internal/codes"
+	"github.com/metriqorg/go/services/orbitr/internal/test/integration"
+	"github.com/metriqorg/go/txnbuild"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestHappyClawbackAccount(t *testing.T) {

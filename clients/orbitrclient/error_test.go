@@ -3,7 +3,7 @@ package orbitrclient
 import (
 	"testing"
 
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/support/render/problem"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -50,7 +50,7 @@ func TestError_Error(t *testing.T) {
 	// non-transaction errors
 	herr = Error{
 		Problem: problem.P{
-			Type:   "https://lantah.network/orbitr-errors/not_found",
+			Type:   "https://metriq.network/orbitr-errors/not_found",
 			Title:  "Resource Missing",
 			Status: 404,
 		},

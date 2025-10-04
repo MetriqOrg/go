@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/friendbot/internal"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/friendbot/internal"
+	"github.com/metriqorg/go/support/render/problem"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

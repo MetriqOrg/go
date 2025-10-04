@@ -11,14 +11,14 @@ import (
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/lantah/go/services/orbitr/internal/db2"
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
-	"github.com/lantah/go/services/orbitr/internal/render/sse"
-	"github.com/lantah/go/services/orbitr/internal/txsub/sequence"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/services/orbitr/internal/db2"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	hProblem "github.com/metriqorg/go/services/orbitr/internal/render/problem"
+	"github.com/metriqorg/go/services/orbitr/internal/render/sse"
+	"github.com/metriqorg/go/services/orbitr/internal/txsub/sequence"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 type ServerMetrics struct {

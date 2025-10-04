@@ -3,10 +3,10 @@ package scraper
 import (
 	"time"
 
-	"github.com/lantah/go/services/ticker/internal/utils"
+	"github.com/metriqorg/go/services/ticker/internal/utils"
 
-	orbitrclient "github.com/lantah/go/clients/orbitrclient"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
+	orbitrclient "github.com/metriqorg/go/clients/orbitrclient"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
 )
 
 // checkRecords check if a list of records contains entries older than minTime. If it does,
@@ -96,12 +96,12 @@ func (c *ScraperConfig) streamTrades(h orbitrclient.TradeHandler, cursor string)
 // addNativeData adds additional fields when one of the assets is native.
 func addNativeData(trade *hProtocol.Trade) {
 	if trade.BaseAssetType == "native" {
-		trade.BaseAssetCode = "GRAM"
+		trade.BaseAssetCode = "MTRQ"
 		trade.BaseAssetIssuer = "native"
 	}
 
 	if trade.CounterAssetType == "native" {
-		trade.CounterAssetCode = "GRAM"
+		trade.CounterAssetCode = "MTRQ"
 		trade.CounterAssetIssuer = "native"
 	}
 }

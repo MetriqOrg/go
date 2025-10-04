@@ -12,16 +12,16 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/lantah/go/clients/gravity"
-	"github.com/lantah/go/historyarchive"
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ingest/filters"
-	apkg "github.com/lantah/go/support/app"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
-	logpkg "github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/clients/gravity"
+	"github.com/metriqorg/go/historyarchive"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest/filters"
+	apkg "github.com/metriqorg/go/support/app"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
+	logpkg "github.com/metriqorg/go/support/log"
 )
 
 const (

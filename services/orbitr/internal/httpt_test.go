@@ -7,9 +7,9 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	tdb "github.com/lantah/go/services/orbitr/internal/test/db"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	tdb "github.com/metriqorg/go/services/orbitr/internal/test/db"
 )
 
 type HTTPT struct {

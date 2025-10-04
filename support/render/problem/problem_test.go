@@ -10,8 +10,8 @@ import (
 	"testing"
 
 	ge "github.com/go-errors/errors"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/test"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -112,8 +112,8 @@ func TestProblemInflate(t *testing.T) {
 		want string
 	}{
 		"renders the type correctly",
-		P{Type: "https://lantah.network/orbitr-errors/not_found", Status: 404},
-		"https://lantah.network/orbitr-errors/not_found",
+		P{Type: "https://metriq.network/orbitr-errors/not_found", Status: 404},
+		"https://metriq.network/orbitr-errors/not_found",
 	}
 
 	t.Run(testCase.name, func(t *testing.T) {

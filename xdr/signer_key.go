@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // Address returns the strkey encoded form of this signer key.  This method will

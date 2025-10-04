@@ -3,8 +3,8 @@ package history
 import (
 	"context"
 
-	"github.com/lantah/go/support/collections/set"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/collections/set"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // Queue adds `seq` to the load queue for the cache.

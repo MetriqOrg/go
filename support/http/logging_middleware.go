@@ -7,8 +7,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/lantah/go/support/http/mutil"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/support/http/mutil"
+	"github.com/metriqorg/go/support/log"
 )
 
 // Options allow the middleware logger to accept additional information.

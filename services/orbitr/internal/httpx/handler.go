@@ -5,17 +5,17 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/lantah/go/services/orbitr/internal/actions"
-	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	"github.com/lantah/go/services/orbitr/internal/render"
-	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
-	"github.com/lantah/go/services/orbitr/internal/render/sse"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/hal"
-	"github.com/lantah/go/support/render/httpjson"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/services/orbitr/internal/actions"
+	orbitrContext "github.com/metriqorg/go/services/orbitr/internal/context"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	"github.com/metriqorg/go/services/orbitr/internal/render"
+	hProblem "github.com/metriqorg/go/services/orbitr/internal/render/problem"
+	"github.com/metriqorg/go/services/orbitr/internal/render/sse"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/hal"
+	"github.com/metriqorg/go/support/render/httpjson"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 type objectAction interface {

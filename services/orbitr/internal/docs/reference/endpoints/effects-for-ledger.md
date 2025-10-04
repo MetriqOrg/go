@@ -26,14 +26,14 @@ GET /ledgers/{sequence}/effects{?cursor,limit,order}
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/ledgers/680777/effects?limit=1"
+curl "https://orbitr-testnet.metriq.network/ledgers/680777/effects?limit=1"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.effects()
   .forLedger("680777")
@@ -58,13 +58,13 @@ This endpoint responds with a list of effects that occurred in the ledger. See [
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/ledgers/680777/effects?cursor=&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/ledgers/680777/effects?cursor=&limit=10&order=asc"
     },
     "next": {
-      "href": "https://orbitr-testnet.lantah.network/ledgers/680777/effects?cursor=2923914950873089-3&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/ledgers/680777/effects?cursor=2923914950873089-3&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://orbitr-testnet.lantah.network/ledgers/680777/effects?cursor=2923914950873089-1&limit=10&order=desc"
+      "href": "https://orbitr-testnet.metriq.network/ledgers/680777/effects?cursor=2923914950873089-1&limit=10&order=desc"
     }
   },
   "_embedded": {
@@ -72,13 +72,13 @@ This endpoint responds with a list of effects that occurred in the ledger. See [
       {
         "_links": {
           "operation": {
-            "href": "https://orbitr-testnet.lantah.network/operations/2923914950873089"
+            "href": "https://orbitr-testnet.metriq.network/operations/2923914950873089"
           },
           "succeeds": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=2923914950873089-1"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=desc&cursor=2923914950873089-1"
           },
           "precedes": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=2923914950873089-1"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=asc&cursor=2923914950873089-1"
           }
         },
         "id": "0002923914950873089-0000000001",
@@ -92,13 +92,13 @@ This endpoint responds with a list of effects that occurred in the ledger. See [
       {
         "_links": {
           "operation": {
-            "href": "https://orbitr-testnet.lantah.network/operations/2923914950873089"
+            "href": "https://orbitr-testnet.metriq.network/operations/2923914950873089"
           },
           "succeeds": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=2923914950873089-2"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=desc&cursor=2923914950873089-2"
           },
           "precedes": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=2923914950873089-2"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=asc&cursor=2923914950873089-2"
           }
         },
         "id": "0002923914950873089-0000000002",
@@ -113,13 +113,13 @@ This endpoint responds with a list of effects that occurred in the ledger. See [
       {
         "_links": {
           "operation": {
-            "href": "https://orbitr-testnet.lantah.network/operations/2923914950873089"
+            "href": "https://orbitr-testnet.metriq.network/operations/2923914950873089"
           },
           "succeeds": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=2923914950873089-3"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=desc&cursor=2923914950873089-3"
           },
           "precedes": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=2923914950873089-3"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=asc&cursor=2923914950873089-3"
           }
         },
         "id": "0002923914950873089-0000000003",

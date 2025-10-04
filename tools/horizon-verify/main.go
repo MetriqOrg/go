@@ -7,9 +7,9 @@ import (
 	"sync"
 
 	"github.com/spf13/cobra"
-	"github.com/lantah/go/clients/orbitrclient"
-	protocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	protocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/xdr"
 )
 
 var orbitrURL string

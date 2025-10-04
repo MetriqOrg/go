@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 

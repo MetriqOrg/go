@@ -13,8 +13,8 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/lantah/go/support/ordered"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/ordered"
+	"github.com/metriqorg/go/xdr"
 )
 
 var (

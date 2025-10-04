@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
 )
 
 // StatsChangeProcessor is a state processors that counts number of changes types

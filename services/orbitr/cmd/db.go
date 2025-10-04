@@ -12,15 +12,15 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
 
-	orbitr "github.com/lantah/go/services/orbitr/internal"
-	"github.com/lantah/go/services/orbitr/internal/db2/schema"
-	"github.com/lantah/go/services/orbitr/internal/ingest"
-	support "github.com/lantah/go/support/config"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
-	hlog "github.com/lantah/go/support/log"
+	orbitr "github.com/metriqorg/go/services/orbitr/internal"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/schema"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest"
+	support "github.com/metriqorg/go/support/config"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
+	hlog "github.com/metriqorg/go/support/log"
 )
 
 var dbCmd = &cobra.Command{

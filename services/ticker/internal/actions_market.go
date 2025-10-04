@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/lantah/go/services/ticker/internal/tickerdb"
-	"github.com/lantah/go/services/ticker/internal/utils"
-	hlog "github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/services/ticker/internal/tickerdb"
+	"github.com/metriqorg/go/services/ticker/internal/utils"
+	hlog "github.com/metriqorg/go/support/log"
 )
 
 // GenerateMarketSummaryFile generates a MarketSummary with the statistics for all

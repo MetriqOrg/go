@@ -8,11 +8,11 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/guregu/null"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	"github.com/lantah/go/toid"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/toid"
 )
 
 func TestTransactionQueries(t *testing.T) {

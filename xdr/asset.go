@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/lantah/go/strkey"
+	"github.com/metriqorg/go/strkey"
 )
 
 // This file contains helpers for working with xdr.Asset structs
@@ -141,8 +141,8 @@ func BuildAssets(s string) ([]Asset, error) {
 		var asset Asset
 
 		// Technically https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0011.md allows
-		// any string up to 12 characters not containing an unescaped colon to represent GRAM
-		// however, this function only accepts the string "native" to represent GRAM
+		// any string up to 12 characters not containing an unescaped colon to represent MTRQ
+		// however, this function only accepts the string "native" to represent MTRQ
 		if strings.ToLower(assetString) == "native" {
 			if err := asset.SetNative(); err != nil {
 				return nil, err

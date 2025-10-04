@@ -1,6 +1,6 @@
 package txnbuild
 
-import "github.com/lantah/go/support/errors"
+import "github.com/metriqorg/go/support/errors"
 
 // LedgerBounds represent a transaction precondition that controls the ledger
 // range for which a transaction is valid. Setting MaxLedger = 0 indicates there

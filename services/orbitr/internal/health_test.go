@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/protocols/gravity"
-	"github.com/lantah/go/support/clock"
-	"github.com/lantah/go/support/clock/clocktest"
-	"github.com/lantah/go/support/db"
+	"github.com/metriqorg/go/protocols/gravity"
+	"github.com/metriqorg/go/support/clock"
+	"github.com/metriqorg/go/support/clock/clocktest"
+	"github.com/metriqorg/go/support/db"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

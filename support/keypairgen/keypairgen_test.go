@@ -3,9 +3,9 @@ package keypairgen_test
 import (
 	"testing"
 
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/support/keypairgen"
-	"github.com/lantah/go/support/keypairgen/keypairgentest"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/support/keypairgen"
+	"github.com/metriqorg/go/support/keypairgen/keypairgentest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

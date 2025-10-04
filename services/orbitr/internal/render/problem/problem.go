@@ -3,7 +3,7 @@ package problem
 import (
 	"net/http"
 
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 // Well-known and reused problems below:
@@ -98,7 +98,7 @@ var (
 		Title:  "Data Requested Is Before Recorded History",
 		Status: http.StatusGone,
 		Detail: "This orbitr instance is configured to only track a " +
-			"portion of the lantah network's latest history. This request " +
+			"portion of the metriq network's latest history. This request " +
 			"is asking for results prior to the recorded history known to " +
 			"this orbitr instance.",
 	}

@@ -3,8 +3,8 @@ package resourceadapter
 import (
 	"context"
 
-	protocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/txsub"
+	protocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/txsub"
 )
 
 // Populate fills out the details

@@ -15,16 +15,16 @@ import (
 	"github.com/rs/cors"
 	"github.com/stellar/throttled"
 
-	"github.com/lantah/go/services/orbitr/internal/actions"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	"github.com/lantah/go/services/orbitr/internal/paths"
-	"github.com/lantah/go/services/orbitr/internal/render"
-	"github.com/lantah/go/services/orbitr/internal/render/sse"
-	"github.com/lantah/go/services/orbitr/internal/txsub"
-	"github.com/lantah/go/support/db"
-	supporthttp "github.com/lantah/go/support/http"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/services/orbitr/internal/actions"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	"github.com/metriqorg/go/services/orbitr/internal/paths"
+	"github.com/metriqorg/go/services/orbitr/internal/render"
+	"github.com/metriqorg/go/services/orbitr/internal/render/sse"
+	"github.com/metriqorg/go/services/orbitr/internal/txsub"
+	"github.com/metriqorg/go/support/db"
+	supporthttp "github.com/metriqorg/go/support/http"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 type RouterConfig struct {

@@ -7,8 +7,8 @@ package historyarchive
 import (
 	"math/rand"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // A ArchivePool is just a collection of `ArchiveInterface`s so that we can

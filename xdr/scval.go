@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/lantah/go/strkey"
+	"github.com/metriqorg/go/strkey"
 )
 
 func (address ScAddress) String() (string, error) {

@@ -5,10 +5,10 @@ import (
 	"database/sql"
 	"math/big"
 
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 type priceLevel struct {

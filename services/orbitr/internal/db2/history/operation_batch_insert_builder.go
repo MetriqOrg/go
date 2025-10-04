@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/guregu/null"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/xdr"
 )
 
 // OperationBatchInsertBuilder is used to insert a transaction's operations into the

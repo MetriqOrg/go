@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
 	"github.com/stretchr/testify/assert"
 )
 

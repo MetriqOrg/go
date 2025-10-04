@@ -7,9 +7,9 @@ import (
 	"encoding/base64"
 	"io"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // TransformLedgerEntryFunction is a function that transforms ledger entry

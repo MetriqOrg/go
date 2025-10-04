@@ -3,7 +3,7 @@ package txnbuild
 import (
 	"testing"
 
-	"github.com/lantah/go/price"
+	"github.com/metriqorg/go/price"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

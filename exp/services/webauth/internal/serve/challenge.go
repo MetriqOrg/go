@@ -6,11 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/strkey"
-	supportlog "github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/httpjson"
-	"github.com/lantah/go/txnbuild"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/strkey"
+	supportlog "github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/httpjson"
+	"github.com/metriqorg/go/txnbuild"
 )
 
 // ChallengeHandler implements the SEP-10 challenge endpoint and handles

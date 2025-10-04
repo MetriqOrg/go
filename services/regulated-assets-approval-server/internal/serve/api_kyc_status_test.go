@@ -14,9 +14,9 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/google/uuid"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/db/dbtest"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/kycstatus"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/db/dbtest"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/serve/kycstatus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

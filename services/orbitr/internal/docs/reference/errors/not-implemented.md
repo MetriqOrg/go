@@ -27,9 +27,9 @@ draft specification guide and thus has the following attributes:
 ## Example
 
 ```shell
-$ curl -X GET "https://orbitr-testnet.lantah.network/offers/1234"
+$ curl -X GET "https://orbitr-testnet.metriq.network/offers/1234"
 {
-  "type": "https://lantah.network/orbitr-errors/not_implemented",
+  "type": "https://metriq.network/orbitr-errors/not_implemented",
   "title": "Resource Not Yet Implemented",
   "status": 404,
   "detail": "While the requested URL is expected to eventually point to a valid resource, the work to implement the resource has not yet been completed."

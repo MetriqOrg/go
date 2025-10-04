@@ -3,7 +3,7 @@ package xdr_test
 import (
 	"testing"
 
-	. "github.com/lantah/go/xdr"
+	. "github.com/metriqorg/go/xdr"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -391,7 +391,7 @@ func TestBuildAsset(t *testing.T) {
 }
 
 func TestAssetLessThan(t *testing.T) {
-	gram := MustNewNativeAsset()
+	MTRQ := MustNewNativeAsset()
 
 	t.Run("returns false if assets are equal", func(t *testing.T) {
 		assetA, err := NewCreditAsset(
@@ -406,7 +406,7 @@ func TestAssetLessThan(t *testing.T) {
 		)
 		require.NoError(t, err)
 
-		assert.False(t, gram.LessThan(gram))
+		assert.False(t, MTRQ.LessThan(MTRQ))
 		assert.False(t, assetA.LessThan(assetA))
 		assert.False(t, assetB.LessThan(assetB))
 	})
@@ -423,15 +423,15 @@ func TestAssetLessThan(t *testing.T) {
 		)
 		require.NoError(t, err)
 
-		assert.False(t, gram.LessThan(gram))
-		assert.True(t, gram.LessThan(anum4))
-		assert.True(t, gram.LessThan(anum12))
+		assert.False(t, MTRQ.LessThan(MTRQ))
+		assert.True(t, MTRQ.LessThan(anum4))
+		assert.True(t, MTRQ.LessThan(anum12))
 
-		assert.False(t, anum4.LessThan(gram))
+		assert.False(t, anum4.LessThan(MTRQ))
 		assert.False(t, anum4.LessThan(anum4))
 		assert.True(t, anum4.LessThan(anum12))
 
-		assert.False(t, anum12.LessThan(gram))
+		assert.False(t, anum12.LessThan(MTRQ))
 		assert.False(t, anum12.LessThan(anum4))
 		assert.False(t, anum12.LessThan(anum12))
 	})

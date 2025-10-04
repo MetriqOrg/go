@@ -6,15 +6,15 @@ import (
 	"mime"
 	"net/http"
 
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/protocols/orbitr"
-	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
-	"github.com/lantah/go/services/orbitr/internal/resourceadapter"
-	"github.com/lantah/go/services/orbitr/internal/txsub"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/hal"
-	"github.com/lantah/go/support/render/problem"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/protocols/orbitr"
+	hProblem "github.com/metriqorg/go/services/orbitr/internal/render/problem"
+	"github.com/metriqorg/go/services/orbitr/internal/resourceadapter"
+	"github.com/metriqorg/go/services/orbitr/internal/txsub"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/hal"
+	"github.com/metriqorg/go/support/render/problem"
+	"github.com/metriqorg/go/xdr"
 )
 
 type NetworkSubmitter interface {
@@ -109,7 +109,7 @@ func (handler SubmitTransactionHandler) response(r *http.Request, info envelopeI
 			Type:   "transaction_failed",
 			Title:  "Transaction Failed",
 			Status: http.StatusBadRequest,
-			Detail: "The transaction failed when submitted to the lantah network. " +
+			Detail: "The transaction failed when submitted to the metriq network. " +
 				"The `extras.result_codes` field on this response contains further " +
 				"details.  Descriptions of each code can be found at: " +
 				"https://developers.stellar.org/api/errors/http-status-codes/horizon-specific/transaction-failed/",

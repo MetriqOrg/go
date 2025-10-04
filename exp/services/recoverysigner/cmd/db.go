@@ -7,10 +7,10 @@ import (
 
 	migrate "github.com/rubenv/sql-migrate"
 	"github.com/spf13/cobra"
-	dbpkg "github.com/lantah/go/exp/services/recoverysigner/internal/db"
-	"github.com/lantah/go/exp/services/recoverysigner/internal/db/dbmigrate"
-	"github.com/lantah/go/support/config"
-	supportlog "github.com/lantah/go/support/log"
+	dbpkg "github.com/metriqorg/go/exp/services/recoverysigner/internal/db"
+	"github.com/metriqorg/go/exp/services/recoverysigner/internal/db/dbmigrate"
+	"github.com/metriqorg/go/support/config"
+	supportlog "github.com/metriqorg/go/support/log"
 )
 
 type DBCommand struct {

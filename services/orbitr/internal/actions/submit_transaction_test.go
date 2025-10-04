@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/services/orbitr/internal/corestate"
-	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
-	"github.com/lantah/go/services/orbitr/internal/txsub"
-	"github.com/lantah/go/support/render/problem"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/services/orbitr/internal/corestate"
+	hProblem "github.com/metriqorg/go/services/orbitr/internal/render/problem"
+	"github.com/metriqorg/go/services/orbitr/internal/txsub"
+	"github.com/metriqorg/go/support/render/problem"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -23,7 +23,7 @@ import (
 func TestGravityMalformedTx(t *testing.T) {
 	handler := SubmitTransactionHandler{}
 
-	r := httptest.NewRequest("POST", "https://orbitr.lantah.network/transactions", nil)
+	r := httptest.NewRequest("POST", "https://orbitr.metriq.network/transactions", nil)
 	w := httptest.NewRecorder()
 	_, err := handler.GetResource(w, r)
 	assert.Error(t, err)
@@ -65,7 +65,7 @@ func TestGravityNotSynced(t *testing.T) {
 
 	request, err := http.NewRequest(
 		"POST",
-		"https://orbitr.lantah.network/transactions",
+		"https://orbitr.metriq.network/transactions",
 		strings.NewReader(form.Encode()),
 	)
 	require.NoError(t, err)
@@ -101,7 +101,7 @@ func TestTimeoutSubmission(t *testing.T) {
 
 	request, err := http.NewRequest(
 		"POST",
-		"https://orbitr.lantah.network/transactions",
+		"https://orbitr.metriq.network/transactions",
 		strings.NewReader(form.Encode()),
 	)
 
@@ -139,7 +139,7 @@ func TestClientDisconnectSubmission(t *testing.T) {
 
 	request, err := http.NewRequest(
 		"POST",
-		"https://orbitr.lantah.network/transactions",
+		"https://orbitr.metriq.network/transactions",
 		strings.NewReader(form.Encode()),
 	)
 
@@ -185,7 +185,7 @@ func TestDisableTxSubFlagSubmission(t *testing.T) {
 
 	request, err := http.NewRequest(
 		"POST",
-		"https://orbitr.lantah.network/transactions",
+		"https://orbitr.metriq.network/transactions",
 		strings.NewReader(form.Encode()),
 	)
 

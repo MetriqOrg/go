@@ -3,7 +3,7 @@ package serve
 import (
 	"net/http"
 
-	"github.com/lantah/go/support/render/httpjson"
+	"github.com/metriqorg/go/support/render/httpjson"
 )
 
 var serverError = errorResponse{

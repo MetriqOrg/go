@@ -7,7 +7,7 @@ Assets from different issuers but with the same code are aggregated, so trades b
 - `native` and `BTC:GDT3ZKQZXXHDPJUKNHUMANMNIT4JWSUYXUGN7EQZDVXBO7NPNFVFPBAK`
 - `native` and `BTC:GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH`
 
-are aggregated in the `GRAM_BTC` pair.
+are aggregated in the `MTRQ_BTC` pair.
 
 ### Trade Pairs
 
@@ -15,7 +15,7 @@ Trade pairs are ordered `<Counter>_<Base>`.
 
 Example:
 
-The pair `GRAM_ZZZ` has the `GRAM` as the counter currency and `ZZZ` as the base. For that pair if the API returns a `close` value of `2`, then the last trade for the pair was `2 GRAM` exchanged for `1 ZZZ`.
+The pair `MTRQ_ZZZ` has the `MTRQ` as the counter currency and `ZZZ` as the base. For that pair if the API returns a `close` value of `2`, then the last trade for the pair was `2 MTRQ` exchanged for `1 ZZZ`.
 
 ### Response Fields
 
@@ -199,7 +199,7 @@ GET `https://ticker.stellar.org/assets.json`
             "display_decimals": 2,
             "name": "Push",
             "desc": "1 PUSH token entitles you to access the push API.",
-            "conditions": "Token used to access the PUSH api to send a push request to the lantah network.",
+            "conditions": "Token used to access the PUSH api to send a push request to the metriq network.",
             "is_asset_anchored": false,
             "fixed_number": 0,
             "max_number": 0,
@@ -238,7 +238,7 @@ Full documentation on Horizon's Orderbook endpoint can be found [here](https://d
 
 ### Example
 #### Endpoint
-GET `https://orbitr.lantah.network/order_book?selling_asset_type=native&buying_asset_type=credit_alphanum4&buying_asset_code=BTC&buying_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH`
+GET `https://orbitr.metriq.network/order_book?selling_asset_type=native&buying_asset_type=credit_alphanum4&buying_asset_code=BTC&buying_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH`
 
 #### Response (application/json)
 ```json

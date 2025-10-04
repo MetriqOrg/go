@@ -3,7 +3,7 @@ package history
 import (
 	"context"
 
-	"github.com/lantah/go/support/db"
+	"github.com/metriqorg/go/support/db"
 )
 
 // QParticipants defines ingestion participant related queries.

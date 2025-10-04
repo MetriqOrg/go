@@ -16,10 +16,10 @@ package main
 import (
 	"log"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/txnbuild"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/txnbuild"
 )
 
 func main() {

@@ -5,12 +5,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/services/friendbot/internal"
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/txnbuild"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/services/friendbot/internal"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/txnbuild"
 )
 
 func initFriendbot(

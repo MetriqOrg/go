@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestStatsLedgerTransactionProcessoAllOpTypesCovered(t *testing.T) {

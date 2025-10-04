@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // Exec executes the query represented by the builder, populating the

@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/problem"
 	"github.com/stretchr/testify/require"
 )
 

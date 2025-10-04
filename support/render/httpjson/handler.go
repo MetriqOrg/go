@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/http/httpdecode"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/http/httpdecode"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 var (

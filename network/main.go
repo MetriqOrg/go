@@ -1,4 +1,4 @@
-// Package network contains functions that deal with lantah network passphrases
+// Package network contains functions that deal with metriq network passphrases
 // and IDs.
 package network
 
@@ -7,13 +7,13 @@ import (
 
 	"strings"
 
-	"github.com/lantah/go/hash"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/hash"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 const (
-	// PublicNetworkPassphrase is the pass phrase used for every transaction intended for the public lantah network
+	// PublicNetworkPassphrase is the pass phrase used for every transaction intended for the public metriq network
 	PublicNetworkPassphrase = "Public Global Lantah Network ; 2023"
 	// TestNetworkPassphrase is the pass phrase used for every transaction intended for the SDF-run test network
 	TestNetworkPassphrase = "Test Lantah Network ; 2023"
@@ -22,15 +22,15 @@ const (
 )
 
 var (
-	// PublicNetworkhistoryArchiveURLs is a list of history archive URLs for lantah 'pubnet'
-	PublicNetworkhistoryArchiveURLs = []string{"https://gravity1.lantah/network/",
-		"https://gravity2.lantah/network/",
-		"https://gravity3.lantah/network/"}
+	// PublicNetworkhistoryArchiveURLs is a list of history archive URLs for metriq 'pubnet'
+	PublicNetworkhistoryArchiveURLs = []string{"https://gravity1.metriq/network/",
+		"https://gravity2.metriq/network/",
+		"https://gravity3.metriq/network/"}
 
-	// TestNetworkhistoryArchiveURLs is a list of history archive URLs for lantah 'testnet'
-	TestNetworkhistoryArchiveURLs = []string{"https://testgravity1.lantah/network/",
-		"http://testgravity2.lantah/network/",
-		"https://testgravity3.lantah/network/"}
+	// TestNetworkhistoryArchiveURLs is a list of history archive URLs for metriq 'testnet'
+	TestNetworkhistoryArchiveURLs = []string{"https://testgravity1.metriq/network/",
+		"http://testgravity2.metriq/network/",
+		"https://testgravity3.metriq/network/"}
 )
 
 // ID returns the network ID derived from the provided passphrase.  This value

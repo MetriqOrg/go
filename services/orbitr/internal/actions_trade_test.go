@@ -12,13 +12,13 @@ import (
 	"time"
 
 	"github.com/guregu/null"
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/keypair"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/keypair"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	stellarTime "github.com/lantah/go/support/time"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	stellarTime "github.com/metriqorg/go/support/time"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestLiquidityPoolTrades(t *testing.T) {
@@ -592,7 +592,7 @@ func TestTradeActions_IndexRegressions(t *testing.T) {
 		ht.Assert.Equal(404, w.Code) //This used to be 200 with length 0
 	})
 
-	t.Run("Regression for nil prices: https://github.com/lantah/go/issues/357", func(t *testing.T) {
+	t.Run("Regression for nil prices: https://github.com/metriqorg/go/issues/357", func(t *testing.T) {
 		ht := StartHTTPTestWithoutScenario(t)
 		dbQ := &history.Q{ht.OrbitRSession()}
 		history.TradeScenario(ht.T, dbQ)
@@ -609,7 +609,7 @@ func TestTradeActions_IndexRegressions(t *testing.T) {
 
 // TestTradeActions_AggregationOrdering checks that open/close aggregation
 // fields are correct for multiple trades that occur in the same ledger
-// https://github.com/lantah/go/issues/215
+// https://github.com/metriqorg/go/issues/215
 func TestTradeActions_AggregationOrdering(t *testing.T) {
 	ht := StartHTTPTestWithoutScenario(t)
 	defer ht.Finish()

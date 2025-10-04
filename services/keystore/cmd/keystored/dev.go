@@ -4,8 +4,8 @@
 package main
 
 import (
-	"github.com/lantah/go/services/keystore"
-	"github.com/lantah/go/support/env"
+	"github.com/metriqorg/go/services/keystore"
+	"github.com/metriqorg/go/support/env"
 )
 
 func getConfig() *keystore.Config {

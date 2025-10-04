@@ -1,8 +1,8 @@
 package contractevents
 
 import (
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 var ErrNotBalanceChangeEvent = errors.New("event doesn't represent a balance change")

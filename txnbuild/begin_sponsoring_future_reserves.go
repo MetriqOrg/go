@@ -3,8 +3,8 @@
 package txnbuild
 
 import (
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // BeginSponsoringFutureReserves represents the Stellar begin sponsoring future reserves operation. See

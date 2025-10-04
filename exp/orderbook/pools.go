@@ -4,8 +4,8 @@ import (
 	"math"
 
 	"github.com/holiman/uint256"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // There are two different exchanges that can be simulated:

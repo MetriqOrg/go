@@ -3,8 +3,8 @@ package filters
 import (
 	"testing"
 
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
 )
 
 func TestItGetsFilters(t *testing.T) {

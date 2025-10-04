@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/services/orbitr/internal/test/integration"
-	"github.com/lantah/go/txnbuild"
-	"github.com/lantah/go/xdr"
+	sdk "github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/services/orbitr/internal/test/integration"
+	"github.com/metriqorg/go/txnbuild"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 

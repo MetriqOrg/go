@@ -27,14 +27,14 @@ GET /effects{?cursor,limit,order}
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/effects"
+curl "https://orbitr-testnet.metriq.network/effects"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.effects()
   .call()
@@ -51,7 +51,7 @@ server.effects()
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 var effectHandler = function (effectResponse) {
   console.log(effectResponse);

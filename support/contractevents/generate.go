@@ -7,8 +7,8 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/xdr"
 )
 
 // GenerateEvent is a utility function to be used by testing frameworks in order

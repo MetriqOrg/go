@@ -13,15 +13,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lantah/go/txnbuild"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/txnbuild"
+	"github.com/metriqorg/go/xdr"
 
 	"github.com/manucorporat/sse"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/protocols/orbitr/operations"
-	"github.com/lantah/go/support/errors"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/protocols/orbitr/operations"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // sendRequest builds the URL for the given orbitr request and sends the url to a orbitr server

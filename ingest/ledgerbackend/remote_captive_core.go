@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // PrepareRangeResponse describes the status of the pending PrepareRange operation.

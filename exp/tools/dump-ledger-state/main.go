@@ -12,11 +12,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/lantah/go/historyarchive"
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/historyarchive"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/xdr"
 )
 
 // csvMap maintains a mapping from ledger entry type to csv file

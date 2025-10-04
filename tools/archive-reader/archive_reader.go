@@ -7,8 +7,8 @@ import (
 	"io"
 	"log"
 
-	"github.com/lantah/go/historyarchive"
-	"github.com/lantah/go/ingest"
+	"github.com/metriqorg/go/historyarchive"
+	"github.com/metriqorg/go/ingest"
 )
 
 func main() {

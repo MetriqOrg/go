@@ -3,8 +3,8 @@ package ledgerbackend
 import (
 	"testing"
 
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

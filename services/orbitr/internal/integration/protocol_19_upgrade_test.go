@@ -4,10 +4,10 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/test/integration"
-	"github.com/lantah/go/txnbuild"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/test/integration"
+	"github.com/metriqorg/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 )
 

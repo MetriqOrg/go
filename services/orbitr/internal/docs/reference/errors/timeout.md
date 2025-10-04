@@ -36,7 +36,7 @@ draft specification guide and thus has the following attributes:
 ## Example
 ```json
 {
-  "type": "https://lantah.network/orbitr-errors/timeout",
+  "type": "https://metriq.network/orbitr-errors/timeout",
   "title": "Timeout",
   "status": 504,
   "detail": "Your request timed out before completing.  Please try your request again. If you are submitting a transaction make sure you are sending exactly the same transaction (with the same sequence number)."

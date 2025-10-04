@@ -33,14 +33,14 @@ GET /transactions{?cursor,limit,order,include_failed}
 
 ```sh
 # Retrieve the 200 latest transactions, ordered chronologically:
-curl "https://orbitr-testnet.lantah.network/transactions?limit=200&order=desc"
+curl "https://orbitr-testnet.metriq.network/transactions?limit=200&order=desc"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.transactions()
   .call()
@@ -61,7 +61,7 @@ server.transactions()
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 var txHandler = function (txResponse) {
   console.log(txResponse);

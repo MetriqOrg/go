@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"time"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/errors"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // port - the orbitr admin port, zero value defaults to 4200

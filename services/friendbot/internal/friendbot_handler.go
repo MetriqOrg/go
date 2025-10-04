@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/support/render/hal"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/support/render/hal"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 // FriendbotHandler causes an account at `Address` to be created.

@@ -3,8 +3,8 @@ package orbitrclient
 import (
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/http/httptest"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -56,7 +56,7 @@ func TestPathsRequest(t *testing.T) {
 		SourceAccount:          "GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
 	}
 
-	// orderbook for GRAM/USD
+	// orderbook for MTRQ/USD
 	hmock.On(
 		"GET",
 		"https://localhost/paths?destination_account=GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU&destination_amount=100&destination_asset_code=NGN&destination_asset_issuer=GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM&destination_asset_type=credit_alphanum4&source_account=GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
@@ -104,7 +104,7 @@ func TestStrictReceivePathsRequest(t *testing.T) {
 		SourceAccount:          "GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
 	}
 
-	// orderbook for GRAM/USD
+	// orderbook for MTRQ/USD
 	hmock.On(
 		"GET",
 		"https://localhost/paths?destination_account=GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU&destination_amount=100&destination_asset_code=NGN&destination_asset_issuer=GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM&destination_asset_type=credit_alphanum4&source_account=GDZST3XVCDTUJ76ZAV2HA72KYQODXXZ5PTMAPZGDHZ6CS7RO7MGG3DBM",
@@ -137,7 +137,7 @@ func TestStrictReceivePathsRequest(t *testing.T) {
 }
 
 var badRequestResponse = `{
-  "type": "https://lantah.network/orbitr-errors/bad_request",
+  "type": "https://metriq.network/orbitr-errors/bad_request",
   "title": "Bad Request",
   "status": 400,
   "detail": "The request you sent was invalid in some way",

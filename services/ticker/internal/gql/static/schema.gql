@@ -21,8 +21,8 @@ type Query {
 	): [Market]!
 
 	# retrieve aggregated trade stats for the last <numHoursAgo>
-	# hours. optionally provide a pairName (e.g. "GRAM_BTC" or a 
-	# single currency (e.g. "GRAM") for filtering results.
+	# hours. optionally provide a pairName (e.g. "MTRQ_BTC" or a 
+	# single currency (e.g. "MTRQ") for filtering results.
 	ticker(
 		pairName: String
 		numHoursAgo: Int

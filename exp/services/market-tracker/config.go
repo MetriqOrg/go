@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	hClient "github.com/lantah/go/clients/orbitrclient"
+	hClient "github.com/metriqorg/go/clients/orbitrclient"
 )
 
 // Asset represents an asset on the Lantah Network

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/lantah/go/protocols/orbitr/operations"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/protocols/orbitr/operations"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // BuildURL creates the endpoint to be queried based on the data in the OperationRequest struct.

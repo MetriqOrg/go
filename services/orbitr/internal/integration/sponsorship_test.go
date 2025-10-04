@@ -8,14 +8,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	sdk "github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	protocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/protocols/orbitr/operations"
-	"github.com/lantah/go/services/orbitr/internal/test/integration"
-	"github.com/lantah/go/txnbuild"
-	"github.com/lantah/go/xdr"
+	sdk "github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	protocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/protocols/orbitr/operations"
+	"github.com/metriqorg/go/services/orbitr/internal/test/integration"
+	"github.com/metriqorg/go/txnbuild"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestSponsorships(t *testing.T) {
@@ -675,7 +675,7 @@ func TestSponsorships(t *testing.T) {
 		itest.LogFailedTx(txResp, err)
 
 		// Establish a baseline for the master account
-		masterBalance := getAccountGRAM(itest, sponsorPair)
+		masterBalance := getAccountMTRQ(itest, sponsorPair)
 
 		// Check the global /claimable_balances list for success.
 		balances, err := client.ClaimableBalances(sdk.ClaimableBalanceRequest{})
@@ -693,8 +693,8 @@ func TestSponsorships(t *testing.T) {
 			&txnbuild.ClaimClaimableBalance{BalanceID: claims[0].BalanceID})
 		itest.LogFailedTx(txResp, err)
 
-		tt.Lessf(getAccountGRAM(itest, sponsoreePair), float64(25), "sponsoree balance didn't decrease")
-		tt.Greaterf(getAccountGRAM(itest, sponsorPair), masterBalance, "master balance didn't increase")
+		tt.Lessf(getAccountMTRQ(itest, sponsoreePair), float64(25), "sponsoree balance didn't decrease")
+		tt.Greaterf(getAccountMTRQ(itest, sponsorPair), masterBalance, "master balance didn't increase")
 
 		// Check that operations populate.
 		expectedOperations := map[string]bool{
@@ -767,8 +767,8 @@ func findOperationByID(needle string, haystack []operations.Operation) func() bo
 	}
 }
 
-// Retrieves the GRAM balance for an account.
-func getAccountGRAM(i *integration.Test, account *keypair.Full) float64 {
+// Retrieves the MTRQ balance for an account.
+func getAccountMTRQ(i *integration.Test, account *keypair.Full) float64 {
 	details := i.MustGetAccount(account)
 	balance, err := strconv.ParseFloat(details.Balances[0].Balance, 64)
 	if err != nil {

@@ -4,8 +4,8 @@ package txnbuild
 import (
 	"fmt"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // LiquidityPoolId represents the Stellar liquidity pool id.

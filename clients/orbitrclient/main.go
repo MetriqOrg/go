@@ -2,11 +2,11 @@
 Package orbitrclient provides client access to a OrbitR server, allowing an application to post transactions and look up ledger information.
 
 This library provides an interface to the Lantah OrbitR service. It supports the building of Go applications on
-top of the Lantah network (https://www.lantah.org/). Transactions may be constructed using the sister package to
-this one, txnbuild (https://github.com/lantah/go/tree/master/txnbuild), and then submitted with this client to any
+top of the Lantah network (https://www.metriq.org/). Transactions may be constructed using the sister package to
+this one, txnbuild (https://github.com/metriqorg/go/tree/master/txnbuild), and then submitted with this client to any
 OrbitR instance for processing onto the ledger. Together, these two libraries provide a complete Stellar SDK.
 
-For more information and further examples, see https://github.com/lantah/go/blob/master/docs/reference/readme.md
+For more information and further examples, see https://github.com/metriqorg/go/blob/master/docs/reference/readme.md
 */
 package orbitrclient
 
@@ -18,12 +18,12 @@ import (
 	"sync"
 	"time"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/protocols/orbitr/operations"
-	"github.com/lantah/go/support/clock"
-	"github.com/lantah/go/support/render/problem"
-	"github.com/lantah/go/txnbuild"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/protocols/orbitr/operations"
+	"github.com/metriqorg/go/support/clock"
+	"github.com/metriqorg/go/support/render/problem"
+	"github.com/metriqorg/go/txnbuild"
 )
 
 // cursor represents `cursor` param in queries
@@ -62,7 +62,7 @@ const (
 	AssetType4 AssetType = "credit_alphanum4"
 	// AssetType12 represents an asset type that is 12 characters long
 	AssetType12 AssetType = "credit_alphanum12"
-	// AssetTypeNative represents the asset type for Lantah Grams (GRAM)
+	// AssetTypeNative represents the asset type for Metriq (MTRQ)
 	AssetTypeNative AssetType = "native"
 	// accountRequiresMemo is the base64 encoding of "1".
 	// SEP 29 uses this value to define transaction memo requirements for incoming payments.
@@ -129,7 +129,7 @@ type HTTP interface {
 // transaction timebounds.
 type UniversalTimeHandler func() int64
 
-// Client struct contains data for creating a orbitr client that connects to the lantah network.
+// Client struct contains data for creating a orbitr client that connects to the metriq network.
 type Client struct {
 	// URL of OrbitR server to connect
 	OrbitRURL        string
@@ -236,14 +236,14 @@ type ClientInterface interface {
 
 // DefaultTestNetClient is a default client to connect to test network.
 var DefaultTestNetClient = &Client{
-	OrbitRURL:     "https://orbitr-testnet.lantah.network/",
+	OrbitRURL:     "https://orbitr-testnet.metriq.network/",
 	HTTP:           http.DefaultClient,
 	orbitrTimeout: OrbitRTimeout,
 }
 
 // DefaultPublicNetClient is a default client to connect to public network.
 var DefaultPublicNetClient = &Client{
-	OrbitRURL:     "https://orbitr.lantah.network/",
+	OrbitRURL:     "https://orbitr.metriq.network/",
 	HTTP:           http.DefaultClient,
 	orbitrTimeout: OrbitRTimeout,
 }

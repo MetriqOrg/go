@@ -8,12 +8,12 @@ import (
 	"time"
 
 	"github.com/guregu/null"
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	"github.com/lantah/go/support/render/hal"
-	"github.com/lantah/go/support/render/problem"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/support/render/hal"
+	"github.com/metriqorg/go/support/render/problem"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 

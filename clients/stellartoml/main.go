@@ -38,7 +38,6 @@ type Principal struct {
 	Name                  string `toml:"name"`
 	Email                 string `toml:"email"`
 	Keybase               string `toml:"keybase"`
-	Telegram              string `toml:"telegram"`
 	Twitter               string `toml:"twitter"`
 	Github                string `toml:"github"`
 	IdPhotoHash           string `toml:"id_photo_hash"`

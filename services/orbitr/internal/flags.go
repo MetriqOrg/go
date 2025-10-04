@@ -12,14 +12,14 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/services/orbitr/internal/db2/schema"
-	apkg "github.com/lantah/go/support/app"
-	support "github.com/lantah/go/support/config"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/schema"
+	apkg "github.com/metriqorg/go/support/app"
+	support "github.com/metriqorg/go/support/config"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 	"github.com/stellar/throttled"
 )
 
@@ -100,7 +100,7 @@ func checkMigrations(config Config) error {
 		return fmt.Errorf(
 			`There are %v migrations to apply in the "up" direction.
 The necessary migrations are: %v
-A database migration is required to run this version (%v) of OrbitR. Run "orbitr db migrate up" to update your DB. Consult the Changelog (https://github.com/lantah/go/blob/master/services/orbitr/CHANGELOG.md) for more information.`,
+A database migration is required to run this version (%v) of OrbitR. Run "orbitr db migrate up" to update your DB. Consult the Changelog (https://github.com/metriqorg/go/blob/master/services/orbitr/CHANGELOG.md) for more information.`,
 			len(migrationsToApplyUp),
 			migrationsToApplyUp,
 			apkg.Version(),
@@ -110,7 +110,7 @@ A database migration is required to run this version (%v) of OrbitR. Run "orbitr
 	nMigrationsDown := schema.GetNumMigrationsDown(config.DatabaseURL)
 	if nMigrationsDown > 0 {
 		return fmt.Errorf(
-			`A database migration DOWN to an earlier version of the schema is required to run this version (%v) of OrbitR. Consult the Changelog (https://github.com/lantah/go/blob/master/services/orbitr/CHANGELOG.md) for more information.
+			`A database migration DOWN to an earlier version of the schema is required to run this version (%v) of OrbitR. Consult the Changelog (https://github.com/metriqorg/go/blob/master/services/orbitr/CHANGELOG.md) for more information.
 In order to migrate the database DOWN, using the HIGHEST version number of OrbitR you have installed (not this binary), run "orbitr db migrate down %v".`,
 			apkg.Version(),
 			nMigrationsDown,

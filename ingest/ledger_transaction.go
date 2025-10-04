@@ -3,8 +3,8 @@ package ingest
 import (
 	"fmt"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // LedgerTransaction represents the data for a single transaction within a ledger.

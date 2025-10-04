@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 )
 
 type hash []byte

@@ -1,7 +1,7 @@
 package orderbook
 
 import (
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
 )
 
 // getPoolAssets retrieves string representations of a pool's reserves

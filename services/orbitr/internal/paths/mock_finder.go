@@ -3,7 +3,7 @@ package paths
 import (
 	"context"
 
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/mock"
 )
 

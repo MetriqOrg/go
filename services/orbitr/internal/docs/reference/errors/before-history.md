@@ -3,7 +3,7 @@ title: Before History
 replacement: https://developers.stellar.org/api/errors/http-status-codes/horizon-specific/
 ---
 
-A horizon server may be configured to only keep a portion of the lantah network's history stored
+A horizon server may be configured to only keep a portion of the metriq network's history stored
 within its database.  This error will be returned when a client requests a piece of information
 (such as a page of transactions or a single operation) that the server can positively identify as
 falling outside the range of recorded history.
@@ -27,12 +27,12 @@ draft specification guide and thus has the following attributes:
 ## Example
 
 ```shell
-$ curl -X GET "https://orbitr-testnet.lantah.network/transactions?cursor=1&order=desc"
+$ curl -X GET "https://orbitr-testnet.metriq.network/transactions?cursor=1&order=desc"
 {
-  "type": "https://lantah.network/orbitr-errors/before_history",
+  "type": "https://metriq.network/orbitr-errors/before_history",
   "title": "Data Requested Is Before Recorded History",
   "status": 410,
-  "detail": "This horizon instance is configured to only track a portion of the lantah network's latest history. This request is asking for results prior to the recorded history known to this horizon instance."
+  "detail": "This horizon instance is configured to only track a portion of the metriq network's latest history. This request is asking for results prior to the recorded history known to this horizon instance."
 }
 ```
 

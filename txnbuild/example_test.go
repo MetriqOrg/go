@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/lantah/go/price"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/price"
+	"github.com/metriqorg/go/xdr"
 
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
-	orbitrclient "github.com/lantah/go/txnbuild/exampleorbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
+	orbitrclient "github.com/metriqorg/go/txnbuild/exampleorbitrclient"
 )
 
 func ExampleInflation() {

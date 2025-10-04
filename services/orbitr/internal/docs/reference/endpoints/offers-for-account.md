@@ -32,14 +32,14 @@ GET /accounts/{account}/offers{?cursor,limit,order}
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF/offers"
+curl "https://orbitr-testnet.metriq.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF/offers"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.offers('accounts', 'GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF')
   .call()
@@ -55,7 +55,7 @@ server.offers('accounts', 'GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XU
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 var offerHandler = function (offerResponse) {
   console.log(offerResponse);
@@ -81,13 +81,13 @@ The list of offers.
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF/offers?cursor=&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF/offers?cursor=&limit=10&order=asc"
     },
     "next": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF/offers?cursor=5443256&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF/offers?cursor=5443256&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF/offers?cursor=5443256&limit=10&order=desc"
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF/offers?cursor=5443256&limit=10&order=desc"
     }
   },
   "_embedded": {
@@ -95,10 +95,10 @@ The list of offers.
       {
         "_links": {
           "self": {
-            "href": "https://orbitr-testnet.lantah.network/offers/5443256"
+            "href": "https://orbitr-testnet.metriq.network/offers/5443256"
           },
           "offer_maker": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF"
+            "href": "https://orbitr-testnet.metriq.network/accounts/GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF"
           }
         },
         "id": "5443256",

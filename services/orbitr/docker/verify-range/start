@@ -75,7 +75,7 @@ export CAPTIVE_CORE_CONFIG_APPEND_PATH="/captive-core-pubnet.cfg"
 export GRAVITY_BINARY_PATH="/usr/bin/gravity"
 export ENABLE_CAPTIVE_CORE_INGESTION="true"
 
-cd lantah-go
+cd metriq-go
 git pull origin
 if [ ! -z "$BRANCH" ]; then
 	git checkout $BRANCH
@@ -107,9 +107,9 @@ function alter_tables_unlogged() {
 
 /usr/local/go/bin/go build -v ./services/horizon
 cd $CAPTIVE_CORE_STORAGE_PATH
-/lantah-go/horizon db migrate up
+/metriq-go/horizon db migrate up
 alter_tables_unlogged
-/lantah-go/horizon ingest verify-range --from $FROM --to $TO --verify-state
+/metriq-go/horizon ingest verify-range --from $FROM --to $TO --verify-state
 
 function compare() {
   local expected="/data/compare/old_$1"
@@ -138,15 +138,15 @@ if [ ! -z "$VERIFY_HISTORY" ]; then
 	psql "postgres://postgres:postgres@localhost:5432/horizon?sslmode=disable" -c "DROP SCHEMA public CASCADE;"
 	psql "postgres://postgres:postgres@localhost:5432/horizon?sslmode=disable" -c "CREATE SCHEMA public;"
 
-    cd /lantah-go
+    cd /metriq-go
 	git checkout "$BASE_BRANCH"
 	/usr/local/go/bin/go build -v ./services/horizon
 	
 	cd $CAPTIVE_CORE_STORAGE_PATH
-	/lantah-go/horizon db migrate up
+	/metriq-go/horizon db migrate up
 	alter_tables_unlogged
 	REINGEST_FROM=$((FROM + 1)) # verify-range does not ingest starting ledger
-	/lantah-go/horizon db reingest range $REINGEST_FROM $TO
+	/metriq-go/horizon db reingest range $REINGEST_FROM $TO
 
 	dump_horizon_db "/data/compare/old_history"
 	echo "Done dump_horizon_db old_history"

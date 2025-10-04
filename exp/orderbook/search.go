@@ -3,9 +3,9 @@ package orderbook
 import (
 	"context"
 
-	"github.com/lantah/go/price"
-	"github.com/lantah/go/support/ordered"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/price"
+	"github.com/metriqorg/go/support/ordered"
+	"github.com/metriqorg/go/xdr"
 )
 
 // Path represents a payment path from a source asset to some destination asset

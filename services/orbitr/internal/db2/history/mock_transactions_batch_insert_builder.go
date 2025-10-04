@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
-	"github.com/lantah/go/ingest"
+	"github.com/metriqorg/go/ingest"
 )
 
 type MockTransactionsBatchInsertBuilder struct {

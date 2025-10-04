@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/errors"
 	"github.com/tyler-smith/go-bip39"
 )
 

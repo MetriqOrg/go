@@ -7,9 +7,9 @@ import (
 
 	"github.com/stellar/throttled"
 
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	hProblem "github.com/lantah/go/services/orbitr/internal/render/problem"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	hProblem "github.com/metriqorg/go/services/orbitr/internal/render/problem"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 const lruCacheSize = 50000

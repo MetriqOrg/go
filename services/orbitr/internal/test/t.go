@@ -9,13 +9,13 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	"github.com/lantah/go/services/orbitr/internal/db2/schema"
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	"github.com/lantah/go/services/orbitr/internal/operationfeestats"
-	tdb "github.com/lantah/go/services/orbitr/internal/test/db"
-	"github.com/lantah/go/services/orbitr/internal/test/scenarios"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/render/hal"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/schema"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	"github.com/metriqorg/go/services/orbitr/internal/operationfeestats"
+	tdb "github.com/metriqorg/go/services/orbitr/internal/test/db"
+	"github.com/metriqorg/go/services/orbitr/internal/test/scenarios"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/render/hal"
 )
 
 // CoreSession returns a db.Session instance pointing at the gravity test database

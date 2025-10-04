@@ -8,10 +8,10 @@ import (
 	"text/template"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/lantah/go/services/orbitr/internal/db2"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/toid"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/toid"
+	"github.com/metriqorg/go/xdr"
 )
 
 // LedgerSequence return the ledger in which the effect occurred.
@@ -50,7 +50,7 @@ func preprocessDetails(details string) ([]byte, error) {
 		if strings.HasSuffix(k, "_muxed_id") {
 			if vNumber, ok := v.(json.Number); ok {
 				// transform it into a string so that _muxed_id unmarshaling works with `,string` tags
-				// see https://github.com/lantah/go/pull/3716#issuecomment-867057436
+				// see https://github.com/metriqorg/go/pull/3716#issuecomment-867057436
 				dest[k] = vNumber.String()
 			}
 		}

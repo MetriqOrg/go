@@ -22,7 +22,7 @@ To run some tests these tools are also required:
 Check the code out anywhere, using a `GOPATH` is not required.
 
 ```
-git clone https://github.com/lantah/go
+git clone https://github.com/metriqorg/go
 ```
 
 ## Installing dependencies

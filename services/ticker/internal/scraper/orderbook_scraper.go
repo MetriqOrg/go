@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	orbitrclient "github.com/lantah/go/clients/orbitrclient"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/ticker/internal/utils"
+	orbitrclient "github.com/metriqorg/go/clients/orbitrclient"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/ticker/internal/utils"
 )
 
 // fetchOrderbook fetches the orderbook stats for the base and counter assets provided in the parameters
@@ -118,7 +118,7 @@ func createOrderbookRequest(bType, bCode, bIssuer, cType, cCode, cIssuer string)
 	}
 
 	// The OrbitR API requires *AssetCode and *AssetIssuer fields to be empty
-	// when an Asset is native. As we store "GRAM" as the asset code for native,
+	// when an Asset is native. As we store "MTRQ" as the asset code for native,
 	// we should only add Code and Issuer info in case we're dealing with
 	// non-native assets.
 	// See: https://developers.stellar.org/api/aggregations/order-books/single/

@@ -1,8 +1,8 @@
 package txnbuild
 
 import (
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // TrustLineAsset represents a Stellar trust line asset.
@@ -22,7 +22,7 @@ func (lpsa LiquidityPoolShareTrustLineAsset) GetType() (AssetType, error) {
 	return AssetTypePoolShare, nil
 }
 
-// IsNative for LiquidityPoolShareAsset returns false (this is not an GRAM asset).
+// IsNative for LiquidityPoolShareAsset returns false (this is not an MTRQ asset).
 func (lpsa LiquidityPoolShareTrustLineAsset) IsNative() bool { return false }
 
 // GetCode for LiquidityPoolShareAsset returns blank string

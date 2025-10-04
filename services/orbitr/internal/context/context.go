@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/support/db"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/support/db"
 )
 
 type CtxKey string

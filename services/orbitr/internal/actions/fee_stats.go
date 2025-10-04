@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/operationfeestats"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/operationfeestats"
 )
 
 // FeeStatsHandler is the action handler for the /fee_stats endpoint

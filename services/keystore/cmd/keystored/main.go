@@ -17,9 +17,9 @@ import (
 
 	migrate "github.com/rubenv/sql-migrate"
 	"github.com/sirupsen/logrus"
-	"github.com/lantah/go/services/keystore"
-	"github.com/lantah/go/support/collections/set"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/services/keystore"
+	"github.com/metriqorg/go/support/collections/set"
+	"github.com/metriqorg/go/support/log"
 
 	_ "github.com/lib/pq"
 )

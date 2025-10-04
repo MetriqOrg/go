@@ -10,9 +10,9 @@ import (
 
 	"github.com/go-chi/chi"
 
-	"github.com/lantah/go/services/ticker/internal/gql"
-	"github.com/lantah/go/services/ticker/internal/tickerdb/tickerdbtest"
-	hlog "github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/services/ticker/internal/gql"
+	"github.com/metriqorg/go/services/ticker/internal/tickerdb/tickerdbtest"
+	hlog "github.com/metriqorg/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

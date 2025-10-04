@@ -3,8 +3,8 @@ package federation
 import (
 	"context"
 
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // LookupRecord implements `Driver` by performing `drv.LookupRecordQuery`

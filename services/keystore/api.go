@@ -12,11 +12,11 @@ import (
 	"time"
 
 	"github.com/rs/cors"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/health"
-	"github.com/lantah/go/support/render/httpjson"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/health"
+	"github.com/metriqorg/go/support/render/httpjson"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 func init() {

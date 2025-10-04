@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/http/httptest"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -57,9 +57,9 @@ func TestTradeAggregationsRequest(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.IsType(t, tradeAggs, hProtocol.TradeAggregationsPage{})
 		links := tradeAggs.Links
-		assert.Equal(t, links.Self.Href, "https://orbitr.lantah.network/trade_aggregations?base_asset_type=native\u0026counter_asset_code=SLT\u0026counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP\u0026counter_asset_type=credit_alphanum4\u0026limit=200\u0026order=asc\u0026resolution=3600000\u0026start_time=1517521726000\u0026end_time=1517532526000")
+		assert.Equal(t, links.Self.Href, "https://orbitr.metriq.network/trade_aggregations?base_asset_type=native\u0026counter_asset_code=SLT\u0026counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP\u0026counter_asset_type=credit_alphanum4\u0026limit=200\u0026order=asc\u0026resolution=3600000\u0026start_time=1517521726000\u0026end_time=1517532526000")
 
-		assert.Equal(t, links.Next.Href, "https://orbitr.lantah.network/trade_aggregations?base_asset_type=native\u0026counter_asset_code=SLT\u0026counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP\u0026counter_asset_type=credit_alphanum4\u0026end_time=1517532526000\u0026limit=200\u0026order=asc\u0026resolution=3600000\u0026start_time=1517529600000")
+		assert.Equal(t, links.Next.Href, "https://orbitr.metriq.network/trade_aggregations?base_asset_type=native\u0026counter_asset_code=SLT\u0026counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP\u0026counter_asset_type=credit_alphanum4\u0026end_time=1517532526000\u0026limit=200\u0026order=asc\u0026resolution=3600000\u0026start_time=1517529600000")
 
 		record := tradeAggs.Embedded.Records[0]
 		assert.IsType(t, record, hProtocol.TradeAggregation{})
@@ -127,7 +127,7 @@ func TestNextTradeAggregationsPage(t *testing.T) {
 
 	hmock.On(
 		"GET",
-		"https://orbitr-testnet.lantah.network/trade_aggregations?base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&base_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&limit=2&resolution=60000&start_time=0",
+		"https://orbitr-testnet.metriq.network/trade_aggregations?base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&base_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&limit=2&resolution=60000&start_time=0",
 	).ReturnString(200, emptyTradeAggsPage)
 
 	nextPage, err := client.NextTradeAggregationsPage(tradeAggs)
@@ -166,7 +166,7 @@ func TestPrevTradeAggregationsPage(t *testing.T) {
 
 	hmock.On(
 		"GET",
-		"https://orbitr-testnet.lantah.network/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&start_time=1565132904&resolution=60000&limit=2",
+		"https://orbitr-testnet.metriq.network/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&start_time=1565132904&resolution=60000&limit=2",
 	).ReturnString(200, firstTradeAggsPage)
 
 	prevPage, err := client.PrevTradeAggregationsPage(tradeAggs)
@@ -210,10 +210,10 @@ func TestTradeAggregationsPageStringPayload(t *testing.T) {
 var tradeAggsResponse = `{
   "_links": {
     "self": {
-      "href": "https://orbitr.lantah.network/trade_aggregations?base_asset_type=native\u0026counter_asset_code=SLT\u0026counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP\u0026counter_asset_type=credit_alphanum4\u0026limit=200\u0026order=asc\u0026resolution=3600000\u0026start_time=1517521726000\u0026end_time=1517532526000"
+      "href": "https://orbitr.metriq.network/trade_aggregations?base_asset_type=native\u0026counter_asset_code=SLT\u0026counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP\u0026counter_asset_type=credit_alphanum4\u0026limit=200\u0026order=asc\u0026resolution=3600000\u0026start_time=1517521726000\u0026end_time=1517532526000"
     },
     "next": {
-      "href": "https://orbitr.lantah.network/trade_aggregations?base_asset_type=native\u0026counter_asset_code=SLT\u0026counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP\u0026counter_asset_type=credit_alphanum4\u0026end_time=1517532526000\u0026limit=200\u0026order=asc\u0026resolution=3600000\u0026start_time=1517529600000"
+      "href": "https://orbitr.metriq.network/trade_aggregations?base_asset_type=native\u0026counter_asset_code=SLT\u0026counter_asset_issuer=GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP\u0026counter_asset_type=credit_alphanum4\u0026end_time=1517532526000\u0026limit=200\u0026order=asc\u0026resolution=3600000\u0026start_time=1517529600000"
     }
   },
   "_embedded": {
@@ -279,10 +279,10 @@ var tradeAggsResponse = `{
 var firstTradeAggsPage = `{
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&resolution=60000&limit=2"
+      "href": "https://orbitr-testnet.metriq.network/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&resolution=60000&limit=2"
     },
     "next": {
-      "href": "https://orbitr-testnet.lantah.network/trade_aggregations?base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&base_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&limit=2&resolution=60000&start_time=0"
+      "href": "https://orbitr-testnet.metriq.network/trade_aggregations?base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&base_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&limit=2&resolution=60000&start_time=0"
     },
     "prev": {
       "href": ""
@@ -351,13 +351,13 @@ var firstTradeAggsPage = `{
 var emptyTradeAggsPage = `{
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&resolution=60000&limit=2"
+      "href": "https://orbitr-testnet.metriq.network/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&resolution=60000&limit=2"
     },
     "next": {
-      "href": "https://orbitr-testnet.lantah.network/trade_aggregations?base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&base_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&limit=2&resolution=60000&start_time=0"
+      "href": "https://orbitr-testnet.metriq.network/trade_aggregations?base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&base_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&limit=2&resolution=60000&start_time=0"
     },
     "prev": {
-      "href": "https://orbitr-testnet.lantah.network/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&start_time=1565132904&resolution=60000&limit=2"
+      "href": "https://orbitr-testnet.metriq.network/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=USD&base_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GDLEUZYDSFMWA5ZLQIOCYS7DMLYDKFS2KWJ5M3RQ3P3WS4L75ZTWKELP&start_time=1565132904&resolution=60000&limit=2"
     }
   },
   "_embedded": {

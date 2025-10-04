@@ -3,8 +3,8 @@ package orbitrclient
 import (
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/http/httptest"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -64,7 +64,7 @@ func TestLiquidityPoolDetailRequest(t *testing.T) {
 var liquidityPoolResponse = `{
   "_links": {
     "self": {
-      "href": "https://orbitr.lantah.network/liquidity_pools/abcdef"
+      "href": "https://orbitr.metriq.network/liquidity_pools/abcdef"
     }
   },
 	"id": "abcdef",

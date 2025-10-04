@@ -3,8 +3,8 @@ package resourceadapter
 import (
 	"context"
 
-	protocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/xdr"
+	protocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/xdr"
 )
 
 func PopulateAsset(ctx context.Context, dest *protocol.Asset, asset xdr.Asset) error {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	backends "github.com/lantah/go/ingest/ledgerbackend"
+	backends "github.com/metriqorg/go/ingest/ledgerbackend"
 )
 
 func helloworld() {

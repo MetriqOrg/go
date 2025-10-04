@@ -6,13 +6,13 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/spf13/cobra"
-	"github.com/lantah/go/handlers/federation"
-	"github.com/lantah/go/support/app"
-	"github.com/lantah/go/support/config"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/http"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/handlers/federation"
+	"github.com/metriqorg/go/support/app"
+	"github.com/metriqorg/go/support/config"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/http"
+	"github.com/metriqorg/go/support/log"
 )
 
 // Config represents the configuration of a federation server

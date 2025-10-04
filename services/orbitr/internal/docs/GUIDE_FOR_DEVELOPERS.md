@@ -40,7 +40,7 @@ This script is helpful to spin up the services quickly and play around with them
 We will now configure a development environment to run Horizon service locally without Docker.
 
 ### Building Gravity
-Horizon requires an instance of gravity binary on the same host. This is referred to as the `Captive Core`. Since, we are running horizon for dev purposes, we recommend considering two approaches to get the gravity binary, if saving time is top priority and your development machine is on a linux debian o/s, then consider installing the debian package, otherwise the next option available is to compile the core source directly to binary on your machine, refer to [INSTALL.md](https://github.com/lantah/gravity/blob/master/INSTALL.md) file for the instructions on both approaches.
+Horizon requires an instance of gravity binary on the same host. This is referred to as the `Captive Core`. Since, we are running horizon for dev purposes, we recommend considering two approaches to get the gravity binary, if saving time is top priority and your development machine is on a linux debian o/s, then consider installing the debian package, otherwise the next option available is to compile the core source directly to binary on your machine, refer to [INSTALL.md](https://github.com/metriqorg/gravity/blob/master/INSTALL.md) file for the instructions on both approaches.
 
 ### Building Horizon
 
@@ -144,7 +144,7 @@ This section contains additional information related to the development of Horiz
 By default, the [docker-compose.yml](/services/horizon/docker/docker-compose.yml) will configure Horizon with captive core ingestion to use the test network.
 
 To run the containers on a private stand-alone network, run `./start.sh standalone`.
-When you run Gravity on a stand-alone network, a root account will be created by default. It will have a balance of 1 trillion grams (1Tg) and the following key pair:
+When you run Gravity on a stand-alone network, a root account will be created by default. It will have a balance of 1 trillion MTRQ (1TM) and the following key pair:
 ```
 Root Public Key: (MISSING)
 Root Secret Key: (MISSING)

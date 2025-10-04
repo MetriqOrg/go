@@ -10,14 +10,14 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
-	"github.com/lantah/go/gxdr"
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/randxdr"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/gxdr"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/randxdr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest/processors"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/xdr"
 )
 
 func genAccount(tt *test.T, gen randxdr.Generator) xdr.LedgerEntryChange {

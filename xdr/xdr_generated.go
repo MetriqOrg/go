@@ -11153,7 +11153,7 @@ var _ xdrType = (*LedgerHeaderExt)(nil)
 //	     uint32 ledgerSeq; // sequence number of this ledger
 //
 //	     int64 totalCoins; // total number of µg (micrograms) in existence.
-//	                       // 1,000,000 µg in 1 GRAM
+//	                       // 1,000,000 µg in 1 MTRQ
 //
 //	     int64 feePool;       // fees burned since last inflation run
 //	     uint32 inflationSeq; // inflation sequence number

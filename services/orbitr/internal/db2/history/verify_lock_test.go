@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"testing"
 
-	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
 )
 
 func TestTryStateVerificationLock(t *testing.T) {

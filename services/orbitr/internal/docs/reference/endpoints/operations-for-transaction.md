@@ -32,14 +32,14 @@ GET /transactions/{hash}/operations{?cursor,limit,order}
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a/operations?limit=1"
+curl "https://orbitr-testnet.metriq.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a/operations?limit=1"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.operations()
   .forTransaction("4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a")
@@ -62,13 +62,13 @@ This endpoint responds with a list of operations that are part of a given transa
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a/operations?cursor=&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a/operations?cursor=&limit=10&order=asc"
     },
     "next": {
-      "href": "https://orbitr-testnet.lantah.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a/operations?cursor=2927608622747649&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a/operations?cursor=2927608622747649&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://orbitr-testnet.lantah.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a/operations?cursor=2927608622747649&limit=10&order=desc"
+      "href": "https://orbitr-testnet.metriq.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a/operations?cursor=2927608622747649&limit=10&order=desc"
     }
   },
   "_embedded": {
@@ -76,19 +76,19 @@ This endpoint responds with a list of operations that are part of a given transa
       {
         "_links": {
           "self": {
-            "href": "https://orbitr-testnet.lantah.network/operations/2927608622747649"
+            "href": "https://orbitr-testnet.metriq.network/operations/2927608622747649"
           },
           "transaction": {
-            "href": "https://orbitr-testnet.lantah.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a"
+            "href": "https://orbitr-testnet.metriq.network/transactions/4a3365180521e16b478d9f0c9198b97a9434fc9cb07b34f83ecc32fc54d0ca8a"
           },
           "effects": {
-            "href": "https://orbitr-testnet.lantah.network/operations/2927608622747649/effects"
+            "href": "https://orbitr-testnet.metriq.network/operations/2927608622747649/effects"
           },
           "succeeds": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=desc&cursor=2927608622747649"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=desc&cursor=2927608622747649"
           },
           "precedes": {
-            "href": "https://orbitr-testnet.lantah.network/effects?order=asc&cursor=2927608622747649"
+            "href": "https://orbitr-testnet.metriq.network/effects?order=asc&cursor=2927608622747649"
           }
         },
         "id": "2927608622747649",

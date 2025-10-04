@@ -1624,7 +1624,7 @@ This is a fix release for v0.9.0 and v0.9.1
 This release was retracted due to a bug discovered after release.
 
 ### Added
-- Horizon now exposes the lantah network protocol in several places:  It shows the currently reported protocol version (as returned by the stellar-core `info` command) on the root endpoint, and it reports the protocol version of each ledger resource.
+- Horizon now exposes the metriq network protocol in several places:  It shows the currently reported protocol version (as returned by the stellar-core `info` command) on the root endpoint, and it reports the protocol version of each ledger resource.
 - Trade resources now include a `created_at` timestamp.
 
 ### Fixed

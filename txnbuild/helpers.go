@@ -3,10 +3,10 @@ package txnbuild
 import (
 	"fmt"
 
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // validateStellarPublicKey returns an error if a public key is invalid. Otherwise, it returns nil.
@@ -99,7 +99,7 @@ func validatePrice(p xdr.Price) error {
 
 // validateAssetCode checks if the provided asset is valid as an asset code.
 // It returns an error if the asset is invalid.
-// The asset must be non native (GRAM) with a valid asset code.
+// The asset must be non native (MTRQ) with a valid asset code.
 func validateAssetCode(asset BasicAsset) error {
 	// Note: we are not using validateStellarAsset() function for AllowTrust operations because it requires the
 	//  following :
@@ -111,7 +111,7 @@ func validateAssetCode(asset BasicAsset) error {
 	}
 
 	if asset.IsNative() {
-		return errors.New("native (GRAM) asset type is not allowed")
+		return errors.New("native (MTRQ) asset type is not allowed")
 	}
 
 	_, err := asset.GetType()
@@ -123,7 +123,7 @@ func validateAssetCode(asset BasicAsset) error {
 
 // validateChangeTrustAsset checks if the provided asset is valid for use in ChangeTrust operation.
 // It returns an error if the asset is invalid.
-// The asset must be non native (GRAM) with a valid asset code and issuer.
+// The asset must be non native (MTRQ) with a valid asset code and issuer.
 func validateChangeTrustAsset(asset ChangeTrustAsset) error {
 	// Note: we are not using validateStellarAsset() function for ChangeTrust operations because it requires the
 	//  following :
@@ -156,7 +156,7 @@ func validateChangeTrustAsset(asset ChangeTrustAsset) error {
 // It returns an error if any field is invalid.
 func validatePassiveOffer(buying, selling Asset, offerAmount string, price xdr.Price) error {
 	// Note: see discussion on how this can be improved:
-	// https://github.com/lantah/go/pull/1707#discussion_r321508440
+	// https://github.com/metriqorg/go/pull/1707#discussion_r321508440
 	err := validateStellarAsset(buying)
 	if err != nil {
 		return NewValidationError("Buying", err.Error())

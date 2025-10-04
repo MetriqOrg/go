@@ -26,7 +26,7 @@ To learn more about the concept of ledgers in the Lantah Network, take a look at
 | base_fee                     | number | The [fee] the network charges per operation in a transaction.                                                                |
 | base_reserve                 | string | The [reserve][fee] the network uses when calculating an account's minimum balance.                                           |
 | max_tx_set_size              | number | The maximum number of transactions validators have agreed to process in a given ledger.                                      |
-| protocol_version             | number | The protocol version that the lantah network was running when this ledger was committed.                                    |
+| protocol_version             | number | The protocol version that the metriq network was running when this ledger was committed.                                    |
 | header_xdr                   | string | A base64 encoded string of the raw `LedgerHeader` xdr struct for this ledger.                                                |
 | base_fee_in_µg          | number | The [fee] the network charges per operation in a transaction.  Expressed in µg.                                         |
 | base_reserve_in_µg      | number | The [reserve][fee] the network uses when calculating an account's minimum balance. Expressed in µg.                     |

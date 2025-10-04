@@ -9,15 +9,15 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/network"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/txnbuild"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/network"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/txnbuild"
+	"github.com/metriqorg/go/xdr"
 
-	"github.com/lantah/go/keypair"
+	"github.com/metriqorg/go/keypair"
 )
 
 // The account address of the TestNet "friendbot"

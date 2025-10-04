@@ -26,14 +26,14 @@ GET /offers{?selling_asset_type,selling_asset_issuer,selling_asset_code,buying_a
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/offers{?selling_asset_type,selling_asset_issuer,selling_asset_code,buying_asset_type,buying_asset_issuer,buying_asset_code,seller,cursor,limit,order}"
+curl "https://orbitr-testnet.metriq.network/offers{?selling_asset_type,selling_asset_issuer,selling_asset_code,buying_asset_type,buying_asset_issuer,buying_asset_code,seller,cursor,limit,order}"
 ```
 
 <!-- ### JavaScript Example Request -->
 
 <!-- ```javascript -->
 <!-- var StellarSdk = require('stellar-sdk'); -->
-<!-- var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network'); -->
+<!-- var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network'); -->
 
 <!-- server.offers('accounts', 'GBYUUJHG6F4EPJGNLERINATVQLNDOFRUD7SGJZ26YZLG5PAYLG7XUSGF') -->
 <!--   .call() -->
@@ -49,7 +49,7 @@ curl "https://orbitr-testnet.lantah.network/offers{?selling_asset_type,selling_a
 
 <!-- ```javascript -->
 <!-- var StellarSdk = require('stellar-sdk') -->
-<!-- var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network'); -->
+<!-- var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network'); -->
 
 <!-- var offerHandler = function (offerResponse) { -->
 <!--   console.log(offerResponse); -->
@@ -72,13 +72,13 @@ The list of offers.
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/offers?cursor=&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/offers?cursor=&limit=10&order=asc"
     },
     "next": {
-      "href": "https://orbitr-testnet.lantah.network/offers?cursor=5443256&limit=10&order=asc"
+      "href": "https://orbitr-testnet.metriq.network/offers?cursor=5443256&limit=10&order=asc"
     },
     "prev": {
-      "href": "https://orbitr-testnet.lantah.network/offers?cursor=5443256&limit=10&order=desc"
+      "href": "https://orbitr-testnet.metriq.network/offers?cursor=5443256&limit=10&order=desc"
     }
   },
   "_embedded": {
@@ -86,10 +86,10 @@ The list of offers.
       {
         "_links": {
           "self": {
-            "href": "https://orbitr-testnet.lantah.network/offers/5443256"
+            "href": "https://orbitr-testnet.metriq.network/offers/5443256"
           },
           "offer_maker": {
-            "href": "https://orbitr-testnet.lantah.network/"
+            "href": "https://orbitr-testnet.metriq.network/"
           }
         },
         "id": "5443256",

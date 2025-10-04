@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	orbitrclient "github.com/lantah/go/clients/orbitrclient"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	orbitrclient "github.com/metriqorg/go/clients/orbitrclient"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/lantah/go/protocols/gravity"
+	"github.com/metriqorg/go/protocols/gravity"
 )
 
 type State struct {

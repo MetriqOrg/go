@@ -3,10 +3,10 @@ package resourceadapter
 import (
 	"context"
 
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/price"
-	protocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/price"
+	protocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
 )
 
 // PopulateTradeAggregation fills out the details of a trade aggregation using a row from the trade aggregations

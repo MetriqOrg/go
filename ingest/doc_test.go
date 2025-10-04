@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/lantah/go/historyarchive"
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/historyarchive"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/xdr"
 )
 
 // Example_ledgerentrieshistoryarchive demonstrates how to stream all ledger

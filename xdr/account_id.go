@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/lantah/go/strkey"
+	"github.com/metriqorg/go/strkey"
 )
 
 // Address returns the strkey encoded form of this AccountId.  This method will

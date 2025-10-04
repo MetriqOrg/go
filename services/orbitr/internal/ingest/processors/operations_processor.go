@@ -7,14 +7,14 @@ import (
 	"fmt"
 	"github.com/guregu/null"
 
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/protocols/orbitr/base"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/support/contractevents"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/toid"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/protocols/orbitr/base"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/support/contractevents"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/toid"
+	"github.com/metriqorg/go/xdr"
 )
 
 // OperationProcessor operations processor
@@ -320,7 +320,7 @@ func addAccountAndMuxedAccountDetails(result map[string]interface{}, a xdr.Muxed
 	if a.Type == xdr.CryptoKeyTypeKeyTypeMuxedEd25519 {
 		result[prefix+"_muxed"] = a.Address()
 		// _muxed_id fields should had ideally been stored in the DB as a string instead of uint64
-		// due to Javascript not being able to handle them, see https://github.com/lantah/go/issues/3714
+		// due to Javascript not being able to handle them, see https://github.com/metriqorg/go/issues/3714
 		// However, we released this code in the wild before correcting it. Thus, what we do is
 		// work around it (by preprocessing it into a string) in Operation.UnmarshalDetails()
 		result[prefix+"_muxed_id"] = uint64(a.Med25519.Id)

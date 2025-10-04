@@ -93,34 +93,34 @@ When horizon returns information about an account it uses the following format:
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW"
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW"
     },
     "transactions": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/transactions{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/transactions{?cursor,limit,order}",
       "templated": true
     },
     "operations": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/operations{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/operations{?cursor,limit,order}",
       "templated": true
     },
     "payments": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/payments{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/payments{?cursor,limit,order}",
       "templated": true
     },
     "effects": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/effects{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/effects{?cursor,limit,order}",
       "templated": true
     },
     "offers": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/offers{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/offers{?cursor,limit,order}",
       "templated": true
     },
     "trades": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/trades{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/trades{?cursor,limit,order}",
       "templated": true
     },
     "data": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/data/{key}",
+      "href": "https://orbitr-testnet.metriq.network/accounts/GBWRID7MPYUDBTNQPEHUN4XOBVVDPJOHYXAVW3UTOD2RG7BDAY6O3PHW/data/{key}",
       "templated": true
     }
   },

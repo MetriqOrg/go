@@ -6,10 +6,10 @@ import (
 	"strings"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/lantah/go/services/orbitr/internal/db2"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 func assetStatToMap(assetStat ExpAssetStat) map[string]interface{} {

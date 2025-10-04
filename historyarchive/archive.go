@@ -20,12 +20,12 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 const hexPrefixPat = "/[0-9a-f]{2}/[0-9a-f]{2}/[0-9a-f]{2}/"
-const rootHASPath = ".well-known/lantah-history.json"
+const rootHASPath = ".well-known/metriq-history.json"
 
 type CommandOptions struct {
 	Concurrency  int

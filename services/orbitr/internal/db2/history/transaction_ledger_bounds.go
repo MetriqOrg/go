@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/guregu/null"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // LedgerBounds represents the ledger bounds of a Stellar transaction

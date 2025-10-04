@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	hc "github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/clients/stellartoml"
-	"github.com/lantah/go/support/http/httptest"
+	hc "github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/clients/stellartoml"
+	"github.com/metriqorg/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 )
 

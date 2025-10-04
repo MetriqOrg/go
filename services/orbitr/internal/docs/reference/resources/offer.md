@@ -44,10 +44,10 @@ Thus to get price you would take n / d.
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/offers/2611"
+      "href": "https://orbitr-testnet.metriq.network/offers/2611"
     },
     "offer_maker": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GDG3NOK5YI7A4FCBHE6SKI4L65R7UPRBZUZVBT44IBTQBWGUSTJDDKBQ"
+      "href": "https://orbitr-testnet.metriq.network/accounts/GDG3NOK5YI7A4FCBHE6SKI4L65R7UPRBZUZVBT44IBTQBWGUSTJDDKBQ"
     }
   },
   "id": "2611",

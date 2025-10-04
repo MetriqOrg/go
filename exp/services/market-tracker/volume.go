@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
 )
 
-// Volume stores volume of a various base pair in both GRAM and USD.
+// Volume stores volume of a various base pair in both MTRQ and USD.
 // It also includes metadata about associated trades.
 type Volume struct {
 	BaseVolumeBaseAsset    prometheus.Gauge
@@ -49,7 +49,7 @@ func initVolumes(cfg Config, c trackerClient, watchedTPs []prometheusWatchedTP) 
 	gravityeq := mustCreateGramPriceRequest()
 	gramPriceHist, err := getGramPriceHistory(gravityeq)
 	if err != nil {
-		fmt.Printf("got error when getting gram price history: %s\n", err)
+		fmt.Printf("got error when getting MTRQ price history: %s\n", err)
 	}
 
 	volumeHistMap := make(map[string][]volumeHist)
@@ -60,7 +60,7 @@ func initVolumes(cfg Config, c trackerClient, watchedTPs []prometheusWatchedTP) 
 
 	for i, wtp := range watchedTPs {
 		// TODO: Calculate volume for assets with non-native counter.
-		if wtp.TradePair.SellingAsset.Code != "GRAM" && wtp.TradePair.SellingAsset.IssuerAddress != "" {
+		if wtp.TradePair.SellingAsset.Code != "MTRQ" && wtp.TradePair.SellingAsset.IssuerAddress != "" {
 			continue
 		}
 
@@ -116,7 +116,7 @@ func updateVolume(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatche
 		start := end.Add(-1 * historyUnit)
 		for i, wtp := range watchedTPs {
 			// TODO: Calculate volume for assets with non-native counter.
-			if wtp.TradePair.SellingAsset.Code != "GRAM" && wtp.TradePair.SellingAsset.IssuerAddress != "" {
+			if wtp.TradePair.SellingAsset.Code != "MTRQ" && wtp.TradePair.SellingAsset.IssuerAddress != "" {
 				continue
 			}
 
@@ -149,7 +149,7 @@ func updateVolume(cfg Config, c trackerClient, watchedTPsPtr *[]prometheusWatche
 			ets := end.Unix()
 			counterVolume, err := totalRecordsCounterVolume(records, start, end)
 			if err != nil {
-				fmt.Printf("got error aggregating gram volume for pair %s\n: %s", tps, err)
+				fmt.Printf("got error aggregatinG MTRQ volume for pair %s\n: %s", tps, err)
 			}
 
 			baseVolume, err := totalRecordsBaseVolume(records, start, end)
@@ -205,7 +205,7 @@ func getAggRecords(taps []hProtocol.TradeAggregationsPage) (records []hProtocol.
 
 func constructVolumeHistory(tas []hProtocol.TradeAggregation, gramPrices []gramPrice, assetPrice float64, start, end time.Time, res int) ([]volumeHist, error) {
 	if len(gramPrices) < 2 {
-		return []volumeHist{}, fmt.Errorf("mis-formed gram price history from stellar expert")
+		return []volumeHist{}, fmt.Errorf("mis-formed MTRQ price history from stellar expert")
 	}
 
 	volumeHistory := []volumeHist{}

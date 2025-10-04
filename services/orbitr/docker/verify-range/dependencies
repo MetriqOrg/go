@@ -14,8 +14,8 @@ apt-get install -y gravity=${GRAVITY_VERSION}
 wget -q https://dl.google.com/go/go1.18.linux-amd64.tar.gz
 tar -C /usr/local -xzf go1.18.linux-amd64.tar.gz
 
-git clone https://github.com/lantah/go.git lantah-go
-cd lantah-go
+git clone https://github.com/metriqorg/go.git metriq-go
+cd metriq-go
 # By default "git fetch" only fetches refs/<branchname>
 # Below ensures we also fetch PR refs
 git config --add remote.origin.fetch "+refs/pull/*/head:refs/remotes/origin/pull/*"

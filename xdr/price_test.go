@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestPriceInvert(t *testing.T) {

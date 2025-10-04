@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/protocols/orbitr/operations"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/protocols/orbitr/operations"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
 )
 
 func TestOperationActions_Index(t *testing.T) {

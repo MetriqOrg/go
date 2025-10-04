@@ -4,7 +4,7 @@ import (
 	"log"
 	"sync"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
 )
 
 // Bot represents the friendbot subsystem and primarily delegates work

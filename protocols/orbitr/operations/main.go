@@ -5,10 +5,10 @@ import (
 	"errors"
 	"time"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/protocols/orbitr/base"
-	"github.com/lantah/go/support/render/hal"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr/base"
+	"github.com/metriqorg/go/support/render/hal"
+	"github.com/metriqorg/go/xdr"
 )
 
 // TypeNames maps from operation type to the string used to represent that type

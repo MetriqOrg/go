@@ -1,6 +1,6 @@
 package orbitrclient
 
-import "github.com/lantah/go/support/errors"
+import "github.com/metriqorg/go/support/errors"
 
 // IsNotFoundError returns true if the error is a orbitrclient.Error with
 // a not_found problem indicating that the resource is not found on
@@ -20,7 +20,7 @@ func IsNotFoundError(err error) bool {
 		return false
 	}
 
-	return hErr.Problem.Type == "https://lantah.network/orbitr-errors/not_found"
+	return hErr.Problem.Type == "https://metriq.network/orbitr-errors/not_found"
 }
 
 // GetError returns an error that can be interpreted as a orbitr-specific

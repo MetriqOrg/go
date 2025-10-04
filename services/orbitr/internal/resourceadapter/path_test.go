@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/paths"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/paths"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 

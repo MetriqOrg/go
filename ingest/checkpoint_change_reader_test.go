@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/historyarchive"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/historyarchive"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )

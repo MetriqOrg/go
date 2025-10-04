@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/exp/support/pipeline"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/exp/support/pipeline"
+	"github.com/metriqorg/go/support/errors"
 	"github.com/stretchr/testify/assert"
 )
 

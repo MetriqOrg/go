@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/xdr"
 )
 
 // StatsLedgerTransactionProcessor is a state processors that counts number of changes types

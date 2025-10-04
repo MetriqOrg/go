@@ -6,8 +6,8 @@ import (
 
 	"github.com/guregu/null"
 
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // TradeType is an enum which indicates the type of trade

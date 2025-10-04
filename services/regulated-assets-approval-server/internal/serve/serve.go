@@ -9,15 +9,15 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/db"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/kycstatus"
-	"github.com/lantah/go/support/errors"
-	supporthttp "github.com/lantah/go/support/http"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/health"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/db"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/serve/kycstatus"
+	"github.com/metriqorg/go/support/errors"
+	supporthttp "github.com/metriqorg/go/support/http"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/health"
 )
 
 type Options struct {

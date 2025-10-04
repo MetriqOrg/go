@@ -5,8 +5,8 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 )
 

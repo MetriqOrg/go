@@ -9,14 +9,14 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/httperror"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/http/httpdecode"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/txnbuild"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/serve/httperror"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/http/httpdecode"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/txnbuild"
 )
 
 type txApproveHandler struct {

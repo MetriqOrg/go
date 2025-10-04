@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"testing"
 
-	proto "github.com/lantah/go/protocols/gravity"
-	"github.com/lantah/go/support/http/httptest"
+	proto "github.com/metriqorg/go/protocols/gravity"
+	"github.com/metriqorg/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 )
 

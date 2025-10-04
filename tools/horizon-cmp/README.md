@@ -15,7 +15,7 @@ go install ./tools/horizon-cmp
 
 `horizon-cmp` can be run in two modes:
 
-- Crawling: start with a set of paths (defined in [init_paths.go](https://github.com/lantah/go/blob/master/tools/horizon-cmp/init_paths.go)) and then uses `_links` to find new paths.
+- Crawling: start with a set of paths (defined in [init_paths.go](https://github.com/metriqorg/go/blob/master/tools/horizon-cmp/init_paths.go)) and then uses `_links` to find new paths.
 - ELB access log: send requests found in a provided ELB access log.
 
 ### Crawling mode
@@ -23,17 +23,17 @@ go install ./tools/horizon-cmp
 To run in crawling mode specify a `base` and `test` URL, where `base` is the current version of Horizon and `test` is the version you want to test.
 
 ```bash
-horizon-cmp -t https://new-horizon.host.org -b https://orbitr.lantah.network
+horizon-cmp -t https://new-horizon.host.org -b https://orbitr.metriq.network
 ```
 
-The paths to be tested can be found in [init_paths.go](https://github.com/lantah/go/blob/master/tools/horizon-cmp/init_paths.go).
+The paths to be tested can be found in [init_paths.go](https://github.com/metriqorg/go/blob/master/tools/horizon-cmp/init_paths.go).
 
 ### ELB access log
 
 To run using an ELB access log, use the flag `-a`.
 
 ```bash
-horizon-cmp -t https://new-horizon.host.org -b https://orbitr.lantah.network -a ./elb_access.log
+horizon-cmp -t https://new-horizon.host.org -b https://orbitr.metriq.network -a ./elb_access.log
 ```
 
 Additionally you can specify which line to start in by using the flag `-s`.
@@ -64,5 +64,5 @@ horizon-cmp history -t https://new-horizon.domain.org -b https://base-horizon.do
 By default `horizon-cmp` will send 1 request per second, however, you can change this value using the `--rps` flag.  The following will run `10` request per second. Please note that sending too many requests to a production server can result in rate limiting of requests.
 
 ```bash
-horizon-cmp -t https://new-horizon.host.org -b https://orbitr.lantah.network --rps 10
+horizon-cmp -t https://new-horizon.host.org -b https://orbitr.metriq.network --rps 10
 ```

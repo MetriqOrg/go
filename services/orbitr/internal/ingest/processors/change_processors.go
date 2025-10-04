@@ -4,8 +4,8 @@ import (
 	"context"
 	"io"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/support/errors"
 )
 
 type ChangeProcessor interface {

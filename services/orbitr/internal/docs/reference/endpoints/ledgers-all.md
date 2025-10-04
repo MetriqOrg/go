@@ -27,7 +27,7 @@ GET /ledgers{?cursor,limit,order}
 
 ```sh
 # Retrieve the 200 latest ledgers, ordered chronologically
-curl "https://orbitr-testnet.lantah.network/ledgers?limit=200&order=desc"
+curl "https://orbitr-testnet.metriq.network/ledgers?limit=200&order=desc"
 ```
 
 ### JavaScript Example Request
@@ -54,7 +54,7 @@ server.ledgers()
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 var ledgerHandler = function (ledgerResponse) {
   console.log(ledgerResponse);

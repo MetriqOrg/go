@@ -19,12 +19,12 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 
-	"github.com/lantah/go/services/orbitr/internal/db2"
-	"github.com/lantah/go/support/collections/set"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
-	strtime "github.com/lantah/go/support/time"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2"
+	"github.com/metriqorg/go/support/collections/set"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
+	strtime "github.com/metriqorg/go/support/time"
+	"github.com/metriqorg/go/xdr"
 )
 
 const (

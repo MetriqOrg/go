@@ -5,7 +5,7 @@
 
 
 ## Getting Started
-This library is aimed at developers building Go applications that interact with the [Lantah network](https://www.lantah.org/). It allows users to query the network and submit transactions to the network. The recommended transaction builder for Go programmers is [txnbuild](https://github.com/lantah/go/tree/master/txnbuild). Together, these two libraries provide a complete Stellar SDK.
+This library is aimed at developers building Go applications that interact with the [Lantah network](https://www.metriq.org/). It allows users to query the network and submit transactions to the network. The recommended transaction builder for Go programmers is [txnbuild](https://github.com/metriqorg/go/tree/master/txnbuild). Together, these two libraries provide a complete Stellar SDK.
 
 * The [orbitrclient API reference](https://godoc.org/github.com/stellar/go/clients/orbitrclient).
 * The [txnbuild API reference](https://godoc.org/github.com/stellar/go/txnbuild).
@@ -15,13 +15,13 @@ This library is aimed at developers building Go applications that interact with 
 * [Modules](https://github.com/golang/go/wiki/Modules) to manage dependencies
 
 ### Installing
-* `go get github.com/lantah/go/clients/orbitrclient`
+* `go get github.com/metriqorg/go/clients/orbitrclient`
 
 ### Usage
 
 ``` golang
     ...
-    import hClient "github.com/lantah/go/clients/orbitrclient"
+    import hClient "github.com/metriqorg/go/clients/orbitrclient"
     ...
 
     // Use the default pubnet client

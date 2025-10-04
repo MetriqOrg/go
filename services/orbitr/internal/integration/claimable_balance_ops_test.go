@@ -5,12 +5,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	sdk "github.com/lantah/go/clients/orbitrclient"
-	hEffects "github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/protocols/orbitr/operations"
-	"github.com/lantah/go/services/orbitr/internal/test/integration"
-	"github.com/lantah/go/txnbuild"
-	"github.com/lantah/go/xdr"
+	sdk "github.com/metriqorg/go/clients/orbitrclient"
+	hEffects "github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/protocols/orbitr/operations"
+	"github.com/metriqorg/go/services/orbitr/internal/test/integration"
+	"github.com/metriqorg/go/txnbuild"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestClaimableBalanceCreationOperationsAndEffects(t *testing.T) {
@@ -102,7 +102,7 @@ func TestClaimableBalanceCreationOperationsAndEffects(t *testing.T) {
 		}
 
 		// this operation will fail because the claimable balance is trying to
-		// reserve 100 GRAM but the account only has 50.
+		// reserve 100 MTRQ but the account only has 50.
 		_, err := itest.SubmitOperations(accounts[0], keys[0], &op)
 		tt.Error(err)
 

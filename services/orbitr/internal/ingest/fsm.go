@@ -8,12 +8,12 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/support/errors"
-	logpkg "github.com/lantah/go/support/log"
-	"github.com/lantah/go/toid"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/support/errors"
+	logpkg "github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/toid"
+	"github.com/metriqorg/go/xdr"
 )
 
 var (

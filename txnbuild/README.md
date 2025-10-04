@@ -8,10 +8,10 @@ This project is maintained by the Stellar Development Foundation.
     import (
         "log"
         
-        "github.com/lantah/go/clients/horizonclient"
-        "github.com/lantah/go/keypair"
-        "github.com/lantah/go/network"
-        "github.com/lantah/go/txnbuild"
+        "github.com/metriqorg/go/clients/horizonclient"
+        "github.com/metriqorg/go/keypair"
+        "github.com/metriqorg/go/network"
+        "github.com/metriqorg/go/txnbuild"
     )
     
     // Make a keypair for a known account from a secret seed
@@ -65,7 +65,7 @@ This project is maintained by the Stellar Development Foundation.
 ```
 
 ## Getting Started
-This library is aimed at developers building Go applications on top of the [Lantah Network](https://www.lantah.org/). Transactions constructed by this library may be submitted to any Horizon instance for processing onto the ledger, using any Lantah SDK client. The recommended client for Go programmers is [horizonclient](https://github.com/lantah/go/tree/master/clients/orbitrclient). Together, these two libraries provide a complete Stellar SDK.
+This library is aimed at developers building Go applications on top of the [Lantah Network](https://www.metriq.org/). Transactions constructed by this library may be submitted to any Horizon instance for processing onto the ledger, using any Lantah SDK client. The recommended client for Go programmers is [horizonclient](https://github.com/metriqorg/go/tree/master/clients/orbitrclient). Together, these two libraries provide a complete Stellar SDK.
 
 * The [txnbuild API reference](https://godoc.org/github.com/stellar/go/txnbuild).
 * The [horizonclient API reference](https://godoc.org/github.com/stellar/go/clients/horizonclient).
@@ -77,14 +77,14 @@ An easy-to-follow demonstration that exercises this SDK on the TestNet with actu
 * [Modules](https://github.com/golang/go/wiki/Modules) to manage dependencies
 
 ### Installing
-* `go get github.com/lantah/go/txnbuild`
+* `go get github.com/metriqorg/go/txnbuild`
 
 ## Running the tests
 Run the unit tests from the package directory: `go test`
 
 ## Demo
 To see the SDK in action, build and run the demo:
-* Enter the demo directory: `cd $GOPATH/src/github.com/lantah/go/txnbuild/cmd/demo`
+* Enter the demo directory: `cd $GOPATH/src/github.com/metriqorg/go/txnbuild/cmd/demo`
 * Build the demo: `go build`
 * Run the demo: `./demo init`
 

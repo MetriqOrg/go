@@ -1,8 +1,8 @@
 package txnbuild
 
 import (
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // ChangeTrustAsset represents a Stellar change trust asset.
@@ -15,7 +15,7 @@ type ChangeTrustAsset interface {
 	ToTrustLineAsset() (TrustLineAsset, error)
 }
 
-// LiquidityPoolShareChangeTrustAsset represents non-GRAM assets on the Lantah Network.
+// LiquidityPoolShareChangeTrustAsset represents non-MTRQ assets on the Lantah Network.
 type LiquidityPoolShareChangeTrustAsset struct {
 	LiquidityPoolParameters LiquidityPoolParameters
 }
@@ -25,7 +25,7 @@ func (lpsa LiquidityPoolShareChangeTrustAsset) GetType() (AssetType, error) {
 	return AssetTypePoolShare, nil
 }
 
-// IsNative for LiquidityPoolShareChangeTrustAsset returns false (this is not an GRAM asset).
+// IsNative for LiquidityPoolShareChangeTrustAsset returns false (this is not an MTRQ asset).
 func (lpsa LiquidityPoolShareChangeTrustAsset) IsNative() bool { return false }
 
 // GetCode for LiquidityPoolShareChangeTrustAsset returns blank string

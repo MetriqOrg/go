@@ -3,7 +3,7 @@ package pipeline
 import (
 	"io"
 
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/errors"
 )
 
 func (m *multiWriter) Write(entry interface{}) error {

@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	orbitrclient "github.com/lantah/go/clients/orbitrclient"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/ticker/internal/utils"
-	hlog "github.com/lantah/go/support/log"
+	orbitrclient "github.com/metriqorg/go/clients/orbitrclient"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/ticker/internal/utils"
+	hlog "github.com/metriqorg/go/support/log"
 )
 
 type ScraperConfig struct {
@@ -156,7 +156,7 @@ func (c *ScraperConfig) FetchOrderbookForAssets(bType, bCode, bIssuer, cType, cC
 }
 
 // NormalizeTradeAssets enforces the following rules:
-// 1. native asset type refers to a "GRAM" code and a "native" issuer
+// 1. native asset type refers to a "MTRQ" code and a "native" issuer
 // 2. native is always the base asset (and if not, base and counter are swapped)
 // 3. when trades are between two non-native, the base is the asset whose string
 // comes first alphabetically.

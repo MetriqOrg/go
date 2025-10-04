@@ -3,8 +3,8 @@ package orbitrclient
 import (
 	"testing"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/problem"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -28,7 +28,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "not found problem (pointer)",
 			err: &Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -39,7 +39,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "wrapped not found problem (pointer)",
 			err: errors.Wrap(&Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -50,7 +50,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "not found problem (not a pointer)",
 			err: Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -61,7 +61,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "wrapped not found problem (not a pointer)",
 			err: errors.Wrap(Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -72,7 +72,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "some other problem (pointer)",
 			err: &Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/server_error",
+					Type:   "https://metriq.network/orbitr-errors/server_error",
 					Title:  "Server Error",
 					Status: 500,
 				},
@@ -83,7 +83,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "wrapped some other problem (pointer)",
 			err: errors.Wrap(&Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/server_error",
+					Type:   "https://metriq.network/orbitr-errors/server_error",
 					Title:  "Server Error",
 					Status: 500,
 				},
@@ -94,7 +94,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "some other problem (not a pointer)",
 			err: Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/server_error",
+					Type:   "https://metriq.network/orbitr-errors/server_error",
 					Title:  "Server Error",
 					Status: 500,
 				},
@@ -105,7 +105,7 @@ func TestIsNotFoundError(t *testing.T) {
 			desc: "wrapped some other problem (not a pointer)",
 			err: errors.Wrap(Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/server_error",
+					Type:   "https://metriq.network/orbitr-errors/server_error",
 					Title:  "Server Error",
 					Status: 500,
 				},
@@ -147,14 +147,14 @@ func TestGetError(t *testing.T) {
 			desc: "not found problem (pointer)",
 			err: &Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
 			},
 			wantErr: &Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -164,14 +164,14 @@ func TestGetError(t *testing.T) {
 			desc: "wrapped not found problem (pointer)",
 			err: errors.Wrap(&Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
 			}, "wrap message"),
 			wantErr: &Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -181,14 +181,14 @@ func TestGetError(t *testing.T) {
 			desc: "not found problem (not a pointer)",
 			err: Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
 			},
 			wantErr: &Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -198,14 +198,14 @@ func TestGetError(t *testing.T) {
 			desc: "wrapped not found problem (not a pointer)",
 			err: errors.Wrap(Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
 			}, "wrap message"),
 			wantErr: &Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},

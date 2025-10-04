@@ -7,12 +7,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/corestate"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ingest"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/corestate"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestTransactionActions_Show(t *testing.T) {
@@ -235,7 +235,7 @@ func TestTransactionActions_Index(t *testing.T) {
 	w = ht.Get("/accounts/GCXKG6RN4ONIEPCMNFB732A436Z5PNDSRLGWK7GBLCMQLIFO4S7EYWVU/transactions?cursor=limit=order=")
 	ht.Assert.Equal(400, w.Code)
 
-	// regression: https://github.com/lantah/go/services/orbitr/internal/issues/365
+	// regression: https://github.com/metriqorg/go/services/orbitr/internal/issues/365
 	w = ht.Get("/transactions?limit=200")
 	ht.Require.Equal(200, w.Code)
 	w = ht.Get("/transactions?limit=201")

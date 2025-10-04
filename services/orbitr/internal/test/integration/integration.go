@@ -23,19 +23,19 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/lantah/go/support/config"
+	"github.com/metriqorg/go/support/config"
 
-	sdk "github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/clients/gravity"
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/keypair"
-	proto "github.com/lantah/go/protocols/orbitr"
-	orbitr "github.com/lantah/go/services/orbitr/internal"
-	"github.com/lantah/go/services/orbitr/internal/ingest"
-	"github.com/lantah/go/support/db/dbtest"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/txnbuild"
-	"github.com/lantah/go/xdr"
+	sdk "github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/clients/gravity"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/keypair"
+	proto "github.com/metriqorg/go/protocols/orbitr"
+	orbitr "github.com/metriqorg/go/services/orbitr/internal"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest"
+	"github.com/metriqorg/go/support/db/dbtest"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/txnbuild"
+	"github.com/metriqorg/go/xdr"
 )
 
 const (
@@ -900,7 +900,7 @@ func (i *Test) CreateAccounts(count int, initialBalance string) ([]*keypair.Full
 	}
 
 	for _, keys := range pairs {
-		i.t.Logf("Funded %s (%s) with %s GRAM.\n",
+		i.t.Logf("Funded %s (%s) with %s MTRQ.\n",
 			keys.Seed(), keys.Address(), initialBalance)
 	}
 

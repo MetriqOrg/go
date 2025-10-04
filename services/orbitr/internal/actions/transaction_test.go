@@ -4,10 +4,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	supportProblem "github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	supportProblem "github.com/metriqorg/go/support/render/problem"
 )
 
 func TestGetTransactionsHandler(t *testing.T) {

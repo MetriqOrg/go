@@ -3,9 +3,9 @@ package txnbuild
 import (
 	"math"
 
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // ChangeTrust represents the Stellar change trust operation. See
@@ -32,7 +32,7 @@ func RemoveTrustlineOp(issuedAsset ChangeTrustAsset) ChangeTrust {
 // BuildXDR for ChangeTrust returns a fully configured XDR Operation.
 func (ct *ChangeTrust) BuildXDR() (xdr.Operation, error) {
 	if ct.Line.IsNative() {
-		return xdr.Operation{}, errors.New("trustline cannot be extended to a native (GRAM) asset")
+		return xdr.Operation{}, errors.New("trustline cannot be extended to a native (MTRQ) asset")
 	}
 	xdrLine, err := ct.Line.ToXDR()
 	if err != nil {

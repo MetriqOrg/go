@@ -3,8 +3,8 @@ package main
 import (
 	"testing"
 
-	"github.com/lantah/go/support/db/dbtest"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/db/dbtest"
+	"github.com/metriqorg/go/support/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

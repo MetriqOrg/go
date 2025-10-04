@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
 
 	"github.com/sirupsen/logrus"
 	"github.com/stellar/throttled"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/lantah/go/services/orbitr/cmd"
+	"github.com/metriqorg/go/services/orbitr/cmd"
 )
 
 func main() {

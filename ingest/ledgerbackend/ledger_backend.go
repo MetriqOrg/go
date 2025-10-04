@@ -3,7 +3,7 @@ package ledgerbackend
 import (
 	"context"
 
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
 )
 
 // LedgerBackend represents the interface to a ledger data store.

@@ -7,11 +7,11 @@ import (
 	"sync"
 	"time"
 
-	orbitrclient "github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/services/ticker/internal/scraper"
-	"github.com/lantah/go/services/ticker/internal/tickerdb"
-	"github.com/lantah/go/services/ticker/internal/utils"
-	hlog "github.com/lantah/go/support/log"
+	orbitrclient "github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/services/ticker/internal/scraper"
+	"github.com/metriqorg/go/services/ticker/internal/tickerdb"
+	"github.com/metriqorg/go/services/ticker/internal/utils"
+	hlog "github.com/metriqorg/go/support/log"
 )
 
 // RefreshAssets scrapes the most recent asset list and ingests then into the db.

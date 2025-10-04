@@ -12,15 +12,15 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/stretchr/testify/assert"
 
-	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
-	"github.com/lantah/go/services/orbitr/internal/db2"
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/problem"
-	"github.com/lantah/go/toid"
-	"github.com/lantah/go/xdr"
+	orbitrContext "github.com/metriqorg/go/services/orbitr/internal/context"
+	"github.com/metriqorg/go/services/orbitr/internal/db2"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/problem"
+	"github.com/metriqorg/go/toid"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestGetTransactionID(t *testing.T) {
@@ -256,7 +256,7 @@ func TestActionGetPageQuery(t *testing.T) {
 	_, err = GetPageQuery(ledgerState, r)
 	tt.Assert.Error(err)
 
-	// regression: https://github.com/lantah/go/services/orbitr/internal/issues/372
+	// regression: https://github.com/metriqorg/go/services/orbitr/internal/issues/372
 	// (limit of 0 turns into 10)
 	makeTestActionRequest("/?limit=0", nil)
 	_, err = GetPageQuery(ledgerState, r)
@@ -283,7 +283,7 @@ func TestGetPageQuery(t *testing.T) {
 	_, err = GetPageQuery(ledgerState, r)
 	tt.Assert.Error(err)
 
-	// regression: https://github.com/lantah/go/services/orbitr/internal/issues/372
+	// regression: https://github.com/metriqorg/go/services/orbitr/internal/issues/372
 	// (limit of 0 turns into 10)
 	r = makeTestActionRequest("/?limit=0", nil)
 	_, err = GetPageQuery(ledgerState, r)
@@ -339,7 +339,7 @@ func TestGetURLParam(t *testing.T) {
 	r := makeTestActionRequest("/accounts/{account_id}/operations?limit=100", nil)
 
 	// simulates a request where the named param is not passed.
-	// Regression for https://github.com/lantah/go/issues/1965
+	// Regression for https://github.com/metriqorg/go/issues/1965
 	rctx := chi.RouteContext(r.Context())
 	rctx.URLParams.Keys = []string{
 		"account_id",

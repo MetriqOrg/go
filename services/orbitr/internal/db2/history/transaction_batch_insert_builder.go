@@ -11,11 +11,11 @@ import (
 	"github.com/guregu/null"
 	"github.com/lib/pq"
 
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/services/orbitr/internal/utf8"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/toid"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/services/orbitr/internal/utf8"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/toid"
+	"github.com/metriqorg/go/xdr"
 )
 
 // TransactionBatchInsertBuilder is used to insert transactions into the

@@ -12,7 +12,7 @@ import (
 	"net/url"
 	"path"
 
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/errors"
 )
 
 type HttpArchiveBackend struct {

@@ -1,6 +1,6 @@
 package keypairgen
 
-import "github.com/lantah/go/keypair"
+import "github.com/metriqorg/go/keypair"
 
 // Generator generates new keys with the underlying source. The underlying
 // source defaults to the RandomSource if not specified.

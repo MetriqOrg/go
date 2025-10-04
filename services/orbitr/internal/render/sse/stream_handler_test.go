@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/lantah/go/services/orbitr/internal/ledger"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
 )
 
 type testingFactory struct {

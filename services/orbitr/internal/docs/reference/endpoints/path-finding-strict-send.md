@@ -23,7 +23,7 @@ As part of the search, horizon will load a list of assets available to the sourc
 ## Request
 
 ```
-https://orbitr-testnet.lantah.network/paths/strict-send?&source_amount={sa}&source_asset_type={at}&source_asset_code={ac}&source_asset_issuer={ai}&destination_account={da}
+https://orbitr-testnet.metriq.network/paths/strict-send?&source_amount={sa}&source_asset_type={at}&source_asset_code={ac}&source_asset_issuer={ai}&destination_account={da}
 ```
 
 ## Arguments
@@ -40,20 +40,20 @@ https://orbitr-testnet.lantah.network/paths/strict-send?&source_amount={sa}&sour
 The endpoint will not allow requests which provide both a `destination_account` and `destination_assets` parameter. All requests must provide one or the other.
 The assets in `destination_assets` are expected to be encoded using the following format:
 
-GRAM should be represented as `"native"`. Issued assets should be represented as `"Code:IssuerAccountID"`. `"Code"` must consist of alphanumeric ASCII characters.
+MTRQ should be represented as `"native"`. Issued assets should be represented as `"Code:IssuerAccountID"`. `"Code"` must consist of alphanumeric ASCII characters.
 
 
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/paths/strict-send?&source_amount=10&source_asset_type=native&destination_assets=MXN:GC2GFGZ5CZCFCDJSQF3YYEAYBOS3ZREXJSPU7LUJ7JU3LP3BQNHY7YKS"
+curl "https://orbitr-testnet.metriq.network/paths/strict-send?&source_amount=10&source_asset_type=native&destination_assets=MXN:GC2GFGZ5CZCFCDJSQF3YYEAYBOS3ZREXJSPU7LUJ7JU3LP3BQNHY7YKS"
 ```
 
 ### JavaScript Example Request
 
 ```javascript
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 var sourceAsset = StellarSdk.Asset.native();
 var sourceAmount = "20";

@@ -6,9 +6,9 @@ import (
 
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
-	"github.com/lantah/go/services/ticker/internal/gql/static"
-	"github.com/lantah/go/services/ticker/internal/tickerdb"
-	hlog "github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/services/ticker/internal/gql/static"
+	"github.com/metriqorg/go/services/ticker/internal/tickerdb"
+	hlog "github.com/metriqorg/go/support/log"
 )
 
 // asset represents a Stellar asset, with some type

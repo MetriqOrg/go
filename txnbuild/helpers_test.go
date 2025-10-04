@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -215,7 +215,7 @@ func TestValidateAllowTrustAsset(t *testing.T) {
 
 	err = validateAssetCode(NativeAsset{})
 	assert.Error(t, err)
-	expectedErrMsg = "native (GRAM) asset type is not allowed"
+	expectedErrMsg = "native (MTRQ) asset type is not allowed"
 	require.EqualError(t, err, expectedErrMsg, "An asset is required")
 
 	// allow trust asset does not require asset issuer
@@ -232,7 +232,7 @@ func TestValidateChangeTrustAsset(t *testing.T) {
 
 	err = validateChangeTrustAsset(NativeAsset{}.MustToChangeTrustAsset())
 	assert.Error(t, err)
-	expectedErrMsg = "native (GRAM) asset type is not allowed"
+	expectedErrMsg = "native (MTRQ) asset type is not allowed"
 	require.EqualError(t, err, expectedErrMsg, "A custom asset is required")
 
 	kp0 := newKeypair0()

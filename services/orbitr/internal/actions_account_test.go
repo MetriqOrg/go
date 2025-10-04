@@ -3,9 +3,9 @@ package orbitr
 import (
 	"testing"
 
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ingest"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestAccountActions_InvalidID(t *testing.T) {

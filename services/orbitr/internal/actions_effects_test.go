@@ -3,10 +3,10 @@ package orbitr
 import (
 	"testing"
 
-	"github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ingest"
-	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
 )
 
 func TestEffectActions_Index(t *testing.T) {
@@ -21,7 +21,7 @@ func TestEffectActions_Index(t *testing.T) {
 			ht.Assert.PageOf(11, w.Body)
 		}
 
-		// test streaming, regression for https://github.com/lantah/go/services/orbitr/internal/issues/147
+		// test streaming, regression for https://github.com/metriqorg/go/services/orbitr/internal/issues/147
 		w = ht.Get("/effects?limit=2", test.RequestHelperStreaming)
 		ht.Assert.Equal(200, w.Code)
 

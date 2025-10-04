@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lantah/go/support/clock"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/clock"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // decodeResponse decodes the response from a request to a orbitr server

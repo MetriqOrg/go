@@ -4,7 +4,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	. "github.com/lantah/go/xdr"
+	. "github.com/metriqorg/go/xdr"
 )
 
 var _ = Describe("xdr.MuxedAccount#Get/SetAddress()", func() {

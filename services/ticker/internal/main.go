@@ -1,7 +1,7 @@
 package ticker
 
 import (
-	"github.com/lantah/go/services/ticker/internal/scraper"
+	"github.com/metriqorg/go/services/ticker/internal/scraper"
 )
 
 // MarketSummary represents a summary of statistics of all valid markets

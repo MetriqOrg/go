@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/lantah/go/clients/gravity"
-	proto "github.com/lantah/go/protocols/gravity"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/clients/gravity"
+	proto "github.com/metriqorg/go/protocols/gravity"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 )
 
 // NewDefaultSubmitter returns a new, simple Submitter implementation

@@ -47,7 +47,7 @@ func TestRetrieveMarketData(t *testing.T) {
 
 	// Adding a seed asset to be used later:
 	err = session.InsertOrUpdateAsset(ctx, &Asset{
-		Code:     "GRAM",
+		Code:     "MTRQ",
 		IssuerID: issuer.ID,
 		IsValid:  true,
 	}, []string{"code", "issuer_id"})
@@ -106,7 +106,7 @@ func TestRetrieveMarketData(t *testing.T) {
 
 	// Now let's create the trades:
 	trades := []Trade{
-		{ // GRAM_BTC trade
+		{ // MTRQ_BTC trade
 			OrbitRID:       "hrzid1",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      100.0,
@@ -115,7 +115,7 @@ func TestRetrieveMarketData(t *testing.T) {
 			Price:           0.1,
 			LedgerCloseTime: now,
 		},
-		{ // GRAM_ETH trade
+		{ // MTRQ_ETH trade
 			OrbitRID:       "hrzid3",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      24.0,
@@ -124,7 +124,7 @@ func TestRetrieveMarketData(t *testing.T) {
 			Price:           0.92,
 			LedgerCloseTime: oneHourAgo,
 		},
-		{ // GRAM_ETH trade
+		{ // MTRQ_ETH trade
 			OrbitRID:       "hrzid2",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      50.0,
@@ -133,7 +133,7 @@ func TestRetrieveMarketData(t *testing.T) {
 			Price:           1.0,
 			LedgerCloseTime: now,
 		},
-		{ // GRAM_BTC trade
+		{ // MTRQ_BTC trade
 			OrbitRID:       "hrzid4",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      50.0,
@@ -142,7 +142,7 @@ func TestRetrieveMarketData(t *testing.T) {
 			Price:           0.12,
 			LedgerCloseTime: threeDaysAgo,
 		},
-		{ // GRAM_ETH trade
+		{ // MTRQ_ETH trade
 			OrbitRID:       "hrzid5",
 			BaseAssetID:     gramAsset.ID,
 			BaseAmount:      24.0,
@@ -221,11 +221,11 @@ func TestRetrieveMarketData(t *testing.T) {
 	// Mapping the retrieved markets:
 	var grambtcMkt, gramethMkt Market
 	for _, mkt := range markets {
-		if mkt.TradePair == "GRAM_BTC" {
+		if mkt.TradePair == "MTRQ_BTC" {
 			grambtcMkt = mkt
 		}
 
-		if mkt.TradePair == "GRAM_ETH" {
+		if mkt.TradePair == "MTRQ_ETH" {
 			gramethMkt = mkt
 		}
 	}
@@ -651,7 +651,7 @@ func Test24hStatsFallback(t *testing.T) {
 
 	// Adding a seed asset to be used later:
 	err = session.InsertOrUpdateAsset(ctx, &Asset{
-		Code:     "GRAM",
+		Code:     "MTRQ",
 		IssuerID: issuer.ID,
 		IsValid:  true,
 	}, []string{"code", "issuer_id"})
@@ -757,7 +757,7 @@ func TestPreferAnchorAssetCode(t *testing.T) {
 
 	// Adding a seed asset to be used later:
 	err = session.InsertOrUpdateAsset(ctx, &Asset{
-		Code:     "GRAM",
+		Code:     "MTRQ",
 		IssuerID: issuer.ID,
 		IsValid:  true,
 	}, []string{"code", "issuer_id"})
@@ -821,13 +821,13 @@ func TestPreferAnchorAssetCode(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, 1, len(markets))
 	for _, mkt := range markets {
-		require.Equal(t, "GRAM_EUR", mkt.TradePair)
+		require.Equal(t, "MTRQ_EUR", mkt.TradePair)
 	}
 
 	partialAggMkts, err := session.RetrievePartialAggMarkets(ctx, nil, 168)
 	require.NoError(t, err)
 	assert.Equal(t, 1, len(partialAggMkts))
 	for _, aggMkt := range partialAggMkts {
-		require.Equal(t, "GRAM_EUR", aggMkt.TradePairName)
+		require.Equal(t, "MTRQ_EUR", aggMkt.TradePairName)
 	}
 }

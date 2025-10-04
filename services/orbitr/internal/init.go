@@ -8,15 +8,15 @@ import (
 	"github.com/getsentry/raven-go"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/lantah/go/exp/orderbook"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ingest"
-	"github.com/lantah/go/services/orbitr/internal/paths"
-	"github.com/lantah/go/services/orbitr/internal/simplepath"
-	"github.com/lantah/go/services/orbitr/internal/txsub"
-	"github.com/lantah/go/services/orbitr/internal/txsub/sequence"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/exp/orderbook"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest"
+	"github.com/metriqorg/go/services/orbitr/internal/paths"
+	"github.com/metriqorg/go/services/orbitr/internal/simplepath"
+	"github.com/metriqorg/go/services/orbitr/internal/txsub"
+	"github.com/metriqorg/go/services/orbitr/internal/txsub/sequence"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/log"
 )
 
 func mustNewDBSession(subservice db.Subservice, databaseURL string, maxIdle, maxOpen int, registry *prometheus.Registry, clientConfigs ...db.ClientConfig) db.SessionInterface {

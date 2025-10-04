@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/clients/orbitrclient"
+	"github.com/metriqorg/go/clients/orbitrclient"
 	"github.com/stretchr/testify/require"
 )
 

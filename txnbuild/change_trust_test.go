@@ -3,7 +3,7 @@ package txnbuild
 import (
 	"testing"
 
-	"github.com/lantah/go/network"
+	"github.com/metriqorg/go/network"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -50,7 +50,7 @@ func TestChangeTrustValidateInvalidAsset(t *testing.T) {
 		},
 	)
 	if assert.Error(t, err) {
-		expected := "validation failed for *txnbuild.ChangeTrust operation: Field: Line, Error: native (GRAM) asset type is not allowed"
+		expected := "validation failed for *txnbuild.ChangeTrust operation: Field: Line, Error: native (MTRQ) asset type is not allowed"
 		assert.Contains(t, err.Error(), expected)
 	}
 }

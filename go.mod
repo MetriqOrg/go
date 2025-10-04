@@ -1,4 +1,4 @@
-module github.com/lantah/go
+module github.com/metriqorg/go
 
 go 1.19
 

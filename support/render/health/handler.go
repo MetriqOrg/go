@@ -3,7 +3,7 @@ package health
 import (
 	"net/http"
 
-	"github.com/lantah/go/support/render/httpjson"
+	"github.com/metriqorg/go/support/render/httpjson"
 )
 
 // PassHandler implements a simple handler that returns the most basic health

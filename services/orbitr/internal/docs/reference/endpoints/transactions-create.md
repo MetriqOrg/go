@@ -57,7 +57,7 @@ POST /transactions
 ```sh
 curl -X POST \
      -F "tx=AAAAAOo1QK/3upA74NLkdq4Io3DQAQZPi4TVhuDnvCYQTKIVAAAACgAAH8AAAAABAAAAAAAAAAAAAAABAAAAAQAAAADqNUCv97qQO+DS5HauCKNw0AEGT4uE1Ybg57wmEEyiFQAAAAEAAAAAZc2EuuEa2W1PAKmaqVquHuzUMHaEiRs//+ODOfgWiz8AAAAAAAAAAAAAA+gAAAAAAAAAARBMohUAAABAPnnZL8uPlS+c/AM02r4EbxnZuXmP6pQHvSGmxdOb0SzyfDB2jUKjDtL+NC7zcMIyw4NjTa9Ebp4lvONEf4yDBA==" \
-  "https://orbitr-testnet.lantah.network/transactions"
+  "https://orbitr-testnet.metriq.network/transactions"
 ```
 
 ## Response
@@ -78,27 +78,27 @@ The response will include all fields from the [transaction resource](../resource
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/transactions/264226cb06af3b86299031884175155e67a02e0a8ad0b3ab3a88b409a8c09d5c"
+      "href": "https://orbitr-testnet.metriq.network/transactions/264226cb06af3b86299031884175155e67a02e0a8ad0b3ab3a88b409a8c09d5c"
     },
     "account": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR"
+      "href": "https://orbitr-testnet.metriq.network/accounts/GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR"
     },
     "ledger": {
-      "href": "https://orbitr-testnet.lantah.network/ledgers/697121"
+      "href": "https://orbitr-testnet.metriq.network/ledgers/697121"
     },
     "operations": {
-      "href": "https://orbitr-testnet.lantah.network/transactions/264226cb06af3b86299031884175155e67a02e0a8ad0b3ab3a88b409a8c09d5c/operations{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/transactions/264226cb06af3b86299031884175155e67a02e0a8ad0b3ab3a88b409a8c09d5c/operations{?cursor,limit,order}",
       "templated": true
     },
     "effects": {
-      "href": "https://orbitr-testnet.lantah.network/transactions/264226cb06af3b86299031884175155e67a02e0a8ad0b3ab3a88b409a8c09d5c/effects{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/transactions/264226cb06af3b86299031884175155e67a02e0a8ad0b3ab3a88b409a8c09d5c/effects{?cursor,limit,order}",
       "templated": true
     },
     "precedes": {
-      "href": "https://orbitr-testnet.lantah.network/transactions?order=asc&cursor=2994111896358912"
+      "href": "https://orbitr-testnet.metriq.network/transactions?order=asc&cursor=2994111896358912"
     },
     "succeeds": {
-      "href": "https://orbitr-testnet.lantah.network/transactions?order=desc&cursor=2994111896358912"
+      "href": "https://orbitr-testnet.metriq.network/transactions?order=desc&cursor=2994111896358912"
     }
   },
   "id": "264226cb06af3b86299031884175155e67a02e0a8ad0b3ab3a88b409a8c09d5c",

@@ -1,7 +1,7 @@
 package main
 
 import (
-	cmp "github.com/lantah/go/tools/orbitr-cmp/internal"
+	cmp "github.com/metriqorg/go/tools/orbitr-cmp/internal"
 )
 
 var routes = cmp.Routes{

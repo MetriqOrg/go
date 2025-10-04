@@ -2,8 +2,8 @@ package processors
 
 import (
 	"github.com/guregu/null"
-	logpkg "github.com/lantah/go/support/log"
-	"github.com/lantah/go/xdr"
+	logpkg "github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/xdr"
 )
 
 var log = logpkg.DefaultLogger.WithField("service", "ingest")

@@ -5,10 +5,10 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/guregu/null"
-	"github.com/lantah/go/services/orbitr/internal/db2"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	"github.com/lantah/go/toid"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/services/orbitr/internal/db2"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/toid"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestOperationQueries(t *testing.T) {

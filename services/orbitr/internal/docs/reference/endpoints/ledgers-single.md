@@ -22,14 +22,14 @@ GET /ledgers/{sequence}
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/ledgers/69859"
+curl "https://orbitr-testnet.metriq.network/ledgers/69859"
 ```
 
 ### JavaScript Example Request
 
 ```js
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.ledgers()
   .ledger('69858')

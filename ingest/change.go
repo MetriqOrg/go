@@ -3,8 +3,8 @@ package ingest
 import (
 	"bytes"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // Change is a developer friendly representation of LedgerEntryChanges.
@@ -30,7 +30,7 @@ type Change struct {
 // - for removed, pre is previous state and post is null.
 //
 // gravity source:
-// https://github.com/lantah/gravity/blob/e584b43/src/ledger/LedgerTxn.cpp#L582
+// https://github.com/metriqorg/gravity/blob/e584b43/src/ledger/LedgerTxn.cpp#L582
 func GetChangesFromLedgerEntryChanges(ledgerEntryChanges xdr.LedgerEntryChanges) []Change {
 	changes := make([]Change, 0, len(ledgerEntryChanges))
 	for i, entryChange := range ledgerEntryChanges {

@@ -3,8 +3,8 @@ package reap
 import (
 	"testing"
 
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
 )
 
 func TestDeleteUnretainedHistory(t *testing.T) {

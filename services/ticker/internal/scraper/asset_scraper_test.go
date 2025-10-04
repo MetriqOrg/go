@@ -7,9 +7,9 @@ import (
 	"net/url"
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

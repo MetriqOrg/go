@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/protocols/orbitr/operations"
-	"github.com/lantah/go/txnbuild"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/protocols/orbitr/operations"
+	"github.com/metriqorg/go/txnbuild"
 )
 
 func ExampleClient_Accounts() {
@@ -516,7 +516,7 @@ func ExampleClient_Operations() {
 
 func ExampleClient_OrderBook() {
 	client := orbitrclient.DefaultPublicNetClient
-	// orderbook for an asset pair, e.g GRAM/NGN
+	// orderbook for an asset pair, e.g MTRQ/NGN
 	obRequest := orbitrclient.OrderBookRequest{
 		BuyingAssetType:    orbitrclient.AssetTypeNative,
 		SellingAssetCode:   "USD",
@@ -533,7 +533,7 @@ func ExampleClient_OrderBook() {
 
 func ExampleClient_Paths() {
 	client := orbitrclient.DefaultPublicNetClient
-	// Find paths for GRAM->NGN
+	// Find paths for MTRQ->NGN
 	pr := orbitrclient.PathsRequest{
 		DestinationAccount:     "GCLWGQPMKXQSPF776IU33AH4PZNOOWNAWGGKVTBQMIC5IMKUNP3E6NVU",
 		DestinationAmount:      "100",

@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	orbitr "github.com/lantah/go/services/orbitr/internal"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	orbitr "github.com/metriqorg/go/services/orbitr/internal"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 )
 
 var recordMetricsCmd = &cobra.Command{

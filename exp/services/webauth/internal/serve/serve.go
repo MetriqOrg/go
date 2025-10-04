@@ -7,12 +7,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/support/errors"
-	supporthttp "github.com/lantah/go/support/http"
-	supportlog "github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/health"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/support/errors"
+	supporthttp "github.com/metriqorg/go/support/http"
+	supportlog "github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/health"
 	"gopkg.in/square/go-jose.v2"
 )
 

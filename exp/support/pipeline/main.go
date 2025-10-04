@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // ErrShutdown is an error send to post-processing hook when pipeline has been

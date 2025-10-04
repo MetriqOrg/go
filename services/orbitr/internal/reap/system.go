@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	herrors "github.com/lantah/go/services/orbitr/internal/errors"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/toid"
+	herrors "github.com/metriqorg/go/services/orbitr/internal/errors"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/toid"
 )
 
 // DeleteUnretainedHistory removes all data associated with unretained ledgers.

@@ -1,12 +1,12 @@
 FROM golang:1.20-bullseye AS builder
 
 ARG VERSION="devel"
-WORKDIR /go/src/github.com/lantah/go
+WORKDIR /go/src/github.com/metriqorg/go
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . ./
-ENV GOFLAGS="-ldflags=-X=github.com/lantah/go/support/app.version=${VERSION}-(built-from-source)"
-RUN go install github.com/lantah/go/services/orbitr
+ENV GOFLAGS="-ldflags=-X=github.com/metriqorg/go/support/app.version=${VERSION}-(built-from-source)"
+RUN go install github.com/metriqorg/go/services/orbitr
 
 FROM ubuntu:22.04
 ARG GRAVITY_VERSION 

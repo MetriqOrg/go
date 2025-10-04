@@ -3,7 +3,7 @@ package orderbook
 import (
 	"sort"
 
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
 	"golang.org/x/exp/slices"
 )
 

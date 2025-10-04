@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/prometheus/client_golang/prometheus"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
 )
 
 // Orderbook tracks top-level orderbook statistics.
@@ -19,7 +19,7 @@ type Orderbook struct {
 	AskUsdVolume  prometheus.Gauge
 }
 
-// usdOrder holds the USD representation of an GRAM-based order on the DEX.
+// usdOrder holds the USD representation of an MTRQ-based order on the DEX.
 // This contains the amount of the asset in the order; its price in USD; and that amount in USD.
 type usdOrder struct {
 	gramAmount  float64

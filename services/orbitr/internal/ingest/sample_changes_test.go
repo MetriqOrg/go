@@ -10,11 +10,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/lantah/go/historyarchive"
-	"github.com/lantah/go/ingest"
-	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
-	logpkg "github.com/lantah/go/support/log"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/historyarchive"
+	"github.com/metriqorg/go/ingest"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest/processors"
+	logpkg "github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/xdr"
 )
 
 const (

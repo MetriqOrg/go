@@ -8,11 +8,11 @@ import (
 	"strconv"
 	"time"
 
-	orbitrclient "github.com/lantah/go/clients/orbitrclient"
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/ticker/internal/scraper"
-	"github.com/lantah/go/services/ticker/internal/tickerdb"
-	hlog "github.com/lantah/go/support/log"
+	orbitrclient "github.com/metriqorg/go/clients/orbitrclient"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/ticker/internal/scraper"
+	"github.com/metriqorg/go/services/ticker/internal/tickerdb"
+	hlog "github.com/metriqorg/go/support/log"
 )
 
 // StreamTrades constantly streams and ingests new trades directly from orbitr.

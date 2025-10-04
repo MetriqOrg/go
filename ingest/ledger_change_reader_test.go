@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/xdr"
 )
 
 const (

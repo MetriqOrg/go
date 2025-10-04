@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 var (
@@ -123,7 +123,7 @@ func BenchmarkVibrantPath(b *testing.B) {
 
 	b.ResetTimer()
 	b.ReportAllocs()
-	// https://orbitr.lantah.network/paths/strict-send?source_asset_type=credit_alphanum4&source_asset_code=USDC&source_asset_issuer=GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN&source_amount=10&destination_assets=ARST%3AGCSAZVWXZKWS4XS223M5F54H2B6XPIIXZZGP7KEAIU6YSL5HDRGCI3DG
+	// https://orbitr.metriq.network/paths/strict-send?source_asset_type=credit_alphanum4&source_asset_code=USDC&source_asset_issuer=GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN&source_amount=10&destination_assets=ARST%3AGCSAZVWXZKWS4XS223M5F54H2B6XPIIXZZGP7KEAIU6YSL5HDRGCI3DG
 	// Uncomment in order to get a detailed heap allocations profile
 	// runtime.MemProfileRate = 1
 	for i := 0; i < b.N; i++ {
@@ -169,7 +169,7 @@ func BenchmarkMultipleDestinationAssets(b *testing.B) {
 			amount.MustParse("554.2610400"),
 			[]xdr.Asset{
 				xdr.MustNewNativeAsset(),
-				xdr.MustNewCreditAsset("GRAM", "GARDNV3Q7YGT4AKSDF25LT32YSCCW4EV22Y2TV3I2PU2MMXJTEDL5T55"),
+				xdr.MustNewCreditAsset("MTRQ", "GARDNV3Q7YGT4AKSDF25LT32YSCCW4EV22Y2TV3I2PU2MMXJTEDL5T55"),
 				xdr.MustNewCreditAsset("USDC", "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"),
 				xdr.MustNewCreditAsset("EURT", "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S"),
 			},

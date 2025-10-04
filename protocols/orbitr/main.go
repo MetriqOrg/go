@@ -11,11 +11,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/lantah/go/protocols/orbitr/base"
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/hal"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/protocols/orbitr/base"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/hal"
+	"github.com/metriqorg/go/xdr"
 )
 
 // KeyTypeNames maps from strkey version bytes into json string values to use in
@@ -731,7 +731,7 @@ type FeeDistribution struct {
 }
 
 // FeeStats represents a response of fees from orbitr
-// To do: implement fee suggestions if agreement is reached in https://github.com/lantah/go/issues/926
+// To do: implement fee suggestions if agreement is reached in https://github.com/metriqorg/go/issues/926
 type FeeStats struct {
 	LastLedger          uint32  `json:"last_ledger,string"`
 	LastLedgerBaseFee   int64   `json:"last_ledger_base_fee,string"`

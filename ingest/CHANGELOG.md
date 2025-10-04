@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file. This projec
 * Let filewatcher use binary hash instead of timestamp to detect core version update [4050](https://github.com/stellar/go/pull/4050)
 
 ### New Features
-* **Performance improvement**: the Captive Core backend now reuses bucket files whenever it finds existing ones in the corresponding `--captive-core-storage-path` (introduced in [v2.0](#v2.0.0)) rather than generating a one-time temporary sub-directory ([#3670](https://github.com/stellar/go/pull/3670)). Note that taking advantage of this feature requires [Gravity v17.1.0](https://github.com/lantah/gravity/releases/tag/v17.1.0) or later.
+* **Performance improvement**: the Captive Core backend now reuses bucket files whenever it finds existing ones in the corresponding `--captive-core-storage-path` (introduced in [v2.0](#v2.0.0)) rather than generating a one-time temporary sub-directory ([#3670](https://github.com/stellar/go/pull/3670)). Note that taking advantage of this feature requires [Gravity v17.1.0](https://github.com/metriqorg/gravity/releases/tag/v17.1.0) or later.
 
 ### Bug Fixes
 * The Gravity runner now parses logs from its underlying subprocess better [#3746](https://github.com/stellar/go/pull/3746).

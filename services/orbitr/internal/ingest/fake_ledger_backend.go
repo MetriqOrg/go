@@ -3,10 +3,10 @@ package ingest
 import (
 	"context"
 
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/keypair"
-	logpkg "github.com/lantah/go/support/log"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/keypair"
+	logpkg "github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/xdr"
 )
 
 type fakeLedgerBackend struct {

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/errors"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // BuildURL creates the endpoint to be queried based on the data in the TransactionRequest struct.

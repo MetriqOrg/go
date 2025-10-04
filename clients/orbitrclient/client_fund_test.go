@@ -3,7 +3,7 @@ package orbitrclient
 import (
 	"testing"
 
-	"github.com/lantah/go/support/http/httptest"
+	"github.com/metriqorg/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -11,7 +11,7 @@ func TestFund(t *testing.T) {
 	friendbotFundResponse := `{
   "_links": {
     "transaction": {
-      "href": "https://orbitr-testnet.lantah.org/transactions/94e42f65d3ff5f30669b6109c2ce3e82c0e592c52004e3b41bb30e24df33954e"
+      "href": "https://orbitr-testnet.metriq.org/transactions/94e42f65d3ff5f30669b6109c2ce3e82c0e592c52004e3b41bb30e24df33954e"
     }
   },
   "hash": "94e42f65d3ff5f30669b6109c2ce3e82c0e592c52004e3b41bb30e24df33954e",

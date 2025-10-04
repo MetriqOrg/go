@@ -26,9 +26,9 @@ draft specification guide and thus has the following attributes:
 ## Example
 
 ```shell
-$ curl -X GET "https://orbitr-testnet.lantah.network/ledgers?limit=invalidlimit"
+$ curl -X GET "https://orbitr-testnet.metriq.network/ledgers?limit=invalidlimit"
 {
-  "type": "https://lantah.network/orbitr-errors/bad_request",
+  "type": "https://metriq.network/orbitr-errors/bad_request",
   "title": "Bad Request",
   "status": 400,
   "detail": "The request you sent was invalid in some way",

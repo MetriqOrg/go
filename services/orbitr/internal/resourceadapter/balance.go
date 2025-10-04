@@ -1,12 +1,12 @@
 package resourceadapter
 
 import (
-	"github.com/lantah/go/amount"
-	protocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/assets"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/amount"
+	protocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/assets"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 func PopulatePoolShareBalance(dest *protocol.Balance, row history.TrustLine) (err error) {

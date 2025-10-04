@@ -1,8 +1,8 @@
 package internal
 
 import (
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // Account implements the `txnbuild.Account` interface.

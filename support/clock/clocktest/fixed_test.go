@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/support/clock"
-	"github.com/lantah/go/support/clock/clocktest"
+	"github.com/metriqorg/go/support/clock"
+	"github.com/metriqorg/go/support/clock/clocktest"
 	"github.com/stretchr/testify/assert"
 )
 

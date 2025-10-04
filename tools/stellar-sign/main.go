@@ -14,12 +14,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
 
 	"github.com/howeyc/gopass"
-	"github.com/lantah/go/txnbuild"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/txnbuild"
+	"github.com/metriqorg/go/xdr"
 )
 
 type SignOrVerify struct {

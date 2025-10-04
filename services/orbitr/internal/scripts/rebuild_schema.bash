@@ -5,6 +5,6 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 GOTOP="$( cd "$DIR/../../../../../../../.." && pwd )"
 
-go generate github.com/lantah/go/services/orbitr/internal/db2/schema
-go generate github.com/lantah/go/services/orbitr/internal/test
-go install github.com/lantah/go/services/orbitr
+go generate github.com/metriqorg/go/services/orbitr/internal/db2/schema
+go generate github.com/metriqorg/go/services/orbitr/internal/test
+go install github.com/metriqorg/go/services/orbitr

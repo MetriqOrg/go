@@ -1,6 +1,6 @@
 # **Testing with Horizon**
 
-Run all the Go monorepo unit tests like so (assuming you are at lantah/go, or run from lantah/go/services/horizon for just the Horizon subset):
+Run all the Go monorepo unit tests like so (assuming you are at metriq/go, or run from metriq/go/services/horizon for just the Horizon subset):
 
 ```bash
 go test ./...
@@ -9,7 +9,7 @@ go test ./...
 or run individual Horizon tests like so, providing the expected arguments:
 
 ```bash
-go test github.com/lantah/go/services/horizon/...
+go test github.com/metriqorg/go/services/horizon/...
 ```
 
 Before running integration tests, you also need to set some environment variables:

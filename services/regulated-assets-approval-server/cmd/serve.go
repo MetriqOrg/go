@@ -4,10 +4,10 @@ import (
 	"go/types"
 
 	"github.com/spf13/cobra"
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve"
-	"github.com/lantah/go/support/config"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/serve"
+	"github.com/metriqorg/go/support/config"
 )
 
 type ServeCommand struct{}

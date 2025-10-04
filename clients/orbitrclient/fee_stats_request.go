@@ -1,7 +1,7 @@
 package orbitrclient
 
 import (
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/errors"
 	"net/http"
 )
 

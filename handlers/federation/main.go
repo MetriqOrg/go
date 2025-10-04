@@ -16,7 +16,7 @@ import (
 	"net/url"
 	"sync"
 
-	"github.com/lantah/go/support/db"
+	"github.com/metriqorg/go/support/db"
 )
 
 // Driver represents a data source against which federation queries can be

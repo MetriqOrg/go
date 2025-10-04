@@ -13,10 +13,10 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sirupsen/logrus"
 
-	"github.com/lantah/go/clients/gravity"
-	"github.com/lantah/go/historyarchive"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/clients/gravity"
+	"github.com/metriqorg/go/historyarchive"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/xdr"
 )
 
 // Ensure CaptiveGravity implements LedgerBackend

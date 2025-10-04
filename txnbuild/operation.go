@@ -3,7 +3,7 @@ package txnbuild
 import (
 	"fmt"
 
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
 )
 
 // Operation represents the operation types of the Lantah Network.

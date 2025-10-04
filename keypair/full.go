@@ -5,8 +5,8 @@ import (
 	"crypto/ed25519"
 	"encoding/base64"
 
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/xdr"
 )
 
 type Full struct {

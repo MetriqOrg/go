@@ -11,8 +11,8 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	tdb "github.com/lantah/go/services/orbitr/internal/test/db"
-	"github.com/lantah/go/support/log"
+	tdb "github.com/metriqorg/go/services/orbitr/internal/test/db"
+	"github.com/metriqorg/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

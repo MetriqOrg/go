@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/lantah/go/services/orbitr/internal/codes"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/services/orbitr/internal/codes"
+	"github.com/metriqorg/go/xdr"
 )
 
 var (

@@ -1,9 +1,9 @@
 package ingest
 
 import (
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/xdr"
 )
 
 // GenesisChange returns the Change occurring at the genesis ledger (ledgerseq = 1)..

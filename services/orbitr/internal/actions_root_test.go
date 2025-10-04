@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
 	"github.com/stretchr/testify/assert"
 )
 

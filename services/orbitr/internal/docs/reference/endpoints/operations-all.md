@@ -30,14 +30,14 @@ GET /operations{?cursor,limit,order,include_failed}
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/operations?limit=200&order=desc"
+curl "https://orbitr-testnet.metriq.network/operations?limit=200&order=desc"
 ```
 
 ### JavaScript Example Request
 
 ```js
 var StellarSdk = require('stellar-sdk');
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 server.operations()
   .call()
@@ -59,7 +59,7 @@ server.operations()
 
 ```javascript
 var StellarSdk = require('stellar-sdk')
-var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network');
+var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network');
 
 var operationHandler = function (operationResponse) {
   console.log(operationResponse);

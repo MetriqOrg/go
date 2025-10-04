@@ -47,10 +47,10 @@ In addition, the following additional data is provided in the `extras` field of 
 ### No Source Account
 ```json
 {
-  "type": "https://lantah.network/orbitr-errors/transaction_failed",
+  "type": "https://metriq.network/orbitr-errors/transaction_failed",
   "title": "Transaction Failed",
   "status": 400,
-  "detail": "The transaction failed when submitted to the lantah network. The `extras.result_codes` field on this response contains further details.  Descriptions of each code can be found at: https://www.stellar.org/developers/learn/concepts/list-of-operations.html",
+  "detail": "The transaction failed when submitted to the metriq network. The `extras.result_codes` field on this response contains further details.  Descriptions of each code can be found at: https://www.stellar.org/developers/learn/concepts/list-of-operations.html",
   "extras": {
     "envelope_xdr": "AAAAANNVpdQ9vctZdAJ67sFmNe1KDzaj51dAdkW3vKKM51H3AAAAZAAAAABJlgLSAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAA01Wl1D29y1l0AnruwWY17UoPNqPnV0B2Rbe8ooznUfcAAAAAAAAAAAL68IAAAAAAAAAAAA==",
     "result_codes": {
@@ -64,10 +64,10 @@ In addition, the following additional data is provided in the `extras` field of 
 ### Bad Authentication
 ```json
 {
-  "type": "https://lantah.network/orbitr-errors/transaction_failed",
+  "type": "https://metriq.network/orbitr-errors/transaction_failed",
   "title": "Transaction Failed",
   "status": 400,
-  "detail": "The transaction failed when submitted to the lantah network. The `extras.result_codes` field on this response contains further details.  Descriptions of each code can be found at: https://www.stellar.org/developers/learn/concepts/list-of-operations.html",
+  "detail": "The transaction failed when submitted to the metriq network. The `extras.result_codes` field on this response contains further details.  Descriptions of each code can be found at: https://www.stellar.org/developers/learn/concepts/list-of-operations.html",
   "extras": {
     "envelope_xdr": "AAAAAPORy3CoX6ox2ilbeiVjBA5WlpCSZRcjZ7VE9Wf4QVk7AAAAZAAAQz0AAAACAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAA85HLcKhfqjHaKVt6JWMEDlaWkJJlFyNntUT1Z/hBWTsAAAAAAAAAAAL68IAAAAAAAAAAARN17BEAAABAA9Ad7OKc7y60NT/JuobaHOfmuq8KbZqcV6G/es94u9yT84fi0aI7tJsFMOyy8cZ4meY3Nn908OU+KfRWV40UCw==",
     "result_codes": {

@@ -3,8 +3,8 @@ package orbitrclient
 import (
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/http/httptest"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -47,9 +47,9 @@ func TestLiquidityPoolsRequest(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.IsType(t, response, hProtocol.LiquidityPoolsPage{})
 		links := response.Links
-		assert.Equal(t, links.Self.Href, "https://orbitr.lantah.network/liquidity_pools?limit=200\u0026order=asc")
+		assert.Equal(t, links.Self.Href, "https://orbitr.metriq.network/liquidity_pools?limit=200\u0026order=asc")
 
-		assert.Equal(t, links.Next.Href, "https://orbitr.lantah.network/liquidity_pools?limit=200\u0026order=asc")
+		assert.Equal(t, links.Next.Href, "https://orbitr.metriq.network/liquidity_pools?limit=200\u0026order=asc")
 
 		record := response.Embedded.Records[0]
 		assert.IsType(t, record, hProtocol.LiquidityPool{})
@@ -79,10 +79,10 @@ func TestLiquidityPoolsRequest(t *testing.T) {
 var liquidityPoolsResponse = `{
   "_links": {
     "self": {
-      "href": "https://orbitr.lantah.network/liquidity_pools?limit=200\u0026order=asc"
+      "href": "https://orbitr.metriq.network/liquidity_pools?limit=200\u0026order=asc"
     },
     "next": {
-      "href": "https://orbitr.lantah.network/liquidity_pools?limit=200\u0026order=asc"
+      "href": "https://orbitr.metriq.network/liquidity_pools?limit=200\u0026order=asc"
     }
   },
   "_embedded": {

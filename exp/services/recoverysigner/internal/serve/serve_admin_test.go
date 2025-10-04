@@ -7,9 +7,9 @@ import (
 	"testing"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/lantah/go/exp/services/recoverysigner/internal/account"
-	"github.com/lantah/go/exp/services/recoverysigner/internal/db/dbtest"
-	supportlog "github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/exp/services/recoverysigner/internal/account"
+	"github.com/metriqorg/go/exp/services/recoverysigner/internal/db/dbtest"
+	supportlog "github.com/metriqorg/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

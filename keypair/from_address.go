@@ -4,8 +4,8 @@ import (
 	"crypto/ed25519"
 	"encoding"
 
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/xdr"
 )
 
 // FromAddress represents a keypair to which only the address is know.  This KP

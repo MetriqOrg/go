@@ -3,12 +3,12 @@ package resourceadapter
 import (
 	"context"
 
-	"github.com/lantah/go/protocols/orbitr/base"
-	"github.com/lantah/go/protocols/orbitr/effects"
-	orbitrContext "github.com/lantah/go/services/orbitr/internal/context"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/support/render/hal"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/protocols/orbitr/base"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	orbitrContext "github.com/metriqorg/go/services/orbitr/internal/context"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/support/render/hal"
+	"github.com/metriqorg/go/xdr"
 )
 
 var EffectTypeNames = map[history.EffectType]string{

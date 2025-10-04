@@ -3,7 +3,7 @@ package xdr
 import (
 	"fmt"
 
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/errors"
 )
 
 func (a ClaimAtom) OfferId() Int64 {

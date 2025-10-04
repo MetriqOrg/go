@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	proto "github.com/lantah/go/protocols/gravity"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	proto "github.com/metriqorg/go/protocols/gravity"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // Client represents a client that is capable of communicating with a

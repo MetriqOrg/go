@@ -3,8 +3,8 @@ package xdr_test
 import (
 	"database/sql"
 
-	"github.com/lantah/go/xdr"
-	. "github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/xdr"
+	. "github.com/metriqorg/go/xdr"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"

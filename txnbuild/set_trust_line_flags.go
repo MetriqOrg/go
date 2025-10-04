@@ -1,8 +1,8 @@
 package txnbuild
 
 import (
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // TrustLineFlag represents the bitmask flags used to set and clear account authorization options.
@@ -40,7 +40,7 @@ func (stf *SetTrustLineFlags) BuildXDR() (xdr.Operation, error) {
 
 	// Validate this is an issued asset
 	if stf.Asset.IsNative() {
-		return xdr.Operation{}, errors.New("trustline doesn't exist for a native (GRAM) asset")
+		return xdr.Operation{}, errors.New("trustline doesn't exist for a native (MTRQ) asset")
 	}
 
 	xdrOp.Asset, err = stf.Asset.ToXDR()

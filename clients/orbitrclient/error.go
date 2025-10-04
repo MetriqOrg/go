@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"strings"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 func (herr Error) Error() string {

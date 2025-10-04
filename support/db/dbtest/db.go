@@ -14,8 +14,8 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"github.com/lantah/go/support/db/sqlutils"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/db/sqlutils"
+	"github.com/metriqorg/go/support/errors"
 	"github.com/stretchr/testify/require"
 )
 

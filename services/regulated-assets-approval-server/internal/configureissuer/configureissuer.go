@@ -5,13 +5,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/txnbuild"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/txnbuild"
 )
 
 type Options struct {

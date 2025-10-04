@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/db/dbtest"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/httperror"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/db/dbtest"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/serve/httperror"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

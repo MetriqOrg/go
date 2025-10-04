@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/lantah/go/protocols/orbitr/effects"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/protocols/orbitr/effects"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // EffectHandler is a function that is called when a new effect is received

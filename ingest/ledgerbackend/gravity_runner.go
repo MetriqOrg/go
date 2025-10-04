@@ -17,8 +17,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/lantah/go/protocols/gravity"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/protocols/gravity"
+	"github.com/metriqorg/go/support/log"
 )
 
 type gravityRunnerInterface interface {

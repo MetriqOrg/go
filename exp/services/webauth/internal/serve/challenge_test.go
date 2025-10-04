@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/strkey"
-	supportlog "github.com/lantah/go/support/log"
-	"github.com/lantah/go/txnbuild"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/strkey"
+	supportlog "github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/txnbuild"
+	"github.com/metriqorg/go/xdr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

@@ -29,14 +29,14 @@ GET /accounts{?signer,asset,cursor,limit,order}
 ### curl Example Request
 
 ```sh
-curl "https://orbitr-testnet.lantah.network/accounts?signer=GBPOFUJUHOFTZHMZ63H5GE6NX5KVKQRD6N3I2E5AL3T2UG7HSLPLXN2K"
+curl "https://orbitr-testnet.metriq.network/accounts?signer=GBPOFUJUHOFTZHMZ63H5GE6NX5KVKQRD6N3I2E5AL3T2UG7HSLPLXN2K"
 ```
 
 <!-- ### JavaScript Example Request -->
 
 <!-- ```javascript -->
 <!-- var StellarSdk = require('stellar-sdk'); -->
-<!-- var server = new StellarSdk.Server('https://orbitr-testnet.lantah.network'); -->
+<!-- var server = new StellarSdk.Server('https://orbitr-testnet.metriq.network'); -->
 
 <!-- server.accounts(asset: asset) -->
 <!--   .call() -->
@@ -57,13 +57,13 @@ This endpoint responds with the details of all accounts matching the filters. Se
 {
   "_links": {
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/accounts?cursor=\u0026limit=10\u0026order=asc\u0026signer=GBPOFUJUHOFTZHMZ63H5GE6NX5KVKQRD6N3I2E5AL3T2UG7HSLPLXN2K"
+      "href": "https://orbitr-testnet.metriq.network/accounts?cursor=\u0026limit=10\u0026order=asc\u0026signer=GBPOFUJUHOFTZHMZ63H5GE6NX5KVKQRD6N3I2E5AL3T2UG7HSLPLXN2K"
     },
     "next": {
-      "href": "https://orbitr-testnet.lantah.network/accounts?cursor=GDRREYWHQWJDICNH4SAH4TT2JRBYRPTDYIMLK4UWBDT3X3ZVVYT6I4UQ\u0026limit=10\u0026order=asc\u0026signer=GBPOFUJUHOFTZHMZ63H5GE6NX5KVKQRD6N3I2E5AL3T2UG7HSLPLXN2K"
+      "href": "https://orbitr-testnet.metriq.network/accounts?cursor=GDRREYWHQWJDICNH4SAH4TT2JRBYRPTDYIMLK4UWBDT3X3ZVVYT6I4UQ\u0026limit=10\u0026order=asc\u0026signer=GBPOFUJUHOFTZHMZ63H5GE6NX5KVKQRD6N3I2E5AL3T2UG7HSLPLXN2K"
     },
     "prev": {
-      "href": "https://orbitr-testnet.lantah.network/accounts?cursor=GDRREYWHQWJDICNH4SAH4TT2JRBYRPTDYIMLK4UWBDT3X3ZVVYT6I4UQ\u0026limit=10\u0026order=desc\u0026signer=GBPOFUJUHOFTZHMZ63H5GE6NX5KVKQRD6N3I2E5AL3T2UG7HSLPLXN2K"
+      "href": "https://orbitr-testnet.metriq.network/accounts?cursor=GDRREYWHQWJDICNH4SAH4TT2JRBYRPTDYIMLK4UWBDT3X3ZVVYT6I4UQ\u0026limit=10\u0026order=desc\u0026signer=GBPOFUJUHOFTZHMZ63H5GE6NX5KVKQRD6N3I2E5AL3T2UG7HSLPLXN2K"
     }
   },
   "_embedded": {
@@ -71,34 +71,34 @@ This endpoint responds with the details of all accounts matching the filters. Se
       {
         "_links": {
           "self": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB"
+            "href": "https://orbitr-testnet.metriq.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB"
           },
           "transactions": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/transactions{?cursor,limit,order}",
+            "href": "https://orbitr-testnet.metriq.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/transactions{?cursor,limit,order}",
             "templated": true
           },
           "operations": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/operations{?cursor,limit,order}",
+            "href": "https://orbitr-testnet.metriq.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/operations{?cursor,limit,order}",
             "templated": true
           },
           "payments": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/payments{?cursor,limit,order}",
+            "href": "https://orbitr-testnet.metriq.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/payments{?cursor,limit,order}",
             "templated": true
           },
           "effects": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/effects{?cursor,limit,order}",
+            "href": "https://orbitr-testnet.metriq.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/effects{?cursor,limit,order}",
             "templated": true
           },
           "offers": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/offers{?cursor,limit,order}",
+            "href": "https://orbitr-testnet.metriq.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/offers{?cursor,limit,order}",
             "templated": true
           },
           "trades": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/trades{?cursor,limit,order}",
+            "href": "https://orbitr-testnet.metriq.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/trades{?cursor,limit,order}",
             "templated": true
           },
           "data": {
-            "href": "https://orbitr-testnet.lantah.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/data/{key}",
+            "href": "https://orbitr-testnet.metriq.network/accounts/GD42RQNXTRIW6YR3E2HXV5T2AI27LBRHOERV2JIYNFMXOBA234SWLQQB/data/{key}",
             "templated": true
           }
         },

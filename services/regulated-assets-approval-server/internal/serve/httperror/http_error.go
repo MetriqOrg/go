@@ -3,9 +3,9 @@ package httperror
 import (
 	"net/http"
 
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/httpjson"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/httpjson"
 )
 
 type Error struct {

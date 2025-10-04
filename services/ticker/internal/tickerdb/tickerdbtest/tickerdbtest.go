@@ -6,7 +6,7 @@ import (
 	"time"
 
 	migrate "github.com/rubenv/sql-migrate"
-	"github.com/lantah/go/services/ticker/internal/tickerdb"
+	"github.com/metriqorg/go/services/ticker/internal/tickerdb"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -281,9 +281,9 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 	)
 	require.NoError(t, err)
 
-	// Add an GRAM asset.
+	// Add an MTRQ asset.
 	err = session.InsertOrUpdateAsset(ctx, &tickerdb.Asset{
-		Code:          "GRAM",
+		Code:          "MTRQ",
 		IssuerAccount: issuer1PK,
 		IssuerID:      issuer1.ID,
 		IsValid:       true,
@@ -296,12 +296,12 @@ func SetupTickerTestSession(t *testing.T, migrationsDir string) (session tickerd
 		FROM assets
 		WHERE code = ?
 		AND issuer_account = ?`,
-		"GRAM",
+		"MTRQ",
 		issuer1PK,
 	)
 	require.NoError(t, err)
 
-	// Add GRAM/BTC trades.
+	// Add MTRQ/BTC trades.
 	trades = []tickerdb.Trade{
 		{
 			OrbitRID:       "hrzid5",

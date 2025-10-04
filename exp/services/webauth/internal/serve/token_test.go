@@ -14,15 +14,15 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/exp/support/jwtkey"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/strkey"
-	supportlog "github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/problem"
-	"github.com/lantah/go/txnbuild"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/exp/support/jwtkey"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/strkey"
+	supportlog "github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/problem"
+	"github.com/metriqorg/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/square/go-jose.v2"
@@ -807,7 +807,7 @@ func TestToken_jsonInputAccountNotExistSuccess(t *testing.T) {
 			orbitr.Account{},
 			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -912,7 +912,7 @@ func TestToken_jsonInputAccountNotExistFail(t *testing.T) {
 			orbitr.Account{},
 			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -995,7 +995,7 @@ func TestToken_jsonInputAccountNotExistNotAllowed(t *testing.T) {
 			orbitr.Account{},
 			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -1080,7 +1080,7 @@ func TestToken_jsonInputUnrecognizedServerSigner(t *testing.T) {
 			orbitr.Account{},
 			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -1177,7 +1177,7 @@ func TestToken_jsonInputNoWebAuthDomainSuccess(t *testing.T) {
 			orbitr.Account{},
 			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},
@@ -1282,7 +1282,7 @@ func TestToken_jsonInputInvalidWebAuthDomainFail(t *testing.T) {
 			orbitr.Account{},
 			&orbitrclient.Error{
 				Problem: problem.P{
-					Type:   "https://lantah.network/orbitr-errors/not_found",
+					Type:   "https://metriq.network/orbitr-errors/not_found",
 					Title:  "Resource Missing",
 					Status: 404,
 				},

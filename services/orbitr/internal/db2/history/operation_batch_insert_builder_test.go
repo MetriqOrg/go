@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"github.com/guregu/null"
-	"github.com/lantah/go/services/orbitr/internal/test"
-	"github.com/lantah/go/toid"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/toid"
+	"github.com/metriqorg/go/xdr"
 )
 
 func TestAddOperation(t *testing.T) {

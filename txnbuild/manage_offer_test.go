@@ -3,8 +3,8 @@ package txnbuild
 import (
 	"testing"
 
-	"github.com/lantah/go/price"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/price"
+	"github.com/metriqorg/go/xdr"
 
 	"github.com/stretchr/testify/assert"
 )

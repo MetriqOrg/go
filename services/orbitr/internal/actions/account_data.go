@@ -4,8 +4,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/lantah/go/services/orbitr/internal/context"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/context"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
 )
 
 // AccountDataQuery query struct for account data end-point

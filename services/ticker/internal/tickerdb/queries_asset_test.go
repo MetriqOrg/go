@@ -31,7 +31,7 @@ func TestInsertOrUpdateAsset(t *testing.T) {
 	publicKey := "GCF3TQXKZJNFJK7HCMNE2O2CUNKCJH2Y2ROISTBPLC7C5EIA5NNG2XZB"
 	issuerAccount := "AM2FQXKZJNFJK7HCMNE2O2CUNKCJH2Y2ROISTBPLC7C5EIA5NNG2XZB"
 	name := "FOO BAR"
-	code := "GRAM"
+	code := "MTRQ"
 
 	// Adding a seed issuer to be used later:
 	issuer := Issuer{
@@ -174,7 +174,7 @@ func TestGetAssetByCodeAndIssuerAccount(t *testing.T) {
 
 	publicKey := "GCF3TQXKZJNFJK7HCMNE2O2CUNKCJH2Y2ROISTBPLC7C5EIA5NNG2XZB"
 	name := "FOO BAR"
-	code := "GRAM"
+	code := "MTRQ"
 	issuerAccount := "AM2FQXKZJNFJK7HCMNE2O2CUNKCJH2Y2ROISTBPLC7C5EIA5NNG2XZB"
 
 	// Adding a seed issuer to be used later:

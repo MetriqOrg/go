@@ -6,8 +6,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	orbitrclient "github.com/lantah/go/clients/orbitrclient"
-	hlog "github.com/lantah/go/support/log"
+	orbitrclient "github.com/metriqorg/go/clients/orbitrclient"
+	hlog "github.com/metriqorg/go/support/log"
 )
 
 var DatabaseURL string

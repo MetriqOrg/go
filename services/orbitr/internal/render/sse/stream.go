@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/pkg/errors"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/problem"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/problem"
 )
 
 var (

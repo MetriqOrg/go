@@ -13,11 +13,11 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	client "github.com/lantah/go/clients/orbitrclient"
-	protocol "github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/support/errors"
-	slog "github.com/lantah/go/support/log"
-	cmp "github.com/lantah/go/tools/orbitr-cmp/internal"
+	client "github.com/metriqorg/go/clients/orbitrclient"
+	protocol "github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/support/errors"
+	slog "github.com/metriqorg/go/support/log"
+	cmp "github.com/metriqorg/go/tools/orbitr-cmp/internal"
 )
 
 // maxLevels defines the maximum number of levels deep the crawler

@@ -3,8 +3,8 @@ package sse
 import (
 	"net/http"
 
-	"github.com/lantah/go/services/orbitr/internal/ledger"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/services/orbitr/internal/ledger"
+	"github.com/metriqorg/go/support/errors"
 	"github.com/stellar/throttled"
 )
 

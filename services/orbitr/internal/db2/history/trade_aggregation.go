@@ -7,10 +7,10 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 
-	"github.com/lantah/go/services/orbitr/internal/db2"
-	"github.com/lantah/go/support/errors"
-	strtime "github.com/lantah/go/support/time"
-	"github.com/lantah/go/toid"
+	"github.com/metriqorg/go/services/orbitr/internal/db2"
+	"github.com/metriqorg/go/support/errors"
+	strtime "github.com/metriqorg/go/support/time"
+	"github.com/metriqorg/go/toid"
 )
 
 // AllowedResolutions is the set of trade aggregation time windows allowed to be used as the

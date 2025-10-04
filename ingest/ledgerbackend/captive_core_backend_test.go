@@ -12,10 +12,10 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/lantah/go/historyarchive"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/historyarchive"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // TODO: test frame decoding
@@ -990,7 +990,7 @@ func TestCaptiveGravity_PrepareRangeAfterClose(t *testing.T) {
 		t,
 		captiveGravity.PrepareRange(ctx, BoundedRange(65, 66)),
 		"error starting prepare range: opening subprocess: error getting latest checkpoint sequence: "+
-			"error getting root HAS: Get \"http://localhost/.well-known/lantah-history.json\": context canceled",
+			"error getting root HAS: Get \"http://localhost/.well-known/metriq-history.json\": context canceled",
 	)
 
 	// even if the request to fetch the latest checkpoint succeeds, we should fail at creating the subprocess

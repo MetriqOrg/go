@@ -3,8 +3,8 @@ package txnbuild
 import (
 	"github.com/pkg/errors"
 
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/xdr"
 )
 
 // Clawback represents the Stellar clawback operation. See
@@ -30,7 +30,7 @@ func (cb *Clawback) BuildXDR() (xdr.Operation, error) {
 	}
 	// Validate this is an issued asset
 	if cb.Asset.IsNative() {
-		return xdr.Operation{}, errors.New("clawbacks don't support the native (GRAM) asset")
+		return xdr.Operation{}, errors.New("clawbacks don't support the native (MTRQ) asset")
 	}
 
 	xdrAmount, err := amount.Parse(cb.Amount)

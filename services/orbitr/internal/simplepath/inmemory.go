@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/go-errors/errors"
-	"github.com/lantah/go/exp/orderbook"
-	"github.com/lantah/go/services/orbitr/internal/paths"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/exp/orderbook"
+	"github.com/metriqorg/go/services/orbitr/internal/paths"
+	"github.com/metriqorg/go/xdr"
 )
 
 const (

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/lantah/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
 )
 
 var (

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	hProtocol "github.com/lantah/go/protocols/orbitr"
+	hProtocol "github.com/metriqorg/go/protocols/orbitr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -74,14 +74,14 @@ func TestAddNativeData(t *testing.T) {
 	}
 
 	addNativeData(&trade1)
-	assert.Equal(t, "GRAM", trade1.BaseAssetCode)
+	assert.Equal(t, "MTRQ", trade1.BaseAssetCode)
 	assert.Equal(t, "native", trade1.BaseAssetIssuer)
 
 	trade2 := hProtocol.Trade{
 		CounterAssetType: "native",
 	}
 	addNativeData(&trade2)
-	assert.Equal(t, "GRAM", trade2.CounterAssetCode)
+	assert.Equal(t, "MTRQ", trade2.CounterAssetCode)
 	assert.Equal(t, "native", trade2.CounterAssetIssuer)
 }
 

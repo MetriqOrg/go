@@ -3,8 +3,8 @@ package ingest
 import (
 	"context"
 
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ingest/processors"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest/processors"
 	"github.com/stretchr/testify/mock"
 )
 

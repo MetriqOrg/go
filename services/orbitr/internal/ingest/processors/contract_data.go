@@ -3,8 +3,8 @@ package processors
 import (
 	"math/big"
 
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/xdr"
 )
 
 const (
@@ -84,7 +84,7 @@ func AssetFromContractData(ledgerEntry xdr.LedgerEntry, passphrase string) *xdr.
 		return nil
 	}
 
-	// we don't support asset stats for grams
+	// we don't support asset stats for MTRQ
 	nativeAssetContractID, err := xdr.MustNewNativeAsset().ContractID(passphrase)
 	if err != nil || (contractData.Contract.ContractId != nil && (*contractData.Contract.ContractId) == nativeAssetContractID) {
 		return nil
@@ -188,7 +188,7 @@ func ContractBalanceFromContractData(ledgerEntry xdr.LedgerEntry, passphrase str
 		return [32]byte{}, nil, false
 	}
 
-	// we don't support asset stats for grams
+	// we don't support asset stats for MTRQ
 	nativeAssetContractID, err := xdr.MustNewNativeAsset().ContractID(passphrase)
 	if err != nil || (contractData.Contract.ContractId != nil && *contractData.Contract.ContractId == nativeAssetContractID) {
 		return [32]byte{}, nil, false

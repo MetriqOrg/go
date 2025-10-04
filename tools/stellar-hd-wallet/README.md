@@ -7,7 +7,7 @@ This is experimental software. Use at your own risk.
 ## Usage
 
 ```
-Simple HD wallet for Stellar Lumens. THIS PROGRAM IS STILL EXPERIMENTAL. USE AT YOUR OWN RISK.
+Simple HD wallet for Metriq MTRQ. THIS PROGRAM IS STILL EXPERIMENTAL. USE AT YOUR OWN RISK.
 
 Usage:
   stellar-hd-wallet [command]

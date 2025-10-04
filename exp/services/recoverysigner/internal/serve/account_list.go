@@ -3,11 +3,11 @@ package serve
 import (
 	"net/http"
 
-	"github.com/lantah/go/exp/services/recoverysigner/internal/account"
-	"github.com/lantah/go/exp/services/recoverysigner/internal/serve/auth"
-	"github.com/lantah/go/keypair"
-	supportlog "github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/httpjson"
+	"github.com/metriqorg/go/exp/services/recoverysigner/internal/account"
+	"github.com/metriqorg/go/exp/services/recoverysigner/internal/serve/auth"
+	"github.com/metriqorg/go/keypair"
+	supportlog "github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/httpjson"
 )
 
 type accountListHandler struct {

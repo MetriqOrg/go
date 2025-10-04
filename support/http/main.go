@@ -10,9 +10,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/lantah/go/support/config"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/support/config"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 	"gopkg.in/tylerb/graceful.v1"
 )
 

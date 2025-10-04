@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi"
-	"github.com/lantah/go/clients/orbitrclient"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/protocols/orbitr/base"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/clients/orbitrclient"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr/base"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -62,7 +62,7 @@ func TestFriendbotHandler_validate(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		orbitrClient:       orbitrclient.DefaultTestNetClient,
-		orbitrURL:          "https://orbitr-testnet.lantah.network/",
+		orbitrURL:          "https://orbitr-testnet.metriq.network/",
 	}
 	err = fh.validate()
 	require.EqualError(t, err, "network passphrase cannot be empty")
@@ -72,7 +72,7 @@ func TestFriendbotHandler_validate(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		orbitrClient:       orbitrclient.DefaultTestNetClient,
-		orbitrURL:          "https://orbitr-testnet.lantah.network/",
+		orbitrURL:          "https://orbitr-testnet.metriq.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 	}
 	err = fh.validate()
@@ -83,7 +83,7 @@ func TestFriendbotHandler_validate(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		orbitrClient:       orbitrclient.DefaultTestNetClient,
-		orbitrURL:          "https://orbitr-testnet.lantah.network/",
+		orbitrURL:          "https://orbitr-testnet.metriq.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       1,
 	}
@@ -98,7 +98,7 @@ func TestFriendbotHandler_serveHTTP_missingAddress(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		orbitrClient:       orbitrclient.DefaultTestNetClient,
-		orbitrURL:          "https://orbitr-testnet.lantah.network/",
+		orbitrURL:          "https://orbitr-testnet.metriq.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -129,7 +129,7 @@ func TestFriendbotHandler_serveHTTP_invalidAddress(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		orbitrClient:       orbitrclient.DefaultTestNetClient,
-		orbitrURL:          "https://orbitr-testnet.lantah.network/",
+		orbitrURL:          "https://orbitr-testnet.metriq.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -165,7 +165,7 @@ func TestFriendbotHandler_serveHTTP_accountDoesntExist(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		orbitrClient:       &orbitrMock,
-		orbitrURL:          "https://orbitr-testnet.lantah.network/",
+		orbitrURL:          "https://orbitr-testnet.metriq.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -201,7 +201,7 @@ func TestFriendbotHandler_serveHTTP_missingTrustline(t *testing.T) {
 		issuerAccountSecret: "SB6SFUY6ZJ2ETQHTY456GDAQ547R6NDAU74DTI2CKVVI4JERTUXKB2R4",
 		assetCode:           "FOO",
 		orbitrClient:       &orbitrMock,
-		orbitrURL:          "https://orbitr-testnet.lantah.network/",
+		orbitrURL:          "https://orbitr-testnet.metriq.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -252,7 +252,7 @@ func TestFriendbotHandler_serveHTTP_issuerAccountDoesntExist(t *testing.T) {
 		issuerAccountSecret: "SDVFEIZ3WH5F6GHGK56QITTC5IO6QJ2UIQDWCHE72DAFZFSXYPIHQ6EV", // GDDIO6SFRD4SJEQFJOSKPIDYTDM7LM4METFBKN4NFGVR5DTGB7H75N5S
 		assetCode:           "FOO",
 		orbitrClient:       &orbitrMock,
-		orbitrURL:          "https://orbitr-testnet.lantah.network/",
+		orbitrURL:          "https://orbitr-testnet.metriq.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}
@@ -305,7 +305,7 @@ func TestFriendbotHandler_serveHTTP(t *testing.T) {
 		issuerAccountSecret: "SDVFEIZ3WH5F6GHGK56QITTC5IO6QJ2UIQDWCHE72DAFZFSXYPIHQ6EV", // GDDIO6SFRD4SJEQFJOSKPIDYTDM7LM4METFBKN4NFGVR5DTGB7H75N5S
 		assetCode:           "FOO",
 		orbitrClient:       &orbitrMock,
-		orbitrURL:          "https://orbitr-testnet.lantah.network/",
+		orbitrURL:          "https://orbitr-testnet.metriq.network/",
 		networkPassphrase:   network.TestNetworkPassphrase,
 		paymentAmount:       10000,
 	}

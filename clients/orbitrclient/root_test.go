@@ -3,7 +3,7 @@ package orbitrclient
 import (
 	"testing"
 
-	"github.com/lantah/go/support/http/httptest"
+	"github.com/metriqorg/go/support/http/httptest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -59,15 +59,15 @@ func TestRoot(t *testing.T) {
 var rootResponse = `{
   "_links": {
     "account": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/{account_id}",
+      "href": "https://orbitr-testnet.metriq.network/accounts/{account_id}",
       "templated": true
     },
     "account_transactions": {
-      "href": "https://orbitr-testnet.lantah.network/accounts/{account_id}/transactions{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/accounts/{account_id}/transactions{?cursor,limit,order}",
       "templated": true
     },
     "assets": {
-      "href": "https://orbitr-testnet.lantah.network/assets{?asset_code,asset_issuer,cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/assets{?asset_code,asset_issuer,cursor,limit,order}",
       "templated": true
     },
     "friendbot": {
@@ -75,21 +75,21 @@ var rootResponse = `{
       "templated": true
     },
     "metrics": {
-      "href": "https://orbitr-testnet.lantah.network/metrics"
+      "href": "https://orbitr-testnet.metriq.network/metrics"
     },
     "order_book": {
-      "href": "https://orbitr-testnet.lantah.network/order_book{?selling_asset_type,selling_asset_code,selling_asset_issuer,buying_asset_type,buying_asset_code,buying_asset_issuer,limit}",
+      "href": "https://orbitr-testnet.metriq.network/order_book{?selling_asset_type,selling_asset_code,selling_asset_issuer,buying_asset_type,buying_asset_code,buying_asset_issuer,limit}",
       "templated": true
     },
     "self": {
-      "href": "https://orbitr-testnet.lantah.network/"
+      "href": "https://orbitr-testnet.metriq.network/"
     },
     "transaction": {
-      "href": "https://orbitr-testnet.lantah.network/transactions/{hash}",
+      "href": "https://orbitr-testnet.metriq.network/transactions/{hash}",
       "templated": true
     },
     "transactions": {
-      "href": "https://orbitr-testnet.lantah.network/transactions{?cursor,limit,order}",
+      "href": "https://orbitr-testnet.metriq.network/transactions{?cursor,limit,order}",
       "templated": true
     }
   },

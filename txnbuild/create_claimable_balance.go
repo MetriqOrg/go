@@ -3,9 +3,9 @@
 package txnbuild
 
 import (
-	"github.com/lantah/go/amount"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/amount"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // CreateClaimableBalance represents the Stellar create claimable balance operation. See

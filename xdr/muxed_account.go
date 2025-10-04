@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
-	"github.com/lantah/go/strkey"
+	"github.com/metriqorg/go/strkey"
 )
 
 func MustMuxedAddress(address string) MuxedAccount {

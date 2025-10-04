@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // Deprecated: use SetTrustLineFlags instead.
@@ -32,7 +32,7 @@ func (at *AllowTrust) BuildXDR() (xdr.Operation, error) {
 
 	// Validate this is an issued asset
 	if at.Type.IsNative() {
-		return xdr.Operation{}, errors.New("trustline doesn't exist for a native (GRAM) asset")
+		return xdr.Operation{}, errors.New("trustline doesn't exist for a native (MTRQ) asset")
 	}
 
 	// AllowTrust has a special asset type - map to it

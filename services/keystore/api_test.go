@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/render/httpjson"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/render/httpjson"
 )
 
 func TestPutKeysAPI(t *testing.T) {

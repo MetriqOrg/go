@@ -9,13 +9,13 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/lantah/go/historyarchive"
-	orbitr "github.com/lantah/go/services/orbitr/internal"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ingest"
-	support "github.com/lantah/go/support/config"
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/log"
+	"github.com/metriqorg/go/historyarchive"
+	orbitr "github.com/metriqorg/go/services/orbitr/internal"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest"
+	support "github.com/metriqorg/go/support/config"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/log"
 )
 
 var ingestCmd = &cobra.Command{

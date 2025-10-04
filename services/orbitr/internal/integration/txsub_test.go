@@ -3,8 +3,8 @@ package integration
 import (
 	"testing"
 
-	"github.com/lantah/go/services/orbitr/internal/test/integration"
-	"github.com/lantah/go/txnbuild"
+	"github.com/metriqorg/go/services/orbitr/internal/test/integration"
+	"github.com/metriqorg/go/txnbuild"
 	"github.com/stretchr/testify/assert"
 )
 

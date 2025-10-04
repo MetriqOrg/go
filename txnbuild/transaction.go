@@ -1,11 +1,11 @@
 /*
 Package txnbuild implements transactions and operations on the Lantah Network.
 This library provides an interface to the Stellar transaction model. It supports the building of Go applications on
-top of the Lantah Network (https://www.lantah.org/). Transactions constructed by this library may be submitted
+top of the Lantah Network (https://www.metriq.org/). Transactions constructed by this library may be submitted
 to any OrbitR instance for processing onto the ledger, using any Stellar SDK client. The recommended client for Go
-programmers is orbitrclient (https://github.com/lantah/go/tree/master/clients/orbitrclient). Together, these two
+programmers is orbitrclient (https://github.com/metriqorg/go/tree/master/clients/orbitrclient). Together, these two
 libraries provide a complete Stellar SDK.
-For more information and further examples, see https://github.com/lantah/go/blob/master/docs/reference/readme.md
+For more information and further examples, see https://github.com/metriqorg/go/blob/master/docs/reference/readme.md
 */
 package txnbuild
 
@@ -21,15 +21,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/strkey"
-	"github.com/lantah/go/support/collections/set"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/strkey"
+	"github.com/metriqorg/go/support/collections/set"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
-// MinBaseFee is the minimum transaction fee for the Lantah Network of 100 µg (0.0001 GRAM).
+// MinBaseFee is the minimum transaction fee for the Lantah Network of 100 µM (0.0001 MTRQ).
 const MinBaseFee = 100
 
 // Account represents the aspects of a Stellar account necessary to construct transactions. See

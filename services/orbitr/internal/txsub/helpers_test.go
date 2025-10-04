@@ -10,7 +10,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
 	"github.com/stretchr/testify/mock"
 )
 

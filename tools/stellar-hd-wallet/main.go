@@ -4,12 +4,12 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
-	"github.com/lantah/go/tools/stellar-hd-wallet/commands"
+	"github.com/metriqorg/go/tools/stellar-hd-wallet/commands"
 )
 
 var mainCmd = &cobra.Command{
 	Use:   "stellar-hd-wallet",
-	Short: "Simple HD wallet for Stellar Lumens. THIS PROGRAM IS STILL EXPERIMENTAL. USE AT YOUR OWN RISK.",
+	Short: "Simple HD wallet for Metriq MTRQ. THIS PROGRAM IS STILL EXPERIMENTAL. USE AT YOUR OWN RISK.",
 }
 
 func init() {

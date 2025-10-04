@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	slog "github.com/lantah/go/support/log"
-	cmp "github.com/lantah/go/tools/orbitr-cmp/internal"
+	slog "github.com/metriqorg/go/support/log"
+	cmp "github.com/metriqorg/go/tools/orbitr-cmp/internal"
 )
 
 var (

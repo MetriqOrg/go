@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/lantah/go/services/ticker/internal/utils"
+	"github.com/metriqorg/go/services/ticker/internal/utils"
 )
 
 // InsertOrUpdateIssuer inserts an Issuer on the database (if new),

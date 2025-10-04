@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/httperror"
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/support/http/httpdecode"
-	"github.com/lantah/go/support/log"
-	"github.com/lantah/go/support/render/httpjson"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/serve/httperror"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/support/http/httpdecode"
+	"github.com/metriqorg/go/support/log"
+	"github.com/metriqorg/go/support/render/httpjson"
 )
 
 type kycGetResponse struct {

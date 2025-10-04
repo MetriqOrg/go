@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/lantah/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr"
 )
 
 func TestLedgerActions_Index(t *testing.T) {

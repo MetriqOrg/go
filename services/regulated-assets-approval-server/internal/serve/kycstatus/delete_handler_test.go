@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/lantah/go/keypair"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/db/dbtest"
-	"github.com/lantah/go/services/regulated-assets-approval-server/internal/serve/httperror"
+	"github.com/metriqorg/go/keypair"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/db/dbtest"
+	"github.com/metriqorg/go/services/regulated-assets-approval-server/internal/serve/httperror"
 	"github.com/stretchr/testify/require"
 )
 

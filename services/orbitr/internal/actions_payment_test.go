@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lantah/go/protocols/orbitr"
-	"github.com/lantah/go/protocols/orbitr/operations"
-	"github.com/lantah/go/services/orbitr/internal/db2/history"
-	"github.com/lantah/go/services/orbitr/internal/ingest"
+	"github.com/metriqorg/go/protocols/orbitr"
+	"github.com/metriqorg/go/protocols/orbitr/operations"
+	"github.com/metriqorg/go/services/orbitr/internal/db2/history"
+	"github.com/metriqorg/go/services/orbitr/internal/ingest"
 )
 
 // Moved to TestGetOperationsOnlyPayments

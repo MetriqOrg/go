@@ -3,8 +3,8 @@ package txnbuild
 import (
 	"bytes"
 
-	"github.com/lantah/go/support/errors"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/errors"
+	"github.com/metriqorg/go/xdr"
 )
 
 // AssetType represents the type of a Stellar asset.
@@ -44,7 +44,7 @@ type Asset interface {
 	ToXDR() (xdr.Asset, error)
 }
 
-// NativeAsset represents the native GRAM asset.
+// NativeAsset represents the native MTRQ asset.
 type NativeAsset struct{}
 
 // GetType for NativeAsset returns the enum type of the asset.
@@ -52,13 +52,13 @@ func (na NativeAsset) GetType() (AssetType, error) {
 	return AssetTypeNative, nil
 }
 
-// IsNative for NativeAsset returns true (this is an GRAM asset).
+// IsNative for NativeAsset returns true (this is an MTRQ asset).
 func (na NativeAsset) IsNative() bool { return true }
 
-// GetCode for NativeAsset returns an empty string (GRAM doesn't have a code).
+// GetCode for NativeAsset returns an empty string (MTRQ doesn't have a code).
 func (na NativeAsset) GetCode() string { return "" }
 
-// GetIssuer for NativeAsset returns an empty string (GRAM doesn't have an issuer).
+// GetIssuer for NativeAsset returns an empty string (MTRQ doesn't have an issuer).
 func (na NativeAsset) GetIssuer() string { return "" }
 
 // LessThan returns true if this asset sorts before some other asset.
@@ -104,7 +104,7 @@ func (na NativeAsset) MustToTrustLineAsset() TrustLineAsset {
 	return TrustLineAssetWrapper{na}
 }
 
-// CreditAsset represents non-GRAM assets on the Lantah Network.
+// CreditAsset represents non-MTRQ assets on the Lantah Network.
 type CreditAsset struct {
 	Code   string
 	Issuer string
@@ -122,7 +122,7 @@ func (ca CreditAsset) GetType() (AssetType, error) {
 	}
 }
 
-// IsNative for CreditAsset returns false (this is not an GRAM asset).
+// IsNative for CreditAsset returns false (this is not an MTRQ asset).
 func (ca CreditAsset) IsNative() bool { return false }
 
 // GetCode for CreditAsset returns the asset code.

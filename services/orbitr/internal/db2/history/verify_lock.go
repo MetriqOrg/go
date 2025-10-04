@@ -3,8 +3,8 @@ package history
 import (
 	"context"
 
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/support/errors"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/support/errors"
 )
 
 // stateVerificationLockId is the objid for the advisory lock acquired during

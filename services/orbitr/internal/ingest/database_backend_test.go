@@ -3,9 +3,9 @@ package ingest
 import (
 	"testing"
 
-	"github.com/lantah/go/ingest/ledgerbackend"
-	"github.com/lantah/go/network"
-	"github.com/lantah/go/services/orbitr/internal/test"
+	"github.com/metriqorg/go/ingest/ledgerbackend"
+	"github.com/metriqorg/go/network"
+	"github.com/metriqorg/go/services/orbitr/internal/test"
 )
 
 func TestGetLatestLedger(t *testing.T) {

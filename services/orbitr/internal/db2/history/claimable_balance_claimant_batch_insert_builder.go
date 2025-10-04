@@ -3,8 +3,8 @@ package history
 import (
 	"context"
 
-	"github.com/lantah/go/support/db"
-	"github.com/lantah/go/xdr"
+	"github.com/metriqorg/go/support/db"
+	"github.com/metriqorg/go/xdr"
 )
 
 // ClaimableBalanceClaimantBatchInsertBuilder is used to insert transactions into the
